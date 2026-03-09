@@ -167,47 +167,67 @@ renderCourses();
 observeReveal();
 
 
+
+
 const studentGrid = document.querySelector('.student-grid');
-if(studentGrid){
+if (studentGrid) {
   const originals = Array.from(studentGrid.children);
-  originals.slice(0, 4).forEach(img => {
+  originals.forEach((img) => {
     const clone = img.cloneNode(true);
     clone.setAttribute('aria-hidden', 'true');
     studentGrid.appendChild(clone);
   });
 
-  let autoFrame = null;
-  let scrollAmount = 0;
+  let autoScrollTimer = null;
+  let isPaused = false;
 
-  function isMobileCarousel(){
-    return window.innerWidth <= 780;
+  function getStep() {
+    const firstCard = studentGrid.querySelector('img');
+    if (!firstCard) return 0;
+    const gap = 18;
+    return firstCard.getBoundingClientRect().width + gap;
   }
 
-  function startStudentCarousel(){
-    cancelAnimationFrame(autoFrame);
-    if(!isMobileCarousel()) return;
-    const step = () => {
-      scrollAmount += 0.35;
-      studentGrid.scrollLeft = scrollAmount;
-      const resetPoint = (studentGrid.scrollWidth - studentGrid.clientWidth) / 2;
-      if (scrollAmount >= resetPoint) {
-        scrollAmount = 0;
-        studentGrid.scrollLeft = 0;
-      }
-      autoFrame = requestAnimationFrame(step);
-    };
-    autoFrame = requestAnimationFrame(step);
+  function isCarouselMode() {
+    return window.innerWidth <= 980;
   }
 
-  function stopStudentCarousel(){
-    cancelAnimationFrame(autoFrame);
+  function nextSlide() {
+    if (!isCarouselMode() || isPaused) return;
+    const step = getStep();
+    if (!step) return;
+
+    const halfway = studentGrid.scrollWidth / 2;
+    if (studentGrid.scrollLeft + step >= halfway) {
+      studentGrid.scrollLeft = 0;
+    } else {
+      studentGrid.scrollBy({ left: step, behavior: 'smooth' });
+    }
   }
 
-  studentGrid.addEventListener('mouseenter', stopStudentCarousel);
-  studentGrid.addEventListener('mouseleave', startStudentCarousel);
-  studentGrid.addEventListener('touchstart', stopStudentCarousel, { passive: true });
-  studentGrid.addEventListener('touchend', startStudentCarousel, { passive: true });
-  window.addEventListener('resize', startStudentCarousel);
+  function startAutoScroll() {
+    stopAutoScroll();
+    if (!isCarouselMode()) {
+      studentGrid.scrollLeft = 0;
+      return;
+    }
+    autoScrollTimer = setInterval(nextSlide, 2600);
+  }
 
-  startStudentCarousel();
+  function stopAutoScroll() {
+    if (autoScrollTimer) {
+      clearInterval(autoScrollTimer);
+      autoScrollTimer = null;
+    }
+  }
+
+  studentGrid.addEventListener('mouseenter', () => { isPaused = true; });
+  studentGrid.addEventListener('mouseleave', () => { isPaused = false; });
+  studentGrid.addEventListener('touchstart', () => { isPaused = true; }, { passive: true });
+  studentGrid.addEventListener('touchend', () => {
+    setTimeout(() => { isPaused = false; }, 1200);
+  }, { passive: true });
+
+  window.addEventListener('resize', startAutoScroll);
+  startAutoScroll();
 }
