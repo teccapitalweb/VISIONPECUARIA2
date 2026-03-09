@@ -169,7 +169,10 @@ observeReveal();
 
 
 
-const studentGrid = document.querySelector('.student-grid');
+const studentGrid = document.getElementById('studentGrid');
+const studentsPrev = document.querySelector('.students-prev');
+const studentsNext = document.querySelector('.students-next');
+
 if (studentGrid) {
   const originals = Array.from(studentGrid.children);
   originals.forEach((img) => {
@@ -178,56 +181,79 @@ if (studentGrid) {
     studentGrid.appendChild(clone);
   });
 
-  let autoScrollTimer = null;
-  let isPaused = false;
+  let autoTimer = null;
+  let pauseUntil = 0;
+  let isDragging = false;
+  let startX = 0;
+  let startScroll = 0;
 
-  function getStep() {
-    const firstCard = studentGrid.querySelector('img');
-    if (!firstCard) return 0;
-    const gap = 18;
-    return firstCard.getBoundingClientRect().width + gap;
+  function getCardWidth() {
+    const first = studentGrid.querySelector('img');
+    if (!first) return 0;
+    return first.getBoundingClientRect().width + 18;
   }
 
-  function isCarouselMode() {
-    return window.innerWidth <= 980;
+  function resetIfNeeded() {
+    const half = studentGrid.scrollWidth / 2;
+    if (studentGrid.scrollLeft >= half) {
+      studentGrid.scrollLeft -= half;
+    } else if (studentGrid.scrollLeft < 0) {
+      studentGrid.scrollLeft += half;
+    }
   }
 
-  function nextSlide() {
-    if (!isCarouselMode() || isPaused) return;
-    const step = getStep();
+  function slide(direction) {
+    const step = getCardWidth();
     if (!step) return;
-
-    const halfway = studentGrid.scrollWidth / 2;
-    if (studentGrid.scrollLeft + step >= halfway) {
-      studentGrid.scrollLeft = 0;
-    } else {
-      studentGrid.scrollBy({ left: step, behavior: 'smooth' });
-    }
+    studentGrid.scrollBy({ left: step * direction, behavior: 'smooth' });
+    setTimeout(resetIfNeeded, 450);
   }
 
-  function startAutoScroll() {
-    stopAutoScroll();
-    if (!isCarouselMode()) {
-      studentGrid.scrollLeft = 0;
-      return;
-    }
-    autoScrollTimer = setInterval(nextSlide, 2600);
+  function stopAuto() {
+    if (autoTimer) clearInterval(autoTimer);
+    autoTimer = null;
   }
 
-  function stopAutoScroll() {
-    if (autoScrollTimer) {
-      clearInterval(autoScrollTimer);
-      autoScrollTimer = null;
-    }
+  function startAuto() {
+    stopAuto();
+    autoTimer = setInterval(() => {
+      if (Date.now() < pauseUntil || isDragging) return;
+      slide(1);
+    }, 2600);
   }
 
-  studentGrid.addEventListener('mouseenter', () => { isPaused = true; });
-  studentGrid.addEventListener('mouseleave', () => { isPaused = false; });
-  studentGrid.addEventListener('touchstart', () => { isPaused = true; }, { passive: true });
-  studentGrid.addEventListener('touchend', () => {
-    setTimeout(() => { isPaused = false; }, 1200);
-  }, { passive: true });
+  function pauseAuto(ms=4000){
+    pauseUntil = Date.now() + ms;
+  }
 
-  window.addEventListener('resize', startAutoScroll);
-  startAutoScroll();
+  studentsPrev?.addEventListener('click', () => { pauseAuto(); slide(-1); });
+  studentsNext?.addEventListener('click', () => { pauseAuto(); slide(1); });
+
+  studentGrid.addEventListener('pointerdown', (e) => {
+    isDragging = true;
+    pauseAuto();
+    startX = e.clientX;
+    startScroll = studentGrid.scrollLeft;
+    try { studentGrid.setPointerCapture(e.pointerId); } catch(e){}
+  });
+
+  studentGrid.addEventListener('pointermove', (e) => {
+    if (!isDragging) return;
+    const delta = e.clientX - startX;
+    studentGrid.scrollLeft = startScroll - delta;
+  });
+
+  function endDrag() {
+    if (!isDragging) return;
+    isDragging = false;
+    resetIfNeeded();
+  }
+
+  studentGrid.addEventListener('pointerup', endDrag);
+  studentGrid.addEventListener('pointercancel', endDrag);
+  studentGrid.addEventListener('mouseleave', endDrag);
+  studentGrid.addEventListener('scroll', () => requestAnimationFrame(resetIfNeeded));
+  window.addEventListener('resize', startAuto);
+
+  startAuto();
 }
