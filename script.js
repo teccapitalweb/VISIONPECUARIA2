@@ -1,1 +1,22 @@
-const counts=[{el:document.getElementById("count-capacitados"),target:5000,suffix:"+"},{el:document.getElementById("count-cursos"),target:50,suffix:"+"}];const impact=document.querySelector(".impact");let started=false;function animateCount(){if(started)return;started=true;counts.forEach(({el,target,suffix})=>{let value=0;const step=Math.ceil(target/90);const timer=setInterval(()=>{value+=step;if(value>=target){el.textContent=target+suffix;clearInterval(timer)}else{el.textContent=value+suffix}},22)})}new IntersectionObserver(entries=>{entries.forEach(entry=>{if(entry.isIntersecting)animateCount()})},{threshold:.35}).observe(impact);document.querySelectorAll(".carousel-btn").forEach(btn=>{btn.addEventListener("click",()=>{const track=document.getElementById(btn.dataset.target);const amount=Math.min(track.clientWidth*.9,420);track.scrollBy({left:btn.classList.contains("next")?amount:-amount,behavior:"smooth"})})});const modal=document.getElementById("temario-modal");const modalTitle=document.getElementById("modal-title");const modalList=document.getElementById("modal-list");const modalWa=document.getElementById("modal-wa");document.querySelectorAll(".temario-btn").forEach(btn=>{btn.addEventListener("click",()=>{const course=window.COURSES_DATA[Number(btn.dataset.course)];modalTitle.textContent=course.title;modalList.innerHTML="";course.temario.forEach(item=>{const li=document.createElement("li");li.textContent=item;modalList.appendChild(li)});modalWa.href='https://wa.me/522361049715?text='+encodeURIComponent('Hola, quiero información sobre el curso '+course.title+'.');modal.classList.add("active");modal.setAttribute("aria-hidden","false")})});document.querySelectorAll('[data-close="true"]').forEach(el=>{el.addEventListener("click",()=>{modal.classList.remove("active");modal.setAttribute("aria-hidden","true")})});document.addEventListener("keydown",e=>{if(e.key==="Escape"){modal.classList.remove("active");modal.setAttribute("aria-hidden","true")}});
+
+const counters = document.querySelectorAll('.counter');
+
+counters.forEach(counter => {
+counter.innerText = '0';
+
+const updateCounter = () => {
+const target = +counter.getAttribute('data-target');
+const c = +counter.innerText;
+
+const increment = target / 200;
+
+if(c < target){
+counter.innerText = `${Math.ceil(c + increment)}`;
+setTimeout(updateCounter,10);
+}else{
+counter.innerText = target;
+}
+};
+
+updateCounter();
+});
