@@ -29,3 +29,12 @@ WHATSAPP: +52 1 236 104 9715
 GMAIL:visionpecuaria12@gmail.com
 
 YOUTUBE: https://www.youtube.com/@GrupoPecuarioMexico
+
+
+Mejoras aplicadas:
+- reseñas sin recorte
+- mejor integración con WhatsApp
+- botón flotante de WhatsApp
+- botones de WhatsApp en cada curso
+- mejoras visuales generales
+- experiencia móvil mejorada
