@@ -351,7 +351,16 @@ button{font:inherit}
 .student-grid,.review-grid{
   display:grid;gap:16px;
 }
-.student-grid{grid-template-columns:repeat(4,1fr)}
+.student-grid{
+  display:flex;
+  gap:18px;
+  overflow-x:auto;
+  -webkit-overflow-scrolling:touch;
+  scroll-snap-type:x mandatory;
+  padding:6px 4px 12px;
+  scrollbar-width:none;
+}
+.student-grid::-webkit-scrollbar{display:none}
 .review-grid{grid-template-columns:repeat(3,1fr)}
 .student-grid img,.review-grid img{
   width:100%;
@@ -361,9 +370,11 @@ button{font:inherit}
   background:#fff;
 }
 .student-grid img{
-  height:100%;
-  object-fit:cover;
-  aspect-ratio:1/1;
+  flex:0 0 calc(25% - 14px);
+  max-width:calc(25% - 14px);
+  height:auto;
+  object-fit:contain;
+  scroll-snap-align:start;
 }
 .review-grid img{
   height:auto;
@@ -371,6 +382,7 @@ button{font:inherit}
   padding:6px;
 }
 
+.students .container{overflow:hidden}
 .community-grid{grid-template-columns:repeat(4,1fr)}
 .community-card{
   transition:transform .2s ease, box-shadow .2s ease, border-color .2s ease;
@@ -595,4 +607,32 @@ button{font:inherit}
   .stat-card{padding:28px 18px}
   .contact-links a{padding:0 14px;font-size:.96rem}
   .whatsapp-float-text{font-size:.98rem}
+}
+
+
+@media (max-width:780px){
+  .course-image-wrap{
+    aspect-ratio: 3 / 4.1;
+  }
+  .course-image-wrap img{
+    object-position: top center;
+  }
+  .student-grid{
+    gap:14px;
+    padding-bottom:8px;
+  }
+  .student-grid img{
+    flex:0 0 78%;
+    max-width:78%;
+  }
+}
+
+@media (max-width:520px){
+  .course-image-wrap{
+    aspect-ratio: 3 / 4.35;
+  }
+  .student-grid img{
+    flex:0 0 84%;
+    max-width:84%;
+  }
 }

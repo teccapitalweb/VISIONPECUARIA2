@@ -165,3 +165,49 @@ if(menuToggle && mainMenu){
 
 renderCourses();
 observeReveal();
+
+
+const studentGrid = document.querySelector('.student-grid');
+if(studentGrid){
+  const originals = Array.from(studentGrid.children);
+  originals.slice(0, 4).forEach(img => {
+    const clone = img.cloneNode(true);
+    clone.setAttribute('aria-hidden', 'true');
+    studentGrid.appendChild(clone);
+  });
+
+  let autoFrame = null;
+  let scrollAmount = 0;
+
+  function isMobileCarousel(){
+    return window.innerWidth <= 780;
+  }
+
+  function startStudentCarousel(){
+    cancelAnimationFrame(autoFrame);
+    if(!isMobileCarousel()) return;
+    const step = () => {
+      scrollAmount += 0.35;
+      studentGrid.scrollLeft = scrollAmount;
+      const resetPoint = (studentGrid.scrollWidth - studentGrid.clientWidth) / 2;
+      if (scrollAmount >= resetPoint) {
+        scrollAmount = 0;
+        studentGrid.scrollLeft = 0;
+      }
+      autoFrame = requestAnimationFrame(step);
+    };
+    autoFrame = requestAnimationFrame(step);
+  }
+
+  function stopStudentCarousel(){
+    cancelAnimationFrame(autoFrame);
+  }
+
+  studentGrid.addEventListener('mouseenter', stopStudentCarousel);
+  studentGrid.addEventListener('mouseleave', startStudentCarousel);
+  studentGrid.addEventListener('touchstart', stopStudentCarousel, { passive: true });
+  studentGrid.addEventListener('touchend', startStudentCarousel, { passive: true });
+  window.addEventListener('resize', startStudentCarousel);
+
+  startStudentCarousel();
+}
