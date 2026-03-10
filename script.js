@@ -23,12 +23,15 @@ function createCourseCard(course){
         <span class="course-id">Curso ${String(course.id).padStart(2, '0')}</span>
       </div>
       <h3>${course.nombre}</h3>
-      <ul class="course-topics">
-        ${course.temario.map(topic => `<li>${topic}</li>`).join('')}
-      </ul>
+      <p class="course-description">${course.descripcion}</p>
+      <div class="course-benefits">
+        <span>Clases en vivo</span>
+        <span>Grupo de WhatsApp</span>
+        <span>Certificado QR y folio</span>
+      </div>
       <div class="course-actions">
-        <button class="btn btn-secondary full" data-course-id="${course.id}">Ver más</button>
-        <a class="btn btn-whatsapp full" href="${buildWhatsappMessage(course.nombre)}" target="_blank" rel="noopener noreferrer">Preguntar por WhatsApp</a>
+        <button class="btn btn-secondary full" data-course-id="${course.id}">Ver más detalles</button>
+        <a class="btn btn-whatsapp full" href="${buildWhatsappMessage(course.nombre)}" target="_blank" rel="noopener noreferrer">Solicitar informes</a>
       </div>
     </div>`;
   return article;
