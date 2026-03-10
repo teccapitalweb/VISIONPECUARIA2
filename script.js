@@ -12,7 +12,7 @@ function buildWhatsappMessage(courseName){
 
 function createCourseCard(course){
   const article = document.createElement('article');
-  article.className = 'course-card reveal';
+  article.className = 'course-card reveal'; article.dataset.area = course.area || 'general';
   article.innerHTML = `
     <div class="course-image-wrap">
       <img src="${course.imagen}" alt="${course.nombre}">
@@ -260,3 +260,21 @@ if (studentGrid) {
 
   startAuto();
 }
+
+const areaButtons=document.querySelectorAll(".area-btn");
+areaButtons.forEach(btn=>{
+btn.addEventListener("click",()=>{
+areaButtons.forEach(b=>b.classList.remove("active"));
+btn.classList.add("active");
+const area=btn.dataset.area;
+document.querySelectorAll(".course-card").forEach(card=>{
+if(area==="todos"){
+card.style.display="flex";
+}else if(card.dataset.area===area){
+card.style.display="flex";
+}else{
+card.style.display="none";
+}
+});
+});
+});
