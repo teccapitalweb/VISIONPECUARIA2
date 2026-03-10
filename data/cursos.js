@@ -9,7 +9,8 @@ const coursesData = [
       "Detección de celo y manejo de hembras",
       "Preparación y técnica de inseminación"
     ],
-    "descripcion": "Capacitación orientada al manejo reproductivo porcino con enfoque técnico y práctico."
+    "descripcion": "Capacitación orientada al manejo reproductivo porcino con enfoque técnico y práctico.",
+    "area": "porcinos"
   },
   {
     "id": 2,
@@ -21,7 +22,8 @@ const coursesData = [
       "Sanidad, prevención y bienestar",
       "Alimentación y desarrollo temprano"
     ],
-    "descripcion": "Curso enfocado en las etapas clave del crecimiento del becerro para mejorar salud y desempeño."
+    "descripcion": "Curso enfocado en las etapas clave del crecimiento del becerro para mejorar salud y desempeño.",
+    "area": "bovinos"
   },
   {
     "id": 3,
@@ -33,7 +35,8 @@ const coursesData = [
       "Prevención de lesiones musculoesqueléticas",
       "Manejo y recuperación deportiva"
     ],
-    "descripcion": "Formación para comprender la atención, prevención y acondicionamiento del equino deportivo."
+    "descripcion": "Formación para comprender la atención, prevención y acondicionamiento del equino deportivo.",
+    "area": "equinos"
   },
   {
     "id": 4,
@@ -45,7 +48,8 @@ const coursesData = [
       "Alimentación, crecimiento y manejo",
       "Sanidad y productividad en sistemas acuícolas"
     ],
-    "descripcion": "Capacitación enfocada al manejo técnico de la tilapia y a la optimización de la producción."
+    "descripcion": "Capacitación enfocada al manejo técnico de la tilapia y a la optimización de la producción.",
+    "area": "acuicultura"
   },
   {
     "id": 5,
@@ -57,7 +61,8 @@ const coursesData = [
       "Manejo en sistemas intensivos",
       "Estrategias para mejorar desempeño productivo"
     ],
-    "descripcion": "Curso dirigido a fortalecer la toma de decisiones en nutrición y manejo de bovinos intensivos."
+    "descripcion": "Curso dirigido a fortalecer la toma de decisiones en nutrición y manejo de bovinos intensivos.",
+    "area": "bovinos"
   },
   {
     "id": 6,
@@ -69,7 +74,8 @@ const coursesData = [
       "Nutrición y bienestar de postura",
       "Estrategias para mejorar rendimiento"
     ],
-    "descripcion": "Capacitación para comprender el manejo técnico y productivo de gallinas de postura."
+    "descripcion": "Capacitación para comprender el manejo técnico y productivo de gallinas de postura.",
+    "area": "avicultura"
   },
   {
     "id": 7,
@@ -81,7 +87,8 @@ const coursesData = [
       "Detección de celo y sincronización",
       "Técnica de inseminación artificial"
     ],
-    "descripcion": "Curso práctico y técnico sobre el manejo reproductivo e inseminación en bovinos."
+    "descripcion": "Curso práctico y técnico sobre el manejo reproductivo e inseminación en bovinos.",
+    "area": "bovinos"
   },
   {
     "id": 8,
@@ -93,7 +100,8 @@ const coursesData = [
       "Sujetos, propiedad y régimen de tierras",
       "Marco legal aplicado al sector rural"
     ],
-    "descripcion": "Formación para comprender aspectos normativos relevantes en el ámbito agrario."
+    "descripcion": "Formación para comprender aspectos normativos relevantes en el ámbito agrario.",
+    "area": "general"
   },
   {
     "id": 9,
@@ -105,7 +113,8 @@ const coursesData = [
       "Nutrición, reproducción y sanidad",
       "Estrategias productivas y de bienestar"
     ],
-    "descripcion": "Curso enfocado al manejo técnico y productivo de pequeños rumiantes."
+    "descripcion": "Curso enfocado al manejo técnico y productivo de pequeños rumiantes.",
+    "area": "general"
   },
   {
     "id": 10,
@@ -117,7 +126,8 @@ const coursesData = [
       "Prevención sanitaria en bovinos",
       "Indicadores y seguimiento productivo"
     ],
-    "descripcion": "Capacitación orientada a fortalecer la reproducción y la sanidad del hato bovino."
+    "descripcion": "Capacitación orientada a fortalecer la reproducción y la sanidad del hato bovino.",
+    "area": "bovinos"
   },
   {
     "id": 11,
@@ -129,7 +139,8 @@ const coursesData = [
       "Reproducción y desarrollo larvario",
       "Buenas prácticas de producción"
     ],
-    "descripcion": "Curso técnico para comprender el manejo y la reproducción del camarón blanco."
+    "descripcion": "Curso técnico para comprender el manejo y la reproducción del camarón blanco.",
+    "area": "acuicultura"
   },
   {
     "id": 12,
@@ -141,7 +152,8 @@ const coursesData = [
       "Manejo de colonias y reproducción",
       "Producción sostenible y aprovechamiento"
     ],
-    "descripcion": "Formación para el manejo sustentable de abejas nativas sin aguijón."
+    "descripcion": "Formación para el manejo sustentable de abejas nativas sin aguijón.",
+    "area": "apicultura"
   },
   {
     "id": 13,
@@ -153,7 +165,8 @@ const coursesData = [
       "Ingredientes y balanceo de dietas",
       "Optimización alimenticia en porcinos"
     ],
-    "descripcion": "Capacitación enfocada en nutrición porcina y formulación práctica de raciones."
+    "descripcion": "Capacitación enfocada en nutrición porcina y formulación práctica de raciones.",
+    "area": "porcinos"
   },
   {
     "id": 14,
@@ -165,7 +178,8 @@ const coursesData = [
       "Bases reproductivas y selección",
       "Indicadores de desempeño porcícola"
     ],
-    "descripcion": "Curso diseñado para fortalecer conocimientos en reproducción y engorda porcina."
+    "descripcion": "Curso diseñado para fortalecer conocimientos en reproducción y engorda porcina.",
+    "area": "porcinos"
   },
   {
     "id": 15,
@@ -177,7 +191,8 @@ const coursesData = [
       "Manejo sanitario en aves silvestres",
       "Protocolos y cuidados en exhibición"
     ],
-    "descripcion": "Formación clínica aplicada a la atención de aves silvestres y de exhibición."
+    "descripcion": "Formación clínica aplicada a la atención de aves silvestres y de exhibición.",
+    "area": "avicultura"
   },
   {
     "id": 16,
@@ -189,7 +204,8 @@ const coursesData = [
       "Buenas prácticas y sostenibilidad",
       "Aprovechamiento de especies marinas"
     ],
-    "descripcion": "Capacitación orientada a producción costera con visión sostenible."
+    "descripcion": "Capacitación orientada a producción costera con visión sostenible.",
+    "area": "acuicultura"
   },
   {
     "id": 17,
@@ -201,7 +217,8 @@ const coursesData = [
       "Estrategias para mejorar rentabilidad",
       "Toma de decisiones en producción cárnica"
     ],
-    "descripcion": "Curso enfocado a eficiencia económica y productiva en sistemas de carne."
+    "descripcion": "Curso enfocado a eficiencia económica y productiva en sistemas de carne.",
+    "area": "bovinos"
   },
   {
     "id": 18,
@@ -213,7 +230,8 @@ const coursesData = [
       "Integración de peces y cultivo vegetal",
       "Manejo del sistema y calidad de agua"
     ],
-    "descripcion": "Formación práctica para diseñar y manejar sistemas acuapónicos con peces de ornato."
+    "descripcion": "Formación práctica para diseñar y manejar sistemas acuapónicos con peces de ornato.",
+    "area": "acuicultura"
   },
   {
     "id": 19,
@@ -225,7 +243,8 @@ const coursesData = [
       "Control del ciclo y diagnóstico",
       "Manejo del semental y la yegua"
     ],
-    "descripcion": "Curso enfocado al control reproductivo y a la eficiencia en equinos."
+    "descripcion": "Curso enfocado al control reproductivo y a la eficiencia en equinos.",
+    "area": "equinos"
   },
   {
     "id": 20,
@@ -237,7 +256,8 @@ const coursesData = [
       "Importancia de la abeja reina",
       "Prácticas sostenibles en apicultura"
     ],
-    "descripcion": "Capacitación sobre manejo de colmenas con enfoque sustentable y productivo."
+    "descripcion": "Capacitación sobre manejo de colmenas con enfoque sustentable y productivo.",
+    "area": "apicultura"
   },
   {
     "id": 21,
@@ -249,7 +269,8 @@ const coursesData = [
       "Programas de desparasitación estratégica",
       "Manejo sanitario preventivo"
     ],
-    "descripcion": "Curso para fortalecer el diagnóstico y manejo sanitario de ovinos y caprinos."
+    "descripcion": "Curso para fortalecer el diagnóstico y manejo sanitario de ovinos y caprinos.",
+    "area": "general"
   },
   {
     "id": 22,
@@ -261,7 +282,8 @@ const coursesData = [
       "Calidad de agua y alimentación",
       "Manejo y prevención sanitaria"
     ],
-    "descripcion": "Capacitación práctica enfocada en el bienestar y manejo de peces de ornato."
+    "descripcion": "Capacitación práctica enfocada en el bienestar y manejo de peces de ornato.",
+    "area": "acuicultura"
   },
   {
     "id": 23,
@@ -273,7 +295,8 @@ const coursesData = [
       "Manejo de engorda eficiente",
       "Estrategias para elevar rentabilidad"
     ],
-    "descripcion": "Curso orientado a genética y engorda con visión productiva y rentable."
+    "descripcion": "Curso orientado a genética y engorda con visión productiva y rentable.",
+    "area": "general"
   },
   {
     "id": 24,
@@ -285,7 +308,8 @@ const coursesData = [
       "Manejo diario del caballo",
       "Salud preventiva y buenas prácticas"
     ],
-    "descripcion": "Curso introductorio para comprender el manejo responsable y seguro del caballo."
+    "descripcion": "Curso introductorio para comprender el manejo responsable y seguro del caballo.",
+    "area": "equinos"
   },
   {
     "id": 25,
@@ -297,7 +321,8 @@ const coursesData = [
       "Producción, alimentación y sanidad",
       "Rentabilidad y aprovechamiento"
     ],
-    "descripcion": "Capacitación enfocada al manejo productivo y rentable de la codorniz."
+    "descripcion": "Capacitación enfocada al manejo productivo y rentable de la codorniz.",
+    "area": "avicultura"
   },
   {
     "id": 26,
@@ -309,6 +334,7 @@ const coursesData = [
       "Ingredientes y formulación práctica",
       "Ajustes según etapa productiva"
     ],
-    "descripcion": "Curso enfocado a nutrición y elaboración de dietas para aves de producción."
+    "descripcion": "Curso enfocado a nutrición y elaboración de dietas para aves de producción.",
+    "area": "avicultura"
   }
 ];

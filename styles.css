@@ -857,3 +857,21 @@ padding-bottom:10px;
 flex:0 0 auto;
 }
 }
+
+
+/* Ajustes de centrado e integración visual en cursos */
+.courses .section-head{
+  max-width: 860px;
+}
+.course-card{
+  justify-content: flex-start;
+}
+.course-image-wrap{
+  text-align:center;
+}
+.course-image-wrap img{
+  margin: 0 auto;
+}
+.courses-grid{
+  align-items: stretch;
+}

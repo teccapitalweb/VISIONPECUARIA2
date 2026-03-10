@@ -167,6 +167,7 @@ if(menuToggle && mainMenu){
 }
 
 renderCourses();
+bindAreaFilters();
 observeReveal();
 
 
@@ -261,20 +262,25 @@ if (studentGrid) {
   startAuto();
 }
 
-const areaButtons=document.querySelectorAll(".area-btn");
-areaButtons.forEach(btn=>{
-btn.addEventListener("click",()=>{
-areaButtons.forEach(b=>b.classList.remove("active"));
-btn.classList.add("active");
-const area=btn.dataset.area;
-document.querySelectorAll(".course-card").forEach(card=>{
-if(area==="todos"){
-card.style.display="flex";
-}else if(card.dataset.area===area){
-card.style.display="flex";
-}else{
-card.style.display="none";
+
+
+const areaButtons = document.querySelectorAll('.area-btn');
+
+function bindAreaFilters(){
+  if(!areaButtons.length) return;
+
+  areaButtons.forEach(btn => {
+    btn.addEventListener('click', () => {
+      areaButtons.forEach(b => b.classList.remove('active'));
+      btn.classList.add('active');
+
+      const area = btn.dataset.area;
+      document.querySelectorAll('.course-card').forEach(card => {
+        const matches = area === 'todos' || card.dataset.area === area;
+        card.style.display = matches ? 'flex' : 'none';
+      });
+    });
+  });
 }
-});
-});
-});
+
+bindAreaFilters();
