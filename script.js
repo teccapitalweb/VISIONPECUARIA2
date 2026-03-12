@@ -2,9 +2,6 @@
 const WHATSAPP_BASE = "https://wa.me/522361049715";
 
 const coursesGrid = document.getElementById('coursesGrid');
-const toggleCoursesBtn = document.getElementById('toggleCoursesBtn');
-const INITIAL_VISIBLE_COURSES = 6;
-let showAllCourses = false;
 
 function buildWhatsappMessage(courseName){
   return `${WHATSAPP_BASE}?text=${encodeURIComponent(`Hola, quiero información sobre el curso "${courseName}" de Visión Pecuaria.`)}`;
@@ -256,6 +253,11 @@ counters.forEach(counter => counterObserver.observe(counter));
 
 function observeReveal(){
   const revealElements = document.querySelectorAll('.reveal:not(.reveal-bound)');
+  // Si no hay IntersectionObserver, mostrar todo inmediatamente
+  if(!('IntersectionObserver' in window)){
+    revealElements.forEach(el => el.classList.add('is-visible', 'reveal-bound'));
+    return;
+  }
   const revealObserver = new IntersectionObserver((entries) => {
     entries.forEach(entry => {
       if(entry.isIntersecting){
@@ -263,13 +265,18 @@ function observeReveal(){
         revealObserver.unobserve(entry.target);
       }
     });
-  }, {threshold:0.15});
+  }, {threshold:0.10});
 
   revealElements.forEach(el => {
     el.classList.add('reveal-bound');
     revealObserver.observe(el);
   });
 }
+
+// Mostrar hero inmediatamente sin esperar scroll
+document.querySelectorAll('.hero .reveal, .stats .reveal').forEach(el => {
+  el.classList.add('is-visible');
+});
 
 const menuToggle = document.getElementById('menuToggle');
 const mainMenu = document.getElementById('mainMenu');

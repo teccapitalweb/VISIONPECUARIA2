@@ -720,6 +720,12 @@ button{font:inherit}
   opacity:1;
   transform:translateY(0);
 }
+/* Fallback: si JS no corre, mostrar todo el contenido */
+@media (prefers-reduced-motion: no-preference) {}
+.no-js .reveal{
+  opacity:1;
+  transform:none;
+}
 
 @media (max-width:1080px){
   .hero-grid,
