@@ -926,22 +926,29 @@ flex:0 0 auto;
 /* ── CARRUSEL RESPONSIVO ─────────────────────────────── */
 @media(max-width:900px){
   .course-card{ flex:0 0 calc((100% - 24px) / 2); }
-}
-@media(max-width:640px){
-  .course-card{ flex:0 0 100%; }
-  .carousel-arrow{ width:38px; height:38px; font-size:1.3rem; }
-  .carousel-prev{ margin-right:8px; }
-  .carousel-next{ margin-left:8px; }
-  .course-body{ padding:14px 14px 16px; }
-  .course-card h3{ font-size:.97rem; }
-}
-
-/* reseñas responsivo */
-@media(max-width:900px){
   .review-grid img{ flex:0 0 calc((100% - 20px) / 2); width:calc((100% - 20px) / 2); }
 }
 @media(max-width:640px){
+  /* Ocultar flechas laterales — navegación por swipe y dots */
+  .carousel-prev,
+  .carousel-next,
+  .review-carousel-wrapper .carousel-prev,
+  .review-carousel-wrapper .carousel-next{ display:none; }
+
+  /* Carrusel de cursos: card 100% centrada */
+  .carousel-wrapper{ gap:0; }
+  .courses-carousel{ padding:0 2px; }
+  .course-card{ flex:0 0 100%; }
+  .course-body{ padding:14px 14px 18px; }
+  .course-card h3{ font-size:1rem; }
+
+  /* Dots compactos */
+  .carousel-dots{
+    gap:6px;
+    margin-top:16px;
+  }
+  .carousel-dot{ width:8px; height:8px; }
+
+  /* Reseñas móvil */
   .review-grid img{ flex:0 0 100%; width:100%; }
-  .review-carousel-wrapper .carousel-prev{ margin-right:8px; }
-  .review-carousel-wrapper .carousel-next{ margin-left:8px; }
 }

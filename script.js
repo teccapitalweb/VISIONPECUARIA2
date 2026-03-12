@@ -68,12 +68,24 @@ function renderDots(){
   const pages = getTotalPages();
   const activePage = Math.floor(currentIndex / getCardsPerView());
   dotsContainer.innerHTML = '';
-  for(let i = 0; i < pages; i++){
+
+  // Móvil: ventana de 5 dots; desktop: todos
+  const isMobile = window.innerWidth <= 640;
+  const maxVisible = isMobile ? 5 : pages;
+  let start = 0;
+  if(isMobile && pages > maxVisible){
+    start = Math.max(0, Math.min(activePage - 2, pages - maxVisible));
+  }
+  const end = Math.min(start + maxVisible, pages);
+
+  for(let i = start; i < end; i++){
     const dot = document.createElement('button');
-    dot.className = 'carousel-dot' + (i === activePage ? ' active' : '');
-    dot.setAttribute('aria-label', `Página ${i+1}`);
+    const isActive = i === activePage;
+    dot.className = 'carousel-dot' + (isActive ? ' active' : '');
+    dot.setAttribute('aria-label', 'Página ' + (i+1));
+    const page = i;
     dot.addEventListener('click', () => {
-      currentIndex = i * getCardsPerView();
+      currentIndex = page * getCardsPerView();
       updateCarouselPosition();
     });
     dotsContainer.appendChild(dot);
@@ -387,12 +399,18 @@ bindAreaFilters();
   function renderReviewDots(){
     if(!dots) return;
     const pg = Math.floor(rIdx / rCpv());
+    const total = rPages();
     dots.innerHTML = '';
-    for(let i = 0; i < rPages(); i++){
+    const isMobile = window.innerWidth <= 640;
+    const maxV = isMobile ? 5 : total;
+    const start = isMobile && total > maxV ? Math.max(0, Math.min(pg - 2, total - maxV)) : 0;
+    const end = Math.min(start + maxV, total);
+    for(let i = start; i < end; i++){
       const d = document.createElement('button');
       d.className = 'carousel-dot' + (i === pg ? ' active' : '');
-      d.setAttribute('aria-label', `Página ${i+1}`);
-      d.addEventListener('click', () => { rIdx = i * rCpv(); updateReview(); });
+      d.setAttribute('aria-label', 'Página ' + (i+1));
+      const p = i;
+      d.addEventListener('click', () => { rIdx = p * rCpv(); updateReview(); });
       dots.appendChild(d);
     }
   }
