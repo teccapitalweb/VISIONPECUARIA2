@@ -251,32 +251,9 @@ const counterObserver = new IntersectionObserver((entries, observer) => {
 }, {threshold:0.55});
 counters.forEach(counter => counterObserver.observe(counter));
 
-function observeReveal(){
-  const revealElements = document.querySelectorAll('.reveal:not(.reveal-bound)');
-  // Si no hay IntersectionObserver, mostrar todo inmediatamente
-  if(!('IntersectionObserver' in window)){
-    revealElements.forEach(el => el.classList.add('is-visible', 'reveal-bound'));
-    return;
-  }
-  const revealObserver = new IntersectionObserver((entries) => {
-    entries.forEach(entry => {
-      if(entry.isIntersecting){
-        entry.target.classList.add('is-visible');
-        revealObserver.unobserve(entry.target);
-      }
-    });
-  }, {threshold:0.10});
 
-  revealElements.forEach(el => {
-    el.classList.add('reveal-bound');
-    revealObserver.observe(el);
-  });
-}
 
-// Mostrar hero inmediatamente sin esperar scroll
-document.querySelectorAll('.hero .reveal, .stats .reveal').forEach(el => {
-  el.classList.add('is-visible');
-});
+
 
 const menuToggle = document.getElementById('menuToggle');
 const mainMenu = document.getElementById('mainMenu');
@@ -296,7 +273,7 @@ if(menuToggle && mainMenu){
 
 filterAndRender('todos');
 bindAreaFilters();
-observeReveal();
+
 
 
 

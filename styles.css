@@ -711,21 +711,11 @@ button{font:inherit}
   background:#fff;box-shadow:var(--shadow-soft);cursor:pointer;font-size:1.6rem;
 }
 
-.reveal{
-  opacity:0;
-  transform:translateY(18px);
-  transition:opacity .6s ease, transform .6s ease;
-}
-.reveal.is-visible{
-  opacity:1;
-  transform:translateY(0);
-}
+
+
 /* Fallback: si JS no corre, mostrar todo el contenido */
 @media (prefers-reduced-motion: no-preference) {}
-.no-js .reveal{
-  opacity:1;
-  transform:none;
-}
+.no-js 
 
 @media (max-width:1080px){
   .hero-grid,
