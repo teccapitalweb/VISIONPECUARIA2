@@ -942,6 +942,16 @@ flex:0 0 auto;
   .course-body{ padding:14px 14px 18px; }
   .course-card h3{ font-size:1rem; }
 
+  /* Imagen completa en móvil — sin recorte */
+  .course-image-wrap{
+    aspect-ratio:4 / 3.5;
+    background:#000;
+  }
+  .course-image-wrap img{
+    object-fit:contain;
+    object-position:center center;
+  }
+
   /* Dots compactos */
   .carousel-dots{
     gap:6px;
