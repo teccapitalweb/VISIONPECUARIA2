@@ -141,18 +141,39 @@ window.addEventListener('resize', () => {
   requestAnimationFrame(updateCarouselPosition);
 });
 
-// Swipe táctil
+// Swipe táctil — detecta dirección antes de actuar
 let touchStartX = 0;
+let touchStartY = 0;
+let swipeDetected = false;
+
 if(carousel){
-  carousel.addEventListener('touchstart', e => { touchStartX = e.touches[0].clientX; }, {passive:true});
+  carousel.addEventListener('touchstart', e => {
+    touchStartX = e.touches[0].clientX;
+    touchStartY = e.touches[0].clientY;
+    swipeDetected = false;
+  }, {passive:true});
+
+  carousel.addEventListener('touchmove', e => {
+    if(swipeDetected) return;
+    const dx = Math.abs(e.touches[0].clientX - touchStartX);
+    const dy = Math.abs(e.touches[0].clientY - touchStartY);
+    // Solo bloquear scroll si el gesto es claramente horizontal
+    if(dx > dy && dx > 8){
+      swipeDetected = true;
+      e.preventDefault(); // bloquea scroll vertical mientras desliza horizontal
+    }
+  }, {passive:false});
+
   carousel.addEventListener('touchend', e => {
+    if(!swipeDetected) return;
     const diff = touchStartX - e.changedTouches[0].clientX;
     const cpv = getCardsPerView();
-    if(Math.abs(diff) > 50){
+    if(Math.abs(diff) > 40){
       if(diff > 0) currentIndex = Math.min(carouselData.length - cpv, currentIndex + cpv);
       else currentIndex = Math.max(0, currentIndex - cpv);
       updateCarouselPosition();
     }
+    swipeDetected = false;
   }, {passive:true});
 }
 
@@ -435,14 +456,32 @@ bindAreaFilters();
 
   // Swipe táctil
   let tx = 0;
-  track.addEventListener('touchstart', e => { tx = e.touches[0].clientX; }, {passive:true});
+  let rTouchX = 0, rTouchY = 0, rSwipe = false;
+  track.addEventListener('touchstart', e => {
+    rTouchX = e.touches[0].clientX;
+    rTouchY = e.touches[0].clientY;
+    rSwipe = false;
+  }, {passive:true});
+
+  track.addEventListener('touchmove', e => {
+    if(rSwipe) return;
+    const dx = Math.abs(e.touches[0].clientX - rTouchX);
+    const dy = Math.abs(e.touches[0].clientY - rTouchY);
+    if(dx > dy && dx > 8){
+      rSwipe = true;
+      e.preventDefault();
+    }
+  }, {passive:false});
+
   track.addEventListener('touchend', e => {
-    const diff = tx - e.changedTouches[0].clientX;
-    if(Math.abs(diff) > 50){
+    if(!rSwipe) return;
+    const diff = rTouchX - e.changedTouches[0].clientX;
+    if(Math.abs(diff) > 40){
       const cpv = rCpv();
       rIdx = diff > 0 ? Math.min(images.length - cpv, rIdx + cpv) : Math.max(0, rIdx - cpv);
       updateReview();
     }
+    rSwipe = false;
   }, {passive:true});
 
   window.addEventListener('resize', () => { rIdx = 0; requestAnimationFrame(updateReview); });
