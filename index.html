@@ -184,23 +184,25 @@
           </p>
         </div>
 
-        
-<div class="course-areas">
-<button class="area-btn active" data-area="todos">Todos</button>
-<button class="area-btn" data-area="bovinos">Bovinos</button>
-<button class="area-btn" data-area="porcinos">Porcinos</button>
-<button class="area-btn" data-area="equinos">Equinos</button>
-<button class="area-btn" data-area="avicultura">Avicultura</button>
-<button class="area-btn" data-area="acuicultura">Acuicultura</button>
-<button class="area-btn" data-area="apicultura">Apicultura</button>
-</div>
-
-<div class="courses-grid" id="coursesGrid">
-</div>
-
-        <div class="section-action reveal">
-          <button class="btn btn-primary" id="toggleCoursesBtn">Ver todos los cursos</button>
+        <div class="course-areas">
+          <button class="area-btn active" data-area="todos">Todos</button>
+          <button class="area-btn" data-area="bovinos">Bovinos</button>
+          <button class="area-btn" data-area="porcinos">Porcinos</button>
+          <button class="area-btn" data-area="equinos">Equinos</button>
+          <button class="area-btn" data-area="avicultura">Avicultura</button>
+          <button class="area-btn" data-area="acuicultura">Acuicultura</button>
+          <button class="area-btn" data-area="apicultura">Apicultura</button>
         </div>
+
+        <div class="carousel-wrapper">
+          <button class="carousel-arrow carousel-prev" id="carouselPrev" aria-label="Anterior">&#8249;</button>
+          <div class="courses-carousel" id="coursesCarousel">
+            <div class="courses-grid" id="coursesGrid"></div>
+          </div>
+          <button class="carousel-arrow carousel-next" id="carouselNext" aria-label="Siguiente">&#8250;</button>
+        </div>
+
+        <div class="carousel-dots" id="carouselDots"></div>
       </div>
     </section>
 
@@ -217,17 +219,16 @@
         <div class="students-slider reveal">
           <button class="students-nav students-prev" type="button" aria-label="Ver alumnos anteriores">‹</button>
           <div class="student-grid" id="studentGrid">
-            <img src="assets/alumnos/alumno-01.jpg" alt="Alumno graduado 1">
-            <img src="assets/alumnos/alumno-02.jpg" alt="Alumno graduado 2">
-            <img src="assets/alumnos/alumno-03.jpg" alt="Alumno graduado 3">
-            <img src="assets/alumnos/alumno-04.jpg" alt="Alumno graduado 4">
-            <img src="assets/alumnos/alumno-05.jpg" alt="Alumno graduado 5">
-            <img src="assets/alumnos/alumno-06.jpg" alt="Alumno graduado 6">
-            <img src="assets/alumnos/alumno-07.jpg" alt="Alumno graduado 7">
-            <img src="assets/alumnos/alumno-08.jpg" alt="Alumno graduado 8">
-            <img src="assets/alumnos/alumno-09.jpg" alt="Alumno graduado 9">
-            <img src="assets/alumnos/alumno-10.jpg" alt="Alumno graduado 10">
-            <img src="assets/alumnos/alumno-11.jpg" alt="Alumno graduado 11">
+            <img src="assets/graduados/graduado-01.jpg" alt="Alumno graduado 1">
+            <img src="assets/graduados/graduado-02.jpg" alt="Alumno graduado 2">
+            <img src="assets/graduados/graduado-03.jpg" alt="Alumno graduado 3">
+            <img src="assets/graduados/graduado-04.jpg" alt="Alumno graduado 4">
+            <img src="assets/graduados/graduado-05.jpg" alt="Alumno graduado 5">
+            <img src="assets/graduados/graduado-06.jpg" alt="Alumno graduado 6">
+            <img src="assets/graduados/graduado-07.jpg" alt="Alumno graduado 7">
+            <img src="assets/graduados/graduado-08.jpg" alt="Alumno graduado 8">
+            <img src="assets/graduados/graduado-09.jpg" alt="Alumno graduado 9">
+            <img src="assets/graduados/graduado-10.jpg" alt="Alumno graduado 10">
           </div>
           <button class="students-nav students-next" type="button" aria-label="Ver siguientes alumnos">›</button>
         </div>
@@ -244,20 +245,27 @@
           </p>
         </div>
 
-        <div class="review-grid">
-          <img class="reveal" src="assets/resenas/resena-01.png" alt="Reseña 1">
-          <img class="reveal" src="assets/resenas/resena-02.png" alt="Reseña 2">
-          <img class="reveal" src="assets/resenas/resena-03.png" alt="Reseña 3">
-          <img class="reveal" src="assets/resenas/resena-04.png" alt="Reseña 4">
-          <img class="reveal" src="assets/resenas/resena-05.png" alt="Reseña 5">
-          <img class="reveal" src="assets/resenas/resena-06.png" alt="Reseña 6">
-          <img class="reveal" src="assets/resenas/resena-07.png" alt="Reseña 7">
-          <img class="reveal" src="assets/resenas/resena-08.png" alt="Reseña 8">
-          <img class="reveal" src="assets/resenas/resena-09.png" alt="Reseña 9">
-          <img class="reveal" src="assets/resenas/resena-10.png" alt="Reseña 10">
-          <img class="reveal" src="assets/resenas/resena-11.png" alt="Reseña 11">
-          <img class="reveal" src="assets/resenas/resena-12.png" alt="Reseña 12">
+        <div class="review-carousel-wrapper">
+          <button class="carousel-arrow carousel-prev" id="reviewPrev" aria-label="Anterior">&#8249;</button>
+          <div class="review-carousel-track" id="reviewCarousel">
+            <div class="review-grid" id="reviewGrid">
+              <img src="assets/resenas/resena-01.png" alt="Reseña 1" loading="lazy">
+              <img src="assets/resenas/resena-02.png" alt="Reseña 2" loading="lazy">
+              <img src="assets/resenas/resena-03.png" alt="Reseña 3" loading="lazy">
+              <img src="assets/resenas/resena-04.png" alt="Reseña 4" loading="lazy">
+              <img src="assets/resenas/resena-05.png" alt="Reseña 5" loading="lazy">
+              <img src="assets/resenas/resena-06.png" alt="Reseña 6" loading="lazy">
+              <img src="assets/resenas/resena-07.png" alt="Reseña 7" loading="lazy">
+              <img src="assets/resenas/resena-08.png" alt="Reseña 8" loading="lazy">
+              <img src="assets/resenas/resena-09.png" alt="Reseña 9" loading="lazy">
+              <img src="assets/resenas/resena-10.png" alt="Reseña 10" loading="lazy">
+              <img src="assets/resenas/resena-11.png" alt="Reseña 11" loading="lazy">
+              <img src="assets/resenas/resena-12.png" alt="Reseña 12" loading="lazy">
+            </div>
+          </div>
+          <button class="carousel-arrow carousel-next" id="reviewNext" aria-label="Siguiente">&#8250;</button>
         </div>
+        <div class="carousel-dots" id="reviewDots"></div>
       </div>
     </section>
 

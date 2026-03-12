@@ -10,50 +10,138 @@ function buildWhatsappMessage(courseName){
   return `${WHATSAPP_BASE}?text=${encodeURIComponent(`Hola, quiero información sobre el curso "${courseName}" de Visión Pecuaria.`)}`;
 }
 
+// Mapa de etiquetas de área
+const areaLabels = {
+  bovinos: 'Bovinos',
+  porcinos: 'Porcinos',
+  equinos: 'Equinos',
+  avicultura: 'Avicultura',
+  acuicultura: 'Acuicultura',
+  apicultura: 'Apicultura',
+  general: 'General'
+};
+
 function createCourseCard(course){
   const article = document.createElement('article');
-  article.className = 'course-card reveal'; article.dataset.area = course.area || 'general';
+  article.className = 'course-card';
+  article.dataset.area = course.area || 'general';
+  const areaLabel = areaLabels[course.area] || 'General';
   article.innerHTML = `
     <div class="course-image-wrap">
-      <img src="${course.imagen}" alt="${course.nombre}">
+      <img src="${course.imagen}" alt="${course.nombre}" loading="lazy">
     </div>
     <div class="course-body">
-      <div class="course-meta">
-        <span class="course-pill">${course.modalidad}</span>
-        <span class="course-id">Curso ${String(course.id).padStart(2, '0')}</span>
+      <div class="course-tags">
+        <span class="course-tag-area">${areaLabel}</span>
+        <span class="course-tag-modalidad">Modalidad online</span>
       </div>
       <h3>${course.nombre}</h3>
       <p class="course-description">${course.descripcion}</p>
-      <div class="course-benefits">
-        <span>Clases en vivo</span>
-        <span>Grupo de WhatsApp</span>
-        <span>Certificado QR y folio</span>
-      </div>
       <div class="course-actions">
-        <button class="btn btn-secondary full" data-course-id="${course.id}">Ver más detalles</button>
-        <a class="btn btn-whatsapp full" href="${buildWhatsappMessage(course.nombre)}" target="_blank" rel="noopener noreferrer">Solicitar informes</a>
+        <button class="btn-details" data-course-id="${course.id}">Ver detalles</button>
+        <a class="btn-informes" href="${buildWhatsappMessage(course.nombre)}" target="_blank" rel="noopener noreferrer">Informes</a>
       </div>
     </div>`;
   return article;
 }
 
-function renderCourses(){
-  if(!coursesGrid) return;
-  coursesGrid.innerHTML = '';
-  const data = showAllCourses ? coursesData : coursesData.slice(0, INITIAL_VISIBLE_COURSES);
-  data.forEach(course => coursesGrid.appendChild(createCourseCard(course)));
-  if(toggleCoursesBtn){
-    toggleCoursesBtn.textContent = showAllCourses ? 'Ver menos cursos' : 'Ver todos los cursos';
-  }
-  bindCourseButtons();
-  observeReveal();
+// ── CARRUSEL ──────────────────────────────────────────────
+let carouselData = [];
+let currentIndex = 0;
+const CARDS_PER_VIEW_DESKTOP = 3;
+const CARDS_PER_VIEW_MOBILE = 1;
+const carousel = document.getElementById('coursesCarousel');
+const prevBtn = document.getElementById('carouselPrev');
+const nextBtn = document.getElementById('carouselNext');
+const dotsContainer = document.getElementById('carouselDots');
+
+function getCardsPerView(){
+  return window.innerWidth <= 640 ? 1 : window.innerWidth <= 900 ? 2 : 3;
 }
 
-if(toggleCoursesBtn){
-  toggleCoursesBtn.addEventListener('click', () => {
-    showAllCourses = !showAllCourses;
-    renderCourses();
+function getTotalPages(){
+  return Math.ceil(carouselData.length / getCardsPerView());
+}
+
+function renderDots(){
+  if(!dotsContainer) return;
+  const pages = getTotalPages();
+  const activePage = Math.floor(currentIndex / getCardsPerView());
+  dotsContainer.innerHTML = '';
+  for(let i = 0; i < pages; i++){
+    const dot = document.createElement('button');
+    dot.className = 'carousel-dot' + (i === activePage ? ' active' : '');
+    dot.setAttribute('aria-label', `Página ${i+1}`);
+    dot.addEventListener('click', () => {
+      currentIndex = i * getCardsPerView();
+      updateCarouselPosition();
+    });
+    dotsContainer.appendChild(dot);
+  }
+}
+
+function updateCarouselPosition(){
+  const cpv = getCardsPerView();
+  const maxIndex = Math.max(0, carouselData.length - cpv);
+  if(currentIndex > maxIndex) currentIndex = maxIndex;
+  if(currentIndex < 0) currentIndex = 0;
+  const card = coursesGrid.querySelector('.course-card');
+  if(!card) return;
+  const gap = 24;
+  const offset = currentIndex * (card.offsetWidth + gap);
+  coursesGrid.style.transform = `translateX(-${offset}px)`;
+  if(prevBtn) prevBtn.style.opacity = currentIndex === 0 ? '0.35' : '1';
+  if(nextBtn) nextBtn.style.opacity = currentIndex >= maxIndex ? '0.35' : '1';
+  renderDots();
+}
+
+function renderCarousel(){
+  if(!coursesGrid) return;
+  coursesGrid.style.transform = 'translateX(0)';
+  coursesGrid.innerHTML = '';
+  carouselData.forEach(course => coursesGrid.appendChild(createCourseCard(course)));
+  bindCourseButtons();
+  requestAnimationFrame(updateCarouselPosition);
+}
+
+function filterAndRender(area){
+  carouselData = area === 'todos' ? [...coursesData] : coursesData.filter(c => c.area === area);
+  currentIndex = 0;
+  renderCarousel();
+}
+
+if(prevBtn){
+  prevBtn.addEventListener('click', () => {
+    currentIndex = Math.max(0, currentIndex - getCardsPerView());
+    updateCarouselPosition();
   });
+}
+if(nextBtn){
+  nextBtn.addEventListener('click', () => {
+    const cpv = getCardsPerView();
+    currentIndex = Math.min(carouselData.length - cpv, currentIndex + cpv);
+    updateCarouselPosition();
+  });
+}
+
+window.addEventListener('resize', () => {
+  currentIndex = 0;
+  requestAnimationFrame(updateCarouselPosition);
+});
+
+// Swipe táctil
+let touchStartX = 0;
+if(carousel){
+  carousel.addEventListener('touchstart', e => { touchStartX = e.touches[0].clientX; }, {passive:true});
+  carousel.addEventListener('touchend', e => {
+    const diff = touchStartX - e.changedTouches[0].clientX;
+    const cpv = getCardsPerView();
+    if(Math.abs(diff) > 50){
+      if(diff > 0) currentIndex = Math.min(carouselData.length - cpv, currentIndex + cpv);
+      else currentIndex = Math.max(0, currentIndex - cpv);
+      updateCarouselPosition();
+    }
+  }, {passive:true});
 }
 
 const modal = document.getElementById('courseModal');
@@ -166,7 +254,7 @@ if(menuToggle && mainMenu){
   });
 }
 
-renderCourses();
+filterAndRender('todos');
 bindAreaFilters();
 observeReveal();
 
@@ -264,23 +352,81 @@ if (studentGrid) {
 
 
 
-const areaButtons = document.querySelectorAll('.area-btn');
-
 function bindAreaFilters(){
+  const areaButtons = document.querySelectorAll('.area-btn');
   if(!areaButtons.length) return;
-
   areaButtons.forEach(btn => {
     btn.addEventListener('click', () => {
       areaButtons.forEach(b => b.classList.remove('active'));
       btn.classList.add('active');
-
-      const area = btn.dataset.area;
-      document.querySelectorAll('.course-card').forEach(card => {
-        const matches = area === 'todos' || card.dataset.area === area;
-        card.style.display = matches ? 'flex' : 'none';
-      });
+      filterAndRender(btn.dataset.area);
     });
   });
 }
 
 bindAreaFilters();
+
+// ── CARRUSEL DE RESEÑAS ───────────────────────────────────
+(function(){
+  const track = document.getElementById('reviewCarousel');
+  const grid  = document.getElementById('reviewGrid');
+  const prev  = document.getElementById('reviewPrev');
+  const next  = document.getElementById('reviewNext');
+  const dots  = document.getElementById('reviewDots');
+  if(!track || !grid) return;
+
+  const images = Array.from(grid.querySelectorAll('img'));
+  let rIdx = 0;
+
+  function rCpv(){
+    return window.innerWidth <= 640 ? 1 : window.innerWidth <= 900 ? 2 : 3;
+  }
+
+  function rPages(){ return Math.ceil(images.length / rCpv()); }
+
+  function renderReviewDots(){
+    if(!dots) return;
+    const pg = Math.floor(rIdx / rCpv());
+    dots.innerHTML = '';
+    for(let i = 0; i < rPages(); i++){
+      const d = document.createElement('button');
+      d.className = 'carousel-dot' + (i === pg ? ' active' : '');
+      d.setAttribute('aria-label', `Página ${i+1}`);
+      d.addEventListener('click', () => { rIdx = i * rCpv(); updateReview(); });
+      dots.appendChild(d);
+    }
+  }
+
+  function updateReview(){
+    const cpv = rCpv();
+    const max = Math.max(0, images.length - cpv);
+    if(rIdx > max) rIdx = max;
+    if(rIdx < 0) rIdx = 0;
+    const img = grid.querySelector('img');
+    if(!img) return;
+    const gap = 20;
+    const offset = rIdx * (img.offsetWidth + gap);
+    grid.style.transform = `translateX(-${offset}px)`;
+    if(prev) prev.style.opacity = rIdx === 0 ? '0.35' : '1';
+    if(next) next.style.opacity = rIdx >= max ? '0.35' : '1';
+    renderReviewDots();
+  }
+
+  if(prev) prev.addEventListener('click', () => { rIdx = Math.max(0, rIdx - rCpv()); updateReview(); });
+  if(next) next.addEventListener('click', () => { rIdx = Math.min(images.length - rCpv(), rIdx + rCpv()); updateReview(); });
+
+  // Swipe táctil
+  let tx = 0;
+  track.addEventListener('touchstart', e => { tx = e.touches[0].clientX; }, {passive:true});
+  track.addEventListener('touchend', e => {
+    const diff = tx - e.changedTouches[0].clientX;
+    if(Math.abs(diff) > 50){
+      const cpv = rCpv();
+      rIdx = diff > 0 ? Math.min(images.length - cpv, rIdx + cpv) : Math.max(0, rIdx - cpv);
+      updateReview();
+    }
+  }, {passive:true});
+
+  window.addEventListener('resize', () => { rIdx = 0; requestAnimationFrame(updateReview); });
+  requestAnimationFrame(updateReview);
+})();
