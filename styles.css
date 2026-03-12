@@ -714,247 +714,178 @@ button{font:inherit}
 
 
 /* Fallback: si JS no corre, mostrar todo el contenido */
-@media (prefers-reduced-motion: no-preference) {}
-.no-js 
 
+
+/* ══════════════════════════════════════════
+   RESPONSIVE — MEDIA QUERIES
+   ══════════════════════════════════════════ */
+
+/* ── Tablet grande (≤1080px) ─────────────── */
 @media (max-width:1080px){
-  .hero-grid,
-  .contact-grid,
-  .modal-panel{grid-template-columns:1fr}
-  .hero-media img{min-height:420px}
-  .benefits-grid,.community-grid{grid-template-columns:repeat(2,1fr)}
-  .student-grid{grid-template-columns:repeat(3,1fr)}
-  .footer-grid{grid-template-columns:repeat(2,1fr)}
+  .hero-grid{ grid-template-columns:1fr }
+  .hero-media img{ min-height:420px }
+  .contact-grid{ grid-template-columns:1.15fr .85fr }
+  .modal-panel{ grid-template-columns:.9fr 1.1fr }
+  .benefits-grid,.community-grid{ grid-template-columns:repeat(2,1fr) }
+  .student-grid{ grid-template-columns:repeat(3,1fr) }
+  .footer-grid{ grid-template-columns:repeat(2,1fr) }
 }
 
+/* ── Tablet / móvil grande (≤780px) ─────── */
 @media (max-width:780px){
-  .topbar-inner{justify-content:center}
-  .desktop-whatsapp{display:none}
-  .mobile-whatsapp{display:inline-flex}
-  .menu-toggle{display:block}
+  /* Nav */
+  .topbar-inner{ justify-content:center }
+  .desktop-whatsapp{ display:none }
+  .mobile-whatsapp{ display:inline-flex }
+  .menu-toggle{ display:block }
   .menu{
-    position:absolute;left:16px;right:16px;top:86px;
-    display:none;flex-direction:column;align-items:flex-start;
-    background:#fff;border:1px solid rgba(31,92,64,.08);
-    border-radius:22px;padding:18px;box-shadow:var(--shadow);
+    position:absolute; left:16px; right:16px; top:86px;
+    display:none; flex-direction:column; align-items:flex-start;
+    background:#fff; border:1px solid rgba(31,92,64,.08);
+    border-radius:22px; padding:18px; box-shadow:var(--shadow);
   }
-  .menu.is-open{display:flex}
-  .hero-copy{padding:28px}
-  .hero-copy h1{font-size:clamp(2rem,9vw,3.3rem)}
-  .about-grid,.benefits-grid,.community-grid,.stats-grid,.footer-grid
-  .student-grid{grid-template-columns:repeat(2,1fr)}
-  .nav{min-height:80px}
-  .brand img{width:50px;height:50px}
-  .brand-copy small{display:none}
-  .section{padding:76px 0}
-  .modal-content{padding:22px}
-  .contact-copy,.contact-card{padding:24px}
-  .contact-links a{min-height:54px}
-  .hero-actions{flex-direction:column}
-  .hero-actions .btn{width:100%}
-  .whatsapp-float{
-    right:14px;
-    left:14px;
-    bottom:14px;
-    justify-content:center;
+  .menu.is-open{ display:flex }
+  .nav{ min-height:80px }
+  .brand img{ width:50px; height:50px }
+  .brand-copy small{ display:none }
+
+  /* Hero — imagen oculta, solo texto */
+  .hero-grid{ grid-template-columns:1fr }
+  .hero-media{ display:none }
+  .hero-copy{ padding:28px; width:100% }
+  .hero-copy h1{ font-size:clamp(1.9rem,8vw,2.8rem) }
+  .hero-actions{ flex-direction:column }
+  .hero-actions .btn{ width:100% }
+
+  /* Secciones */
+  .section{ padding:60px 0 }
+  .about-grid,.benefits-grid,.community-grid,.stats-grid{ grid-template-columns:repeat(2,1fr) }
+
+  /* Contacto — 1 columna */
+  .contact-grid{ grid-template-columns:1fr }
+  .contact-copy,.contact-card{ padding:24px }
+  .contact-links a{ min-height:54px }
+
+  /* Modal — 1 columna */
+  .modal-panel{
+    grid-template-columns:1fr;
+    max-height:90vh;
+    margin:5vh auto 0;
+    width:min(540px, calc(100% - 24px));
   }
-}
+  .modal-panel img{
+    width:100%; height:220px;
+    object-fit:cover; min-height:unset;
+    border-radius:28px 28px 0 0;
+  }
+  .modal-content{ padding:20px 22px 24px }
 
-@media (max-width:520px){
-  .student-grid{grid-template-columns:1fr}
-  .topbar{display:none}
-  .hero{padding-top:24px}
-  .hero-media img{min-height:320px}
-  .btn{width:100%}
-  .hero-copy{padding:24px}
-  .section-head h2{font-size:clamp(1.6rem,8vw,2rem)}
-  .section-head p,
-  .hero-copy p,
-  .contact-copy p,
-  .about-card p,
-  .benefit-card p,
-  .community-card p{font-size:.98rem;line-height:1.72}
-  .course-body{padding:18px 18px 20px}
-  .course-card h3{font-size:1.05rem}
-  .stat-card{padding:28px 18px}
-  .contact-links a{padding:0 14px;font-size:.96rem}
-  .whatsapp-float-text{font-size:.98rem}
-}
+  /* Footer — 1 columna */
+  .footer-grid{ grid-template-columns:1fr; gap:28px; padding:40px 0 20px }
 
-
-@media (max-width:780px){
+  /* Cursos carrusel */
   .course-image-wrap{
-    aspect-ratio: 3 / 4.3;
-    padding:8px;
-  }
-  .course-image-wrap img{
-    object-position:center top;
-  }
-  .student-grid{
-    gap:14px;
-    padding-bottom:8px;
-  }
-  .student-grid img{
-    flex:0 0 82%;
-    max-width:82%;
-  }
-}
-
-@media (max-width:520px){
-  .course-image-wrap{
-    aspect-ratio: 3 / 4.45;
-    padding:8px;
-  }
-  .student-grid img{
-    flex:0 0 86%;
-    max-width:86%;
-  }
-}
-
-@media (max-width:980px){
-  .student-grid img{
-    flex:0 0 calc(33.333% - 12px);
-    max-width:calc(33.333% - 12px);
-  }
-}
-@media (max-width:780px){
-  .course-image-wrap{
-    aspect-ratio: 4 / 4.45;
+    aspect-ratio:4/4.45;
     padding:10px 10px 0;
   }
   .course-image-wrap img{
     object-position:center center;
     border-radius:20px 20px 0 0;
   }
-  .course-body{
-    padding:16px 16px 20px;
-    gap:12px;
-  }
-  .course-actions{
-    grid-template-columns:1fr;
-  }
-  .student-grid img{
-    flex:0 0 78%;
-    max-width:78%;
-  }
-  .students-nav{
-    width:42px;
-    height:42px;
-    font-size:1.6rem;
+  .course-body{ padding:16px 16px 20px; gap:12px }
+  .course-actions{ grid-template-columns:1fr }
+
+  /* Alumnos */
+  .student-grid{ gap:14px; padding-bottom:8px }
+  .student-grid img{ flex:0 0 78%; max-width:78% }
+  .students-nav{ width:42px; height:42px; font-size:1.6rem }
+
+  /* WhatsApp flotante */
+  .whatsapp-float{
+    right:14px; left:14px; bottom:14px; justify-content:center;
   }
 }
+
+/* ── Móvil (≤520px) ──────────────────────── */
 @media (max-width:520px){
-  .course-image-wrap{
-    aspect-ratio: 4 / 4.65;
-    padding:8px 8px 0;
-  }
-  .course-body{
-    padding:15px 15px 18px;
-    gap:11px;
-  }
-  .course-card h3{
-    font-size:1.04rem;
-  }
-  .course-description{
-    font-size:.93rem;
-  }
-  .course-benefits span{
-    font-size:.78rem;
-    min-height:31px;
-    padding:0 10px;
-  }
-  .student-grid img{
-    flex:0 0 84%;
-    max-width:84%;
-  }
-  .students-nav{
-    width:38px;
-    height:38px;
-    font-size:1.45rem;
-  }
+  .topbar{ display:none }
+  .hero{ padding-top:24px }
+  .hero-copy{ padding:22px }
+  .hero-copy h1{ font-size:clamp(1.7rem,8vw,2.4rem) }
+  .hero-copy p{ font-size:.97rem }
+  .btn{ width:100% }
+
+  .section-head h2{ font-size:clamp(1.5rem,7.5vw,1.9rem) }
+  .section-head p,
+  .hero-copy p,
+  .contact-copy p,
+  .about-card p,
+  .benefit-card p,
+  .community-card p{ font-size:.95rem; line-height:1.7 }
+
+  /* Beneficios — 2 cols (se mantienen) */
+  .benefits-grid{ grid-template-columns:repeat(2,1fr) }
+  .benefit-card{ padding:18px 14px }
+
+  /* Stats */
+  .stats-grid{ grid-template-columns:repeat(2,1fr) }
+  .stat-card{ padding:24px 14px }
+
+  /* Alumnos */
+  .student-grid{ grid-template-columns:1fr }
+  .student-grid img{ flex:0 0 86%; max-width:86% }
+
+  /* Cursos */
+  .course-image-wrap{ aspect-ratio:4/4.65; padding:8px 8px 0 }
+  .course-body{ padding:14px 14px 18px; gap:11px }
+  .course-card h3{ font-size:1rem }
+  .course-description{ font-size:.92rem }
+  .course-benefits span{ font-size:.78rem; min-height:30px; padding:0 10px }
+  .students-nav{ width:38px; height:38px; font-size:1.45rem }
+
+  /* Contacto */
+  .contact-links a{ padding:0 14px; font-size:.95rem }
+
+  /* Texto footer */
+  .footer-brand h3{ font-size:1.1rem }
+  .whatsapp-float-text{ font-size:.96rem }
 }
 
-.course-areas{
-display:flex;
-justify-content:center;
-flex-wrap:wrap;
-gap:10px;
-margin-bottom:30px;
-}
-.area-btn{
-padding:10px 16px;
-border-radius:999px;
-border:none;
-background:#e7f1ec;
-color:#1f5c40;
-font-weight:700;
-cursor:pointer;
-transition:.25s;
-}
-.area-btn:hover{
-background:#1f5c40;
-color:#fff;
-}
-.area-btn.active{
-background:#1f5c40;
-color:#fff;
-}
+/* Centrado sección cursos */
+.courses .section-head{ max-width:860px }
 
-
-
+/* ── Filtros de área (≤768px) ────────────── */
 @media(max-width:768px){
-.course-areas{
-overflow-x:auto;
-flex-wrap:nowrap;
-padding-bottom:10px;
-}
-.area-btn{
-flex:0 0 auto;
-}
+  .course-areas{ overflow-x:auto; flex-wrap:nowrap; padding-bottom:10px }
+  .area-btn{ flex:0 0 auto }
 }
 
-
-/* Ajustes de centrado e integración visual en cursos */
-.courses .section-head{
-  max-width: 860px;
-}
-}
-/* ── CARRUSEL RESPONSIVO ─────────────────────────────── */
+/* ── Carrusel responsivo ─────────────────── */
 @media(max-width:900px){
-  .course-card{ flex:0 0 calc((100% - 24px) / 2); }
-  .review-grid img{ flex:0 0 calc((100% - 20px) / 2); width:calc((100% - 20px) / 2); }
+  .course-card{ flex:0 0 calc((100% - 24px) / 2) }
+  .review-grid img{ flex:0 0 calc((100% - 20px) / 2); width:calc((100% - 20px) / 2) }
 }
 @media(max-width:640px){
-  /* Ocultar flechas laterales — navegación por swipe y dots */
-  .carousel-prev,
-  .carousel-next,
+  /* Flechas ocultas en móvil */
+  .carousel-prev, .carousel-next,
   .review-carousel-wrapper .carousel-prev,
-  .review-carousel-wrapper .carousel-next{ display:none; }
+  .review-carousel-wrapper .carousel-next{ display:none }
 
-  /* Carrusel de cursos: card 100% centrada */
-  .carousel-wrapper{ gap:0; }
-  .courses-carousel{ padding:0 2px; }
-  .course-card{ flex:0 0 100%; }
-  .course-body{ padding:14px 14px 18px; }
-  .course-card h3{ font-size:1rem; }
+  /* Carrusel cursos: 1 card */
+  .carousel-wrapper{ gap:0 }
+  .courses-carousel{ padding:0 2px }
+  .course-card{ flex:0 0 100% }
+  .course-body{ padding:14px 14px 18px }
+  .course-card h3{ font-size:1rem }
 
-  /* Imagen completa en móvil — sin recorte */
-  .course-image-wrap{
-    aspect-ratio:4 / 3.5;
-    background:#000;
-  }
-  .course-image-wrap img{
-    object-fit:contain;
-    object-position:center center;
-  }
+  /* Imagen completa en móvil */
+  .course-image-wrap{ aspect-ratio:4/3.5; background:#000 }
+  .course-image-wrap img{ object-fit:contain; object-position:center center }
 
-  /* Dots compactos */
-  .carousel-dots{
-    gap:6px;
-    margin-top:16px;
-  }
-  .carousel-dot{ width:8px; height:8px; }
+  /* Dots */
+  .carousel-dots{ gap:6px; margin-top:16px }
+  .carousel-dot{ width:8px; height:8px }
 
   /* Reseñas móvil */
-  .review-grid img{ flex:0 0 100%; width:100%; }
+  .review-grid img{ flex:0 0 100%; width:100% }
 }
