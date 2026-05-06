@@ -27,11 +27,23 @@
       document.body.style.overflow = '';
     };
     window.cambiarAuthTab = function(tab) {
+      // Tabs
       document.querySelectorAll('.auth-tab').forEach(b => b.classList.toggle('active', b.dataset.tab === tab));
+      // Indicador deslizante
+      const ind = document.getElementById('authTabIndicator');
+      if (ind) ind.classList.toggle('right', tab === 'login');
+      // Forms
       const r = document.getElementById('authFormRegistro');
       const l = document.getElementById('authFormLogin');
-      if (r) r.style.display = tab === 'registro' ? 'flex' : 'none';
-      if (l) l.style.display = tab === 'login' ? 'flex' : 'none';
+      if (r) r.classList.toggle('active', tab === 'registro');
+      if (l) l.classList.toggle('active', tab === 'login');
+      // Limpiar alerts
+      document.querySelectorAll('.auth-alert').forEach(a => a.classList.remove('show'));
+    };
+    window.togglePass = function(inputId) {
+      const inp = document.getElementById(inputId);
+      if (!inp) return;
+      inp.type = inp.type === 'password' ? 'text' : 'password';
     };
     // Placeholder hasta que el módulo Firebase reasigne con la versión real
     window.suscribirElitePecuario = function(plan) {
@@ -677,67 +689,115 @@
   <script src="script.js"></script>
 
   <!-- ═══════════════════════════════════════════════════════════ -->
-  <!-- 🔐 MODAL DE AUTENTICACIÓN — Login + Registro + Google OAuth -->
+  <!-- 🔐 MODAL DE AUTENTICACIÓN — versión premium oscura            -->
   <!-- ═══════════════════════════════════════════════════════════ -->
   <div class="auth-overlay" id="authOverlay" onclick="if(event.target===this)cerrarModalAuth()">
+    <div class="auth-bg-orbs">
+      <div class="auth-orb auth-orb--1"></div>
+      <div class="auth-orb auth-orb--2"></div>
+    </div>
     <div class="auth-modal">
-      <button class="auth-close" onclick="cerrarModalAuth()" aria-label="Cerrar">×</button>
+      <button class="auth-close" onclick="cerrarModalAuth()" aria-label="Cerrar">
+        <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><line x1="18" y1="6" x2="6" y2="18"/><line x1="6" y1="6" x2="18" y2="18"/></svg>
+      </button>
+
+      <div class="auth-brand">
+        <div class="auth-brand-logo">🐂</div>
+        <div>
+          <h2>Visión Pecuaria</h2>
+          <p>Acceso al Portal Élite</p>
+        </div>
+      </div>
 
       <div class="auth-tabs">
-        <button class="auth-tab active" data-tab="registro" onclick="cambiarAuthTab('registro')">Crear cuenta</button>
+        <div class="auth-tab-indicator" id="authTabIndicator"></div>
+        <button class="auth-tab" data-tab="registro" onclick="cambiarAuthTab('registro')">Crear cuenta</button>
         <button class="auth-tab" data-tab="login" onclick="cambiarAuthTab('login')">Iniciar sesión</button>
       </div>
 
       <!-- ZONA REGISTRO -->
-      <div class="auth-form" id="authFormRegistro">
-        <h3>🐄 Únete a Visión Pecuaria</h3>
-        <p class="auth-subtitle">Crea tu cuenta gratis y explora el panel de socio. Mejora a VIP cuando quieras.</p>
+      <form class="auth-form active" id="authFormRegistro" onsubmit="registrarConEmail(event)">
+        <h3 class="auth-title">Únete al rancho digital</h3>
+        <p class="auth-subtitle">Crea tu cuenta gratis y explora el panel. Mejora a Élite Pecuario cuando quieras.</p>
 
-        <button class="auth-google" onclick="authConGoogle()">
+        <button type="button" class="auth-google" onclick="authConGoogle()" id="btnGoogleReg">
           <svg width="18" height="18" viewBox="0 0 18 18" xmlns="http://www.w3.org/2000/svg"><path fill="#4285F4" d="M17.64 9.2c0-.637-.057-1.251-.164-1.84H9v3.481h4.844a4.14 4.14 0 0 1-1.796 2.716v2.259h2.908c1.702-1.567 2.684-3.875 2.684-6.615z"/><path fill="#34A853" d="M9 18c2.43 0 4.467-.806 5.956-2.18l-2.908-2.259c-.806.54-1.837.86-3.048.86-2.344 0-4.328-1.584-5.036-3.711H.957v2.332A8.997 8.997 0 0 0 9 18z"/><path fill="#FBBC05" d="M3.964 10.71A5.41 5.41 0 0 1 3.682 9c0-.593.102-1.17.282-1.71V4.958H.957A8.996 8.996 0 0 0 0 9c0 1.452.348 2.827.957 4.042l3.007-2.332z"/><path fill="#EA4335" d="M9 3.58c1.321 0 2.508.454 3.44 1.345l2.582-2.58C13.463.891 11.426 0 9 0A8.997 8.997 0 0 0 .957 4.958L3.964 7.29C4.672 5.163 6.656 3.58 9 3.58z"/></svg>
           <span>Continuar con Google</span>
         </button>
 
-        <div class="auth-sep"><span>o</span></div>
+        <div class="auth-sep"><span>o con tu correo</span></div>
 
-        <input type="text" id="regNombre" placeholder="Tu nombre completo" autocomplete="name">
-        <input type="email" id="regEmail" placeholder="tu@correo.com" autocomplete="email">
-        <input type="password" id="regPass" placeholder="Contraseña (mínimo 6 caracteres)" autocomplete="new-password">
+        <div class="auth-field">
+          <svg class="auth-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"/><circle cx="12" cy="7" r="4"/></svg>
+          <input type="text" id="regNombre" placeholder="Tu nombre completo" autocomplete="name" required>
+        </div>
+        <div class="auth-field">
+          <svg class="auth-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M4 4h16c1.1 0 2 .9 2 2v12c0 1.1-.9 2-2 2H4c-1.1 0-2-.9-2-2V6c0-1.1.9-2 2-2z"/><polyline points="22,6 12,13 2,6"/></svg>
+          <input type="email" id="regEmail" placeholder="tu@correo.com" autocomplete="email" required>
+        </div>
+        <div class="auth-field">
+          <svg class="auth-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="11" width="18" height="11" rx="2" ry="2"/><path d="M7 11V7a5 5 0 0 1 10 0v4"/></svg>
+          <input type="password" id="regPass" placeholder="Mínimo 6 caracteres" autocomplete="new-password" required minlength="6">
+          <button type="button" class="auth-toggle-pass" onclick="togglePass('regPass')" tabindex="-1">
+            <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z"/><circle cx="12" cy="12" r="3"/></svg>
+          </button>
+        </div>
 
-        <button class="auth-submit" onclick="registrarConEmail()" id="btnRegistro">Crear cuenta gratis</button>
-        <p class="auth-error" id="regError"></p>
-        <p class="auth-mini">Al registrarte aceptas recibir información sobre cursos. Puedes cancelar cuando quieras.</p>
-      </div>
+        <div class="auth-alert" id="regError"></div>
+
+        <button type="submit" class="auth-submit" id="btnRegistro">
+          <span>Crear cuenta gratis</span>
+          <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><line x1="5" y1="12" x2="19" y2="12"/><polyline points="12 5 19 12 12 19"/></svg>
+        </button>
+        <p class="auth-mini">Al registrarte aceptas nuestros términos. Sin tarjeta, sin compromiso.</p>
+      </form>
 
       <!-- ZONA LOGIN -->
-      <div class="auth-form" id="authFormLogin" style="display:none">
-        <h3>👋 Bienvenido de vuelta</h3>
-        <p class="auth-subtitle">Inicia sesión para acceder a tu panel de socio.</p>
+      <form class="auth-form" id="authFormLogin" onsubmit="iniciarSesion(event)">
+        <h3 class="auth-title">Bienvenido de vuelta</h3>
+        <p class="auth-subtitle">Accede a tu portal y continúa donde lo dejaste.</p>
 
-        <button class="auth-google" onclick="authConGoogle()">
+        <button type="button" class="auth-google" onclick="authConGoogle()" id="btnGoogleLogin">
           <svg width="18" height="18" viewBox="0 0 18 18" xmlns="http://www.w3.org/2000/svg"><path fill="#4285F4" d="M17.64 9.2c0-.637-.057-1.251-.164-1.84H9v3.481h4.844a4.14 4.14 0 0 1-1.796 2.716v2.259h2.908c1.702-1.567 2.684-3.875 2.684-6.615z"/><path fill="#34A853" d="M9 18c2.43 0 4.467-.806 5.956-2.18l-2.908-2.259c-.806.54-1.837.86-3.048.86-2.344 0-4.328-1.584-5.036-3.711H.957v2.332A8.997 8.997 0 0 0 9 18z"/><path fill="#FBBC05" d="M3.964 10.71A5.41 5.41 0 0 1 3.682 9c0-.593.102-1.17.282-1.71V4.958H.957A8.996 8.996 0 0 0 0 9c0 1.452.348 2.827.957 4.042l3.007-2.332z"/><path fill="#EA4335" d="M9 3.58c1.321 0 2.508.454 3.44 1.345l2.582-2.58C13.463.891 11.426 0 9 0A8.997 8.997 0 0 0 .957 4.958L3.964 7.29C4.672 5.163 6.656 3.58 9 3.58z"/></svg>
           <span>Continuar con Google</span>
         </button>
 
-        <div class="auth-sep"><span>o</span></div>
+        <div class="auth-sep"><span>o con tu correo</span></div>
 
-        <input type="email" id="loginEmail" placeholder="tu@correo.com" autocomplete="email">
-        <input type="password" id="loginPass" placeholder="Tu contraseña" autocomplete="current-password">
+        <div class="auth-field">
+          <svg class="auth-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M4 4h16c1.1 0 2 .9 2 2v12c0 1.1-.9 2-2 2H4c-1.1 0-2-.9-2-2V6c0-1.1.9-2 2-2z"/><polyline points="22,6 12,13 2,6"/></svg>
+          <input type="email" id="loginEmail" placeholder="tu@correo.com" autocomplete="email" required>
+        </div>
+        <div class="auth-field">
+          <svg class="auth-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="11" width="18" height="11" rx="2" ry="2"/><path d="M7 11V7a5 5 0 0 1 10 0v4"/></svg>
+          <input type="password" id="loginPass" placeholder="Tu contraseña" autocomplete="current-password" required>
+          <button type="button" class="auth-toggle-pass" onclick="togglePass('loginPass')" tabindex="-1">
+            <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z"/><circle cx="12" cy="12" r="3"/></svg>
+          </button>
+        </div>
 
-        <button class="auth-submit" onclick="iniciarSesion()" id="btnLogin">Entrar al panel</button>
-        <p class="auth-error" id="loginError"></p>
+        <div class="auth-alert" id="loginError"></div>
+
+        <button type="submit" class="auth-submit" id="btnLogin">
+          <span>Entrar al portal</span>
+          <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><line x1="5" y1="12" x2="19" y2="12"/><polyline points="12 5 19 12 12 19"/></svg>
+        </button>
         <p class="auth-mini"><a href="#" onclick="recuperarPass(event)">¿Olvidaste tu contraseña?</a></p>
-      </div>
+      </form>
     </div>
   </div>
 
   <!-- Firebase v10.11.0 modular -->
+  <!-- ═══════════════════════════════════════════════════════════ -->
+  <!-- 🔥 FIREBASE — Auth + Firestore con autologin cross-domain    -->
+  <!-- ═══════════════════════════════════════════════════════════ -->
   <script type="module">
     import { initializeApp } from "https://www.gstatic.com/firebasejs/10.11.0/firebase-app.js";
     import {
       getAuth, createUserWithEmailAndPassword, signInWithEmailAndPassword,
       GoogleAuthProvider, signInWithPopup, sendPasswordResetEmail,
-      onAuthStateChanged, updateProfile
+      onAuthStateChanged, updateProfile, setPersistence, browserLocalPersistence,
+      signOut
     } from "https://www.gstatic.com/firebasejs/10.11.0/firebase-auth.js";
     import { getFirestore, doc, setDoc, getDoc, serverTimestamp } from "https://www.gstatic.com/firebasejs/10.11.0/firebase-firestore.js";
 
@@ -754,43 +814,91 @@
     const auth = getAuth(app);
     const db = getFirestore(app);
     const googleProvider = new GoogleAuthProvider();
+    googleProvider.setCustomParameters({ prompt: 'select_account' });
+
+    // Persistencia local: la sesión sobrevive refrescos del navegador
+    await setPersistence(auth, browserLocalPersistence);
+
     window.firebase_auth = auth;
     window.firebase_db = db;
 
-    // URL del panel de socio (portal VIP)
-    const PANEL_URL = "https://teccapitalweb.github.io/VisionPecuaria/";
+    const PORTAL_BASE = "https://teccapitalweb.github.io/VisionPecuaria/";
 
-    // Si ya hay sesión activa al cargar, mostrar botón "Ir a mi panel" en header
+    // ═══════════════════════════════════════════════════════════
+    // 🔑 AUTOLOGIN CROSS-DOMAIN
+    // ═══════════════════════════════════════════════════════════
+    // Como visionpecuariamx.com y teccapitalweb.github.io son dominios
+    // distintos, Firebase no comparte sesión entre ellos. Solución:
+    // generar un ID Token al estar logueado en la landing y pasarlo
+    // al portal vía hash (#autologin=TOKEN). El portal lo lee, hace
+    // signInWithCustomToken o usa el ID token para validar.
+    async function irAlPortal(user, payload = {}) {
+      try {
+        const idToken = await user.getIdToken(true);
+        const data = {
+          uid: user.uid,
+          email: user.email,
+          displayName: user.displayName || (user.email||'').split('@')[0],
+          photoURL: user.photoURL || null,
+          idToken: idToken,
+          ts: Date.now(),
+          ...payload
+        };
+        const hash = btoa(encodeURIComponent(JSON.stringify(data)));
+        window.location.href = PORTAL_BASE + '#autologin=' + hash;
+      } catch (e) {
+        // Si falla generar el token, redirige sin autologin (el portal
+        // detectará la sesión por su cuenta si están en mismo origen)
+        console.warn('No se pudo generar token autologin:', e);
+        window.location.href = PORTAL_BASE;
+      }
+    }
+
+    // ═══════════════════════════════════════════════════════════
+    // 👀 onAuthStateChanged — actualizar UI del header
+    // ═══════════════════════════════════════════════════════════
     onAuthStateChanged(auth, (user) => {
-      const desktopAuth = document.querySelector('.header-auth');
+      const headerAuth = document.querySelector('.header-auth');
       const mobileLogin = document.querySelector('.mobile-login');
       const mobileReg = document.querySelector('.mobile-register');
+
       if (user) {
-        // Reemplazar botones de auth por "Ir a mi panel"
-        if (desktopAuth) {
-          desktopAuth.innerHTML = `
-            <a href="${PANEL_URL}" class="btn btn-primary">📊 Ir a mi panel</a>
+        // Reemplazar botones por "Ir a mi panel"
+        if (headerAuth) {
+          headerAuth.innerHTML = `
             <button class="btn btn-login" onclick="cerrarSesionAuth()">Salir</button>
+            <button class="btn btn-primary" onclick="window.irAlPortalAuth()">📊 Ir a mi panel</button>
           `;
         }
-        if (mobileLogin) mobileLogin.style.display = 'none';
+        if (mobileLogin) {
+          mobileLogin.textContent = 'Salir';
+          mobileLogin.onclick = () => window.cerrarSesionAuth();
+        }
         if (mobileReg) {
           mobileReg.textContent = '📊 Ir a mi panel';
-          mobileReg.onclick = () => window.location.href = PANEL_URL;
+          mobileReg.onclick = () => window.irAlPortalAuth();
         }
+        window.__authUser = user;
+      } else {
+        window.__authUser = null;
       }
     });
 
-    async function crearDocFreeSiNoExiste(user, nombreExtra = '') {
+    window.irAlPortalAuth = function() {
+      const user = window.__authUser;
+      if (user) irAlPortal(user);
+      else window.location.href = PORTAL_BASE;
+    };
+
+    // ═══════════════════════════════════════════════════════════
+    // HELPER: crear o actualizar doc free
+    // ═══════════════════════════════════════════════════════════
+    async function asegurarDocFree(user, nombreExtra = '') {
       const refMiembro = doc(db, "miembros", user.uid);
       const refFree = doc(db, "usuarios_free", user.uid);
-      const snapMiembro = await getDoc(refMiembro);
-      const snapFree = await getDoc(refFree);
-      // Si ya es miembro VIP, no tocar nada
+      const [snapMiembro, snapFree] = await Promise.all([getDoc(refMiembro), getDoc(refFree)]);
       if (snapMiembro.exists()) return;
-      // Si ya tiene doc free, no duplicar
       if (snapFree.exists()) return;
-      // Crear doc nuevo en usuarios_free
       await setDoc(refFree, {
         uid: user.uid,
         email: user.email,
@@ -802,113 +910,163 @@
       });
     }
 
-    function mostrarErrorAuth(idCampo, codigo) {
-      const mensajes = {
-        'auth/email-already-in-use': 'Ya existe una cuenta con ese correo. Intenta iniciar sesión.',
-        'auth/invalid-email': 'El correo no es válido.',
-        'auth/weak-password': 'La contraseña debe tener al menos 6 caracteres.',
-        'auth/user-not-found': 'No encontramos una cuenta con ese correo.',
-        'auth/wrong-password': 'Contraseña incorrecta.',
-        'auth/invalid-credential': 'Credenciales incorrectas. Verifica tu correo y contraseña.',
-        'auth/too-many-requests': 'Demasiados intentos. Espera unos minutos.',
-        'auth/popup-closed-by-user': 'Cerraste la ventana antes de terminar.',
-        'auth/network-request-failed': 'Sin conexión a internet.'
-      };
+    // ═══════════════════════════════════════════════════════════
+    // MENSAJES DE ERROR EN ESPAÑOL
+    // ═══════════════════════════════════════════════════════════
+    const ERR_MSG = {
+      'auth/email-already-in-use': 'Ya existe una cuenta con ese correo. Intenta iniciar sesión.',
+      'auth/invalid-email': 'El correo no es válido.',
+      'auth/weak-password': 'La contraseña debe tener al menos 6 caracteres.',
+      'auth/user-not-found': 'No encontramos una cuenta con ese correo.',
+      'auth/wrong-password': 'Contraseña incorrecta.',
+      'auth/invalid-credential': 'Credenciales incorrectas. Verifica tu correo y contraseña.',
+      'auth/too-many-requests': 'Demasiados intentos. Espera unos minutos.',
+      'auth/popup-closed-by-user': 'Cerraste la ventana de Google antes de terminar.',
+      'auth/popup-blocked': 'El navegador bloqueó la ventana. Permite popups para este sitio.',
+      'auth/network-request-failed': 'Sin conexión a internet.',
+      'auth/cancelled-popup-request': 'Operación cancelada.',
+      'auth/account-exists-with-different-credential': 'Ya existe una cuenta con ese correo usando otro método.'
+    };
+
+    function mostrarAlert(idCampo, codigo) {
       const el = document.getElementById(idCampo);
-      if (el) el.textContent = mensajes[codigo] || ('Error: ' + codigo);
+      if (!el) return;
+      el.textContent = ERR_MSG[codigo] || ('Error: ' + codigo);
+      el.classList.add('show', 'auth-alert--error');
+      el.classList.remove('auth-alert--success');
+    }
+    function mostrarSuccess(idCampo, msg) {
+      const el = document.getElementById(idCampo);
+      if (!el) return;
+      el.textContent = msg;
+      el.classList.add('show', 'auth-alert--success');
+      el.classList.remove('auth-alert--error');
+    }
+    function ocultarAlerts() {
+      document.querySelectorAll('.auth-alert').forEach(a => a.classList.remove('show'));
     }
 
-    window.registrarConEmail = async function() {
+    // ═══════════════════════════════════════════════════════════
+    // REGISTRO CON EMAIL
+    // ═══════════════════════════════════════════════════════════
+    window.registrarConEmail = async function(ev) {
+      if (ev) ev.preventDefault();
+      ocultarAlerts();
       const nombre = document.getElementById('regNombre').value.trim();
       const email = document.getElementById('regEmail').value.trim();
       const pass = document.getElementById('regPass').value;
-      const errEl = document.getElementById('regError');
-      errEl.textContent = '';
-      if (!nombre || !email || !pass) { errEl.textContent = 'Completa todos los campos.'; return; }
-      if (pass.length < 6) { errEl.textContent = 'La contraseña debe tener al menos 6 caracteres.'; return; }
+      if (!nombre || !email || !pass) { mostrarAlert('regError', 'Completa todos los campos.'); return; }
+      if (pass.length < 6) { mostrarAlert('regError', 'auth/weak-password'); return; }
 
       const btn = document.getElementById('btnRegistro');
-      btn.disabled = true; btn.textContent = 'Creando cuenta...';
+      btn.disabled = true;
+      btn.querySelector('span').textContent = 'Creando cuenta...';
       try {
         const cred = await createUserWithEmailAndPassword(auth, email, pass);
         await updateProfile(cred.user, { displayName: nombre });
-        await crearDocFreeSiNoExiste(cred.user, nombre);
-        btn.textContent = '✅ ¡Cuenta creada!';
+        await asegurarDocFree(cred.user, nombre);
+        btn.querySelector('span').textContent = '✅ ¡Cuenta creada!';
+        mostrarSuccess('regError', '🚀 Llevándote al portal...');
         const intencion = sessionStorage.getItem('intencion_pago');
         if (intencion) {
           sessionStorage.removeItem('intencion_pago');
-          btn.textContent = '🚀 Llevando al pago...';
-          setTimeout(() => window.suscribirElitePecuario(intencion), 600);
+          setTimeout(() => window.suscribirElitePecuario(intencion), 800);
         } else {
-          setTimeout(() => window.location.href = PANEL_URL, 800);
+          setTimeout(() => irAlPortal(cred.user), 800);
         }
       } catch (e) {
-        mostrarErrorAuth('regError', e.code);
-        btn.disabled = false; btn.textContent = 'Crear cuenta gratis';
+        mostrarAlert('regError', e.code);
+        btn.disabled = false;
+        btn.querySelector('span').textContent = 'Crear cuenta gratis';
       }
     };
 
-    window.iniciarSesion = async function() {
+    // ═══════════════════════════════════════════════════════════
+    // LOGIN CON EMAIL
+    // ═══════════════════════════════════════════════════════════
+    window.iniciarSesion = async function(ev) {
+      if (ev) ev.preventDefault();
+      ocultarAlerts();
       const email = document.getElementById('loginEmail').value.trim();
       const pass = document.getElementById('loginPass').value;
-      const errEl = document.getElementById('loginError');
-      errEl.textContent = '';
-      if (!email || !pass) { errEl.textContent = 'Completa correo y contraseña.'; return; }
+      if (!email || !pass) { mostrarAlert('loginError', 'Completa correo y contraseña.'); return; }
+
       const btn = document.getElementById('btnLogin');
-      btn.disabled = true; btn.textContent = 'Entrando...';
+      btn.disabled = true;
+      btn.querySelector('span').textContent = 'Entrando...';
       try {
         const cred = await signInWithEmailAndPassword(auth, email, pass);
-        await crearDocFreeSiNoExiste(cred.user);
-        btn.textContent = '✅ ¡Bienvenido!';
+        await asegurarDocFree(cred.user);
+        btn.querySelector('span').textContent = '✅ ¡Bienvenido!';
+        mostrarSuccess('loginError', '🚀 Llevándote al portal...');
         const intencion = sessionStorage.getItem('intencion_pago');
         if (intencion) {
           sessionStorage.removeItem('intencion_pago');
-          btn.textContent = '🚀 Llevando al pago...';
           setTimeout(() => window.suscribirElitePecuario(intencion), 600);
         } else {
-          setTimeout(() => window.location.href = PANEL_URL, 600);
+          setTimeout(() => irAlPortal(cred.user), 600);
         }
       } catch (e) {
-        mostrarErrorAuth('loginError', e.code);
-        btn.disabled = false; btn.textContent = 'Entrar al panel';
+        mostrarAlert('loginError', e.code);
+        btn.disabled = false;
+        btn.querySelector('span').textContent = 'Entrar al portal';
       }
     };
 
+    // ═══════════════════════════════════════════════════════════
+    // GOOGLE OAUTH
+    // ═══════════════════════════════════════════════════════════
     window.authConGoogle = async function() {
+      ocultarAlerts();
+      const btnL = document.getElementById('btnGoogleLogin');
+      const btnR = document.getElementById('btnGoogleReg');
+      if (btnL) btnL.disabled = true;
+      if (btnR) btnR.disabled = true;
       try {
         const cred = await signInWithPopup(auth, googleProvider);
-        await crearDocFreeSiNoExiste(cred.user);
+        await asegurarDocFree(cred.user);
         const intencion = sessionStorage.getItem('intencion_pago');
         if (intencion) {
           sessionStorage.removeItem('intencion_pago');
           setTimeout(() => window.suscribirElitePecuario(intencion), 400);
         } else {
-          window.location.href = PANEL_URL;
+          irAlPortal(cred.user);
         }
       } catch (e) {
-        const errEl = document.getElementById('regError') || document.getElementById('loginError');
-        if (errEl) mostrarErrorAuth(errEl.id, e.code);
+        const idAlert = document.getElementById('authFormLogin').classList.contains('active') ? 'loginError' : 'regError';
+        mostrarAlert(idAlert, e.code);
+        if (btnL) btnL.disabled = false;
+        if (btnR) btnR.disabled = false;
       }
     };
 
+    // ═══════════════════════════════════════════════════════════
+    // RECUPERAR CONTRASEÑA
+    // ═══════════════════════════════════════════════════════════
     window.recuperarPass = async function(ev) {
-      ev.preventDefault();
+      if (ev) ev.preventDefault();
       const email = document.getElementById('loginEmail').value.trim();
-      if (!email) { alert('Escribe tu correo en el campo de arriba primero.'); return; }
+      if (!email) {
+        mostrarAlert('loginError', 'Escribe tu correo arriba primero.');
+        return;
+      }
       try {
         await sendPasswordResetEmail(auth, email);
-        alert('✅ Te enviamos un correo para recuperar tu contraseña.');
+        mostrarSuccess('loginError', '✅ Te enviamos un correo para recuperar tu contraseña.');
       } catch (e) {
-        alert('Error: ' + e.code);
+        mostrarAlert('loginError', e.code);
       }
     };
 
+    // ═══════════════════════════════════════════════════════════
+    // CERRAR SESIÓN
+    // ═══════════════════════════════════════════════════════════
     window.cerrarSesionAuth = async function() {
-      const { signOut } = await import("https://www.gstatic.com/firebasejs/10.11.0/firebase-auth.js");
       await signOut(auth);
       window.location.reload();
     };
   </script>
+
 
   <script>
     // ════════════════════════════════════════════════════════════
