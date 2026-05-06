@@ -53,7 +53,7 @@
         <a class="btn btn-whatsapp mobile-whatsapp" href="https://wa.me/522361049715" target="_blank" rel="noopener noreferrer">Escríbenos por WhatsApp</a>
       </nav>
 
-      <div class="header-auth desktop-auth">
+      <div class="header-auth">
         <button class="btn btn-login" onclick="abrirModalAuth('login')">Iniciar sesión</button>
         <button class="btn btn-primary" onclick="abrirModalAuth('registro')">Crear cuenta gratis</button>
       </div>
@@ -725,7 +725,7 @@
 
     // Si ya hay sesión activa al cargar, mostrar botón "Ir a mi panel" en header
     onAuthStateChanged(auth, (user) => {
-      const desktopAuth = document.querySelector('.desktop-auth');
+      const desktopAuth = document.querySelector('.header-auth');
       const mobileLogin = document.querySelector('.mobile-login');
       const mobileReg = document.querySelector('.mobile-register');
       if (user) {
