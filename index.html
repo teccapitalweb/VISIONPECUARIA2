@@ -46,7 +46,7 @@
         <a href="#cursos">Cursos</a>
         <a href="#alumnos">Alumnos</a>
         <a href="#resenas">Reseñas</a>
-        <a href="#empresas">Empresas</a>
+        <a href="#planes" class="link-vip">✨ Plan VIP</a>
         <a href="#contacto">Contacto</a>
         <button class="btn btn-login mobile-login" onclick="abrirModalAuth('login')">Iniciar sesión</button>
         <button class="btn btn-primary mobile-register" onclick="abrirModalAuth('registro')">Crear cuenta gratis</button>
@@ -74,8 +74,27 @@
           </p>
 
           <div class="hero-actions">
-            <button class="btn btn-primary" onclick="abrirModalAuth('registro')">🎁 Crear cuenta gratis</button>
-            <a href="#cursos" class="btn btn-secondary">Ver cursos</a>
+            <button class="btn btn-cta-vip" onclick="document.getElementById('planes').scrollIntoView({behavior:'smooth'})">
+              <span class="btn-cta-shine"></span>
+              <span>👑 Ver Plan Élite Pecuario</span>
+              <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><line x1="5" y1="12" x2="19" y2="12"/><polyline points="12 5 19 12 12 19"/></svg>
+            </button>
+            <button class="btn btn-secondary" onclick="abrirModalAuth('registro')">🎁 Crear cuenta gratis</button>
+          </div>
+
+          <div class="hero-stats">
+            <div class="hero-stat">
+              <div class="hero-stat-num" data-counter="2000">0</div>
+              <div class="hero-stat-label">Alumnos graduados</div>
+            </div>
+            <div class="hero-stat">
+              <div class="hero-stat-num" data-counter="26">0</div>
+              <div class="hero-stat-label">Cursos especializados</div>
+            </div>
+            <div class="hero-stat">
+              <div class="hero-stat-num" data-counter="98" data-suffix="%">0</div>
+              <div class="hero-stat-label">Satisfacción</div>
+            </div>
           </div>
 
           <div class="hero-mini-cta">
@@ -342,6 +361,180 @@
       </div>
     </section>
 
+    <!-- ════════════════════════════════════════════════════════════ -->
+    <!-- ✨ SECCIÓN: PLAN ÉLITE PECUARIO — pricing premium con animaciones -->
+    <!-- ════════════════════════════════════════════════════════════ -->
+    <section class="section planes-section" id="planes">
+      <div class="planes-bg">
+        <div class="planes-orb planes-orb--1"></div>
+        <div class="planes-orb planes-orb--2"></div>
+        <div class="planes-orb planes-orb--3"></div>
+        <div class="planes-grid-bg"></div>
+      </div>
+
+      <div class="container planes-container reveal-on-scroll">
+        <div class="planes-header">
+          <span class="planes-eyebrow">
+            <span class="eyebrow-dot"></span>
+            MEMBRESÍA EXCLUSIVA
+          </span>
+          <h2 class="planes-title">
+            Conviértete en parte de
+            <span class="title-gradient">Élite Pecuario</span>
+          </h2>
+          <p class="planes-subtitle">
+            Acceso ilimitado al portal VIP con todas las herramientas, cursos y beneficios diseñados para que dejes de ser ganadero y te conviertas en empresario pecuario.
+          </p>
+        </div>
+
+        <div class="planes-cards">
+          <!-- ═══ PLAN FREE ═══ -->
+          <div class="plan-card plan-card--free reveal-card" data-delay="0">
+            <div class="plan-card-inner">
+              <div class="plan-badge plan-badge--free">Cuenta Gratis</div>
+              <h3 class="plan-name">Explorador</h3>
+              <div class="plan-price">
+                <span class="plan-currency">$</span>
+                <span class="plan-amount">0</span>
+                <span class="plan-period">/ siempre</span>
+              </div>
+              <p class="plan-tagline">Empieza a conocer la plataforma sin costo. Ideal para ver qué hay adentro.</p>
+
+              <ul class="plan-features">
+                <li><span class="feat-check feat-check--off">✓</span> Vista previa del panel VIP</li>
+                <li><span class="feat-check feat-check--off">✓</span> Acceso al primer módulo de un curso</li>
+                <li><span class="feat-check feat-check--off">✓</span> Comunidad pública</li>
+                <li class="feat-locked"><span class="feat-check feat-check--lock">🔒</span> Cursos completos</li>
+                <li class="feat-locked"><span class="feat-check feat-check--lock">🔒</span> Webinars en vivo</li>
+                <li class="feat-locked"><span class="feat-check feat-check--lock">🔒</span> Certificados con QR</li>
+                <li class="feat-locked"><span class="feat-check feat-check--lock">🔒</span> Herramientas premium</li>
+              </ul>
+
+              <button class="plan-cta plan-cta--free" onclick="abrirModalAuth('registro')">
+                Crear cuenta gratis
+              </button>
+              <p class="plan-mini">Sin tarjeta · sin compromiso</p>
+            </div>
+          </div>
+
+          <!-- ═══ PLAN VIP ANUAL — DESTACADO ═══ -->
+          <div class="plan-card plan-card--anual plan-card--featured reveal-card" data-delay="200">
+            <div class="plan-glow"></div>
+            <div class="plan-recommended">
+              <span>⭐ MÁS POPULAR — AHORRA 20%</span>
+            </div>
+            <div class="plan-card-inner">
+              <div class="plan-badge plan-badge--anual">Élite Pecuario · Anual</div>
+              <h3 class="plan-name">Patrón del Año</h3>
+              <div class="plan-price">
+                <span class="plan-old-price">$2,400</span>
+                <span class="plan-currency">$</span>
+                <span class="plan-amount plan-amount--big">1,920</span>
+                <span class="plan-period">MXN / año</span>
+              </div>
+              <p class="plan-saving">Equivale a <strong>$160 / mes</strong> · ahorras $480 al año</p>
+              <p class="plan-tagline">Para el productor serio que quiere dominar su negocio todo el año.</p>
+
+              <ul class="plan-features plan-features--vip">
+                <li><span class="feat-check feat-check--gold">✓</span> 🎓 Acceso a todos los cursos especializados</li>
+                <li><span class="feat-check feat-check--gold">✓</span> 📚 Clases en HD descargables</li>
+                <li><span class="feat-check feat-check--gold">✓</span> 🎥 Webinars en vivo con expertos pecuarios</li>
+                <li><span class="feat-check feat-check--gold">✓</span> 📜 Certificados oficiales IPCI con QR</li>
+                <li><span class="feat-check feat-check--gold">✓</span> 🐄 Diagnóstico veterinario por IA</li>
+                <li><span class="feat-check feat-check--gold">✓</span> 💰 Calculadora pecuaria de rentabilidad</li>
+                <li><span class="feat-check feat-check--gold">✓</span> 📊 Mercado pecuario en tiempo real (SIAP-SADER)</li>
+                <li><span class="feat-check feat-check--gold">✓</span> 📓 Bitácora digital de hato</li>
+                <li><span class="feat-check feat-check--gold">✓</span> 🏛️ Apoyos del gobierno (PROGAN, FIRA, SINIIGA)</li>
+                <li><span class="feat-check feat-check--gold">✓</span> 💊 Catálogo completo de medicamentos veterinarios</li>
+                <li><span class="feat-check feat-check--gold">✓</span> 🏆 Sistema de logros y rankings</li>
+                <li><span class="feat-check feat-check--gold">✓</span> 👥 Foro privado con productores</li>
+                <li><span class="feat-check feat-check--gold">✓</span> 📱 Grupo VIP de WhatsApp</li>
+                <li><span class="feat-check feat-check--gold">✓</span> ✅ Exámenes con certificación oficial</li>
+                <li><span class="feat-check feat-check--gold">✓</span> 🎁 Cursos futuros incluidos sin costo extra</li>
+                <li class="feat-bonus"><span class="feat-check feat-check--bonus">★</span> <strong>BONO ANUAL:</strong> Asesoría 1 a 1 con MVZ certificado</li>
+              </ul>
+
+              <button class="plan-cta plan-cta--anual" onclick="suscribirElitePecuario('anual')">
+                <span>👑 Ser Patrón del Año</span>
+                <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><line x1="5" y1="12" x2="19" y2="12"/><polyline points="12 5 19 12 12 19"/></svg>
+              </button>
+              <p class="plan-mini">Cancela cuando quieras · garantía 7 días</p>
+            </div>
+          </div>
+
+          <!-- ═══ PLAN VIP MENSUAL ═══ -->
+          <div class="plan-card plan-card--mensual reveal-card" data-delay="100">
+            <div class="plan-card-inner">
+              <div class="plan-badge plan-badge--mensual">Élite Pecuario · Mensual</div>
+              <h3 class="plan-name">Capataz Pro</h3>
+              <div class="plan-price">
+                <span class="plan-currency">$</span>
+                <span class="plan-amount">200</span>
+                <span class="plan-period">MXN / mes</span>
+              </div>
+              <p class="plan-tagline">Mes a mes, sin compromiso. Ideal si estás probando.</p>
+
+              <ul class="plan-features plan-features--vip">
+                <li><span class="feat-check feat-check--gold">✓</span> 🎓 Acceso a todos los cursos especializados</li>
+                <li><span class="feat-check feat-check--gold">✓</span> 📚 Clases en HD descargables</li>
+                <li><span class="feat-check feat-check--gold">✓</span> 🎥 Webinars en vivo con expertos pecuarios</li>
+                <li><span class="feat-check feat-check--gold">✓</span> 📜 Certificados oficiales IPCI con QR</li>
+                <li><span class="feat-check feat-check--gold">✓</span> 🐄 Diagnóstico veterinario por IA</li>
+                <li><span class="feat-check feat-check--gold">✓</span> 💰 Calculadora pecuaria de rentabilidad</li>
+                <li><span class="feat-check feat-check--gold">✓</span> 📊 Mercado pecuario en tiempo real</li>
+                <li><span class="feat-check feat-check--gold">✓</span> 📓 Bitácora digital de hato</li>
+                <li><span class="feat-check feat-check--gold">✓</span> 🏛️ Apoyos del gobierno</li>
+                <li><span class="feat-check feat-check--gold">✓</span> 💊 Catálogo de medicamentos veterinarios</li>
+                <li><span class="feat-check feat-check--gold">✓</span> 🏆 Sistema de logros y rankings</li>
+                <li><span class="feat-check feat-check--gold">✓</span> 👥 Foro privado con productores</li>
+                <li><span class="feat-check feat-check--gold">✓</span> 📱 Grupo VIP de WhatsApp</li>
+                <li><span class="feat-check feat-check--gold">✓</span> ✅ Exámenes con certificación</li>
+                <li><span class="feat-check feat-check--gold">✓</span> 🎁 Cursos futuros incluidos</li>
+              </ul>
+
+              <button class="plan-cta plan-cta--mensual" onclick="suscribirElitePecuario('mensual')">
+                <span>Ser Capataz Pro</span>
+                <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><line x1="5" y1="12" x2="19" y2="12"/><polyline points="12 5 19 12 12 19"/></svg>
+              </button>
+              <p class="plan-mini">Cancela cuando quieras · garantía 7 días</p>
+            </div>
+          </div>
+        </div>
+
+        <!-- Trust badges -->
+        <div class="planes-trust">
+          <div class="trust-item">
+            <span class="trust-icon">🔒</span>
+            <div>
+              <strong>Pago 100% seguro</strong>
+              <small>Procesado por Stripe</small>
+            </div>
+          </div>
+          <div class="trust-item">
+            <span class="trust-icon">↩️</span>
+            <div>
+              <strong>Garantía 7 días</strong>
+              <small>Devolución sin preguntas</small>
+            </div>
+          </div>
+          <div class="trust-item">
+            <span class="trust-icon">⚡</span>
+            <div>
+              <strong>Acceso inmediato</strong>
+              <small>Empieza al instante</small>
+            </div>
+          </div>
+          <div class="trust-item">
+            <span class="trust-icon">📱</span>
+            <div>
+              <strong>Sin compromiso</strong>
+              <small>Cancela cuando quieras</small>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+
     <section class="section contact" id="contacto">
       <div class="container contact-grid">
         <div class="contact-copy">
@@ -524,6 +717,8 @@
     const auth = getAuth(app);
     const db = getFirestore(app);
     const googleProvider = new GoogleAuthProvider();
+    window.firebase_auth = auth;
+    window.firebase_db = db;
 
     // URL del panel de socio (portal VIP)
     const PANEL_URL = "https://teccapitalweb.github.io/VisionPecuaria/";
@@ -602,7 +797,14 @@
         await updateProfile(cred.user, { displayName: nombre });
         await crearDocFreeSiNoExiste(cred.user, nombre);
         btn.textContent = '✅ ¡Cuenta creada!';
-        setTimeout(() => window.location.href = PANEL_URL, 800);
+        const intencion = sessionStorage.getItem('intencion_pago');
+        if (intencion) {
+          sessionStorage.removeItem('intencion_pago');
+          btn.textContent = '🚀 Llevando al pago...';
+          setTimeout(() => window.suscribirElitePecuario(intencion), 600);
+        } else {
+          setTimeout(() => window.location.href = PANEL_URL, 800);
+        }
       } catch (e) {
         mostrarErrorAuth('regError', e.code);
         btn.disabled = false; btn.textContent = 'Crear cuenta gratis';
@@ -621,7 +823,14 @@
         const cred = await signInWithEmailAndPassword(auth, email, pass);
         await crearDocFreeSiNoExiste(cred.user);
         btn.textContent = '✅ ¡Bienvenido!';
-        setTimeout(() => window.location.href = PANEL_URL, 600);
+        const intencion = sessionStorage.getItem('intencion_pago');
+        if (intencion) {
+          sessionStorage.removeItem('intencion_pago');
+          btn.textContent = '🚀 Llevando al pago...';
+          setTimeout(() => window.suscribirElitePecuario(intencion), 600);
+        } else {
+          setTimeout(() => window.location.href = PANEL_URL, 600);
+        }
       } catch (e) {
         mostrarErrorAuth('loginError', e.code);
         btn.disabled = false; btn.textContent = 'Entrar al panel';
@@ -632,7 +841,13 @@
       try {
         const cred = await signInWithPopup(auth, googleProvider);
         await crearDocFreeSiNoExiste(cred.user);
-        window.location.href = PANEL_URL;
+        const intencion = sessionStorage.getItem('intencion_pago');
+        if (intencion) {
+          sessionStorage.removeItem('intencion_pago');
+          setTimeout(() => window.suscribirElitePecuario(intencion), 400);
+        } else {
+          window.location.href = PANEL_URL;
+        }
       } catch (e) {
         const errEl = document.getElementById('regError') || document.getElementById('loginError');
         if (errEl) mostrarErrorAuth(errEl.id, e.code);
@@ -673,6 +888,123 @@
       document.getElementById('authFormRegistro').style.display = tab === 'registro' ? 'flex' : 'none';
       document.getElementById('authFormLogin').style.display = tab === 'login' ? 'flex' : 'none';
     };
+
+    // ════════════════════════════════════════════════════════════
+    // 👑 SUSCRIPCIÓN ÉLITE PECUARIO — Stripe Checkout
+    // ════════════════════════════════════════════════════════════
+    window.suscribirElitePecuario = async function(plan) {
+      // Si NO hay sesión, abre modal de registro y guarda intención
+      const auth = window.firebase_auth;
+      const user = auth?.currentUser;
+
+      if (!user) {
+        sessionStorage.setItem('intencion_pago', plan);
+        abrirModalAuth('registro');
+        // Mensaje informativo en el modal
+        setTimeout(() => {
+          const reg = document.getElementById('authFormRegistro');
+          const aviso = document.createElement('div');
+          aviso.className = 'auth-aviso-pago';
+          aviso.innerHTML = `<span>👑</span> Crea tu cuenta primero — luego te llevamos al pago de <strong>${plan === 'anual' ? 'Patrón del Año' : 'Capataz Pro'}</strong>`;
+          if (reg && !reg.querySelector('.auth-aviso-pago')) reg.insertBefore(aviso, reg.firstChild);
+        }, 100);
+        return;
+      }
+
+      // Hay sesión → llamar al webhook para crear checkout
+      const btn = event?.target?.closest('button');
+      if (btn) { btn.disabled = true; btn.style.opacity = '.7'; btn.querySelector('span').textContent = 'Conectando con Stripe...'; }
+
+      try {
+        const res = await fetch('https://visionpecuaria-webhook-production.up.railway.app/crear-checkout', {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({ plan, email: user.email, uid: user.uid })
+        });
+        const data = await res.json();
+        if (data.url) {
+          window.location.href = data.url;
+        } else {
+          throw new Error(data.error || 'No se pudo crear el checkout');
+        }
+      } catch (e) {
+        alert('Error al procesar el pago: ' + e.message + '\n\nIntenta de nuevo o contáctanos por WhatsApp.');
+        if (btn) { btn.disabled = false; btn.style.opacity = '1'; }
+      }
+    };
+
+    // ════════════════════════════════════════════════════════════
+    // ✨ REVEAL ON SCROLL — anima elementos al entrar en viewport
+    // ════════════════════════════════════════════════════════════
+    const revealObserver = new IntersectionObserver((entries) => {
+      entries.forEach(entry => {
+        if (entry.isIntersecting) {
+          entry.target.classList.add('revealed');
+          // Si es card con delay
+          if (entry.target.classList.contains('reveal-card')) {
+            const delay = entry.target.dataset.delay || 0;
+            entry.target.style.transitionDelay = `${delay}ms`;
+          }
+          revealObserver.unobserve(entry.target);
+        }
+      });
+    }, { threshold: 0.15, rootMargin: '0px 0px -60px 0px' });
+
+    document.querySelectorAll('.reveal-on-scroll, .reveal-card').forEach(el => {
+      revealObserver.observe(el);
+    });
+
+    // ════════════════════════════════════════════════════════════
+    // 🔢 COUNTER ANIMADO — numeros que suben de 0 al valor
+    // ════════════════════════════════════════════════════════════
+    const counterObserver = new IntersectionObserver((entries) => {
+      entries.forEach(entry => {
+        if (entry.isIntersecting) {
+          const el = entry.target;
+          const target = parseInt(el.dataset.counter, 10);
+          const suffix = el.dataset.suffix || '';
+          let current = 0;
+          const duration = 1500;
+          const step = target / (duration / 16);
+          const timer = setInterval(() => {
+            current += step;
+            if (current >= target) {
+              current = target;
+              clearInterval(timer);
+            }
+            const val = Math.floor(current).toLocaleString('es-MX');
+            el.textContent = (target >= 1000 ? '+' : '') + val + suffix;
+          }, 16);
+          counterObserver.unobserve(el);
+        }
+      });
+    }, { threshold: 0.5 });
+    document.querySelectorAll('[data-counter]').forEach(el => counterObserver.observe(el));
+
+    // ════════════════════════════════════════════════════════════
+    // 💫 SCROLL SUAVE para anchors internos
+    // ════════════════════════════════════════════════════════════
+    document.querySelectorAll('a[href^="#"]').forEach(a => {
+      a.addEventListener('click', e => {
+        const href = a.getAttribute('href');
+        if (href.length > 1 && document.querySelector(href)) {
+          e.preventDefault();
+          document.querySelector(href).scrollIntoView({ behavior: 'smooth', block: 'start' });
+        }
+      });
+    });
+
+    // Aviso de pago en login también
+    window.addEventListener('DOMContentLoaded', () => {
+      // Detectar si tras registrarse había intención de pago, ejecutar
+      window.addEventListener('vp:auth-success', (e) => {
+        const intencion = sessionStorage.getItem('intencion_pago');
+        if (intencion) {
+          sessionStorage.removeItem('intencion_pago');
+          setTimeout(() => suscribirElitePecuario(intencion), 500);
+        }
+      });
+    });
   </script>
 </body>
 </html>
