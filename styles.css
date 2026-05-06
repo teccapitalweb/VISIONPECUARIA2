@@ -1176,27 +1176,29 @@ button{cursor:pointer;border:none;background:none;font:inherit}
 .auth-field input {
   width: 100%;
   padding: 13px 14px 13px 42px;
-  background: rgba(255,255,255,.06);
-  border: 1.5px solid rgba(255,255,255,.1);
+  background: rgba(20, 50, 32, 0.85);
+  border: 1.5px solid rgba(255,255,255,.15);
   border-radius: 12px;
   color: #fff;
   font: 400 .92rem/1 'Inter', sans-serif;
   font-family: inherit;
   transition: border-color .25s, background .25s, box-shadow .25s;
 }
-.auth-field input::placeholder { color: rgba(255,255,255,.35); }
+.auth-field input::placeholder { color: rgba(255,255,255,.45); }
 .auth-field input:focus {
   outline: none;
   border-color: var(--gold, #d4a017);
-  background: rgba(255,255,255,.08);
+  background: rgba(30, 60, 40, 0.95);
   box-shadow: 0 0 0 4px rgba(212,160,23,.15);
 }
 .auth-field input:-webkit-autofill,
 .auth-field input:-webkit-autofill:hover,
-.auth-field input:-webkit-autofill:focus {
-  -webkit-text-fill-color: #fff;
-  -webkit-box-shadow: 0 0 0 1000px rgba(255,255,255,.06) inset;
-  caret-color: #fff;
+.auth-field input:-webkit-autofill:focus,
+.auth-field input:-webkit-autofill:active {
+  -webkit-text-fill-color: #fff !important;
+  -webkit-box-shadow: 0 0 0 1000px rgba(20, 50, 32, 0.85) inset !important;
+  caret-color: #fff !important;
+  transition: background-color 99999s ease-in-out 0s;
 }
 .auth-icon {
   position: absolute;

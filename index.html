@@ -823,35 +823,28 @@
     window.firebase_db = db;
 
     const PORTAL_BASE = "https://teccapitalweb.github.io/VisionPecuaria/";
+    const WEBHOOK_BASE = "https://visionpecuaria-webhook-production.up.railway.app";
 
     // ═══════════════════════════════════════════════════════════
-    // 🔑 AUTOLOGIN CROSS-DOMAIN
+    // 🔑 IR AL PORTAL — autologin cross-domain con hash email+password
     // ═══════════════════════════════════════════════════════════
-    // Como visionpecuariamx.com y teccapitalweb.github.io son dominios
-    // distintos, Firebase no comparte sesión entre ellos. Solución:
-    // generar un ID Token al estar logueado en la landing y pasarlo
-    // al portal vía hash (#autologin=TOKEN). El portal lo lee, hace
-    // signInWithCustomToken o usa el ID token para validar.
-    async function irAlPortal(user, payload = {}) {
+    // El portal ya tiene lógica para leer #a=<base64> con email+password
+    // y hacer signInWithEmailAndPassword automático. Aprovechamos eso.
+    // Para Google OAuth no aplica (no hay password) — redirige directo.
+    function irAlPortalConPass(email, password) {
       try {
-        const idToken = await user.getIdToken(true);
-        const data = {
-          uid: user.uid,
-          email: user.email,
-          displayName: user.displayName || (user.email||'').split('@')[0],
-          photoURL: user.photoURL || null,
-          idToken: idToken,
-          ts: Date.now(),
-          ...payload
-        };
+        const data = { e: email, p: password, t: Date.now() };
         const hash = btoa(encodeURIComponent(JSON.stringify(data)));
-        window.location.href = PORTAL_BASE + '#autologin=' + hash;
+        window.location.href = PORTAL_BASE + '#a=' + hash;
       } catch (e) {
-        // Si falla generar el token, redirige sin autologin (el portal
-        // detectará la sesión por su cuenta si están en mismo origen)
-        console.warn('No se pudo generar token autologin:', e);
+        console.warn('Hash autologin error:', e);
         window.location.href = PORTAL_BASE;
       }
+    }
+
+    // Redirect simple (Google OAuth o cuando no tenemos password)
+    function irAlPortal(user) {
+      window.location.href = PORTAL_BASE;
     }
 
     // ═══════════════════════════════════════════════════════════
@@ -972,7 +965,8 @@
           sessionStorage.removeItem('intencion_pago');
           setTimeout(() => window.suscribirElitePecuario(intencion), 800);
         } else {
-          setTimeout(() => irAlPortal(cred.user), 800);
+          // Cross-domain: pasar email+password al portal vía hash autologin
+          setTimeout(() => irAlPortalConPass(email, pass), 800);
         }
       } catch (e) {
         mostrarAlert('regError', e.code);
@@ -1004,7 +998,8 @@
           sessionStorage.removeItem('intencion_pago');
           setTimeout(() => window.suscribirElitePecuario(intencion), 600);
         } else {
-          setTimeout(() => irAlPortal(cred.user), 600);
+          // Cross-domain: pasar email+password al portal vía hash autologin
+          setTimeout(() => irAlPortalConPass(email, pass), 600);
         }
       } catch (e) {
         mostrarAlert('loginError', e.code);
