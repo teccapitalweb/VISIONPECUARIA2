@@ -11,6 +11,43 @@
   <link rel="stylesheet" href="styles.css" />
 </head>
 <body>
+  <!-- Funciones globales tempranas para que onclick funcione antes del módulo Firebase -->
+  <script>
+    window.abrirModalAuth = function(tab) {
+      const overlay = document.getElementById('authOverlay');
+      if (!overlay) return;
+      overlay.classList.add('active');
+      window.cambiarAuthTab(tab || 'registro');
+      document.body.style.overflow = 'hidden';
+    };
+    window.cerrarModalAuth = function() {
+      const overlay = document.getElementById('authOverlay');
+      if (!overlay) return;
+      overlay.classList.remove('active');
+      document.body.style.overflow = '';
+    };
+    window.cambiarAuthTab = function(tab) {
+      document.querySelectorAll('.auth-tab').forEach(b => b.classList.toggle('active', b.dataset.tab === tab));
+      const r = document.getElementById('authFormRegistro');
+      const l = document.getElementById('authFormLogin');
+      if (r) r.style.display = tab === 'registro' ? 'flex' : 'none';
+      if (l) l.style.display = tab === 'login' ? 'flex' : 'none';
+    };
+    // Placeholder hasta que el módulo Firebase reasigne con la versión real
+    window.suscribirElitePecuario = function(plan) {
+      sessionStorage.setItem('intencion_pago', plan);
+      window.abrirModalAuth('registro');
+      setTimeout(() => {
+        const reg = document.getElementById('authFormRegistro');
+        if (reg && !reg.querySelector('.auth-aviso-pago')) {
+          const aviso = document.createElement('div');
+          aviso.className = 'auth-aviso-pago';
+          aviso.innerHTML = `<span>👑</span> Crea tu cuenta primero — luego te llevamos al pago de <strong>${plan === 'anual' ? 'Patrón del Año' : 'Capataz Pro'}</strong>`;
+          reg.insertBefore(aviso, reg.firstChild);
+        }
+      }, 100);
+    };
+  </script>
   <div class="topbar">
     <div class="container topbar-inner">
       <div class="topbar-links">
@@ -874,21 +911,6 @@
   </script>
 
   <script>
-    window.abrirModalAuth = function(tab) {
-      document.getElementById('authOverlay').classList.add('active');
-      cambiarAuthTab(tab || 'registro');
-      document.body.style.overflow = 'hidden';
-    };
-    window.cerrarModalAuth = function() {
-      document.getElementById('authOverlay').classList.remove('active');
-      document.body.style.overflow = '';
-    };
-    window.cambiarAuthTab = function(tab) {
-      document.querySelectorAll('.auth-tab').forEach(b => b.classList.toggle('active', b.dataset.tab === tab));
-      document.getElementById('authFormRegistro').style.display = tab === 'registro' ? 'flex' : 'none';
-      document.getElementById('authFormLogin').style.display = tab === 'login' ? 'flex' : 'none';
-    };
-
     // ════════════════════════════════════════════════════════════
     // 👑 SUSCRIPCIÓN ÉLITE PECUARIO — Stripe Checkout
     // ════════════════════════════════════════════════════════════
@@ -936,28 +958,27 @@
     // ════════════════════════════════════════════════════════════
     // ✨ REVEAL ON SCROLL — anima elementos al entrar en viewport
     // ════════════════════════════════════════════════════════════
-    const revealObserver = new IntersectionObserver((entries) => {
+    const vpRevealObserver = new IntersectionObserver((entries) => {
       entries.forEach(entry => {
         if (entry.isIntersecting) {
           entry.target.classList.add('revealed');
-          // Si es card con delay
           if (entry.target.classList.contains('reveal-card')) {
             const delay = entry.target.dataset.delay || 0;
             entry.target.style.transitionDelay = `${delay}ms`;
           }
-          revealObserver.unobserve(entry.target);
+          vpRevealObserver.unobserve(entry.target);
         }
       });
     }, { threshold: 0.15, rootMargin: '0px 0px -60px 0px' });
 
     document.querySelectorAll('.reveal-on-scroll, .reveal-card').forEach(el => {
-      revealObserver.observe(el);
+      vpRevealObserver.observe(el);
     });
 
     // ════════════════════════════════════════════════════════════
     // 🔢 COUNTER ANIMADO — numeros que suben de 0 al valor
     // ════════════════════════════════════════════════════════════
-    const counterObserver = new IntersectionObserver((entries) => {
+    const vpCounterObserver = new IntersectionObserver((entries) => {
       entries.forEach(entry => {
         if (entry.isIntersecting) {
           const el = entry.target;
@@ -975,11 +996,11 @@
             const val = Math.floor(current).toLocaleString('es-MX');
             el.textContent = (target >= 1000 ? '+' : '') + val + suffix;
           }, 16);
-          counterObserver.unobserve(el);
+          vpCounterObserver.unobserve(el);
         }
       });
     }, { threshold: 0.5 });
-    document.querySelectorAll('[data-counter]').forEach(el => counterObserver.observe(el));
+    document.querySelectorAll('[data-counter]').forEach(el => vpCounterObserver.observe(el));
 
     // ════════════════════════════════════════════════════════════
     // 💫 SCROLL SUAVE para anchors internos

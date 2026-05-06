@@ -523,11 +523,10 @@ button{cursor:pointer;border:none;background:none;font:inherit}
 /* En desktop: header-auth visible, en mobile oculto (se mete al menú) */
 .mobile-login, .mobile-register { display: none; }
 
-@media (max-width: 980px) {
-  .header-auth { display: none; }
-  .desktop-whatsapp { display: none; }
+@media (max-width: 960px) {
+  .header-auth { display: none !important; }
   .mobile-login, .mobile-register {
-    display: inline-flex; width: 100%;
+    display: inline-flex !important; width: 100%;
     justify-content: center; margin-top: 6px;
   }
 }
