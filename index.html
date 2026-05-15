@@ -1094,26 +1094,38 @@
         const res = await fetch('https://visionpecuaria-webhook-production.up.railway.app/crear-checkout', {
           method: 'POST',
           headers: { 'Content-Type': 'application/json' },
-          body: JSON.stringify({ plan, email: user.email, uid: user.uid })
+          body: JSON.stringify({
+            plan,
+            email: user.email,
+            uid: user.uid,
+            nombre: user.displayName || ''
+          })
         });
         const data = await res.json();
+
+        if (data.error) throw new Error(data.error);
+
+        // Opción 1: URL directa (modo redirect) — preferida si Stripe la devuelve
         if (data.url) {
-          // Sanitizar URL: encodear caracteres no-ASCII (acentos, ñ, etc.)
-          let urlFinal = data.url;
-          try {
-            const u = new URL(data.url);
-            // Re-encodear cada parámetro para asegurar percent-encoding
-            const params = new URLSearchParams();
-            u.searchParams.forEach((v, k) => params.set(k, v));
-            u.search = params.toString();
-            urlFinal = u.toString();
-          } catch(urlErr) {
-            console.warn('URL del checkout no estándar, redirigiendo igual:', urlErr);
-          }
-          window.location.href = urlFinal;
-        } else {
-          throw new Error(data.error || 'No se pudo crear el checkout');
+          window.location.href = data.url;
+          return;
         }
+
+        // Opción 2: clientSecret (modo embedded) — abrir Stripe Embedded Checkout
+        if (data.clientSecret) {
+          if (typeof Stripe === 'undefined') {
+            // Cargar Stripe.js dinámicamente si no está
+            const s = document.createElement('script');
+            s.src = 'https://js.stripe.com/v3/';
+            s.onload = () => montarStripeEmbedded(data.clientSecret);
+            document.head.appendChild(s);
+          } else {
+            montarStripeEmbedded(data.clientSecret);
+          }
+          return;
+        }
+
+        throw new Error('Respuesta inesperada del servidor de pagos');
       } catch (e) {
         const numero = '5212361100649';
         const msg = encodeURIComponent('Hola, intenté pagar mi suscripción Élite Pecuario y me dio error. Email: ' + (user.email || '') + ' Plan: ' + plan);
@@ -1123,6 +1135,31 @@
         if (btn) { btn.disabled = false; btn.style.opacity = '1'; const sp = btn.querySelector('span'); if (sp) sp.textContent = plan === 'anual' ? 'Pago anual' : 'Pago mensual'; }
       }
     };
+
+    // Monta el Stripe Embedded Checkout en un overlay modal
+    async function montarStripeEmbedded(clientSecret) {
+      // Crear overlay
+      const overlay = document.createElement('div');
+      overlay.id = 'stripeCheckoutOverlay';
+      overlay.style.cssText = 'position:fixed;inset:0;background:rgba(0,0,0,.85);z-index:99999;display:flex;align-items:center;justify-content:center;padding:20px;overflow-y:auto;';
+      overlay.innerHTML = '<div style="background:#0a1f12;border-radius:16px;width:100%;max-width:520px;max-height:92vh;overflow-y:auto;position:relative;padding:24px;">' +
+        '<button id="stripeCheckoutCerrar" style="position:absolute;top:10px;right:10px;background:rgba(255,255,255,.1);border:none;color:#fff;width:36px;height:36px;border-radius:50%;cursor:pointer;font-size:20px;z-index:2;">×</button>' +
+        '<div id="stripeEmbeddedContainer"></div>' +
+      '</div>';
+      document.body.appendChild(overlay);
+
+      document.getElementById('stripeCheckoutCerrar').onclick = () => overlay.remove();
+
+      try {
+        const stripe = Stripe(window.STRIPE_PUBLIC_KEY || 'pk_live_REEMPLAZAR');
+        const checkout = await stripe.initEmbeddedCheckout({ clientSecret });
+        checkout.mount('#stripeEmbeddedContainer');
+      } catch(err) {
+        console.error('Error montando Stripe embedded:', err);
+        overlay.remove();
+        alert('No se pudo cargar el formulario de pago: ' + err.message);
+      }
+    }
 
     // ════════════════════════════════════════════════════════════
     // ✨ REVEAL ON SCROLL — anima elementos al entrar en viewport
