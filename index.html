@@ -1098,13 +1098,29 @@
         });
         const data = await res.json();
         if (data.url) {
-          window.location.href = data.url;
+          // Sanitizar URL: encodear caracteres no-ASCII (acentos, ñ, etc.)
+          let urlFinal = data.url;
+          try {
+            const u = new URL(data.url);
+            // Re-encodear cada parámetro para asegurar percent-encoding
+            const params = new URLSearchParams();
+            u.searchParams.forEach((v, k) => params.set(k, v));
+            u.search = params.toString();
+            urlFinal = u.toString();
+          } catch(urlErr) {
+            console.warn('URL del checkout no estándar, redirigiendo igual:', urlErr);
+          }
+          window.location.href = urlFinal;
         } else {
           throw new Error(data.error || 'No se pudo crear el checkout');
         }
       } catch (e) {
-        alert('Error al procesar el pago: ' + e.message + '\n\nIntenta de nuevo o contáctanos por WhatsApp.');
-        if (btn) { btn.disabled = false; btn.style.opacity = '1'; }
+        const numero = '5212361100649';
+        const msg = encodeURIComponent('Hola, intenté pagar mi suscripción Élite Pecuario y me dio error. Email: ' + (user.email || '') + ' Plan: ' + plan);
+        if (confirm('Error al procesar el pago: ' + e.message + '\n\n¿Quieres contactarnos por WhatsApp para procesar tu pago?')) {
+          window.open('https://wa.me/' + numero + '?text=' + msg, '_blank');
+        }
+        if (btn) { btn.disabled = false; btn.style.opacity = '1'; const sp = btn.querySelector('span'); if (sp) sp.textContent = plan === 'anual' ? 'Pago anual' : 'Pago mensual'; }
       }
     };
 
