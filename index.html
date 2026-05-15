@@ -1151,7 +1151,7 @@
       document.getElementById('stripeCheckoutCerrar').onclick = () => overlay.remove();
 
       try {
-        const stripe = Stripe(window.STRIPE_PUBLIC_KEY || 'pk_live_REEMPLAZAR');
+        const stripe = Stripe(window.STRIPE_PUBLIC_KEY || 'pk_test_51TMAchPBgqsOPfUYtBbalhoOLnnGz6LymFleli7OxTDbiK4FNYX0K82ispYDb39zKJQXevyMtIPetxVAvq9hhb5P005VGgxu99');
         const checkout = await stripe.initEmbeddedCheckout({ clientSecret });
         checkout.mount('#stripeEmbeddedContainer');
       } catch(err) {
