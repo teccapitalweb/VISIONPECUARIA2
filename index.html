@@ -877,10 +877,21 @@
       }
     });
 
-    window.irAlPortalAuth = function() {
-      const user = window.__authUser;
-      if (user) irAlPortal(user);
-      else window.location.href = PORTAL_BASE;
+    window.irAlPortalAuth = async function() {
+      const user = window.__authUser || auth.currentUser;
+      if (!user) { window.location.href = PORTAL_BASE; return; }
+
+      // Si el usuario ya tiene sesión, intentamos obtener un id_token de Firebase
+      // y pasarlo. La app lo usará para verificar la sesión.
+      try {
+        const idToken = await user.getIdToken();
+        const data = { f: idToken, e: user.email, t: Date.now() };
+        const hash = btoa(encodeURIComponent(JSON.stringify(data)));
+        window.location.href = PORTAL_BASE + '#f=' + hash;
+      } catch(e) {
+        console.warn('No se pudo obtener idToken:', e);
+        window.location.href = PORTAL_BASE;
+      }
     };
 
     // ═══════════════════════════════════════════════════════════
@@ -1020,12 +1031,17 @@
       try {
         const cred = await signInWithPopup(auth, googleProvider);
         await asegurarDocFree(cred.user);
+
+        // Capturar el idToken de Google para autologin cross-domain
+        const googleCred = GoogleAuthProvider.credentialFromResult(cred);
+        const googleIdToken = googleCred?.idToken || null;
+
         const intencion = sessionStorage.getItem('intencion_pago');
         if (intencion) {
           sessionStorage.removeItem('intencion_pago');
           setTimeout(() => window.suscribirElitePecuario(intencion), 400);
         } else {
-          irAlPortal(cred.user);
+          irAlPortalGoogle(cred.user, googleIdToken);
         }
       } catch (e) {
         const idAlert = document.getElementById('authFormLogin').classList.contains('active') ? 'loginError' : 'regError';
@@ -1034,6 +1050,19 @@
         if (btnR) btnR.disabled = false;
       }
     };
+
+    // Redirect al portal pasando el idToken de Google para autologin
+    function irAlPortalGoogle(user, googleIdToken) {
+      if (googleIdToken) {
+        const data = { g: googleIdToken, t: Date.now() };
+        try {
+          const hash = btoa(encodeURIComponent(JSON.stringify(data)));
+          window.location.href = PORTAL_BASE + '#g=' + hash;
+          return;
+        } catch(e) { console.warn('Hash Google error:', e); }
+      }
+      window.location.href = PORTAL_BASE;
+    }
 
     // ═══════════════════════════════════════════════════════════
     // RECUPERAR CONTRASEÑA
