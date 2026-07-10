@@ -190,11 +190,15 @@
           <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M17 21v-2a4 4 0 00-4-4H5a4 4 0 00-4 4v2"/><circle cx="9" cy="7" r="4"/><path d="M23 21v-2a4 4 0 00-3-3.87M16 3.13a4 4 0 010 7.75"/></svg>
           Dirigido a
         </button>
+        <button class="tabs__btn" role="tab" aria-selected="false" data-tab="instructor">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M20 21v-2a4 4 0 00-4-4H8a4 4 0 00-4 4v2"/><circle cx="12" cy="7" r="4"/></svg>
+          Instructor
+        </button>
       </div>
 
       <div class="tabs__panels">
         <!-- QUÉ APRENDERÁS -->
-        <div class="tabs__panel" id="panel-aprenderas" data-active role="tabpanel">
+        <div class="tabs__panel" id="panel-aprenderas" data-active="true" role="tabpanel">
           <ul class="check-list">
             <li>Fundamentos de la elaboración de embutidos: relación carne-grasa, uso correcto de sal de cura, control de temperatura e higiene alimentaria.</li>
             <li>Cómo elaborar <b>chorizo rojo mexicano</b> con especias tradicionales y textura profesional.</li>
@@ -366,42 +370,34 @@
             <li>Cualquier persona con ganas de aprender un oficio con demanda real y rentable.</li>
           </ul>
         </div>
-      </div>
-    </div>
-  </div>
-</section>
 
-<!-- ═══════ INSTRUCTOR ═══════ -->
-<section class="section" style="padding-top:16px;">
-  <div class="container">
-    <div class="section__head reveal">
-      <span class="eyebrow">Tu instructor</span>
-      <h2 class="section__title">Quien te va a enseñar</h2>
-    </div>
-    <div class="instructor reveal">
-      <div class="instructor__inner">
-        <div class="instructor__media">
-          <img
-            src="/assets/curso-chorizo/instructor-castillo-800.jpg"
-            srcset="/assets/curso-chorizo/instructor-castillo-400.jpg 400w, /assets/curso-chorizo/instructor-castillo-800.jpg 800w"
-            sizes="(min-width:768px) 360px, 100vw"
-            alt="M.V.Z. José Antonio Castillo García"
-            width="800" height="800"
-            loading="lazy">
-        </div>
-        <div class="instructor__copy">
-          <span class="instructor__eyebrow">Semblanza profesional</span>
-          <h3 class="instructor__name">M.V.Z. José Antonio Castillo García</h3>
-          <p class="instructor__title">Médico Veterinario Zootecnista</p>
-          <p class="instructor__bio">
-            Médico Veterinario Zootecnista con más de 15 años de experiencia en medicina y clínica de pequeñas y grandes especies, así como en prevención, diagnóstico y tratamiento de enfermedades animales. Docente universitario y de bachillerato por más de 8 años. Comprometido con la salud animal, la producción responsable y el bienestar de los sintientes.
-          </p>
-          <ul class="instructor__creds">
-            <li>Más de 15 años en atención médica veterinaria de pequeñas y grandes especies.</li>
-            <li>Docente universitario y de bachillerato (Anatomía, Fisiología, Nutrición Animal, Semiología, Propedéutica, entre otras).</li>
-            <li>Enfoque en bienestar animal, medicina preventiva y producción pecuaria.</li>
-            <li>Asesor de tesis profesionales de carácter experimental.</li>
-          </ul>
+        <!-- INSTRUCTOR -->
+        <div class="tabs__panel" id="panel-instructor" role="tabpanel">
+          <div class="instructor-tab">
+            <div class="instructor-tab__media">
+              <img
+                src="/assets/curso-chorizo/instructor-castillo-800.jpg"
+                srcset="/assets/curso-chorizo/instructor-castillo-400.jpg 400w, /assets/curso-chorizo/instructor-castillo-800.jpg 800w"
+                sizes="(min-width:768px) 240px, 260px"
+                alt="M.V.Z. José Antonio Castillo García"
+                width="800" height="800"
+                loading="lazy">
+            </div>
+            <div>
+              <span class="instructor-tab__eyebrow">Semblanza profesional</span>
+              <h3 class="instructor-tab__name">M.V.Z. José Antonio Castillo García</h3>
+              <p class="instructor-tab__title">Médico Veterinario Zootecnista</p>
+              <p class="instructor-tab__bio">
+                Médico Veterinario Zootecnista con más de 15 años de experiencia en medicina y clínica de pequeñas y grandes especies, así como en prevención, diagnóstico y tratamiento de enfermedades animales. Docente universitario y de bachillerato por más de 8 años. Comprometido con la salud animal, la producción responsable y el bienestar de los sintientes.
+              </p>
+              <ul class="instructor__creds">
+                <li>Más de 15 años en atención médica veterinaria de pequeñas y grandes especies.</li>
+                <li>Docente universitario y de bachillerato (Anatomía, Fisiología, Nutrición Animal, Semiología, Propedéutica, entre otras).</li>
+                <li>Enfoque en bienestar animal, medicina preventiva y producción pecuaria.</li>
+                <li>Asesor de tesis profesionales de carácter experimental.</li>
+              </ul>
+            </div>
+          </div>
         </div>
       </div>
     </div>
@@ -427,10 +423,8 @@
           <video
             src="/assets/curso-chorizo/preview-recetario.mp4"
             poster="/assets/curso-chorizo/hero-chef-640.jpg"
-            controls
-            playsinline
-            preload="metadata"
-            muted></video>
+            autoplay muted loop playsinline
+            preload="metadata"></video>
         </div>
       </div>
     </div>
