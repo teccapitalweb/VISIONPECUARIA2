@@ -310,7 +310,7 @@ function initTabs() {
       const target = btn.dataset.tab;
       tabs.forEach(b => b.setAttribute('aria-selected', b === btn ? 'true' : 'false'));
       panels.forEach(p => {
-        if (p.id === 'panel-' + target) p.setAttribute('data-active','');
+        if (p.id === 'panel-' + target) p.setAttribute('data-active', 'true');
         else p.removeAttribute('data-active');
       });
       // Scroll suave al inicio de las pestañas si el usuario está por debajo
