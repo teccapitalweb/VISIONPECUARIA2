@@ -604,8 +604,9 @@ h1, h2, h3, h4 {
   box-shadow: var(--ss);
 }
 .tabs__panels { padding: 24px 20px; }
-.tabs__panel { display: none; animation: fadeIn .3s ease both; }
-.tabs__panel[data-active] { display: block; }
+.tabs__panel { display: none !important; animation: fadeIn .3s ease both; }
+.tabs__panel[data-active],
+.tabs__panel[data-active="true"] { display: block !important; }
 @keyframes fadeIn {
   from { opacity: 0; transform: translateY(6px); }
   to   { opacity: 1; transform: translateY(0); }
@@ -617,36 +618,47 @@ h1, h2, h3, h4 {
   .tabs__panels { padding: 32px 32px; }
 }
 
-/* Listas dentro de tabs */
+/* Listas dentro de tabs
+   Fix crítico: no usar `display: grid` en <li> con contenido mixto (texto + <b>)
+   porque CSS Grid trata cada text node y cada elemento como celdas separadas
+   y rompe la línea de texto. Usamos padding + ::before absolute. */
 .check-list { display: grid; gap: 12px; }
 .check-list li {
-  display: grid;
-  grid-template-columns: 26px 1fr;
-  gap: 12px;
-  align-items: start;
+  position: relative;
+  padding-left: 38px;
   font-size: .95rem;
   color: var(--text-2);
+  line-height: 1.55;
 }
 .check-list li::before {
   content: '';
+  position: absolute;
+  left: 0;
+  top: 2px;
   width: 22px; height: 22px;
   background: linear-gradient(135deg, var(--g700), var(--g800));
   border-radius: 7px;
-  display: block;
-  position: relative;
-  flex-shrink: 0;
   mask: url("data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='white' stroke-width='3' stroke-linecap='round' stroke-linejoin='round'><path d='M20 6L9 17l-5-5'/></svg>") center/16px 16px no-repeat, linear-gradient(black, black);
   mask-composite: intersect;
-  -webkit-mask: linear-gradient(black, black);
+  -webkit-mask: url("data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='white' stroke-width='3' stroke-linecap='round' stroke-linejoin='round'><path d='M20 6L9 17l-5-5'/></svg>") center/16px 16px no-repeat;
+  -webkit-mask-composite: source-over;
 }
-.check-list li[data-icon]::before { background: transparent; }
+.check-list li b { font-weight: 700; color: var(--text); }
+
+/* Variante con íconos (Qué incluye) — sí usa grid porque el contenido
+   está en <div> hijos explícitos, no en text nodes libres */
+.check-list--icons { display: grid; gap: 12px; }
 .check-list--icons li {
+  display: grid;
   grid-template-columns: 44px 1fr;
+  gap: 14px;
   align-items: center;
   padding: 14px;
   background: var(--g50);
   border: 1px solid var(--border);
   border-radius: var(--r);
+  padding-left: 14px;
+  position: static;
 }
 .check-list--icons li::before { display: none; }
 .check-list__ico {
@@ -756,7 +768,77 @@ h1, h2, h3, h4 {
 }
 
 /* ═══════════════════════════════════════════════════════════
-   INSTRUCTOR
+   INSTRUCTOR — variante DENTRO del panel de pestaña
+   ═══════════════════════════════════════════════════════════ */
+.instructor-tab {
+  display: grid;
+  gap: 20px;
+}
+.instructor-tab__media {
+  aspect-ratio: 1/1;
+  max-width: 260px;
+  border-radius: var(--rl);
+  overflow: hidden;
+  background: var(--g100);
+  box-shadow: var(--s);
+  margin: 0 auto;
+}
+.instructor-tab__media img {
+  width: 100%; height: 100%;
+  object-fit: cover;
+  object-position: center 15%;
+}
+.instructor-tab__eyebrow {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  padding: 5px 10px;
+  background: var(--g100);
+  color: var(--g800);
+  border-radius: 999px;
+  font-family: var(--font-display);
+  font-weight: 700;
+  font-size: .68rem;
+  letter-spacing: .12em;
+  text-transform: uppercase;
+  margin-bottom: 12px;
+  width: max-content;
+}
+.instructor-tab__name {
+  font-family: var(--font-display);
+  font-size: 1.3rem;
+  font-weight: 800;
+  letter-spacing: -.022em;
+  color: var(--text);
+  line-height: 1.15;
+}
+.instructor-tab__title {
+  color: var(--g800);
+  font-family: var(--font-display);
+  font-weight: 700;
+  font-size: .92rem;
+  margin: 4px 0 14px;
+}
+.instructor-tab__bio {
+  color: var(--muted);
+  font-size: .92rem;
+  line-height: 1.6;
+  margin-bottom: 16px;
+}
+
+@media (min-width: 768px) {
+  .instructor-tab {
+    grid-template-columns: 240px 1fr;
+    align-items: start;
+    gap: 32px;
+  }
+  .instructor-tab__media { margin: 0; aspect-ratio: 4/5; max-width: none; }
+  .instructor-tab__name { font-size: 1.55rem; }
+}
+
+/* ═══════════════════════════════════════════════════════════
+   INSTRUCTOR — sección aparte (LEGACY, ya no se usa pero
+   dejamos el CSS por si vuelve a usarse en otros cursos)
    ═══════════════════════════════════════════════════════════ */
 .instructor {
   background: var(--paper);
@@ -821,17 +903,18 @@ h1, h2, h3, h4 {
   gap: 8px;
 }
 .instructor__creds li {
-  display: grid;
-  grid-template-columns: 18px 1fr;
-  gap: 10px;
-  align-items: start;
+  position: relative;
+  padding-left: 28px;
   font-size: .88rem;
   color: var(--text-2);
+  line-height: 1.55;
 }
 .instructor__creds li::before {
   content: '';
+  position: absolute;
+  left: 0;
+  top: 4px;
   width: 16px; height: 16px;
-  margin-top: 2px;
   background: var(--gold);
   border-radius: 50%;
   mask: url("data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='white' stroke-width='4' stroke-linecap='round' stroke-linejoin='round'><path d='M20 6L9 17l-5-5'/></svg>") center/12px 12px no-repeat;
