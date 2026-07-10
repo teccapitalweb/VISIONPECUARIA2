@@ -235,12 +235,88 @@ async function actualizarCupo() {
       if (!snap.exists()) return;
       cursoData = snap.data();
       pintarCupoYPrecio(cursoData);
+      pintarCountdown(cursoData);
     }, (err) => {
       console.warn('Cupo snapshot error:', err);
     });
   } catch (err) {
     console.warn('No pudimos cargar el cupo:', err);
   }
+}
+
+// ─── COUNTDOWN HASTA fechaInicio ─────────────────────────────────────────────
+let countdownTimer = null;
+function pintarCountdown(c) {
+  const $section = $('#countdown');
+  if (!$section || !c.fechaInicio) return;
+
+  // Firestore Timestamp → JS Date
+  const fecha = c.fechaInicio.toDate ? c.fechaInicio.toDate() : new Date(c.fechaInicio);
+  if (isNaN(fecha.getTime())) return;
+
+  // Formatear fecha para el eyebrow
+  const eyebrow = fecha.toLocaleDateString('es-MX', { day: 'numeric', month: 'long', year: 'numeric' });
+  const $eye = $('[data-countdown-eyebrow]');
+  if ($eye) $eye.textContent = 'Arrancamos el ' + eyebrow;
+
+  // Iniciar countdown si aún no
+  clearInterval(countdownTimer);
+  $section.hidden = false;
+
+  function tick() {
+    const now = new Date();
+    const diff = fecha - now;
+
+    const $title = $('[data-countdown-title]');
+    const $grid  = $('[data-countdown-grid]');
+
+    if (diff <= 0) {
+      // Ya empezó → mostrar mensaje y ocultar grid
+      if ($title) $title.textContent = '🎉 ¡El curso ya empezó!';
+      if ($grid) $grid.style.display = 'none';
+      clearInterval(countdownTimer);
+      return;
+    }
+
+    if ($title) $title.textContent = 'Faltan';
+    if ($grid) $grid.style.display = '';
+
+    const days  = Math.floor(diff / (1000 * 60 * 60 * 24));
+    const hours = Math.floor((diff / (1000 * 60 * 60)) % 24);
+    const mins  = Math.floor((diff / (1000 * 60)) % 60);
+    const secs  = Math.floor((diff / 1000) % 60);
+
+    const pad = n => String(n).padStart(2, '0');
+    const $d = $('[data-countdown-days]');
+    const $h = $('[data-countdown-hours]');
+    const $m = $('[data-countdown-mins]');
+    const $s = $('[data-countdown-secs]');
+    if ($d) $d.textContent = pad(days);
+    if ($h) $h.textContent = pad(hours);
+    if ($m) $m.textContent = pad(mins);
+    if ($s) $s.textContent = pad(secs);
+  }
+
+  tick();
+  countdownTimer = setInterval(tick, 1000);
+}
+
+// ─── TOGGLE DE SONIDO EN VIDEOS ──────────────────────────────────────────────
+function initMuteToggles() {
+  $$('[data-mute-toggle]').forEach(btn => {
+    btn.addEventListener('click', () => {
+      const videoId = btn.dataset.muteToggle;
+      const video = document.getElementById(videoId);
+      if (!video) return;
+      video.muted = !video.muted;
+      // Si estaba pausado (por política del navegador), intentar reproducir
+      if (video.paused) video.play().catch(() => {});
+      btn.setAttribute('data-muted', video.muted ? 'true' : 'false');
+      const label = btn.querySelector('[data-mute-label]');
+      if (label) label.textContent = video.muted ? 'Activar sonido' : 'Silenciar';
+      btn.setAttribute('aria-label', video.muted ? 'Activar sonido del video' : 'Silenciar el video');
+    });
+  });
 }
 
 function pintarCupoYPrecio(c) {
@@ -400,6 +476,7 @@ function boot() {
   initReveal();
   initStickyCTA();
   initModals();
+  initMuteToggles();
   actualizarCupo();
 
   // Detectar retorno de Stripe (return_url)
