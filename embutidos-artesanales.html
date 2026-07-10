@@ -117,6 +117,25 @@
   </div>
 </section>
 
+<!-- ═══════ COUNTDOWN ═══════ -->
+<section class="countdown" id="countdown" hidden>
+  <div class="container">
+    <div class="countdown__card">
+      <span class="countdown__eyebrow">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="width:12px;height:12px;"><circle cx="12" cy="12" r="10"/><path d="M12 6v6l4 2"/></svg>
+        <span data-countdown-eyebrow>Arrancamos el 27 de julio</span>
+      </span>
+      <h2 class="countdown__title" data-countdown-title>Faltan</h2>
+      <div class="countdown__grid" data-countdown-grid>
+        <div class="countdown__cell"><b data-countdown-days>00</b><span>Días</span></div>
+        <div class="countdown__cell"><b data-countdown-hours>00</b><span>Hrs</span></div>
+        <div class="countdown__cell"><b data-countdown-mins>00</b><span>Min</span></div>
+        <div class="countdown__cell"><b data-countdown-secs>00</b><span>Seg</span></div>
+      </div>
+    </div>
+  </div>
+</section>
+
 <!-- ═══════ PRICING CARD ═══════ -->
 <section class="pricing">
   <div class="container">
@@ -425,10 +444,20 @@
         </div>
         <div class="preview__video">
           <video
+            id="preview-video"
             src="/assets/curso-chorizo/preview-recetario.mp4"
             poster="/assets/curso-chorizo/hero-chef-640.jpg"
             autoplay muted loop playsinline
             preload="metadata"></video>
+          <button
+            class="mute-toggle"
+            data-mute-toggle="preview-video"
+            data-muted="true"
+            aria-label="Activar sonido del video">
+            <svg data-icon-muted viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><polygon points="11 5 6 9 2 9 2 15 6 15 11 19 11 5"/><line x1="23" y1="9" x2="17" y2="15"/><line x1="17" y1="9" x2="23" y2="15"/></svg>
+            <svg data-icon-unmuted viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><polygon points="11 5 6 9 2 9 2 15 6 15 11 19 11 5"/><path d="M15.54 8.46a5 5 0 010 7.07"/><path d="M19.07 4.93a10 10 0 010 14.14"/></svg>
+            <span data-mute-label>Activar sonido</span>
+          </button>
         </div>
       </div>
     </div>
