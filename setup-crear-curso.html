@@ -1,0 +1,275 @@
+<!DOCTYPE html>
+<html lang="es-MX">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Setup · Crear curso en Firestore</title>
+<style>
+  body { font-family: system-ui, sans-serif; background: #f4f6f3; padding: 24px; max-width: 720px; margin: 0 auto; color: #111b15; }
+  h1 { font-size: 1.5rem; margin-bottom: 8px; }
+  p { color: #5a6b61; margin-bottom: 20px; line-height: 1.6; }
+  button { padding: 14px 24px; background: #1f5c40; color: white; border: none; border-radius: 10px; font-size: 1rem; font-weight: 700; cursor: pointer; margin: 8px 4px; }
+  button:disabled { opacity: 0.5; cursor: not-allowed; }
+  button.danger { background: #7f1d1d; }
+  pre { background: #fff; border: 1px solid rgba(31,92,64,.15); border-radius: 10px; padding: 16px; font-size: .82rem; line-height: 1.5; overflow-x: auto; margin-top: 20px; max-height: 400px; overflow-y: auto; }
+  .status { padding: 12px 16px; border-radius: 10px; margin: 12px 0; font-size: .9rem; font-weight: 600; }
+  .status.ok { background: #e7f1ec; color: #163d28; }
+  .status.err { background: #fee; color: #7f1d1d; }
+  .status.info { background: #e8f0fd; color: #1e40af; }
+  input[type="text"] { padding: 10px; border: 1px solid rgba(31,92,64,.2); border-radius: 8px; font-size: .95rem; width: 100%; margin-bottom: 8px; }
+  label { font-size: .82rem; color: #5a6b61; font-weight: 600; display: block; margin-bottom: 4px; }
+</style>
+</head>
+<body>
+
+<h1>🛠️ Setup: crear curso en Firestore</h1>
+<p>
+  Esta página crea los 2 documentos necesarios para el curso <b>Chorizo y Embutidos Artesanales</b>:
+  el catálogo (<code>cursosVenta/embutidos-artesanales</code>) y el instructor (<code>instructores/castillo-garcia</code>).
+</p>
+<p>
+  <b>Requisito:</b> debes estar logueado con una cuenta de Google que exista en <code>admins/{tu-uid}</code> en Firestore.
+  Si no eres admin, la creación fallará por reglas de seguridad.
+</p>
+
+<div id="status" class="status info">⏳ Esperando conexión con Firebase...</div>
+
+<div id="controls" style="display:none;">
+  <button id="btn-crear">🚀 Crear los 2 documentos</button>
+  <button id="btn-verificar">🔍 Verificar si ya existen</button>
+  <button id="btn-actualizar">🔄 Actualizar (si ya existen)</button>
+  <button id="btn-signin" style="background:#4285f4;">🔑 Cambiar cuenta Google</button>
+</div>
+
+<pre id="log">Presiona el botón para ejecutar...</pre>
+
+<script type="module">
+import { initializeApp } from "https://www.gstatic.com/firebasejs/10.11.0/firebase-app.js";
+import { getAuth, onAuthStateChanged, signInWithPopup, GoogleAuthProvider, signOut } from "https://www.gstatic.com/firebasejs/10.11.0/firebase-auth.js";
+import { getFirestore, doc, setDoc, getDoc, serverTimestamp } from "https://www.gstatic.com/firebasejs/10.11.0/firebase-firestore.js";
+
+const firebaseConfig = {
+  apiKey: "AIzaSyDQXkIo-BWPIeLZzHeTMN986WMDn0TrTJU",
+  authDomain: "visionpecuaria-vip.firebaseapp.com",
+  projectId: "visionpecuaria-vip",
+  storageBucket: "visionpecuaria-vip.firebasestorage.app",
+  messagingSenderId: "978318807782",
+  appId: "1:978318807782:web:626e67bb30795c15b02127"
+};
+
+const app = initializeApp(firebaseConfig);
+const auth = getAuth(app);
+const db = getFirestore(app);
+
+const $ = (id) => document.getElementById(id);
+const log = (msg, kind='') => {
+  const l = $('log');
+  const time = new Date().toLocaleTimeString('es-MX');
+  l.textContent = `[${time}] ${msg}\n` + l.textContent;
+};
+const setStatus = (msg, kind='info') => {
+  const s = $('status');
+  s.className = 'status ' + kind;
+  s.textContent = msg;
+};
+
+onAuthStateChanged(auth, async (user) => {
+  if (!user) {
+    setStatus('❌ No has iniciado sesión. Haz clic en el botón de Google.', 'err');
+    $('controls').style.display = 'block';
+    return;
+  }
+  // Verificar si es admin
+  try {
+    const adminDoc = await getDoc(doc(db, 'admins', user.uid));
+    if (!adminDoc.exists()) {
+      setStatus(`⚠️ ${user.email} NO está en la colección admins/. Las reglas rechazarán la creación.`, 'err');
+      log(`UID del usuario: ${user.uid}`);
+      log(`Si eres el dueño del proyecto, crea manualmente el doc admins/${user.uid} en la consola Firebase.`);
+    } else {
+      setStatus(`✅ ${user.email} es admin. Puedes proceder.`, 'ok');
+    }
+  } catch (e) {
+    setStatus(`⚠️ No pudimos verificar admins: ${e.message}`, 'err');
+  }
+  $('controls').style.display = 'block';
+});
+
+$('btn-signin').addEventListener('click', async () => {
+  await signOut(auth);
+  const provider = new GoogleAuthProvider();
+  provider.setCustomParameters({ prompt: 'select_account' });
+  await signInWithPopup(auth, provider);
+});
+
+// ═══ DATOS DEL CURSO ═══
+const instructorData = {
+  slug: 'castillo-garcia',
+  nombre: 'M.V.Z. José Antonio Castillo García',
+  titulo: 'Médico Veterinario Zootecnista',
+  bio: 'Médico Veterinario Zootecnista con más de 15 años de experiencia en medicina y clínica de pequeñas y grandes especies, así como en prevención, diagnóstico y tratamiento de enfermedades animales. Docente universitario y de bachillerato por más de 8 años. Comprometido con la salud animal, la producción responsable y el bienestar de los sintientes.',
+  credenciales: [
+    'Más de 15 años en atención médica veterinaria de pequeñas y grandes especies.',
+    'Docente universitario y de bachillerato (Anatomía, Fisiología, Nutrición Animal, Semiología, Propedéutica, entre otras).',
+    'Enfoque en bienestar animal, medicina preventiva y producción pecuaria.',
+    'Asesor de tesis profesionales de carácter experimental.'
+  ],
+  areas: [
+    'Atención veterinaria: prevención, diagnóstico y tratamiento en pequeñas y grandes especies.',
+    'Medicina preventiva: vacunaciones, desparasitaciones, programas sanitarios.',
+    'Producción pecuaria: asesoría en nutrición, manejo y mejora productiva.',
+    'Docencia y capacitación para nuevos profesionales del área veterinaria.'
+  ],
+  fotoUrl: '/assets/curso-chorizo/instructor-castillo-800.jpg',
+  activo: true
+};
+
+const cursoData = {
+  consultoraId: 'visionpecuaria',
+  slug: 'embutidos-artesanales',
+  nombre: 'Elaboración de Chorizo, Carne Enchilada y Embutidos Artesanales',
+  subtitulo: 'Domina las recetas artesanales, calcula tu costo real y véndelo con margen sano.',
+  descripcion: 'Curso 100% online con acceso permanente. Aprende paso a paso a elaborar chorizo rojo mexicano, chorizo verde estilo Toluca, longaniza y carne enchilada. Incluye recetario descargable, calculadora de costos y precios en Excel, canal VIP de WhatsApp con novedades del sector y certificado digital con folio QR válido.',
+  estado: 'publicado',                          // 'borrador' | 'publicado'
+  instructorId: 'castillo-garcia',
+  moneda: 'mxn',
+  precioNormalCentavos:     55000,              // $550 MXN
+  precioLanzamientoCentavos:45000,              // $450 MXN
+  cupoLanzamientoMax:       15,
+  cupoLanzamientoTomados:    0,                 // El webhook lo incrementa
+  fechaInicio:      new Date('2026-07-27T00:00:00-06:00'),
+  fechaInicioTexto: '27 de julio 2026',
+  duracionHoras:    5,                          // Editable desde el admin
+  modalidad:        'Curso online · Acceso permanente',
+  esOnDemand:       true,
+  linkClaseEnVivo:  null,                       // Para cuando quieran hacer sesión live en el futuro
+  whatsappCurso:    '+522382514313',
+  whatsappCurso_wa: 'https://wa.me/522382514313',
+  canalWhatsapp:    'https://whatsapp.com/channel/0029VbBxvxG8F2pBBhVO6O0m',
+  posterPath:       '/assets/curso-chorizo/hero-chef-1024.jpg',
+  previewVideoPath: '/assets/curso-chorizo/preview-recetario.mp4',
+  flyerPath:        '/assets/curso-chorizo/flyer.jpg',
+  queAprenderas: [
+    'Fundamentos de la elaboración de embutidos: relación carne-grasa, uso correcto de sal de cura, control de temperatura e higiene alimentaria.',
+    'Cómo elaborar chorizo rojo mexicano con especias tradicionales y textura profesional.',
+    'Cómo elaborar chorizo verde estilo Toluca, receta paso a paso con sabor auténtico.',
+    'Cómo elaborar longaniza artesanal con calibrado correcto de tripas.',
+    'Cómo preparar carne enchilada (adobada) lista para venta o preparación en casa.',
+    'Cómo calcular tu costo real por kilo y definir tu precio de venta con margen sano.'
+  ],
+  queIncluye: [
+    { titulo: 'Recetario de Embutidos Artesanales', descripcion: 'PDF descargable con 4 recetas + fundamentos + guía de higiene.' },
+    { titulo: 'Calculadora de Costo y Precio',      descripcion: 'Excel con fórmulas listas: ingresa insumos y obtén tu precio de venta ideal.' },
+    { titulo: 'Canal VIP de WhatsApp',              descripcion: 'Novedades del sector, tips y avisos de nuevas capacitaciones.' },
+    { titulo: 'Certificado Digital con QR',         descripcion: 'Folio único verificable en línea, con validez oficial.' },
+    { titulo: 'Acceso permanente al contenido',     descripcion: 'Videos grabados en HD. Aprende a tu ritmo, cuando quieras.' }
+  ],
+  dirigidoA: [
+    'Productores pecuarios que quieren agregar valor a su carne.',
+    'Emprendedores del sector alimentos que buscan un producto artesanal rentable.',
+    'Amas y amos de casa que quieren elaborar sus propios embutidos.',
+    'Estudiantes y profesionales veterinarios interesados en la industria cárnica.',
+    'Cualquier persona con ganas de aprender un oficio con demanda real.'
+  ],
+  temario: [
+    { n:1, titulo:'Fundamentos y seguridad alimentaria', puntos:[
+      'Relación carne-grasa y por qué es clave para la textura final.',
+      'Ingredientes funcionales: sal común, sal de cura #1, azúcar, hielo, vinagre.',
+      'La regla del frío: cómo trabajar a la temperatura correcta.',
+      'Tipos de tripas y cómo prepararlas.',
+      'Higiene y buenas prácticas para producto seguro y estable.'
+    ]},
+    { n:2, titulo:'Receta 1 · Chorizo rojo mexicano', puntos:[
+      'Formulación por kilo y cálculo de rendimiento.',
+      'Preparación del adobo de chiles secos (guajillo, ancho, pasilla).',
+      'Molienda, mezclado y curación.',
+      'Embutido, atado y secado inicial.',
+      'Errores comunes y cómo evitarlos.'
+    ]},
+    { n:3, titulo:'Receta 2 · Chorizo verde estilo Toluca', puntos:[
+      'Ingredientes clave del chorizo verde.',
+      'Balance de acidez y sabor auténtico.',
+      'Diferencias técnicas con el chorizo rojo.',
+      'Presentación como producto premium.'
+    ]},
+    { n:4, titulo:'Receta 3 · Longaniza artesanal', puntos:[
+      'Formulación tradicional mexicana.',
+      'Calibre de tripas natural para longaniza.',
+      'Técnica de atado y secado.'
+    ]},
+    { n:5, titulo:'Receta 4 · Carne enchilada (adobada)', puntos:[
+      'Preparación del adobo tradicional.',
+      'Corte y curado de la carne.',
+      'Empaque para venta directa o congelación.'
+    ]},
+    { n:6, titulo:'Costeo, precio de venta y comercialización', puntos:[
+      'Cálculo real del costo por kilo con la calculadora incluida.',
+      'Definición del margen sano según el mercado.',
+      'Presentación, empaque y estrategias básicas de venta.'
+    ]}
+  ],
+  clases: [
+    // Placeholder — Jorge llena cuando suba los videos a Firebase Storage
+    { orden: 1, titulo: 'Fundamentos y seguridad', duracionMin: 45, storagePath: 'cursos/embutidos-artesanales/clase-01.mp4' },
+    { orden: 2, titulo: 'Chorizo rojo mexicano',    duracionMin: 60, storagePath: 'cursos/embutidos-artesanales/clase-02.mp4' },
+    { orden: 3, titulo: 'Chorizo verde Toluca',     duracionMin: 55, storagePath: 'cursos/embutidos-artesanales/clase-03.mp4' },
+    { orden: 4, titulo: 'Longaniza artesanal',      duracionMin: 50, storagePath: 'cursos/embutidos-artesanales/clase-04.mp4' },
+    { orden: 5, titulo: 'Carne enchilada',          duracionMin: 45, storagePath: 'cursos/embutidos-artesanales/clase-05.mp4' },
+    { orden: 6, titulo: 'Costeo y venta',           duracionMin: 45, storagePath: 'cursos/embutidos-artesanales/clase-06.mp4' }
+  ],
+  recursosDescargables: [
+    { titulo: 'Recetario Embutidos Artesanales (PDF)', url: '/assets/curso-chorizo/recetario-embutidos.pdf', tipo: 'pdf' },
+    { titulo: 'Calculadora de Costo y Precio (Excel)', url: '/assets/curso-chorizo/calculadora-embutidos.xlsx', tipo: 'xlsx' }
+  ],
+  fechaCreacion: serverTimestamp(),
+  ultimaActualizacion: serverTimestamp()
+};
+
+$('btn-verificar').addEventListener('click', async () => {
+  try {
+    log('Verificando docs...');
+    const [c, i] = await Promise.all([
+      getDoc(doc(db, 'cursosVenta', cursoData.slug)),
+      getDoc(doc(db, 'instructores', instructorData.slug))
+    ]);
+    log(`cursosVenta/${cursoData.slug}: ${c.exists() ? '✅ EXISTE' : '❌ NO existe'}`);
+    log(`instructores/${instructorData.slug}: ${i.exists() ? '✅ EXISTE' : '❌ NO existe'}`);
+    if (c.exists()) {
+      log('Datos del curso: ' + JSON.stringify(c.data(), null, 2).slice(0, 500) + '...');
+    }
+  } catch (e) {
+    log('❌ Error: ' + e.message, 'err');
+  }
+});
+
+async function crearOActualizar(mergeMode) {
+  try {
+    log(`${mergeMode ? '🔄 Actualizando' : '🚀 Creando'} instructor...`);
+    // Para update solo mandamos algunos campos si es merge; para create mandamos todo
+    if (mergeMode) {
+      // En update NO tocamos cupoLanzamientoTomados (las reglas lo bloquean)
+      const { cupoLanzamientoTomados, fechaCreacion, ...cursoUpdate } = cursoData;
+      cursoUpdate.ultimaActualizacion = serverTimestamp();
+      await setDoc(doc(db, 'instructores', instructorData.slug), instructorData, { merge: true });
+      log('✅ Instructor actualizado');
+      await setDoc(doc(db, 'cursosVenta', cursoData.slug), cursoUpdate, { merge: true });
+      log('✅ Curso actualizado (sin tocar cupoLanzamientoTomados)');
+    } else {
+      await setDoc(doc(db, 'instructores', instructorData.slug), instructorData);
+      log('✅ Instructor creado');
+      await setDoc(doc(db, 'cursosVenta', cursoData.slug), cursoData);
+      log('✅ Curso creado con cupoLanzamientoTomados=0');
+    }
+    setStatus('🎉 ¡Listo! Ya puedes ir a la landing.', 'ok');
+  } catch (e) {
+    log('❌ Error: ' + e.message);
+    setStatus('❌ Falló: ' + e.message, 'err');
+  }
+}
+
+$('btn-crear').addEventListener('click', () => crearOActualizar(false));
+$('btn-actualizar').addEventListener('click', () => crearOActualizar(true));
+</script>
+
+</body>
+</html>

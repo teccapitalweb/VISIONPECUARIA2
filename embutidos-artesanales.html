@@ -1,0 +1,628 @@
+<!DOCTYPE html>
+<html lang="es-MX">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
+<meta name="theme-color" content="#163d28">
+<title>Curso: Elaboración de Chorizo y Embutidos Artesanales — Visión Pecuaria</title>
+<meta name="description" content="Aprende a elaborar chorizo, carne enchilada y embutidos artesanales paso a paso. Incluye recetario, calculadora de costos, comunidad VIP y certificado digital con QR válido. Curso 100% online.">
+
+<!-- Open Graph -->
+<meta property="og:type" content="website">
+<meta property="og:site_name" content="Visión Pecuaria">
+<meta property="og:title" content="Curso: Elaboración de Chorizo y Embutidos Artesanales">
+<meta property="og:description" content="Recetario + Calculadora + Comunidad VIP + Certificado. Desde $450 MXN (precio de lanzamiento, cupo limitado).">
+<meta property="og:image" content="https://visionpecuariamx.com/assets/brand/og-image.jpg">
+<meta property="og:url" content="https://visionpecuariamx.com/embutidos-artesanales.html">
+<meta name="twitter:card" content="summary_large_image">
+
+<!-- ⚠️ STRIPE PUBLISHABLE KEY — editable sin tocar código
+     Pásame la publishable key correcta (pk_live_...) de la cuenta de Stripe de VP
+     y pégala aquí. Mientras esté "TU_PUBLISHABLE_KEY_AQUI" el checkout mostrará
+     un error controlado en lugar de romper la página. -->
+<meta name="stripe-pk" content="pk_live_TU_PUBLISHABLE_KEY_AQUI">
+
+<!-- Favicons -->
+<link rel="icon" type="image/x-icon" href="/assets/brand/favicon.ico">
+<link rel="icon" type="image/png" sizes="16x16" href="/assets/brand/favicon-16.png">
+<link rel="icon" type="image/png" sizes="32x32" href="/assets/brand/favicon-32.png">
+<link rel="apple-touch-icon" sizes="180x180" href="/assets/brand/apple-touch-icon.png">
+
+<!-- Fuentes (Montserrat + Inter, mismas del sitio principal) -->
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@600;700;800;900&family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+
+<!-- Preload hero -->
+<link rel="preload" as="image" imagesrcset="/assets/curso-chorizo/hero-chef-640.webp 640w, /assets/curso-chorizo/hero-chef-1024.webp 1024w, /assets/curso-chorizo/hero-chef-1600.webp 1600w" imagesizes="(min-width:768px) 45vw, 100vw" type="image/webp">
+
+<!-- Estilos -->
+<link rel="stylesheet" href="/assets/css/curso-landing.css">
+</head>
+
+<body data-slug="embutidos-artesanales">
+
+<!-- ═══════ HEADER ═══════ -->
+<header class="header">
+  <div class="container header__inner">
+    <a href="/" class="header__brand" aria-label="Visión Pecuaria — Inicio">
+      <span class="brand-mark">
+        <img src="/assets/brand/logo-vp.png" alt="Visión Pecuaria">
+      </span>
+      <span class="header__brand-text">
+        <b>Visión Pecuaria</b>
+        <small>Excelencia en producción animal</small>
+      </span>
+    </a>
+    <button class="header__cta" data-action="inscribir">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M12 5v14M5 12h14"/></svg>
+      Inscribirme
+    </button>
+  </div>
+</header>
+
+<!-- ═══════ HERO ═══════ -->
+<section class="hero" id="hero">
+  <div class="container">
+    <div class="hero__inner">
+      <div>
+        <span class="hero__eyebrow">Curso Online · Visión Pecuaria</span>
+        <h1 class="hero__title">
+          Elaboración de Chorizo,
+          Carne Enchilada y
+          <em>Embutidos Artesanales</em>
+        </h1>
+        <p class="hero__sub">
+          Aprende paso a paso las recetas artesanales, calcula tu costo real y véndelo con margen sano. Curso 100% online con acceso permanente, comunidad VIP y certificado digital con QR válido.
+        </p>
+        <div class="hero__stats reveal">
+          <div class="hero__stat">
+            <b data-duracion>5h</b>
+            <span>de contenido</span>
+          </div>
+          <div class="hero__stat">
+            <b>4</b>
+            <span>recetas maestras</span>
+          </div>
+          <div class="hero__stat">
+            <b>QR</b>
+            <span>certificado válido</span>
+          </div>
+        </div>
+      </div>
+      <div class="hero__media">
+        <img
+          src="/assets/curso-chorizo/hero-chef-1024.jpg"
+          srcset="/assets/curso-chorizo/hero-chef-640.jpg 640w, /assets/curso-chorizo/hero-chef-1024.jpg 1024w, /assets/curso-chorizo/hero-chef-1600.jpg 1600w"
+          sizes="(min-width:768px) 45vw, 100vw"
+          alt="Chef preparando chorizo artesanal con embutidora tradicional"
+          width="1024" height="1024"
+          loading="eager"
+          fetchpriority="high">
+        <div class="hero__badge">
+          <span class="hero__badge-ico">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="4" width="18" height="18" rx="2"/><line x1="16" y1="2" x2="16" y2="6"/><line x1="8" y1="2" x2="8" y2="6"/><line x1="3" y1="10" x2="21" y2="10"/></svg>
+          </span>
+          <div class="hero__badge-copy">
+            <small>Disponible desde</small>
+            <b data-fecha>27 de julio 2026</b>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ═══════ PRICING CARD ═══════ -->
+<section class="pricing">
+  <div class="container">
+    <div class="pricing__card reveal">
+      <span class="pricing__ribbon">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"><path d="M13 2L3 14h9l-1 8 10-12h-9l1-8z"/></svg>
+        Precio de lanzamiento
+      </span>
+      <h2 class="pricing__title">Cupo limitado con descuento</h2>
+      <p class="pricing__sub">Los primeros <b data-cupo-max>15</b> inscritos pagan el precio de lanzamiento. Después, precio regular.</p>
+
+      <div class="pricing__amount">
+        <b data-precio>$450</b>
+        <small>MXN</small>
+        <s class="pricing__original" data-precio-normal>$550 MXN</s>
+      </div>
+      <span class="pricing__save" data-ahorro>Ahorras $100 MXN</span>
+
+      <div class="pricing__meter" data-cupo-block>
+        <div class="pricing__meter-head">
+          <span>Cupos con descuento</span>
+          <b><span data-cupo-restantes>15</span> / <span data-cupo-max>15</span> disponibles</b>
+        </div>
+        <div class="pricing__meter-bar">
+          <div class="pricing__meter-fill" data-cupo-fill style="width:0%"></div>
+        </div>
+      </div>
+
+      <button class="btn-primary" data-action="inscribir">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><rect x="2" y="5" width="20" height="14" rx="3"/><path d="M2 10h20"/></svg>
+        Inscribirme ahora
+      </button>
+
+      <div class="pricing__foot">
+        <span>
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="11" width="18" height="10" rx="2"/><path d="M7 11V7a5 5 0 0110 0v4"/></svg>
+          Pago seguro por Stripe
+        </span>
+        <span>
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"/><path d="M12 6v6l4 2"/></svg>
+          Acceso inmediato
+        </span>
+        <span>
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M9 12l2 2 4-4"/><circle cx="12" cy="12" r="10"/></svg>
+          Certificado QR
+        </span>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ═══════ CONTENIDO EN PESTAÑAS ═══════ -->
+<section class="section">
+  <div class="container">
+    <div class="section__head reveal">
+      <span class="eyebrow">Qué te llevas</span>
+      <h2 class="section__title">Todo lo que necesitas para producir con calidad y vender con margen</h2>
+    </div>
+
+    <div class="tabs reveal">
+      <div class="tabs__nav" role="tablist" aria-label="Contenido del curso">
+        <button class="tabs__btn" role="tab" aria-selected="true" data-tab="aprenderas">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M22 10v6M2 10l10-5 10 5-10 5z"/><path d="M6 12v5c3 3 9 3 12 0v-5"/></svg>
+          Qué aprenderás
+        </button>
+        <button class="tabs__btn" role="tab" aria-selected="false" data-tab="incluye">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M20 7L12 3 4 7v10l8 4 8-4V7z"/><path d="M12 12l8-5M12 12v9M12 12L4 7"/></svg>
+          Qué incluye
+        </button>
+        <button class="tabs__btn" role="tab" aria-selected="false" data-tab="temario">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M2 3h6a4 4 0 014 4v14a3 3 0 00-3-3H2z"/><path d="M22 3h-6a4 4 0 00-4 4v14a3 3 0 013-3h7z"/></svg>
+          Temario
+        </button>
+        <button class="tabs__btn" role="tab" aria-selected="false" data-tab="dirigido">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M17 21v-2a4 4 0 00-4-4H5a4 4 0 00-4 4v2"/><circle cx="9" cy="7" r="4"/><path d="M23 21v-2a4 4 0 00-3-3.87M16 3.13a4 4 0 010 7.75"/></svg>
+          Dirigido a
+        </button>
+      </div>
+
+      <div class="tabs__panels">
+        <!-- QUÉ APRENDERÁS -->
+        <div class="tabs__panel" id="panel-aprenderas" data-active role="tabpanel">
+          <ul class="check-list">
+            <li>Fundamentos de la elaboración de embutidos: relación carne-grasa, uso correcto de sal de cura, control de temperatura e higiene alimentaria.</li>
+            <li>Cómo elaborar <b>chorizo rojo mexicano</b> con especias tradicionales y textura profesional.</li>
+            <li>Cómo elaborar <b>chorizo verde estilo Toluca</b>, receta paso a paso con sabor auténtico.</li>
+            <li>Cómo elaborar <b>longaniza</b> artesanal con calibrado correcto de tripas.</li>
+            <li>Cómo preparar <b>carne enchilada (adobada)</b> lista para venta o preparación en casa.</li>
+            <li>Cómo calcular tu <b>costo real por kilo</b> y definir tu precio de venta con margen sano usando el Excel incluido.</li>
+          </ul>
+        </div>
+
+        <!-- QUÉ INCLUYE -->
+        <div class="tabs__panel" id="panel-incluye" role="tabpanel">
+          <ul class="check-list check-list--icons">
+            <li>
+              <span class="check-list__ico">
+                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M4 19.5A2.5 2.5 0 016.5 17H20"/><path d="M6.5 2H20v20H6.5A2.5 2.5 0 014 19.5v-15A2.5 2.5 0 016.5 2z"/></svg>
+              </span>
+              <div>
+                <b>Recetario de Embutidos Artesanales</b>
+                <small>PDF descargable con 4 recetas maestras + fundamentos + guía de higiene.</small>
+              </div>
+            </li>
+            <li>
+              <span class="check-list__ico">
+                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="4" y="2" width="16" height="20" rx="2"/><line x1="8" y1="10" x2="16" y2="10"/><line x1="8" y1="14" x2="16" y2="14"/><line x1="8" y1="18" x2="12" y2="18"/></svg>
+              </span>
+              <div>
+                <b>Calculadora de Costo y Precio</b>
+                <small>Excel con fórmulas listas: ingresa insumos, ajusta márgenes y obtén tu precio de venta ideal.</small>
+              </div>
+            </li>
+            <li>
+              <span class="check-list__ico">
+                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 15a2 2 0 01-2 2H7l-4 4V5a2 2 0 012-2h14a2 2 0 012 2z"/></svg>
+              </span>
+              <div>
+                <b>Canal VIP de WhatsApp</b>
+                <small>Novedades del sector, tips, correcciones de recetas y avisos de nuevas capacitaciones.</small>
+              </div>
+            </li>
+            <li>
+              <span class="check-list__ico">
+                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="8" r="7"/><polyline points="8.21 13.89 7 23 12 20 17 23 15.79 13.88"/></svg>
+              </span>
+              <div>
+                <b>Certificado Digital con QR</b>
+                <small>Folio único verificable en línea, para que puedas mostrar tu preparación con evidencia real.</small>
+              </div>
+            </li>
+            <li>
+              <span class="check-list__ico">
+                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polygon points="23 7 16 12 23 17 23 7"/><rect x="1" y="5" width="15" height="14" rx="2"/></svg>
+              </span>
+              <div>
+                <b>Acceso permanente al contenido</b>
+                <small>Videos grabados en HD. Aprende a tu ritmo y repasa cuantas veces necesites, desde cualquier dispositivo.</small>
+              </div>
+            </li>
+          </ul>
+        </div>
+
+        <!-- TEMARIO (acordeón) -->
+        <div class="tabs__panel" id="panel-temario" role="tabpanel">
+          <div class="modules">
+            <details class="module" open>
+              <summary>
+                <span class="module__num">1</span>
+                <span class="module__title">Fundamentos y seguridad alimentaria</span>
+                <svg class="module__chev" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"><path d="M6 9l6 6 6-6"/></svg>
+              </summary>
+              <div class="module__body">
+                <ul>
+                  <li>Relación carne-grasa y por qué es clave para la textura final.</li>
+                  <li>Ingredientes funcionales: sal común, sal de cura #1, azúcar, hielo, vinagre.</li>
+                  <li>La regla del frío: cómo trabajar a la temperatura correcta.</li>
+                  <li>Tipos de tripas y cómo prepararlas.</li>
+                  <li>Higiene y buenas prácticas para producto seguro y estable.</li>
+                </ul>
+              </div>
+            </details>
+
+            <details class="module">
+              <summary>
+                <span class="module__num">2</span>
+                <span class="module__title">Receta 1 · Chorizo rojo mexicano</span>
+                <svg class="module__chev" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"><path d="M6 9l6 6 6-6"/></svg>
+              </summary>
+              <div class="module__body">
+                <ul>
+                  <li>Formulación por kilo y cálculo de rendimiento.</li>
+                  <li>Preparación del adobo de chiles secos (guajillo, ancho, pasilla).</li>
+                  <li>Molienda, mezclado y curación.</li>
+                  <li>Embutido, atado y secado inicial.</li>
+                  <li>Errores comunes y cómo evitarlos.</li>
+                </ul>
+              </div>
+            </details>
+
+            <details class="module">
+              <summary>
+                <span class="module__num">3</span>
+                <span class="module__title">Receta 2 · Chorizo verde estilo Toluca</span>
+                <svg class="module__chev" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"><path d="M6 9l6 6 6-6"/></svg>
+              </summary>
+              <div class="module__body">
+                <ul>
+                  <li>Ingredientes clave del chorizo verde: chile poblano, cilantro, tomate verde, pepitas.</li>
+                  <li>Balance de acidez y sabor auténtico.</li>
+                  <li>Diferencias técnicas con el chorizo rojo.</li>
+                  <li>Presentación y venta como producto premium.</li>
+                </ul>
+              </div>
+            </details>
+
+            <details class="module">
+              <summary>
+                <span class="module__num">4</span>
+                <span class="module__title">Receta 3 · Longaniza artesanal</span>
+                <svg class="module__chev" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"><path d="M6 9l6 6 6-6"/></svg>
+              </summary>
+              <div class="module__body">
+                <ul>
+                  <li>Formulación tradicional mexicana.</li>
+                  <li>Calibre de tripas natural para longaniza.</li>
+                  <li>Técnica de atado y secado.</li>
+                </ul>
+              </div>
+            </details>
+
+            <details class="module">
+              <summary>
+                <span class="module__num">5</span>
+                <span class="module__title">Receta 4 · Carne enchilada (adobada)</span>
+                <svg class="module__chev" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"><path d="M6 9l6 6 6-6"/></svg>
+              </summary>
+              <div class="module__body">
+                <ul>
+                  <li>Preparación del adobo tradicional.</li>
+                  <li>Corte y curado de la carne.</li>
+                  <li>Empaque para venta directa o congelación.</li>
+                </ul>
+              </div>
+            </details>
+
+            <details class="module">
+              <summary>
+                <span class="module__num">6</span>
+                <span class="module__title">Costeo, precio de venta y comercialización</span>
+                <svg class="module__chev" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"><path d="M6 9l6 6 6-6"/></svg>
+              </summary>
+              <div class="module__body">
+                <ul>
+                  <li>Cálculo real del costo por kilo con la calculadora incluida.</li>
+                  <li>Definición del margen sano según el mercado.</li>
+                  <li>Presentación, empaque y estrategias básicas de venta.</li>
+                </ul>
+              </div>
+            </details>
+          </div>
+        </div>
+
+        <!-- DIRIGIDO A -->
+        <div class="tabs__panel" id="panel-dirigido" role="tabpanel">
+          <ul class="check-list">
+            <li>Productores pecuarios que quieren <b>agregar valor</b> a su carne y venderla transformada.</li>
+            <li>Emprendedores del sector alimentos que buscan un producto artesanal rentable.</li>
+            <li>Amas y amos de casa que quieren <b>elaborar sus propios embutidos</b> con calidad casera.</li>
+            <li>Estudiantes y profesionales veterinarios interesados en la <b>industria cárnica</b>.</li>
+            <li>Cualquier persona con ganas de aprender un oficio con demanda real y rentable.</li>
+          </ul>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ═══════ INSTRUCTOR ═══════ -->
+<section class="section" style="padding-top:16px;">
+  <div class="container">
+    <div class="section__head reveal">
+      <span class="eyebrow">Tu instructor</span>
+      <h2 class="section__title">Quien te va a enseñar</h2>
+    </div>
+    <div class="instructor reveal">
+      <div class="instructor__inner">
+        <div class="instructor__media">
+          <img
+            src="/assets/curso-chorizo/instructor-castillo-800.jpg"
+            srcset="/assets/curso-chorizo/instructor-castillo-400.jpg 400w, /assets/curso-chorizo/instructor-castillo-800.jpg 800w"
+            sizes="(min-width:768px) 360px, 100vw"
+            alt="M.V.Z. José Antonio Castillo García"
+            width="800" height="800"
+            loading="lazy">
+        </div>
+        <div class="instructor__copy">
+          <span class="instructor__eyebrow">Semblanza profesional</span>
+          <h3 class="instructor__name">M.V.Z. José Antonio Castillo García</h3>
+          <p class="instructor__title">Médico Veterinario Zootecnista</p>
+          <p class="instructor__bio">
+            Médico Veterinario Zootecnista con más de 15 años de experiencia en medicina y clínica de pequeñas y grandes especies, así como en prevención, diagnóstico y tratamiento de enfermedades animales. Docente universitario y de bachillerato por más de 8 años. Comprometido con la salud animal, la producción responsable y el bienestar de los sintientes.
+          </p>
+          <ul class="instructor__creds">
+            <li>Más de 15 años en atención médica veterinaria de pequeñas y grandes especies.</li>
+            <li>Docente universitario y de bachillerato (Anatomía, Fisiología, Nutrición Animal, Semiología, Propedéutica, entre otras).</li>
+            <li>Enfoque en bienestar animal, medicina preventiva y producción pecuaria.</li>
+            <li>Asesor de tesis profesionales de carácter experimental.</li>
+          </ul>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ═══════ PREVIEW DEL RECETARIO ═══════ -->
+<section class="section" style="padding-top:16px;">
+  <div class="container">
+    <div class="preview reveal">
+      <div class="preview__inner">
+        <div>
+          <span class="preview__eyebrow">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round" style="width:12px;height:12px;"><path d="M4 19.5A2.5 2.5 0 016.5 17H20"/><path d="M6.5 2H20v20H6.5A2.5 2.5 0 014 19.5v-15A2.5 2.5 0 016.5 2z"/></svg>
+            Un vistazo al recetario
+          </span>
+          <h2 class="preview__title">Recetario completo, listo para imprimir</h2>
+          <p class="preview__desc">
+            Descarga el recetario en PDF apenas te inscribas. 4 recetas paso a paso, fundamentos técnicos, guía de higiene y tablas de dosificación por kilo. Es tu manual de referencia para volver una y otra vez.
+          </p>
+        </div>
+        <div class="preview__video">
+          <video
+            src="/assets/curso-chorizo/preview-recetario.mp4"
+            poster="/assets/curso-chorizo/hero-chef-640.jpg"
+            controls
+            playsinline
+            preload="metadata"
+            muted></video>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ═══════ FAQ ═══════ -->
+<section class="section" style="padding-top:16px;">
+  <div class="container">
+    <div class="section__head reveal">
+      <span class="eyebrow">Preguntas frecuentes</span>
+      <h2 class="section__title">Lo que otros suelen preguntar antes de inscribirse</h2>
+    </div>
+    <div class="faq reveal">
+      <details>
+        <summary><span>¿Cuándo empieza el curso?</span></summary>
+        <div class="faq__body">
+          <p>El contenido está disponible a partir del <b data-fecha>27 de julio de 2026</b>. Una vez que te inscribas, tendrás acceso inmediato a todas las videoclases, materiales descargables y el canal de WhatsApp con novedades.</p>
+        </div>
+      </details>
+      <details>
+        <summary><span>¿Es en vivo o pregrabado?</span></summary>
+        <div class="faq__body">
+          <p>Es un curso <b>100% pregrabado en HD</b> con acceso permanente. Puedes verlo a tu ritmo, cuando quieras y desde cualquier dispositivo (celular, tablet o computadora).</p>
+        </div>
+      </details>
+      <details>
+        <summary><span>¿Cuánto tiempo tengo para verlo?</span></summary>
+        <div class="faq__body">
+          <p>Acceso permanente. No hay límite de tiempo. Repasa las lecciones cuantas veces necesites.</p>
+        </div>
+      </details>
+      <details>
+        <summary><span>¿Cómo obtengo mi certificado?</span></summary>
+        <div class="faq__body">
+          <p>Al completar el curso recibes un certificado digital con folio único y código QR verificable en línea. Es válido y puedes compartirlo o imprimirlo.</p>
+        </div>
+      </details>
+      <details>
+        <summary><span>¿Necesito equipo profesional para practicar?</span></summary>
+        <div class="faq__body">
+          <p>No. Puedes practicar en casa con un molino de carne casero y una embutidora manual básica. Dentro del curso te recomendamos el equipo mínimo y el ideal según tu nivel de producción.</p>
+        </div>
+      </details>
+      <details>
+        <summary><span>¿Puedo pagar con cualquier tarjeta?</span></summary>
+        <div class="faq__body">
+          <p>Sí, aceptamos tarjetas de débito y crédito Visa, MasterCard y American Express. El pago es 100% seguro por medio de Stripe (mismo sistema que usan Netflix, Uber y Amazon).</p>
+        </div>
+      </details>
+      <details>
+        <summary><span>¿Tienen dudas de contacto por WhatsApp?</span></summary>
+        <div class="faq__body">
+          <p>Sí. Puedes escribirnos al <a href="https://wa.me/522382514313" style="color:var(--g800);font-weight:700;">238-251-4313</a> para cualquier pregunta antes o después de inscribirte.</p>
+        </div>
+      </details>
+    </div>
+  </div>
+</section>
+
+<!-- ═══════ AVISO DE PRIVACIDAD ═══════ -->
+<section class="privacy">
+  <div class="container">
+    <details>
+      <summary>
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="11" width="18" height="10" rx="2"/><path d="M7 11V7a5 5 0 0110 0v4"/></svg>
+        <span>Aviso de privacidad</span>
+      </summary>
+      <div class="privacy__body">
+        <p><b>Responsable:</b> Visión Pecuaria (visionpecuariamx.com), consultora especializada en producción animal.</p>
+        <p><b>Datos que recabamos:</b> nombre, correo electrónico y datos de pago (procesados exclusivamente por Stripe, Inc. — nosotros nunca vemos ni almacenamos los datos de tu tarjeta). Opcionalmente, tu número de WhatsApp si decides compartirlo para recibir avisos del curso.</p>
+        <p><b>Finalidad:</b> registrar tu inscripción, darte acceso al contenido comprado, emitir tu certificado digital con folio válido y enviarte comunicaciones relacionadas con tu curso y con nuevas capacitaciones de la consultora.</p>
+        <p><b>Terceros:</b> tu información de pago la procesa Stripe, Inc. bajo sus propias políticas de privacidad. Tu correo se almacena de manera segura en Google Firebase (Google Cloud).</p>
+        <p><b>Tus derechos:</b> puedes solicitar el acceso, rectificación, cancelación u oposición al tratamiento de tus datos (derechos ARCO) escribiendo al WhatsApp <a href="https://wa.me/522382514313" style="color:var(--g800);font-weight:700;">238-251-4313</a>.</p>
+        <p>Al inscribirte, aceptas los términos de este aviso.</p>
+      </div>
+    </details>
+  </div>
+</section>
+
+<!-- ═══════ FOOTER ═══════ -->
+<footer class="footer">
+  <div class="container">
+    <div class="footer__brand">
+      <img src="/assets/brand/logo-vp.png" alt="Visión Pecuaria">
+      <div class="footer__brand-text">
+        <b>Visión Pecuaria</b>
+        <small>Excelencia en producción animal</small>
+      </div>
+    </div>
+    <div class="footer__cols">
+      <div class="footer__col">
+        <h5>Contacto directo</h5>
+        <ul>
+          <li>
+            <a href="https://wa.me/522382514313" target="_blank" rel="noopener">
+              <svg viewBox="0 0 24 24" fill="currentColor" style="color:#25D366;"><path d="M20.52 3.48A11.86 11.86 0 0012.06 0C5.5 0 .16 5.34.16 11.9c0 2.1.55 4.14 1.6 5.94L0 24l6.32-1.66a11.87 11.87 0 005.73 1.46h.01c6.56 0 11.9-5.34 11.9-11.9 0-3.18-1.24-6.16-3.48-8.42zM12.06 21.6c-1.79 0-3.55-.48-5.08-1.4l-.36-.22-3.75.98 1-3.66-.24-.38a9.9 9.9 0 01-1.52-5.02c0-5.47 4.45-9.92 9.94-9.92 2.65 0 5.14 1.04 7.02 2.92a9.86 9.86 0 012.92 7.02c0 5.47-4.46 9.92-9.93 9.92z"/></svg>
+              Escribir por WhatsApp
+            </a>
+          </li>
+          <li>
+            <a href="https://whatsapp.com/channel/0029VbBxvxG8F2pBBhVO6O0m" target="_blank" rel="noopener">
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M3 11l18-5v12L3 14v-3z"/><path d="M11.6 16.8a3 3 0 11-5.8-1.6"/></svg>
+              Canal VIP de novedades
+            </a>
+          </li>
+        </ul>
+      </div>
+      <div class="footer__col">
+        <h5>Sobre este curso</h5>
+        <ul>
+          <li><a href="#hero">Ver descripción</a></li>
+          <li><a href="#" data-action="inscribir">Inscribirme</a></li>
+        </ul>
+      </div>
+      <div class="footer__col">
+        <h5>Redes sociales</h5>
+        <div class="footer__socials">
+          <a href="https://www.facebook.com/visionpecueria" target="_blank" rel="noopener" aria-label="Facebook">
+            <svg viewBox="0 0 24 24" fill="currentColor"><path d="M22 12c0-5.52-4.48-10-10-10S2 6.48 2 12c0 4.84 3.44 8.87 8 9.8V15H8v-3h2V9.5C10 7.57 11.57 6 13.5 6H16v3h-2c-.55 0-1 .45-1 1v2h3v3h-3v6.95c5.05-.5 9-4.76 9-9.95z"/></svg>
+          </a>
+          <a href="https://www.instagram.com/visionpecuaria/" target="_blank" rel="noopener" aria-label="Instagram">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="2" y="2" width="20" height="20" rx="5"/><path d="M16 11.37A4 4 0 1112.63 8 4 4 0 0116 11.37z"/><line x1="17.5" y1="6.5" x2="17.51" y2="6.5"/></svg>
+          </a>
+        </div>
+      </div>
+    </div>
+    <div class="footer__bottom">
+      <span>© 2026 Visión Pecuaria · Excelencia en producción animal</span>
+      <span>Hecho con orgullo en México 🇲🇽</span>
+    </div>
+  </div>
+</footer>
+
+<!-- ═══════ STICKY CTA MÓVIL ═══════ -->
+<div class="sticky-cta" id="sticky-cta">
+  <div class="sticky-cta__price">
+    <small>Precio de lanzamiento</small>
+    <b data-precio-full>$450 MXN</b>
+    <s data-precio-normal>$550 MXN</s>
+  </div>
+  <button class="sticky-cta__btn" data-action="inscribir">
+    Inscribirme
+    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12h14M13 5l7 7-7 7"/></svg>
+  </button>
+</div>
+
+<!-- ═══════ MODAL AUTH ═══════ -->
+<div class="modal" id="modal-auth" role="dialog" aria-modal="true" aria-labelledby="modal-auth-title">
+  <div class="modal__card">
+    <div class="modal__head">
+      <span class="modal__title" id="modal-auth-title">Inicia sesión para inscribirte</span>
+      <button class="modal__close" data-close-modal="modal-auth" aria-label="Cerrar">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><line x1="18" y1="6" x2="6" y2="18"/><line x1="6" y1="6" x2="18" y2="18"/></svg>
+      </button>
+    </div>
+    <div class="modal__body">
+      <div class="auth-hero">
+        <div class="auth-hero__ico">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M20 21v-2a4 4 0 00-4-4H8a4 4 0 00-4 4v2"/><circle cx="12" cy="7" r="4"/></svg>
+        </div>
+        <h3>Un solo clic con Google</h3>
+        <p>Vinculamos tu cuenta para darte acceso al curso apenas confirmes el pago.</p>
+      </div>
+      <button class="btn-google" id="btn-google-signin"></button>
+      <div class="auth-note">
+        Usamos tu correo solo para <b>emitir tu certificado</b> y darte acceso al contenido. Nunca compartimos tus datos ni enviamos spam.
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- ═══════ MODAL CHECKOUT ═══════ -->
+<div class="modal" id="modal-checkout" role="dialog" aria-modal="true" aria-labelledby="modal-checkout-title">
+  <div class="modal__card">
+    <div class="modal__head">
+      <span class="modal__title" id="modal-checkout-title">Completa tu inscripción</span>
+      <button class="modal__close" data-close-modal="modal-checkout" aria-label="Cerrar">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><line x1="18" y1="6" x2="6" y2="18"/><line x1="6" y1="6" x2="18" y2="18"/></svg>
+      </button>
+    </div>
+    <div class="modal__body">
+      <div id="checkout-container"></div>
+    </div>
+  </div>
+</div>
+
+<!-- ═══════ TOAST ═══════ -->
+<div class="toast" id="toast" role="status" aria-live="polite"></div>
+
+<!-- ═══════ SCRIPT (type=module para Firebase v10) ═══════ -->
+<script type="module" src="/assets/js/checkout-curso.js"></script>
+
+</body>
+</html>
