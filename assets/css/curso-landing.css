@@ -563,6 +563,131 @@ h1, h2, h3, h4 {
 .pricing__foot svg { width: 14px; height: 14px; color: var(--g700); }
 
 /* ═══════════════════════════════════════════════════════════
+   COUNTDOWN
+   ═══════════════════════════════════════════════════════════ */
+.countdown {
+  padding: 32px 0 8px;
+}
+.countdown__card {
+  background: linear-gradient(135deg, var(--g900) 0%, var(--g800) 100%);
+  border-radius: var(--rxl);
+  padding: 26px 20px;
+  text-align: center;
+  color: #fff;
+  position: relative;
+  overflow: hidden;
+  box-shadow: var(--sl);
+}
+.countdown__card::before {
+  content: '';
+  position: absolute;
+  inset: 0;
+  background:
+    radial-gradient(ellipse 60% 40% at 15% 30%, rgba(212,160,23,.14), transparent 60%),
+    radial-gradient(ellipse 60% 40% at 85% 100%, rgba(212,160,23,.14), transparent 60%);
+  pointer-events: none;
+}
+.countdown__eyebrow {
+  position: relative;
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  padding: 5px 12px;
+  background: rgba(212,160,23,.18);
+  color: var(--gold-cream);
+  border: 1px solid rgba(212,160,23,.36);
+  border-radius: 999px;
+  font-family: var(--font-display);
+  font-weight: 700;
+  font-size: .68rem;
+  letter-spacing: .12em;
+  text-transform: uppercase;
+  margin-bottom: 12px;
+}
+.countdown__title {
+  position: relative;
+  font-family: var(--font-display);
+  font-weight: 800;
+  color: #fff;
+  font-size: clamp(1.1rem, 3vw, 1.35rem);
+  letter-spacing: -.015em;
+  margin-bottom: 18px;
+}
+.countdown__grid {
+  position: relative;
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  gap: 8px;
+  max-width: 520px;
+  margin: 0 auto;
+}
+.countdown__cell {
+  background: rgba(255,255,255,.08);
+  border: 1px solid rgba(212,160,23,.28);
+  border-radius: var(--r);
+  padding: 14px 6px;
+  backdrop-filter: blur(6px);
+  -webkit-backdrop-filter: blur(6px);
+}
+.countdown__cell b {
+  display: block;
+  font-family: var(--font-display);
+  font-weight: 800;
+  font-size: clamp(1.6rem, 6vw, 2.4rem);
+  color: var(--gold-cream);
+  letter-spacing: -.03em;
+  font-variant-numeric: tabular-nums;
+  line-height: 1;
+}
+.countdown__cell span {
+  display: block;
+  font-size: .66rem;
+  color: rgba(247,243,234,.72);
+  letter-spacing: .14em;
+  text-transform: uppercase;
+  margin-top: 4px;
+}
+@media (min-width: 720px) {
+  .countdown__card { padding: 34px 32px; }
+  .countdown__grid { gap: 12px; }
+  .countdown__cell { padding: 20px 8px; }
+}
+
+/* ═══════════════════════════════════════════════════════════
+   BOTÓN DE SONIDO en el video del recetario
+   ═══════════════════════════════════════════════════════════ */
+.preview__video { position: relative; }
+.mute-toggle {
+  position: absolute;
+  right: 12px;
+  bottom: 12px;
+  z-index: 2;
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  padding: 8px 14px;
+  min-height: 36px;
+  background: rgba(11,32,20,.75);
+  color: #fff;
+  border-radius: 999px;
+  font-family: var(--font-display);
+  font-weight: 700;
+  font-size: .78rem;
+  letter-spacing: -.005em;
+  backdrop-filter: blur(8px);
+  -webkit-backdrop-filter: blur(8px);
+  border: 1px solid rgba(255,255,255,.14);
+  cursor: pointer;
+  transition: background var(--tr-fast), transform var(--tr-fast);
+}
+.mute-toggle:hover { background: rgba(11,32,20,.9); }
+.mute-toggle:active { transform: scale(.96); }
+.mute-toggle svg { width: 14px; height: 14px; flex-shrink: 0; }
+.mute-toggle [data-icon-unmuted] { display: none; }
+.mute-toggle[data-muted="false"] [data-icon-muted] { display: none; }
+.mute-toggle[data-muted="false"] [data-icon-unmuted] { display: inline-block; }
+
+/* ═══════════════════════════════════════════════════════════
    SECTION HEADINGS
    ═══════════════════════════════════════════════════════════ */
 .section { padding: 44px 0; }
