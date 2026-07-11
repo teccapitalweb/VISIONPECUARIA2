@@ -1,0 +1,225 @@
+<!DOCTYPE html>
+<html lang="es-MX">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
+<meta name="theme-color" content="#163d28">
+<title>Mi curso · Visión Pecuaria</title>
+<meta name="robots" content="noindex,nofollow">
+
+<!-- Favicons -->
+<link rel="icon" type="image/x-icon" href="/assets/brand/favicon.ico">
+<link rel="apple-touch-icon" sizes="180x180" href="/assets/brand/apple-touch-icon.png">
+
+<!-- Fuentes -->
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@600;700;800;900&family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+
+<link rel="stylesheet" href="/assets/css/curso-landing.css">
+<link rel="stylesheet" href="/assets/css/curso-acceso.css">
+</head>
+
+<body data-slug="embutidos-artesanales">
+
+<!-- ═══════ HEADER ═══════ -->
+<header class="acceso-header">
+  <div class="container acceso-header__inner">
+    <a href="/" class="acceso-header__brand" aria-label="Visión Pecuaria — Inicio">
+      <span class="brand-mark">
+        <img src="/assets/brand/logo-vp.png" alt="Visión Pecuaria">
+      </span>
+      <span class="acceso-header__brand-text">
+        <b>Visión Pecuaria</b>
+        <small>Mi curso</small>
+      </span>
+    </a>
+    <div class="acceso-header__user">
+      <span class="acceso-header__hi" data-user-hi>Cargando...</span>
+      <button class="acceso-header__logout" id="btn-logout" aria-label="Cerrar sesión" title="Cerrar sesión">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M9 21H5a2 2 0 01-2-2V5a2 2 0 012-2h4"/><polyline points="16 17 21 12 16 7"/><line x1="21" y1="12" x2="9" y2="12"/></svg>
+        <span>Salir</span>
+      </button>
+    </div>
+  </div>
+</header>
+
+<!-- ═══════ ESTADO: CARGANDO ═══════ -->
+<div class="acceso-loading" id="acceso-loading">
+  <div class="acceso-loading__spinner"></div>
+  <p>Verificando tu acceso...</p>
+</div>
+
+<!-- ═══════ ESTADO: SIN ACCESO (no ha pagado o no ha iniciado sesión) ═══════ -->
+<div class="acceso-denegado" id="acceso-denegado" hidden>
+  <div class="container">
+    <div class="acceso-denegado__card">
+      <div class="acceso-denegado__ico">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="11" width="18" height="10" rx="2"/><path d="M7 11V7a5 5 0 0110 0v4"/></svg>
+      </div>
+      <h2 data-denegado-title>Aún no tienes acceso a este curso</h2>
+      <p data-denegado-msg>Inicia sesión con la cuenta que usaste al inscribirte para ver el contenido.</p>
+      <div class="acceso-denegado__actions">
+        <button class="btn-primary" id="btn-signin-acceso">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"><path d="M20 21v-2a4 4 0 00-4-4H8a4 4 0 00-4 4v2"/><circle cx="12" cy="7" r="4"/></svg>
+          Iniciar sesión con Google
+        </button>
+        <a href="/embutidos-artesanales.html" class="btn-secondary">
+          Ver descripción del curso
+        </a>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- ═══════ ESTADO: CON ACCESO ═══════ -->
+<main class="acceso-main" id="acceso-main" hidden>
+
+  <!-- HERO DE BIENVENIDA -->
+  <section class="acceso-hero">
+    <div class="container">
+      <span class="acceso-hero__eyebrow">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round" style="width:12px;height:12px;"><path d="M9 12l2 2 4-4"/><circle cx="12" cy="12" r="10"/></svg>
+        Acceso activo
+      </span>
+      <h1 class="acceso-hero__title" data-curso-titulo>Elaboración de Chorizo, Carne Enchilada y Embutidos Artesanales</h1>
+      <p class="acceso-hero__sub">
+        Bienvenido a tu curso. Aquí tienes el contenido, los materiales descargables y tu certificado con folio válido.
+      </p>
+    </div>
+  </section>
+
+  <!-- SECCIÓN: CONTENIDO DEL CURSO (VIDEOS) -->
+  <section class="acceso-section">
+    <div class="container">
+      <div class="acceso-section__head">
+        <span class="eyebrow">Contenido</span>
+        <h2 class="section__title">Clases del curso</h2>
+        <p class="acceso-section__sub" data-clases-info>Videos grabados en HD. Reproduce cuando quieras, en el orden que prefieras.</p>
+      </div>
+      <div class="clases-grid" id="clases-grid">
+        <!-- Se pinta con JS desde Firestore -->
+      </div>
+    </div>
+  </section>
+
+  <!-- SECCIÓN: HERRAMIENTAS Y RECURSOS -->
+  <section class="acceso-section">
+    <div class="container">
+      <div class="acceso-section__head">
+        <span class="eyebrow">Herramientas del curso</span>
+        <h2 class="section__title">Descarga tus materiales</h2>
+        <p class="acceso-section__sub">Guárdalos en tu compu o celular. Puedes descargarlos cuantas veces necesites.</p>
+      </div>
+      <div class="recursos-grid" id="recursos-grid">
+        <!-- Se pinta con JS -->
+      </div>
+    </div>
+  </section>
+
+  <!-- SECCIÓN: CERTIFICADO -->
+  <section class="acceso-section">
+    <div class="container">
+      <div class="acceso-section__head">
+        <span class="eyebrow">Tu diploma</span>
+        <h2 class="section__title">Certificado digital con QR</h2>
+      </div>
+      <div class="certificado-card" id="certificado-card">
+        <div class="certificado-card__ico">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="8" r="7"/><polyline points="8.21 13.89 7 23 12 20 17 23 15.79 13.88"/></svg>
+        </div>
+        <div class="certificado-card__body">
+          <div class="certificado-card__estado" data-cert-estado>Verificando certificado...</div>
+          <div class="certificado-card__folio" data-cert-folio></div>
+          <p class="certificado-card__desc">
+            Tu certificado ya fue emitido y enviado por email. Aquí puedes verlo, descargarlo como PDF o compartir el link con quien quieras (LinkedIn, Facebook, WhatsApp).
+          </p>
+          <div class="certificado-card__actions">
+            <a href="#" class="btn-primary" id="btn-ver-certificado" hidden>
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"><path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z"/><circle cx="12" cy="12" r="3"/></svg>
+              Ver mi certificado
+            </a>
+            <button class="btn-secondary" id="btn-reenviar-email">
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M4 4h16c1.1 0 2 .9 2 2v12c0 1.1-.9 2-2 2H4c-1.1 0-2-.9-2-2V6c0-1.1.9-2 2-2z"/><polyline points="22,6 12,13 2,6"/></svg>
+              Reenviar por email
+            </button>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- SECCIÓN: COMUNIDAD -->
+  <section class="acceso-section acceso-section--comunidad">
+    <div class="container">
+      <div class="comunidad-card">
+        <div class="comunidad-card__inner">
+          <div>
+            <span class="preview__eyebrow" style="margin-bottom:12px;">
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round" style="width:12px;height:12px;"><path d="M21 15a2 2 0 01-2 2H7l-4 4V5a2 2 0 012-2h14a2 2 0 012 2z"/></svg>
+              Únete a la comunidad
+            </span>
+            <h2 style="font-family:var(--font-display);font-weight:800;color:#fff;font-size:clamp(1.35rem, 5vw, 1.9rem);letter-spacing:-.02em;margin-bottom:12px;">Canal VIP de WhatsApp</h2>
+            <p style="color:rgba(247,243,234,.75);font-size:.95rem;margin-bottom:20px;">
+              Recibe novedades del sector, tips exclusivos, correcciones de recetas y avisos de nuevas capacitaciones directamente en tu WhatsApp.
+            </p>
+            <a href="https://whatsapp.com/channel/0029VbBxvxG8F2pBBhVO6O0m" target="_blank" rel="noopener" class="btn-primary" style="background:#25D366;box-shadow:0 6px 14px rgba(37,211,102,.35);">
+              <svg viewBox="0 0 24 24" fill="currentColor"><path d="M20.52 3.48A11.86 11.86 0 0012.06 0C5.5 0 .16 5.34.16 11.9c0 2.1.55 4.14 1.6 5.94L0 24l6.32-1.66a11.87 11.87 0 005.73 1.46h.01c6.56 0 11.9-5.34 11.9-11.9 0-3.18-1.24-6.16-3.48-8.42z"/></svg>
+              Unirme al canal
+            </a>
+          </div>
+          <div class="comunidad-card__whatsapp">
+            <span class="comunidad-card__whatsapp-eye">Dudas del curso</span>
+            <a href="https://wa.me/522382514313" target="_blank" rel="noopener" class="comunidad-card__whatsapp-btn">
+              <svg viewBox="0 0 24 24" fill="currentColor" style="color:#25D366;width:22px;height:22px;"><path d="M20.52 3.48A11.86 11.86 0 0012.06 0C5.5 0 .16 5.34.16 11.9c0 2.1.55 4.14 1.6 5.94L0 24l6.32-1.66a11.87 11.87 0 005.73 1.46h.01c6.56 0 11.9-5.34 11.9-11.9 0-3.18-1.24-6.16-3.48-8.42z"/></svg>
+              Escribir 238-251-4313
+            </a>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+</main>
+
+<!-- ═══════ MODAL VIDEO PLAYER ═══════ -->
+<div class="modal" id="modal-video" role="dialog" aria-modal="true">
+  <div class="modal__card modal__card--video">
+    <div class="modal__head">
+      <span class="modal__title" data-video-titulo>Clase</span>
+      <button class="modal__close" data-close-modal="modal-video" aria-label="Cerrar">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><line x1="18" y1="6" x2="6" y2="18"/><line x1="6" y1="6" x2="18" y2="18"/></svg>
+      </button>
+    </div>
+    <div class="modal__body modal__body--video">
+      <div class="video-player-wrap"></div>
+      <div class="video-player-info" data-video-info></div>
+    </div>
+  </div>
+</div>
+
+<!-- Toast -->
+<div class="toast" id="toast" role="status" aria-live="polite"></div>
+
+<!-- Footer minimal -->
+<footer class="acceso-footer">
+  <div class="container">
+    <div class="acceso-footer__brand">
+      <img src="/assets/brand/logo-vp.png" alt="Visión Pecuaria">
+      <div>
+        <b>Visión Pecuaria</b>
+        <small>© 2026 · Excelencia en producción animal</small>
+      </div>
+    </div>
+    <div class="acceso-footer__links">
+      <a href="/">Inicio</a>
+      <a href="https://wa.me/522382514313" target="_blank" rel="noopener">WhatsApp</a>
+      <a href="https://www.instagram.com/visionpecuaria/" target="_blank" rel="noopener">Instagram</a>
+    </div>
+  </div>
+</footer>
+
+<script type="module" src="/assets/js/curso-acceso.js"></script>
+
+</body>
+</html>
