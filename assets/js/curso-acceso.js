@@ -182,9 +182,17 @@ function mostrarAccesoDenegado({ titulo, msg }) {
 
 // ─── RENDER: contenido principal ─────────────────────────────────────────────
 function renderContenido() {
-  // Título del curso
+  // Título del curso en el hero
   const t = $('[data-curso-titulo]');
   if (t) t.textContent = cursoData.nombre || 'Tu curso';
+
+  // Meta del hero: duración
+  const dur = $('[data-curso-duracion]');
+  if (dur) dur.textContent = cursoData.duracionHoras ? cursoData.duracionHoras + ' horas de contenido' : 'Contenido on-demand';
+
+  // Meta del hero: instructor
+  const ins = $('[data-curso-instructor]');
+  if (ins) ins.textContent = cursoData.instructorNombre || 'Instructor certificado';
 
   renderClases();
   renderRecursos();
@@ -199,10 +207,10 @@ function renderClases() {
 
   if (clases.length === 0) {
     grid.innerHTML = `
-      <div style="grid-column: 1/-1; text-align:center; padding: 40px 20px; background: var(--paper); border: 1px dashed var(--border-strong); border-radius: var(--rl); color: var(--muted);">
-        <div style="font-size:2rem; margin-bottom:10px;">📹</div>
-        <div style="font-family: var(--font-display); font-weight: 800; color: var(--text); font-size: 1.05rem; margin-bottom: 6px;">Videoclases próximamente</div>
-        <div style="font-size: .9rem;">El contenido estará disponible desde el ${cursoData.fechaInicioTexto || '27 de julio'}. Te avisaremos por WhatsApp cuando esté listo.</div>
+      <div class="empty-block">
+        <div class="empty-block__ico">🎬</div>
+        <div class="empty-block__title">Videoclases próximamente</div>
+        <div class="empty-block__desc">El contenido se habilita el día del arranque. Te avisaremos por WhatsApp y correo cuando esté listo.</div>
       </div>
     `;
     if (infoEl) infoEl.textContent = 'Los videos se habilitarán en la fecha de arranque del curso.';
@@ -260,7 +268,13 @@ function renderRecursos() {
   const recursos = Array.isArray(cursoData.recursosDescargables) ? cursoData.recursosDescargables : [];
 
   if (recursos.length === 0) {
-    grid.innerHTML = `<div style="grid-column:1/-1;text-align:center;padding:24px;color:var(--muted);font-size:.9rem;">No hay recursos descargables por ahora.</div>`;
+    grid.innerHTML = `
+      <div class="empty-block">
+        <div class="empty-block__ico">📎</div>
+        <div class="empty-block__title">Sin materiales por ahora</div>
+        <div class="empty-block__desc">Cuando el instructor suba el recetario y las herramientas, aparecerán aquí para descargar.</div>
+      </div>
+    `;
     return;
   }
 
