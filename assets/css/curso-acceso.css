@@ -5,6 +5,9 @@
 
 * { box-sizing: border-box; }
 
+/* Fix crítico: el atributo [hidden] siempre gana sobre display: grid/flex */
+[hidden] { display: none !important; }
+
 /* ═══════════════════════════════════════════════════════════
    HEADER (sticky verde profundo)
    ═══════════════════════════════════════════════════════════ */
