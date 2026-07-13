@@ -1,0 +1,274 @@
+<!DOCTYPE html>
+<html lang="es-MX">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Setup · Crear curso Gallinas de Postura en Firestore</title>
+<style>
+  body { font-family: system-ui, sans-serif; background: #f4f6f3; padding: 24px; max-width: 720px; margin: 0 auto; color: #111b15; }
+  h1 { font-size: 1.5rem; margin-bottom: 8px; }
+  p { color: #5a6b61; margin-bottom: 20px; line-height: 1.6; }
+  button { padding: 14px 24px; background: #1f5c40; color: white; border: none; border-radius: 10px; font-size: 1rem; font-weight: 700; cursor: pointer; margin: 8px 4px; }
+  button:disabled { opacity: 0.5; cursor: not-allowed; }
+  button.danger { background: #7f1d1d; }
+  pre { background: #fff; border: 1px solid rgba(31,92,64,.15); border-radius: 10px; padding: 16px; font-size: .82rem; line-height: 1.5; overflow-x: auto; margin-top: 20px; max-height: 400px; overflow-y: auto; }
+  .status { padding: 12px 16px; border-radius: 10px; margin: 12px 0; font-size: .9rem; font-weight: 600; }
+  .status.ok { background: #e7f1ec; color: #163d28; }
+  .status.err { background: #fee; color: #7f1d1d; }
+  .status.info { background: #e8f0fd; color: #1e40af; }
+</style>
+</head>
+<body>
+
+<h1>🐓 Setup: crear curso Gallinas de Postura en Firestore</h1>
+<p>
+  Esta página crea los 2 documentos necesarios para el curso <b>Manejo Profesional de Gallinas de Postura</b>:
+  el catálogo (<code>cursosVenta/gallinas-de-postura</code>) y el instructor (<code>instructores/diego-arturo-gomez</code>).
+</p>
+<p>
+  <b>Requisito:</b> debes estar logueado con una cuenta de Google que exista en <code>admins/{tu-uid}</code> en Firestore.
+</p>
+
+<div id="status" class="status info">⏳ Esperando conexión con Firebase...</div>
+
+<div id="controls" style="display:none;">
+  <button id="btn-crear">🚀 Crear los 2 documentos</button>
+  <button id="btn-verificar">🔍 Verificar si ya existen</button>
+  <button id="btn-actualizar">🔄 Actualizar (si ya existen)</button>
+  <button id="btn-signin" style="background:#4285f4;">🔑 Cambiar cuenta Google</button>
+</div>
+
+<pre id="log">Presiona el botón para ejecutar...</pre>
+
+<script type="module">
+import { initializeApp } from "https://www.gstatic.com/firebasejs/10.11.0/firebase-app.js";
+import { getAuth, onAuthStateChanged, signInWithPopup, GoogleAuthProvider, signOut } from "https://www.gstatic.com/firebasejs/10.11.0/firebase-auth.js";
+import { getFirestore, doc, setDoc, getDoc, serverTimestamp } from "https://www.gstatic.com/firebasejs/10.11.0/firebase-firestore.js";
+
+const firebaseConfig = {
+  apiKey: "AIzaSyDQXkIo-BWPIeLZzHeTMN986WMDn0TrTJU",
+  authDomain: "visionpecuaria-vip.firebaseapp.com",
+  projectId: "visionpecuaria-vip",
+  storageBucket: "visionpecuaria-vip.firebasestorage.app",
+  messagingSenderId: "978318807782",
+  appId: "1:978318807782:web:626e67bb30795c15b02127"
+};
+
+const app = initializeApp(firebaseConfig);
+const auth = getAuth(app);
+const db = getFirestore(app);
+
+const $ = (id) => document.getElementById(id);
+const log = (msg) => {
+  const l = $('log');
+  const time = new Date().toLocaleTimeString('es-MX');
+  l.textContent = `[${time}] ${msg}\n` + l.textContent;
+};
+const setStatus = (msg, kind='info') => {
+  const s = $('status');
+  s.className = 'status ' + kind;
+  s.textContent = msg;
+};
+
+onAuthStateChanged(auth, async (user) => {
+  if (!user) {
+    setStatus('❌ No has iniciado sesión. Haz clic en el botón de Google.', 'err');
+    $('controls').style.display = 'block';
+    return;
+  }
+  try {
+    const adminDoc = await getDoc(doc(db, 'admins', user.uid));
+    if (!adminDoc.exists()) {
+      setStatus(`⚠️ ${user.email} NO está en la colección admins/. Las reglas rechazarán la creación.`, 'err');
+      log(`UID del usuario: ${user.uid}`);
+    } else {
+      setStatus(`✅ ${user.email} es admin. Puedes proceder.`, 'ok');
+    }
+  } catch (e) {
+    setStatus(`⚠️ No pudimos verificar admins: ${e.message}`, 'err');
+  }
+  $('controls').style.display = 'block';
+});
+
+$('btn-signin').addEventListener('click', async () => {
+  await signOut(auth);
+  const provider = new GoogleAuthProvider();
+  provider.setCustomParameters({ prompt: 'select_account' });
+  await signInWithPopup(auth, provider);
+});
+
+// ═══════════════════════════════════════════════════════════
+// DATOS DEL CURSO — Manejo Profesional de Gallinas de Postura
+// ═══════════════════════════════════════════════════════════
+const instructorData = {
+  slug: 'diego-arturo-gomez',
+  nombre: 'M.V.Z. Diego Arturo Gómez',
+  titulo: 'Médico Veterinario Zootecnista · Especialista en Avicultura de Postura',
+  bio: 'Médico Veterinario Zootecnista con enfoque profesional en producción avícola, sanidad y manejo integral de aves de postura. Su trabajo combina el asesoramiento técnico en granjas comerciales con la capacitación de productores emergentes que buscan escalar de traspatio a producción rentable. Comprometido con la producción responsable, el bienestar animal y la profesionalización del sector pecuario mexicano.',
+  credenciales: [
+    'Experiencia técnica en manejo de gallinas ponedoras, desde recepción de pollita hasta descarte.',
+    'Diseño e implementación de programas sanitarios, bioseguridad y calendarios vacunales.',
+    'Asesoría en formulación de raciones, nutrición por etapa y optimización de conversión alimenticia.',
+    'Capacitador de productores y estudiantes en avicultura comercial y de traspatio profesional.'
+  ],
+  areas: [
+    'Producción avícola: manejo integral de gallinas de postura de traspatio y comercial.',
+    'Sanidad y bioseguridad: programas vacunales, desparasitación y control de enfermedades.',
+    'Nutrición avícola: formulación de raciones y optimización de conversión alimenticia.',
+    'Capacitación técnica a productores y estudiantes del sector pecuario.'
+  ],
+  fotoUrl: '/assets/curso-gallinas-postura/instructor-gomez-800.jpg',
+  activo: true
+};
+
+const cursoData = {
+  consultoraId: 'visionpecuaria',
+  slug: 'gallinas-de-postura',
+  nombre: 'Manejo Profesional de Gallinas de Postura',
+  subtitulo: 'Producción, sanidad, alimentación y comercialización de huevo con enfoque técnico y rentable.',
+  descripcion: 'Curso híbrido con clases en vivo por Google Meet + acceso permanente a las grabaciones. Aprende manejo integral de gallinas de postura: desde la selección de pollita hasta la comercialización del huevo. Incluye manual descargable, corrida financiera avícola en Excel, herramientas profesionales, canal VIP de WhatsApp, BONUS de curso gratis de sexaje avícola y certificado digital con folio QR válido.',
+  estado: 'publicado',
+  instructorId: 'diego-arturo-gomez',
+  moneda: 'mxn',
+  precioNormalCentavos:      65000,             // $650 MXN
+  precioLanzamientoCentavos: 65000,             // $650 MXN (sin promo de lanzamiento)
+  cupoLanzamientoMax:        0,                  // Sin cupo limitado
+  cupoLanzamientoTomados:    0,                  // El webhook lo incrementa (no aplica aquí)
+  fechaInicio:      new Date('2026-07-27T18:00:00-06:00'),  // 27 julio 2026, 18:00 CDMX
+  fechaInicioTexto: '27 de julio · 18:00 hrs',
+  duracionHoras:    6,
+  modalidad:        'Clases en vivo por Google Meet · Grabaciones con acceso permanente',
+  esOnDemand:       false,                       // Es en vivo (con grabación posterior)
+  linkClaseEnVivo:  null,                        // Diego Arturo lo pega antes de cada sesión
+  whatsappCurso:    '+522382514313',
+  whatsappCurso_wa: 'https://wa.me/522382514313',
+  canalWhatsapp:    'https://whatsapp.com/channel/0029VbBxvxG8F2pBBhVO6O0m',
+  posterPath:       '/assets/curso-gallinas-postura/hero-gallinas-1024.jpg',
+  previewVideoPath: null,                        // TANDA 3: agregar cuando haya video preview
+  flyerPath:        null,
+  queAprenderas: [
+    'Principios del manejo integral de gallinas ponedoras: fisiología, ciclo productivo y curvas de postura.',
+    'Alimentación y formulación balanceada por etapa (inicio, crecimiento, pre-postura y producción).',
+    'Sanidad avícola: vacunación, desparasitación, bioseguridad y prevención de enfermedades comunes.',
+    'Instalaciones y equipo: diseño de galera, ventilación, iluminación, bebederos y comederos por lote.',
+    'Producción de huevo: recolección, clasificación, empaque, conservación y control de calidad.',
+    'Comercialización: cálculo de costo por huevo/kilo, precio de venta y canales de distribución rentables.'
+  ],
+  queIncluye: [
+    { titulo: '5 Sesiones en Vivo por Google Meet',   descripcion: 'Clases en vivo con el instructor donde puedes preguntar en tiempo real. Todas quedan grabadas.' },
+    { titulo: 'Manual de Manejo Avícola',              descripcion: 'PDF descargable con protocolos de alimentación, sanidad, bioseguridad y calendario productivo.' },
+    { titulo: 'Corrida Financiera Avícola',            descripcion: 'Excel profesional con proyección de ingresos, egresos, flujo de efectivo y punto de equilibrio.' },
+    { titulo: 'Herramientas Profesionales',            descripcion: 'Formatos, checklist sanitarios, registros de postura y calendarios listos para imprimir.' },
+    { titulo: 'BONUS · Curso de Sexaje Avícola',       descripcion: 'Curso adicional GRATIS de sexaje avícola. Aprende a diferenciar machos y hembras desde la primera semana.' },
+    { titulo: 'Canal VIP de WhatsApp',                 descripcion: 'Novedades del sector avícola, tips de manejo, avisos sanitarios y nuevas capacitaciones.' },
+    { titulo: 'Certificado Digital con QR',            descripcion: 'Folio único verificable en línea, con validez oficial.' },
+    { titulo: 'Acceso permanente a las grabaciones',   descripcion: 'Sesiones en vivo grabadas en HD dentro de tu panel. Aprende a tu ritmo desde cualquier dispositivo.' }
+  ],
+  dirigidoA: [
+    'Productores avícolas que quieren profesionalizar su granja y aumentar su rentabilidad.',
+    'Emprendedores rurales que buscan iniciar un negocio de producción de huevo.',
+    'Familias con parvada de traspatio interesadas en escalar a producción comercial.',
+    'Estudiantes y profesionales de veterinaria y zootecnia con interés en avicultura de postura.',
+    'Técnicos y asesores del sector pecuario que quieren actualizar sus protocolos de manejo.',
+    'Cualquier persona con ganas de aprender un oficio con demanda real y márgenes sanos.'
+  ],
+  temario: [
+    { n:1, titulo:'Fundamentos del ave de postura y arranque de la parvada', puntos:[
+      'Anatomía y fisiología de la gallina ponedora: aparato reproductor, formación del huevo, curva de postura esperada.',
+      'Líneas comerciales más usadas en México (Hy-Line, Lohmann, Bovans, Isa Brown) y criterios para elegir.',
+      'Selección de pollita: proveedor, edad de recepción, transporte y aclimatación.',
+      'Diseño básico de instalaciones: sistema piso, jaula convencional, jaula enriquecida y libre pastoreo.',
+      'Densidades por metro cuadrado, ventilación, iluminación y control de temperatura.'
+    ]},
+    { n:2, titulo:'Nutrición y alimentación por etapa productiva', puntos:[
+      'Requerimientos nutricionales por etapa: inicio, crecimiento, pre-postura y producción.',
+      'Balance de energía, proteína, calcio, fósforo y aminoácidos esenciales (metionina, lisina).',
+      'Formulación de raciones con ingredientes locales y evaluación costo-beneficio.',
+      'Consumo diario esperado, conversión alimenticia y su relación con el precio del huevo.',
+      'Errores comunes de alimentación que colapsan la postura y cómo detectarlos a tiempo.'
+    ]},
+    { n:3, titulo:'Sanidad, bioseguridad y programa vacunal', puntos:[
+      'Calendario de vacunación: Newcastle, Bronquitis, Marek, Gumboro y otras según región.',
+      'Enfermedades comunes en postura: identificación temprana de síntomas y protocolos de acción.',
+      'Programa de desparasitación interna y externa (piojos, ácaros, coccidias).',
+      'Bioseguridad de la granja: control de accesos, vados sanitarios, desinfección de equipo.',
+      'Manejo del ave enferma, aislamiento, cuándo tratar y cuándo tomar la decisión de descarte.'
+    ]},
+    { n:4, titulo:'Producción, calidad y manejo del huevo', puntos:[
+      'Recolección diaria, frecuencia óptima y buenas prácticas de manipulación.',
+      'Clasificación por peso (jumbo, XL, L, M, S) y por calidad (A, B, C).',
+      'Control de calidad de cascarón, altura de yema, unidades Haugh y frescura.',
+      'Empaque, etiquetado y conservación: temperatura, humedad y vida de anaquel.',
+      'Registros de postura por lote: cómo llevarlos y qué decisiones tomar con los datos.'
+    ]},
+    { n:5, titulo:'Costos, corrida financiera y comercialización', puntos:[
+      'Cálculo real del costo por huevo y por kilo con la corrida financiera incluida.',
+      'Análisis de rentabilidad, punto de equilibrio y proyección a 12 meses.',
+      'Canales de venta: directo al consumidor, tiendas, restaurantes, distribuidores.',
+      'Estrategias de precio según calidad, canal y estacionalidad del mercado.',
+      'Cómo escalar de granja de traspatio a producción comercial rentable.'
+    ]}
+  ],
+  clases: [
+    // Links de Drive (TANDA 5: pegar en el panel admin cuando confirmen que están públicos)
+    { orden: 1, titulo: 'Módulo 1 · Fundamentos y arranque de la parvada', duracionMin: 70, urlOriginal: 'https://drive.google.com/file/d/1vX5LAeNZq72XmHaqVZYVrSmPgx1Wmxo6/view', url: 'https://drive.google.com/file/d/1vX5LAeNZq72XmHaqVZYVrSmPgx1Wmxo6/preview' },
+    { orden: 2, titulo: 'Módulo 2 · Nutrición y alimentación por etapa',    duracionMin: 70, urlOriginal: 'https://drive.google.com/file/d/1nr_danFfCCEb2d0t4d0-J3ZDlxbMBZjl/view', url: 'https://drive.google.com/file/d/1nr_danFfCCEb2d0t4d0-J3ZDlxbMBZjl/preview' },
+    { orden: 3, titulo: 'Módulo 3 · Sanidad, bioseguridad y vacunación',    duracionMin: 70, urlOriginal: 'https://drive.google.com/file/d/1f2VCJYj8pPI1Or1hLf1hnSgsV755rSHj/view', url: 'https://drive.google.com/file/d/1f2VCJYj8pPI1Or1hLf1hnSgsV755rSHj/preview' },
+    { orden: 4, titulo: 'Módulo 4 · Producción y calidad del huevo',        duracionMin: 70, urlOriginal: 'https://drive.google.com/file/d/1T13WUSv1sFTx-sV33pVOGTqBgmGZa9_6/view', url: 'https://drive.google.com/file/d/1T13WUSv1sFTx-sV33pVOGTqBgmGZa9_6/preview' },
+    { orden: 5, titulo: 'Módulo 5 · Corrida financiera y comercialización', duracionMin: 70, urlOriginal: 'https://drive.google.com/file/d/1huVd5W3-UT-2z0-oiLjkQVPoXLlYXcFX/view', url: 'https://drive.google.com/file/d/1huVd5W3-UT-2z0-oiLjkQVPoXLlYXcFX/preview' }
+  ],
+  recursosDescargables: [
+    // TANDA 5: subir a Drive y pegar link
+    // { titulo: 'Manual de Manejo Avícola (PDF)',      url: 'https://drive.google.com/file/d/...',  tipo: 'pdf' },
+    // { titulo: 'Corrida Financiera Avícola (Excel)',  url: 'https://drive.google.com/file/d/...',  tipo: 'xlsx' }
+  ],
+  fechaCreacion: serverTimestamp(),
+  ultimaActualizacion: serverTimestamp()
+};
+
+$('btn-verificar').addEventListener('click', async () => {
+  try {
+    log('Verificando docs...');
+    const [c, i] = await Promise.all([
+      getDoc(doc(db, 'cursosVenta', cursoData.slug)),
+      getDoc(doc(db, 'instructores', instructorData.slug))
+    ]);
+    log(`cursosVenta/${cursoData.slug}: ${c.exists() ? '✅ EXISTE' : '❌ NO existe'}`);
+    log(`instructores/${instructorData.slug}: ${i.exists() ? '✅ EXISTE' : '❌ NO existe'}`);
+    if (c.exists()) {
+      log('Datos del curso: ' + JSON.stringify(c.data(), null, 2).slice(0, 500) + '...');
+    }
+  } catch (e) {
+    log('❌ Error: ' + e.message);
+  }
+});
+
+async function crearOActualizar(mergeMode) {
+  try {
+    log(`${mergeMode ? '🔄 Actualizando' : '🚀 Creando'} instructor...`);
+    if (mergeMode) {
+      const { cupoLanzamientoTomados, fechaCreacion, ...cursoUpdate } = cursoData;
+      cursoUpdate.ultimaActualizacion = serverTimestamp();
+      await setDoc(doc(db, 'instructores', instructorData.slug), instructorData, { merge: true });
+      log('✅ Instructor actualizado');
+      await setDoc(doc(db, 'cursosVenta', cursoData.slug), cursoUpdate, { merge: true });
+      log('✅ Curso actualizado (sin tocar cupoLanzamientoTomados)');
+    } else {
+      await setDoc(doc(db, 'instructores', instructorData.slug), instructorData);
+      log('✅ Instructor creado');
+      await setDoc(doc(db, 'cursosVenta', cursoData.slug), cursoData);
+      log('✅ Curso creado con cupoLanzamientoTomados=0');
+    }
+    setStatus('🎉 ¡Listo! Ya puedes ir a la landing.', 'ok');
+  } catch (e) {
+    log('❌ Error: ' + e.message);
+    setStatus('❌ Falló: ' + e.message, 'err');
+  }
+}
+
+$('btn-crear').addEventListener('click', () => crearOActualizar(false));
+$('btn-actualizar').addEventListener('click', () => crearOActualizar(true));
+</script>
+
+</body>
+</html>
