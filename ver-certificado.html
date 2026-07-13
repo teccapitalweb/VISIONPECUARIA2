@@ -528,143 +528,62 @@
   /* ═══════════════════════════════════════════════════════════
      MÓVIL (< 720px) — layout vertical legible
      ═══════════════════════════════════════════════════════════ */
+  /* ═══════════════════════════════════════════════════════════
+     MÓVIL — El diploma mantiene su formato horizontal A4 (297:210)
+     Solo se escala al ancho del contenedor. Container queries hacen
+     que todo el interior escale proporcionalmente con cqw.
+     ═══════════════════════════════════════════════════════════ */
+
+  /* Mensaje "gira tu teléfono" solo visible en móvil portrait */
+  .rotate-hint {
+    display: none;
+    max-width: 480px;
+    margin: 0 auto 16px;
+    padding: 12px 16px;
+    background: rgba(212,160,23,.14);
+    border: 1px solid rgba(212,160,23,.4);
+    border-radius: 12px;
+    color: var(--gold-cream);
+    text-align: center;
+    font-size: .78rem;
+    font-weight: 600;
+    letter-spacing: .04em;
+    line-height: 1.4;
+  }
+  .rotate-hint svg {
+    width: 18px;
+    height: 18px;
+    vertical-align: middle;
+    margin-right: 6px;
+    display: inline-block;
+    animation: rotateHint 2s ease-in-out infinite;
+  }
+  @keyframes rotateHint {
+    0%, 100% { transform: rotate(0); }
+    50% { transform: rotate(-90deg); }
+  }
+
   @media (max-width: 720px) {
-    body { padding: 12px 10px 24px; }
+    body { padding: 12px 8px 24px; }
+
+    /* Solo mostrar el hint en portrait móvil */
+    .rotate-hint { display: block; }
+
+    /* En portrait móvil el cert es diploma horizontal escalado */
+    /* Mantenemos aspect-ratio horizontal, container queries, y todo el interior con cqw */
     .cert-wrap {
-      aspect-ratio: auto;
-      container-type: normal;
-      padding: 16px 12px 84px;
-      border-radius: 12px;
+      /* aspect-ratio: 297/210 heredado del desktop, NO se cambia */
+      max-width: 100%;
     }
-    .cert-wrap::before {
-      inset: 6px;
-      border-width: 3px;
-    }
-    .cert-wrap::after {
-      inset: 12px;
-      border-width: 1px;
-    }
+
+    /* Ocultar ornamentos que quedan muy chiquitos y no se ven bien */
     .flourish { display: none; }
-    /* Sello más discreto en móvil (no debe invadir el contenido) */
-    .seal-bg {
-      width: 60%;
-      max-width: 260px;
-      height: 260px;
-      opacity: .025;
-    }
-    .cert-inner {
-      position: relative;
-      inset: auto;
-      padding: 8px 6px;
-    }
 
-    /* Header apilado y compacto */
-    .cert-header {
-      flex-direction: column;
-      text-align: center;
-      gap: 8px;
-      padding: 8px 0 12px;
-      border-bottom-width: 2px;
-      margin-bottom: 4px;
-    }
-    .brand-mark {
-      width: 52px; height: 52px;
-      padding: 7px;
-      border-width: 2px;
-    }
-    .brand-text .brand-name { font-size: 1.2rem; }
-    .brand-text .brand-tagline { font-size: .54rem; margin-top: 4px; letter-spacing: .18em; }
-
-    /* Body compacto */
-    .cert-body { padding: 8px 4px; }
-    .cert-title {
-      font-size: 1.5rem;
-      margin-bottom: 4px;
-      letter-spacing: .02em;
-      line-height: 1.1;
-    }
-    .cert-title-underline { width: 50px; height: 3px; margin: 6px auto 12px; }
-    .otorga { font-size: .78rem; margin-bottom: 10px; }
-    .nombre {
-      font-size: 1.25rem;
-      padding-bottom: 8px;
-      padding-left: 6px; padding-right: 6px;
-      border-bottom-width: 2px;
-      margin-bottom: 2px;
-      letter-spacing: .03em;
-      line-height: 1.1;
-    }
-    .por-completar { font-size: .74rem; margin: 10px 0 4px; line-height: 1.4; }
-    .curso-nombre { font-size: .95rem; max-width: 100%; margin-bottom: 8px; line-height: 1.25; }
-    .carga {
-      font-size: .58rem;
-      gap: 6px;
-      letter-spacing: .1em;
-      justify-content: center;
-      flex-direction: row;
-    }
-    .carga .sep {
-      width: 1px;
-      height: 10px;
-      background: var(--gold);
-      opacity: .8;
-      align-self: center;
-    }
-    .fecha-emision { font-size: .74rem; margin-top: 14px; }
-
-    /* Footer apilado */
-    .cert-footer {
-      display: flex;
-      flex-direction: column;
-      gap: 20px;
-      align-items: center;
-      padding: 16px 0 12px;
-      margin-top: 12px;
-      border-top: 1px solid rgba(15,74,44,.18);
-    }
-    .qr-col {
-      width: 100%;
-      max-width: 180px;
-    }
-    .qr-img {
-      width: 100px; height: 100px;
-      padding: 5px;
-      border-width: 1.5px;
-    }
-    .qr-label { font-size: .56rem; letter-spacing: .1em; }
-    .firma-col {
-      width: 100%;
-      max-width: 240px;
-      padding-bottom: 0;
-    }
-    .firma-img { height: 44px; max-height: 44px; margin-bottom: 4px; }
-    .firma-linea { padding-top: 6px; border-top-width: 1px; }
-    .firma-nombre { font-size: .82rem; line-height: 1.15; }
-    .firma-cargo { font-size: .62rem; margin-top: 2px; }
-
-    /* Franja inferior */
-    .cert-bottom-band {
-      position: absolute;
-      left: 10px;
-      right: 10px;
-      bottom: 10px;
-      height: auto;
-      padding: 10px 12px;
-      flex-direction: column;
-      gap: 4px;
-      font-size: .55rem;
-      letter-spacing: .04em;
-      text-align: center;
-      line-height: 1.3;
-    }
-    .cert-bottom-band .folio-code { font-size: .7rem; }
-    .cert-bottom-band .dot { display: none; }
-
-    /* Toolbar en móvil */
+    /* Toolbar más compacta y apilada en móvil */
     .toolbar-bottom {
       grid-template-columns: 1fr;
       gap: 8px;
-      margin-top: 16px;
+      margin-top: 20px;
     }
     .toolbar-secondary {
       grid-template-columns: repeat(2, 1fr);
@@ -675,6 +594,13 @@
       font-size: .88rem;
       min-height: 48px;
     }
+  }
+
+  /* En landscape móvil o tablet, cert al 95% de ancho */
+  @media (max-width: 720px) and (orientation: landscape) {
+    .rotate-hint { display: none; }
+    body { padding: 16px 24px 24px; }
+    .cert-wrap { max-width: 100%; }
   }
 </style>
 </head>
@@ -698,6 +624,11 @@
 
 <!-- Certificado + Toolbar -->
 <div class="layout" id="layout" style="display:none;">
+
+  <div class="rotate-hint">
+    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="5" y="2" width="14" height="20" rx="2"/><line x1="12" y1="18" x2="12.01" y2="18"/></svg>
+    Gira tu teléfono para ver mejor tu certificado
+  </div>
 
   <div class="cert-wrap" id="cert-wrap">
 
