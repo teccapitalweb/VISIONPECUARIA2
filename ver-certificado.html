@@ -570,16 +570,52 @@
     .rotate-hint { display: block; }
 
     /* En portrait móvil el cert es diploma horizontal escalado */
-    /* Mantenemos aspect-ratio horizontal, container queries, y todo el interior con cqw */
-    .cert-wrap {
-      /* aspect-ratio: 297/210 heredado del desktop, NO se cambia */
-      max-width: 100%;
-    }
+    .cert-wrap { max-width: 100%; }
 
     /* Ocultar ornamentos que quedan muy chiquitos y no se ven bien */
     .flourish { display: none; }
 
-    /* Toolbar más compacta y apilada en móvil */
+    /* ─── FIX: bajar los mínimos de clamp() para que todo escale bien
+       cuando el contenedor es chico (~370px) ─── */
+    .cert-title { font-size: clamp(0.6rem, 4.8cqw, 3.4rem); }
+    .cert-sub { font-size: clamp(0.35rem, 1.3cqw, 1rem); }
+    .otorga { font-size: clamp(0.35rem, 1.4cqw, 1.05rem); }
+    .nombre {
+      font-size: clamp(0.5rem, 3.8cqw, 2.7rem);
+      letter-spacing: .03em;
+    }
+    .por-completar { font-size: clamp(0.32rem, 1.2cqw, 0.92rem); }
+    .curso-nombre { font-size: clamp(0.4rem, 2cqw, 1.5rem); }
+    .carga { font-size: clamp(0.28rem, 0.95cqw, 0.75rem); }
+    .fecha-emision { font-size: clamp(0.3rem, 1.15cqw, 0.88rem); }
+
+    .brand-text .brand-name { font-size: clamp(0.5rem, 2.6cqw, 2rem); }
+    .brand-text .brand-tagline { font-size: clamp(0.28rem, 0.9cqw, 0.75rem); }
+    .folio-block { font-size: clamp(0.28rem, 0.9cqw, 0.7rem); }
+    .folio-block strong { font-size: clamp(0.35rem, 1.2cqw, 0.9rem); }
+
+    .qr-label { font-size: clamp(0.24rem, 0.85cqw, 0.68rem); }
+    .firma-nombre { font-size: clamp(0.32rem, 1.2cqw, 0.92rem); }
+    .firma-cargo { font-size: clamp(0.26rem, 0.85cqw, 0.7rem); }
+
+    .cert-bottom-band {
+      font-size: clamp(0.28rem, 0.85cqw, 0.68rem);
+    }
+    .cert-bottom-band .folio-code { font-size: clamp(0.35rem, 1cqw, 0.82rem); }
+
+    /* Reducir tamaño mínimo del QR para no invadir el layout chico */
+    .qr-img {
+      min-width: 40px;
+      min-height: 40px;
+    }
+
+    /* Reducir tamaño mínimo del brand mark */
+    .brand-mark {
+      min-width: 28px;
+      min-height: 28px;
+    }
+
+    /* Toolbar apilada en móvil */
     .toolbar-bottom {
       grid-template-columns: 1fr;
       gap: 8px;
