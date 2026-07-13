@@ -94,9 +94,9 @@ async function signInGoogle() {
     provider.setCustomParameters({ prompt: 'select_account' });
     const cred = await signInWithPopup(auth, provider);
     currentUser = cred.user;
-    // Ya autenticado → cerrar modal auth, abrir modal checkout
+    // Ya autenticado → cerrar modal auth, abrir modal nombre
     closeModal('modal-auth');
-    setTimeout(() => openCheckout(), 300);
+    setTimeout(() => abrirModalNombre(), 300);
   } catch (err) {
     console.error('Sign-in error:', err);
     toast('No pudimos iniciar sesión. Intenta de nuevo.', 'error');
@@ -105,6 +105,33 @@ async function signInGoogle() {
       btn.innerHTML = googleBtnHTML();
     }
   }
+}
+
+// ─── MODAL DE CONFIRMAR NOMBRE PARA CERTIFICADO ──────────────────────────────
+let nombreConfirmado = '';
+
+function abrirModalNombre() {
+  const input = $('#input-nombre-cert');
+  if (input) {
+    // Prefill: primero lo que ya confirmó, si no lo que Google dio
+    input.value = nombreConfirmado || currentUser?.displayName || '';
+  }
+  openModal('modal-nombre');
+  // Focus con delay para animación
+  setTimeout(() => { if (input) { input.focus(); input.select?.(); } }, 200);
+}
+
+function confirmarNombreYContinuar() {
+  const input = $('#input-nombre-cert');
+  const nombre = (input?.value || '').trim();
+  if (nombre.length < 3) {
+    toast('Escribe tu nombre completo (mínimo 3 letras)', 'error');
+    input?.focus();
+    return;
+  }
+  nombreConfirmado = nombre;
+  closeModal('modal-nombre');
+  setTimeout(() => openCheckout(), 300);
 }
 
 function googleBtnHTML() {
@@ -139,10 +166,17 @@ async function iniciarInscripcion() {
     toast('El sistema de pago no está disponible. Escríbenos por WhatsApp.', 'error');
     return;
   }
+  // Paso 1: Login con Google (si no está logueado)
   if (!currentUser) {
     openModal('modal-auth');
     return;
   }
+  // Paso 2: Confirmar nombre para el certificado (si aún no lo confirmó en esta sesión)
+  if (!nombreConfirmado || nombreConfirmado.trim().length < 3) {
+    abrirModalNombre();
+    return;
+  }
+  // Paso 3: Checkout
   openCheckout();
 }
 
@@ -182,7 +216,7 @@ async function openCheckout() {
         slug: SLUG,
         uid:  currentUser.uid,
         email: currentUser.email,
-        nombre: currentUser.displayName || '',
+        nombre: nombreConfirmado || currentUser.displayName || '',
         whatsapp: ''
       })
     });
@@ -456,11 +490,21 @@ function initModals() {
       e.preventDefault();
       signInGoogle();
     }
+    // Confirmar nombre → checkout
+    if (e.target.closest('#btn-continuar-checkout')) {
+      e.preventDefault();
+      confirmarNombreYContinuar();
+    }
   });
   // ESC cierra
   document.addEventListener('keydown', (e) => {
     if (e.key === 'Escape') {
       $$('.modal[data-open]').forEach(m => closeModal(m.id));
+    }
+    // Enter en el input de nombre → continuar al checkout
+    if (e.key === 'Enter' && e.target?.id === 'input-nombre-cert') {
+      e.preventDefault();
+      confirmarNombreYContinuar();
     }
   });
 }
