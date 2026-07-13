@@ -570,14 +570,36 @@
     /* Solo mostrar el hint en portrait móvil */
     .rotate-hint { display: block; }
 
-    /* En portrait móvil el cert es diploma horizontal escalado */
-    .cert-wrap { max-width: 100%; }
+    /* En portrait móvil damos MÁS altura al cert para que todo el contenido quepa
+       Aspect ratio 5:4 en vez de 297:210 (menos horizontal pero cabe todo) */
+    .cert-wrap {
+      max-width: 100%;
+      aspect-ratio: 5 / 4;
+    }
 
-    /* Ocultar ornamentos que quedan muy chiquitos y no se ven bien */
+    /* En móvil el contenido interior necesita más espacio en el bottom
+       porque la franja verde y las firmas se pisaban */
+    .cert-inner {
+      inset: 3cqw 3cqw 12cqw 3cqw;
+    }
+
+    /* La franja verde bien pegada al borde inferior en móvil */
+    .cert-bottom-band {
+      left: 3cqw;
+      right: 3cqw;
+      bottom: 3cqw;
+      height: auto;
+      padding: 1.4cqw 2cqw;
+      font-size: clamp(0.32rem, 0.85cqw, 0.68rem);
+      gap: 1.5cqw;
+    }
+    .cert-bottom-band .folio-code { font-size: clamp(0.35rem, 1cqw, 0.82rem); }
+
+    /* Ocultar ornamentos que quedan muy chiquitos */
     .flourish { display: none; }
 
     /* ─── FIX: bajar los mínimos de clamp() para que todo escale bien
-       cuando el contenedor es chico (~370px) ─── */
+       cuando el contenedor es chico ─── */
     .cert-title { font-size: clamp(0.6rem, 4.8cqw, 3.4rem); }
     .cert-sub { font-size: clamp(0.35rem, 1.3cqw, 1rem); }
     .otorga { font-size: clamp(0.35rem, 1.4cqw, 1.05rem); }
@@ -599,22 +621,8 @@
     .firma-nombre { font-size: clamp(0.32rem, 1.2cqw, 0.92rem); }
     .firma-cargo { font-size: clamp(0.26rem, 0.85cqw, 0.7rem); }
 
-    .cert-bottom-band {
-      font-size: clamp(0.28rem, 0.85cqw, 0.68rem);
-    }
-    .cert-bottom-band .folio-code { font-size: clamp(0.35rem, 1cqw, 0.82rem); }
-
-    /* Reducir tamaño mínimo del QR para no invadir el layout chico */
-    .qr-img {
-      min-width: 40px;
-      min-height: 40px;
-    }
-
-    /* Reducir tamaño mínimo del brand mark */
-    .brand-mark {
-      min-width: 28px;
-      min-height: 28px;
-    }
+    .qr-img { min-width: 40px; min-height: 40px; }
+    .brand-mark { min-width: 28px; min-height: 28px; }
 
     /* Toolbar apilada en móvil */
     .toolbar-bottom {
@@ -633,11 +641,15 @@
     }
   }
 
-  /* En landscape móvil o tablet, cert al 95% de ancho */
+  /* En landscape móvil, aspect-ratio horizontal normal */
   @media (max-width: 720px) and (orientation: landscape) {
     .rotate-hint { display: none; }
     body { padding: 16px 24px 24px; }
-    .cert-wrap { max-width: 100%; }
+    .cert-wrap {
+      max-width: 100%;
+      aspect-ratio: 297 / 210;
+    }
+    .cert-inner { inset: 4cqw 4cqw 10cqw 4cqw; }
   }
 </style>
 </head>
