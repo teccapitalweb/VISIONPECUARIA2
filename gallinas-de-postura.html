@@ -302,60 +302,104 @@
 
   /* ============ TABS NUEVAS ============ */
   .tabs-section-nueva {
-    padding: 60px 20px;
-    background: white;
+    padding: 70px 20px;
+    background: linear-gradient(180deg, #0a1c11 0%, #0f2a1a 60%, #163d28 100%);
+    position: relative;
+    overflow: hidden;
+  }
+  .tabs-section-nueva::before {
+    content: "";
+    position: absolute;
+    top: -80px;
+    left: -80px;
+    width: 320px;
+    height: 320px;
+    background: radial-gradient(circle, rgba(212,160,23,0.18) 0%, transparent 70%);
+    border-radius: 50%;
+    pointer-events: none;
+  }
+  .tabs-section-nueva::after {
+    content: "";
+    position: absolute;
+    bottom: -60px;
+    right: -60px;
+    width: 260px;
+    height: 260px;
+    background: radial-gradient(circle, rgba(45,122,86,0.35) 0%, transparent 70%);
+    border-radius: 50%;
+    pointer-events: none;
   }
   .tabs-container {
     max-width: 1000px;
     margin: 0 auto;
+    position: relative;
+    z-index: 1;
   }
   .tabs-titulo {
     text-align: center;
-    font-size: 36px;
+    font-size: 38px;
     font-weight: 800;
-    color: #1a1a1a;
-    margin-bottom: 40px;
+    color: #ffffff;
+    margin-bottom: 8px;
+    letter-spacing: -.02em;
+    font-family: 'Archivo', sans-serif;
+  }
+  .tabs-titulo::after {
+    content: "";
+    display: block;
+    width: 60px;
+    height: 3px;
+    background: linear-gradient(90deg, #d4a017, #e8c465);
+    margin: 14px auto 0;
+    border-radius: 2px;
   }
   .tabs-nav {
     display: grid;
     grid-template-columns: repeat(4, 1fr);
-    gap: 8px;
-    background: #f5f5f5;
-    padding: 8px;
+    gap: 6px;
+    background: rgba(255,255,255,0.06);
+    backdrop-filter: blur(8px);
+    padding: 6px;
     border-radius: 16px;
-    margin-bottom: 32px;
+    margin: 36px 0 32px;
+    border: 1px solid rgba(255,255,255,0.1);
   }
   .tab-btn {
     background: transparent;
     border: none;
-    padding: 16px 12px;
+    padding: 14px 10px;
     border-radius: 12px;
     cursor: pointer;
     display: flex;
     flex-direction: column;
     align-items: center;
-    gap: 8px;
-    font-family: inherit;
-    font-size: 14px;
-    font-weight: 600;
-    color: #666;
+    gap: 6px;
+    font-family: 'Archivo', sans-serif;
+    font-size: 13px;
+    font-weight: 700;
+    color: rgba(255,255,255,0.65);
     transition: all 0.2s;
+    letter-spacing: 0.02em;
   }
   .tab-btn:hover {
-    background: rgba(212,160,23,0.05);
-    color: #d4a017;
+    background: rgba(212,160,23,0.10);
+    color: #e8c465;
   }
   .tab-btn.active {
-    background: white;
-    color: #d4a017;
-    box-shadow: 0 4px 12px rgba(0,0,0,0.08);
+    background: linear-gradient(135deg, #d4a017, #b8891a);
+    color: #0a1c11;
+    box-shadow: 0 6px 20px rgba(212,160,23,0.35);
   }
   .tab-icon {
-    font-size: 24px;
+    font-size: 22px;
   }
   .tab-panel {
     display: none;
     animation: fadeIn 0.3s;
+    background: #ffffff;
+    border-radius: 20px;
+    padding: 34px;
+    box-shadow: 0 30px 80px rgba(0,0,0,0.25);
   }
   .tab-panel.active {
     display: block;
@@ -375,6 +419,10 @@
     .tab-icon {
       font-size: 20px;
     }
+    .tab-panel {
+      padding: 22px;
+    }
+    .tabs-titulo { font-size: 30px; }
   }
 
   /* Tab: Qué aprenderás */
@@ -935,13 +983,13 @@
       </p>
 
       <div class="hero-precio">
-        <div class="precio-tachado">Precio del ciclo · pago único</div>
+        <div class="precio-tachado">Antes $1,050 MXN</div>
         <div class="precio-ahora">
           <span class="moneda">$</span>
           <span class="numero" data-precio>650</span>
           <span class="mxn">MXN</span>
         </div>
-        <div class="precio-ahorro">🎁 Incluye BONUS Curso de Sexaje Avícola GRATIS</div>
+        <div class="precio-ahorro">🎁 Ahorras $400 · Incluye BONUS Curso de Sexaje Avícola GRATIS</div>
       </div>
 
       <div class="hero-beneficios-rapidos">
@@ -1026,13 +1074,13 @@
     <h2 class="tabs-titulo">Todo sobre este curso</h2>
 
     <div class="tabs-nav">
-      <button class="tab-btn active" data-tab="aprenderas">
-        <span class="tab-icon">🎯</span>
-        <span class="tab-label">Qué aprenderás</span>
-      </button>
-      <button class="tab-btn" data-tab="ponente">
+      <button class="tab-btn active" data-tab="ponente">
         <span class="tab-icon">👨‍🏫</span>
         <span class="tab-label">Ponente</span>
+      </button>
+      <button class="tab-btn" data-tab="aprenderas">
+        <span class="tab-icon">🎯</span>
+        <span class="tab-label">Qué aprenderás</span>
       </button>
       <button class="tab-btn" data-tab="incluye">
         <span class="tab-icon">🎁</span>
@@ -1047,7 +1095,7 @@
     <div class="tabs-content">
 
     <!-- TAB: QUÉ APRENDERÁS -->
-    <div class="tab-panel active" id="tab-aprenderas">
+    <div class="tab-panel" id="tab-aprenderas">
       <div class="learn-grid">
         <div class="learn-item">
           <svg width="20" height="20" viewBox="0 0 24 24" fill="none"><path d="M4 12l5 5L20 6" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"/></svg>
@@ -1069,7 +1117,7 @@
     </div>
 
     <!-- TAB: PONENTE -->
-    <div class="tab-panel" id="tab-ponente">
+    <div class="tab-panel active" id="tab-ponente">
       <div class="speaker">
         <div class="speaker-photo">
           <img src="/assets/curso-gallinas-postura/instructor-gomez-800.jpg" alt="M.V.Z. Diego Arturo Gómez" class="ponente-foto" loading="lazy" style="width:100%;height:100%;object-fit:cover;">
@@ -1407,14 +1455,14 @@
     </div>
 
     <div class="compra-precio-mega">
-      <div class="precio-mega-tachado">Pago único · sin costos ocultos</div>
+      <div class="precio-mega-tachado">Antes $1,050 MXN</div>
       <div class="precio-mega-actual">
         <span class="mega-moneda">$</span>
         <span class="mega-numero" data-precio>650</span>
         <span class="mega-mxn">MXN</span>
       </div>
       <div class="precio-mega-ahorro">
-        🎉 INCLUYE BONUS · Curso de Sexaje Avícola GRATIS
+        🎉 AHORRAS $400 · INCLUYE BONUS Curso de Sexaje Avícola GRATIS
       </div>
     </div>
 
