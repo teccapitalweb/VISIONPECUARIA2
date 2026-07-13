@@ -453,6 +453,165 @@
     .cert-wrap { box-shadow: none; max-width: 100%; }
     @page { size: A4 landscape; margin: 0; }
   }
+
+  /* ═══════════════════════════════════════════════════════════
+     MÓVIL (< 720px) — diploma vertical tipo tarjeta legible
+     ═══════════════════════════════════════════════════════════ */
+  @media (max-width: 720px) {
+    body { padding: 16px 12px 32px; }
+
+    .cert-wrap {
+      aspect-ratio: auto;
+      min-height: auto;
+      padding: 32px 20px;
+      border-radius: 14px;
+      container-type: normal;
+    }
+    .cert-wrap::before {
+      inset: 8px;
+      border-width: 2px;
+      border-radius: 8px;
+    }
+    .cert-wrap::after {
+      inset: 12px;
+      border-width: 1px;
+      border-radius: 6px;
+    }
+
+    /* Esquinas más pequeñas y ajustadas */
+    .corner { width: 34px; height: 34px; }
+    .corner-tl { top: 14px; left: 14px; }
+    .corner-tr { top: 14px; right: 14px; }
+    .corner-bl { bottom: 14px; left: 14px; }
+    .corner-br { bottom: 14px; right: 14px; }
+
+    /* Watermark más chico */
+    .watermark img { width: 60%; height: 60%; opacity: .6; }
+
+    .cert-inner {
+      position: relative;
+      inset: auto;
+      padding: 24px 8px;
+    }
+
+    /* Header apilado */
+    .cert-header {
+      flex-direction: column;
+      align-items: center;
+      text-align: center;
+      gap: 12px;
+      margin-bottom: 20px;
+    }
+    .logo-block {
+      flex-direction: column;
+      gap: 10px;
+    }
+    .logo-icon {
+      width: 56px; height: 56px;
+      border-radius: 12px;
+      padding: 6px;
+    }
+    .logo-text { text-align: center; }
+    .logo-text .big { font-size: 1.1rem; }
+    .logo-text .small { font-size: .58rem; margin-top: 4px; }
+    .folio-block {
+      text-align: center;
+      font-size: .58rem;
+      padding-top: 8px;
+      border-top: 1px solid rgba(212,160,23,.28);
+      width: 100%;
+    }
+    .folio-block strong {
+      font-size: .82rem;
+      margin-top: 4px;
+    }
+
+    /* Body más legible */
+    .cert-body {
+      padding: 4px;
+      gap: 12px;
+    }
+    .eyebrow {
+      font-size: .58rem;
+      letter-spacing: .3em;
+      gap: 8px;
+      margin-bottom: 8px;
+    }
+    .eyebrow::before, .eyebrow::after {
+      width: 24px;
+    }
+    .cert-title {
+      font-size: 2rem;
+      margin-bottom: 4px;
+      letter-spacing: .04em;
+    }
+    .cert-sub {
+      font-size: .82rem;
+      margin-bottom: 16px;
+    }
+    .nombre {
+      font-size: 1.4rem;
+      padding-bottom: 12px;
+      padding-left: 12px;
+      padding-right: 12px;
+      border-bottom-width: 2px;
+      margin-bottom: 4px;
+    }
+    .por-completar {
+      font-size: .82rem;
+      margin: 16px 0 6px;
+    }
+    .curso-nombre {
+      font-size: 1rem;
+      max-width: 100%;
+      margin-bottom: 12px;
+    }
+    .curso-badge {
+      padding: 4px 12px;
+      font-size: .58rem;
+      border-width: 1px;
+    }
+
+    /* Footer apilado vertical */
+    .cert-footer {
+      display: flex;
+      flex-direction: column;
+      gap: 24px;
+      align-items: center;
+      padding-top: 24px;
+      margin-top: 20px;
+      border-top: 1px solid rgba(212,160,23,.20);
+    }
+    .firma-col, .fecha-col, .qr-col {
+      width: 100%;
+      max-width: 260px;
+      padding-bottom: 0;
+    }
+    .firma-line {
+      font-size: 1.5rem;
+      margin-bottom: 6px;
+    }
+    .firma-nombre {
+      padding-top: 8px;
+      border-top-width: 1px;
+      font-size: .82rem;
+    }
+    .firma-cargo {
+      font-size: .6rem;
+      margin-top: 4px;
+    }
+    .fecha-num { font-size: 1.1rem; }
+    .fecha-label { font-size: .58rem; }
+    .fecha-loc { font-size: .58rem; }
+    .qr-img {
+      width: 100px; height: 100px;
+      border-radius: 8px;
+      padding: 6px;
+      border-width: 1px;
+      margin-bottom: 8px;
+    }
+    .qr-label { font-size: .55rem; }
+  }
 </style>
 </head>
 <body>
