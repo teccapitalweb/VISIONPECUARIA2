@@ -81,6 +81,9 @@ function showState(state) {
 }
 
 // ─── AUTH ────────────────────────────────────────────────────────────────────
+// Al arranque forzamos loading (por si el HTML no vino con hidden)
+showState('loading');
+
 if (auth) {
   onAuthStateChanged(auth, async (user) => {
     currentUser = user;
@@ -220,7 +223,7 @@ function renderClases() {
   if (infoEl) infoEl.textContent = `${clases.length} clase${clases.length === 1 ? '' : 's'} · Reproduce cuando quieras, en el orden que prefieras.`;
 
   grid.innerHTML = clases.map((c, i) => {
-    const disponible = !!c.storagePath;
+    const disponible = !!c.storagePath || !!c.embedUrl;
     const orden = c.orden || (i + 1);
     return `
       <button class="clase-card"
@@ -256,7 +259,7 @@ function renderClases() {
     btn.addEventListener('click', () => {
       const idx = Number(btn.dataset.claseIndex);
       const clase = clases[idx];
-      if (!clase || !clase.storagePath) return;
+      if (!clase || (!clase.storagePath && !clase.embedUrl)) return;
       abrirVideo(clase);
     });
   });
