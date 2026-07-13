@@ -1,0 +1,649 @@
+<!DOCTYPE html>
+<html lang="es-MX">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
+<meta name="theme-color" content="#163d28">
+<title>Certificado · Visión Pecuaria</title>
+<meta name="robots" content="noindex,nofollow">
+
+<link rel="icon" type="image/x-icon" href="/assets/brand/favicon.ico">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&family=Playfair+Display:ital,wght@0,400;0,600;0,700;0,800;1,400;1,600&family=Great+Vibes&display=swap" rel="stylesheet">
+
+<style>
+  :root {
+    --gold: #d4a017;
+    --gold-deep: #b8880a;
+    --gold-light: #e8c465;
+    --gold-cream: #f4d97e;
+    --g900: #0a1f12;
+    --g800: #163d28;
+    --g700: #1f5c40;
+    --g600: #2d7a56;
+    --g50: #ecf3ef;
+    --paper: #faf7f0;
+    --paper-dark: #f2ebd7;
+    --tinta: #1a2e1d;
+    --muted: #6b7280;
+    --font: 'Inter', -apple-system, BlinkMacSystemFont, sans-serif;
+    --font-elegant: 'Playfair Display', Georgia, serif;
+    --font-firma: 'Great Vibes', 'Dancing Script', cursive;
+  }
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+  html, body {
+    width: 100%;
+    background: linear-gradient(135deg, #0a1f12 0%, #163d28 100%);
+    font-family: var(--font);
+    color: var(--tinta);
+    min-height: 100vh;
+    -webkit-font-smoothing: antialiased;
+  }
+  body {
+    display: flex;
+    flex-direction: column;
+    padding: 20px 12px 40px;
+    padding-top: calc(20px + env(safe-area-inset-top));
+    padding-bottom: calc(40px + env(safe-area-inset-bottom));
+  }
+
+  /* ═══════ LOADING ═══════ */
+  #loading, #error {
+    max-width: 480px;
+    margin: 60px auto;
+    background: #fff;
+    border-radius: 20px;
+    padding: 40px 28px;
+    text-align: center;
+    box-shadow: 0 20px 40px rgba(0,0,0,.3);
+  }
+  #loading__spinner {
+    width: 48px; height: 48px;
+    border: 3px solid rgba(31,92,64,.14);
+    border-top-color: var(--g800);
+    border-radius: 50%;
+    animation: spin .8s linear infinite;
+    margin: 0 auto 20px;
+  }
+  @keyframes spin { to { transform: rotate(360deg); } }
+  #loading p, #error p { color: var(--muted); font-size: .95rem; line-height: 1.55; }
+  #error__ico {
+    width: 64px; height: 64px;
+    border-radius: 18px;
+    background: linear-gradient(135deg, #fee2e2, #fecaca);
+    color: #dc2626;
+    display: grid; place-items: center;
+    margin: 0 auto 16px;
+  }
+  #error__ico svg { width: 32px; height: 32px; }
+  #error h2 {
+    font-family: var(--font-elegant);
+    font-weight: 700;
+    color: var(--tinta);
+    font-size: 1.35rem;
+    margin-bottom: 10px;
+  }
+  #error a {
+    display: inline-block;
+    margin-top: 18px;
+    padding: 12px 24px;
+    background: linear-gradient(180deg, var(--g700), var(--g900));
+    color: #fff;
+    text-decoration: none;
+    border-radius: 10px;
+    font-family: var(--font);
+    font-weight: 700;
+    font-size: .88rem;
+  }
+
+  /* ═══════ TOOLBAR ═══════ */
+  .toolbar {
+    max-width: 1200px;
+    margin: 0 auto 24px;
+    display: flex;
+    gap: 8px;
+    justify-content: center;
+    flex-wrap: wrap;
+    padding: 0 4px;
+  }
+  .tbtn {
+    background: rgba(255,255,255,.95);
+    border: 1.5px solid rgba(255,255,255,.24);
+    border-radius: 10px;
+    padding: 10px 16px;
+    font-size: .82rem;
+    font-weight: 700;
+    cursor: pointer;
+    font-family: var(--font);
+    color: var(--tinta);
+    display: inline-flex;
+    align-items: center;
+    gap: 6px;
+    transition: transform .15s, box-shadow .15s;
+    text-decoration: none;
+    min-height: 40px;
+  }
+  .tbtn:hover { transform: translateY(-1px); box-shadow: 0 6px 16px rgba(0,0,0,.14); }
+  .tbtn svg { width: 14px; height: 14px; }
+  .tbtn--primary { background: linear-gradient(180deg, var(--gold), var(--gold-deep)); color: var(--g900); border-color: var(--gold-deep); }
+  .tbtn--wa { background: #25D366; color: #fff; border-color: #25D366; }
+  .tbtn--li { background: #0a66c2; color: #fff; border-color: #0a66c2; }
+  .tbtn--ghost { background: rgba(255,255,255,.08); color: #fff; border-color: rgba(255,255,255,.24); backdrop-filter: blur(6px); -webkit-backdrop-filter: blur(6px); }
+
+  @media (max-width: 640px) {
+    .tbtn { padding: 10px 12px; font-size: .78rem; }
+    .tbtn svg { width: 16px; height: 16px; }
+  }
+
+  /* ═══════ CERTIFICADO WRAP ═══════ */
+  .cert-wrap {
+    max-width: 1200px;
+    margin: 0 auto;
+    aspect-ratio: 297 / 210;
+    background: linear-gradient(135deg, var(--paper) 0%, var(--paper-dark) 100%);
+    box-shadow: 0 40px 80px rgba(0,0,0,.4), 0 12px 30px rgba(0,0,0,.2);
+    border-radius: 6px;
+    position: relative;
+    overflow: hidden;
+    container-type: inline-size;
+  }
+  .cert-wrap::before {
+    content: '';
+    position: absolute;
+    inset: 2.2cqw;
+    border: 0.24cqw solid var(--gold);
+    border-radius: 3px;
+    pointer-events: none;
+  }
+  .cert-wrap::after {
+    content: '';
+    position: absolute;
+    inset: 2.7cqw;
+    border: 0.08cqw solid var(--gold-light);
+    border-radius: 3px;
+    pointer-events: none;
+  }
+
+  .corner {
+    position: absolute;
+    width: 6cqw;
+    height: 6cqw;
+    pointer-events: none;
+    z-index: 4;
+  }
+  .corner svg { width: 100%; height: 100%; display: block; }
+  .corner-tl { top: 3cqw; left: 3cqw; }
+  .corner-tr { top: 3cqw; right: 3cqw; transform: scaleX(-1); }
+  .corner-bl { bottom: 3cqw; left: 3cqw; transform: scaleY(-1); }
+  .corner-br { bottom: 3cqw; right: 3cqw; transform: scale(-1,-1); }
+
+  .watermark {
+    position: absolute;
+    inset: 0;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    pointer-events: none;
+    z-index: 0;
+    opacity: .04;
+  }
+  .watermark img {
+    width: 40%; height: 40%;
+    object-fit: contain;
+  }
+
+  .cert-inner {
+    position: absolute;
+    inset: 5cqw;
+    display: flex;
+    flex-direction: column;
+    z-index: 2;
+  }
+
+  .cert-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: flex-start;
+    gap: 1cqw;
+  }
+  .logo-block {
+    display: flex;
+    align-items: center;
+    gap: 1cqw;
+  }
+  .logo-icon {
+    width: 5cqw;
+    height: 5cqw;
+    min-width: 42px;
+    min-height: 42px;
+    border-radius: 0.8cqw;
+    background: #fff;
+    border: 0.16cqw solid var(--gold);
+    box-shadow: 0 0.3cqw 1cqw rgba(0,0,0,.15);
+    display: grid; place-items: center;
+    flex-shrink: 0;
+    padding: 0.3cqw;
+  }
+  .logo-icon img {
+    width: 100%; height: 100%;
+    object-fit: contain;
+  }
+  .logo-text {
+    font-family: var(--font-elegant);
+    font-weight: 700;
+    color: var(--g800);
+    line-height: 1;
+  }
+  .logo-text .big {
+    font-size: clamp(0.9rem, 1.8cqw, 1.3rem);
+    display: block;
+    letter-spacing: -.01em;
+  }
+  .logo-text .small {
+    font-size: clamp(0.5rem, 0.85cqw, 0.68rem);
+    letter-spacing: .24em;
+    color: var(--muted);
+    text-transform: uppercase;
+    margin-top: 0.4cqw;
+    font-family: var(--font);
+    font-weight: 600;
+  }
+  .folio-block {
+    text-align: right;
+    font-size: clamp(0.5rem, 0.85cqw, 0.68rem);
+    letter-spacing: .15em;
+    color: var(--muted);
+    text-transform: uppercase;
+    font-weight: 700;
+    line-height: 1.5;
+  }
+  .folio-block strong {
+    display: block;
+    font-size: clamp(0.65rem, 1.15cqw, 0.88rem);
+    color: var(--g800);
+    letter-spacing: .08em;
+    margin-top: 0.3cqw;
+    font-family: 'JetBrains Mono', 'Menlo', monospace;
+  }
+
+  .cert-body {
+    flex: 1;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    text-align: center;
+    padding: 0 4cqw;
+  }
+  .eyebrow {
+    font-size: clamp(0.6rem, 1cqw, 0.78rem);
+    letter-spacing: .45em;
+    color: var(--gold-deep);
+    text-transform: uppercase;
+    font-weight: 700;
+    margin-bottom: 1.4cqw;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 1.5cqw;
+  }
+  .eyebrow::before, .eyebrow::after {
+    content: '';
+    display: block;
+    width: 5cqw;
+    height: 1px;
+    background: linear-gradient(90deg, transparent, var(--gold), transparent);
+  }
+  .cert-title {
+    font-family: var(--font-elegant);
+    font-size: clamp(1.6rem, 4.8cqw, 3.2rem);
+    font-weight: 800;
+    color: var(--g800);
+    line-height: 1;
+    letter-spacing: .04em;
+    margin-bottom: 0.8cqw;
+  }
+  .cert-sub {
+    font-family: var(--font-elegant);
+    font-style: italic;
+    font-size: clamp(0.7rem, 1.3cqw, 1rem);
+    color: var(--muted);
+    margin-bottom: 2.5cqw;
+  }
+  .nombre {
+    font-family: var(--font-elegant);
+    font-size: clamp(1.3rem, 3.6cqw, 2.5rem);
+    font-weight: 700;
+    color: var(--tinta);
+    line-height: 1.1;
+    margin-bottom: 0.4cqw;
+    padding-bottom: 1.2cqw;
+    border-bottom: 0.3cqw solid var(--gold);
+    display: inline-block;
+    padding-left: 5cqw;
+    padding-right: 5cqw;
+    max-width: 92%;
+    word-wrap: break-word;
+  }
+  .por-completar {
+    font-size: clamp(0.65rem, 1.1cqw, 0.85rem);
+    color: var(--tinta);
+    margin: 2cqw 0 0.6cqw;
+    font-weight: 500;
+  }
+  .curso-nombre {
+    font-family: var(--font-elegant);
+    font-style: italic;
+    font-size: clamp(0.9rem, 1.85cqw, 1.35rem);
+    font-weight: 600;
+    color: var(--gold-deep);
+    line-height: 1.3;
+    max-width: 90%;
+    margin-bottom: 1cqw;
+  }
+  .curso-badge {
+    display: inline-block;
+    padding: 0.6cqw 1.5cqw;
+    background: rgba(212,160,23,.10);
+    border: 0.1cqw solid var(--gold);
+    border-radius: 999px;
+    color: var(--gold-deep);
+    font-size: clamp(0.5rem, 0.85cqw, 0.7rem);
+    font-weight: 700;
+    text-transform: uppercase;
+    letter-spacing: .12em;
+    font-family: var(--font);
+  }
+
+  .cert-footer {
+    display: grid;
+    grid-template-columns: 1.2fr 1fr 0.8fr;
+    gap: 2cqw;
+    align-items: end;
+    padding-top: 1cqw;
+  }
+  .firma-col {
+    text-align: center;
+    padding-bottom: 0.5cqw;
+  }
+  .firma-line {
+    font-family: var(--font-firma);
+    font-size: clamp(1rem, 2.3cqw, 1.7rem);
+    color: var(--tinta);
+    line-height: 1;
+    margin-bottom: 0.4cqw;
+    transform: rotate(-2deg);
+    letter-spacing: -.02em;
+  }
+  .firma-nombre {
+    padding-top: 0.6cqw;
+    border-top: 0.1cqw solid var(--tinta);
+    font-family: var(--font);
+    font-weight: 700;
+    font-size: clamp(0.65rem, 1.1cqw, 0.85rem);
+    color: var(--g800);
+    line-height: 1.2;
+    max-width: 90%;
+    margin: 0 auto;
+  }
+  .firma-cargo {
+    font-size: clamp(0.5rem, 0.85cqw, 0.68rem);
+    color: var(--muted);
+    letter-spacing: .16em;
+    text-transform: uppercase;
+    margin-top: 0.4cqw;
+    font-weight: 600;
+  }
+  .fecha-col {
+    text-align: center;
+    padding-bottom: 0.5cqw;
+  }
+  .fecha-num {
+    font-family: var(--font-elegant);
+    font-size: clamp(0.9rem, 1.8cqw, 1.25rem);
+    font-weight: 700;
+    color: var(--g800);
+    margin-bottom: 0.4cqw;
+  }
+  .fecha-label {
+    font-size: clamp(0.5rem, 0.85cqw, 0.68rem);
+    color: var(--muted);
+    letter-spacing: .16em;
+    text-transform: uppercase;
+    font-weight: 600;
+    margin-bottom: 0.3cqw;
+  }
+  .fecha-loc {
+    font-size: clamp(0.5rem, 0.8cqw, 0.65rem);
+    color: var(--muted);
+    font-style: italic;
+  }
+  .qr-col {
+    text-align: center;
+  }
+  .qr-img {
+    width: 7cqw;
+    height: 7cqw;
+    min-width: 60px;
+    min-height: 60px;
+    margin: 0 auto 0.5cqw;
+    background: #fff;
+    padding: 0.4cqw;
+    border-radius: 0.5cqw;
+    border: 0.1cqw solid var(--gold);
+    box-shadow: 0 0.3cqw 0.8cqw rgba(0,0,0,.14);
+  }
+  .qr-img img {
+    width: 100%; height: 100%;
+    display: block;
+    object-fit: contain;
+  }
+  .qr-label {
+    font-size: clamp(0.45rem, 0.75cqw, 0.6rem);
+    color: var(--muted);
+    letter-spacing: .12em;
+    text-transform: uppercase;
+    font-weight: 600;
+  }
+
+  @media print {
+    body { background: #fff; padding: 0; }
+    .toolbar { display: none !important; }
+    .cert-wrap { box-shadow: none; max-width: 100%; }
+    @page { size: A4 landscape; margin: 0; }
+  }
+</style>
+</head>
+<body>
+
+<div class="toolbar" id="toolbar" style="display:none;">
+  <button class="tbtn tbtn--primary" onclick="window.print()">
+    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="6 9 6 2 18 2 18 9"/><path d="M6 18H4a2 2 0 01-2-2v-5a2 2 0 012-2h16a2 2 0 012 2v5a2 2 0 01-2 2h-2"/><rect x="6" y="14" width="12" height="8"/></svg>
+    Imprimir / PDF
+  </button>
+  <button class="tbtn tbtn--wa" onclick="compartirWA()">
+    <svg viewBox="0 0 24 24" fill="currentColor"><path d="M20.52 3.48A11.86 11.86 0 0012.06 0C5.5 0 .16 5.34.16 11.9c0 2.1.55 4.14 1.6 5.94L0 24l6.32-1.66a11.87 11.87 0 005.73 1.46h.01c6.56 0 11.9-5.34 11.9-11.9 0-3.18-1.24-6.16-3.48-8.42z"/></svg>
+    WhatsApp
+  </button>
+  <button class="tbtn tbtn--li" onclick="compartirLI()">
+    <svg viewBox="0 0 24 24" fill="currentColor"><path d="M20.447 20.452h-3.554v-5.569c0-1.328-.027-3.037-1.852-3.037-1.853 0-2.136 1.445-2.136 2.939v5.667H9.351V9h3.414v1.561h.046c.477-.9 1.637-1.85 3.37-1.85 3.601 0 4.267 2.37 4.267 5.455v6.286zM5.337 7.433a2.062 2.062 0 01-2.063-2.065 2.063 2.063 0 112.063 2.065zm1.782 13.019H3.555V9h3.564v11.452z"/></svg>
+    LinkedIn
+  </button>
+  <button class="tbtn tbtn--ghost" onclick="copiarLink()">
+    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M10 13a5 5 0 007.54.54l3-3a5 5 0 00-7.07-7.07l-1.72 1.71"/><path d="M14 11a5 5 0 00-7.54-.54l-3 3a5 5 0 007.07 7.07l1.71-1.71"/></svg>
+    Copiar link
+  </button>
+  <a href="/curso-acceso.html" class="tbtn tbtn--ghost">
+    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M19 12H5M12 19l-7-7 7-7"/></svg>
+    Volver
+  </a>
+</div>
+
+<div id="loading">
+  <div id="loading__spinner"></div>
+  <p>Cargando tu certificado...</p>
+</div>
+
+<div id="error" style="display:none;">
+  <div id="error__ico">
+    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"/><line x1="12" y1="8" x2="12" y2="12"/><line x1="12" y1="16" x2="12.01" y2="16"/></svg>
+  </div>
+  <h2>Certificado no encontrado</h2>
+  <p id="error-msg">No pudimos cargar el certificado.</p>
+  <a href="/curso-acceso.html">Volver a mi curso</a>
+</div>
+
+<div id="cert-wrap" class="cert-wrap" style="display:none;">
+  <div class="watermark"><img src="/assets/brand/logo-vp.png" alt=""></div>
+
+  <div class="corner corner-tl">
+    <svg viewBox="0 0 100 100" fill="none"><path d="M0 30 L30 30 L30 0 M15 15 L45 15 L45 45" stroke="#d4a017" stroke-width="1.8"/><circle cx="30" cy="30" r="3" fill="#d4a017"/></svg>
+  </div>
+  <div class="corner corner-tr">
+    <svg viewBox="0 0 100 100" fill="none"><path d="M0 30 L30 30 L30 0 M15 15 L45 15 L45 45" stroke="#d4a017" stroke-width="1.8"/><circle cx="30" cy="30" r="3" fill="#d4a017"/></svg>
+  </div>
+  <div class="corner corner-bl">
+    <svg viewBox="0 0 100 100" fill="none"><path d="M0 30 L30 30 L30 0 M15 15 L45 15 L45 45" stroke="#d4a017" stroke-width="1.8"/><circle cx="30" cy="30" r="3" fill="#d4a017"/></svg>
+  </div>
+  <div class="corner corner-br">
+    <svg viewBox="0 0 100 100" fill="none"><path d="M0 30 L30 30 L30 0 M15 15 L45 15 L45 45" stroke="#d4a017" stroke-width="1.8"/><circle cx="30" cy="30" r="3" fill="#d4a017"/></svg>
+  </div>
+
+  <div class="cert-inner">
+    <div class="cert-header">
+      <div class="logo-block">
+        <div class="logo-icon"><img src="/assets/brand/logo-vp.png" alt=""></div>
+        <div class="logo-text">
+          <span class="big">Visión Pecuaria</span>
+          <span class="small">Excelencia en producción animal</span>
+        </div>
+      </div>
+      <div class="folio-block">
+        Folio oficial
+        <strong id="cert-folio">—</strong>
+      </div>
+    </div>
+
+    <div class="cert-body">
+      <div class="eyebrow">Certificado de participación</div>
+      <div class="cert-title">CERTIFICADO</div>
+      <div class="cert-sub">Se otorga el presente a</div>
+
+      <div class="nombre" id="cert-nombre">—</div>
+
+      <div class="por-completar">por haber completado satisfactoriamente el curso</div>
+      <div class="curso-nombre" id="cert-curso">—</div>
+      <div class="curso-badge" id="cert-categoria">Curso especializado</div>
+    </div>
+
+    <div class="cert-footer">
+      <div class="firma-col">
+        <div class="firma-line">Visión Pecuaria</div>
+        <div class="firma-nombre">Dirección Académica</div>
+        <div class="firma-cargo">Visión Pecuaria · IPCI</div>
+      </div>
+      <div class="fecha-col">
+        <div class="fecha-num" id="cert-fecha">—</div>
+        <div class="fecha-label">Fecha de emisión</div>
+        <div class="fecha-loc">Tehuacán, Puebla · México</div>
+      </div>
+      <div class="qr-col">
+        <div class="qr-img"><img id="qr-img" src="" alt="QR verificación"></div>
+        <div class="qr-label">Escanea para verificar</div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<script type="module">
+import { initializeApp } from "https://www.gstatic.com/firebasejs/10.11.0/firebase-app.js";
+import { getFirestore, doc, getDoc } from "https://www.gstatic.com/firebasejs/10.11.0/firebase-firestore.js";
+
+const firebaseConfig = {
+  apiKey: "AIzaSyDQXkIo-BWPIeLZzHeTMN986WMDn0TrTJU",
+  authDomain: "visionpecuaria-vip.firebaseapp.com",
+  projectId: "visionpecuaria-vip",
+  storageBucket: "visionpecuaria-vip.firebasestorage.app",
+  messagingSenderId: "978318807782",
+  appId: "1:978318807782:web:626e67bb30795c15b02127"
+};
+const app = initializeApp(firebaseConfig);
+const db  = getFirestore(app);
+
+const params = new URLSearchParams(window.location.search);
+const folio  = params.get('folio');
+
+async function cargarCertificado() {
+  if (!folio) return mostrarError('No se especificó ningún folio en la URL.');
+  try {
+    const snap = await getDoc(doc(db, 'certificados', folio));
+    if (!snap.exists()) return mostrarError('El folio <b>' + folio + '</b> no existe en nuestros registros. Verifica que el link esté completo.');
+
+    const c = snap.data();
+    document.getElementById('cert-folio').textContent = folio;
+
+    const nombreCert = c.nombre || c.miembroNombre || 'Alumno Visión Pecuaria';
+    document.getElementById('cert-nombre').textContent = String(nombreCert).toUpperCase();
+    document.getElementById('cert-curso').textContent = c.cursoTitulo || '—';
+
+    const cat = document.getElementById('cert-categoria');
+    if (c.tipo === 'curso') cat.textContent = 'Curso especializado' + (c.horas ? ' · ' + c.horas + 'h de contenido' : '');
+    else if (c.categoria) cat.textContent = c.categoria;
+    else cat.textContent = 'Certificación oficial';
+
+    let fecha;
+    if (c.fechaEmision?.toDate) fecha = c.fechaEmision.toDate();
+    else if (c.fechaEmision?.seconds) fecha = new Date(c.fechaEmision.seconds * 1000);
+    else if (c.fechaEmision) fecha = new Date(c.fechaEmision);
+    else fecha = new Date();
+    const meses = ['Enero','Febrero','Marzo','Abril','Mayo','Junio','Julio','Agosto','Septiembre','Octubre','Noviembre','Diciembre'];
+    document.getElementById('cert-fecha').textContent = `${fecha.getDate()} de ${meses[fecha.getMonth()]} de ${fecha.getFullYear()}`;
+
+    const baseUrl = window.location.origin + window.location.pathname.replace(/[^/]*$/, '');
+    const verificarUrl = baseUrl + 'ver-certificado.html?folio=' + encodeURIComponent(folio);
+    document.getElementById('qr-img').src = 'https://api.qrserver.com/v1/create-qr-code/?size=200x200&margin=2&data=' + encodeURIComponent(verificarUrl);
+
+    window._certData = { folio, nombre: nombreCert, curso: c.cursoTitulo, verificarUrl };
+
+    document.getElementById('loading').style.display = 'none';
+    document.getElementById('cert-wrap').style.display = 'block';
+    document.getElementById('toolbar').style.display = 'flex';
+    document.title = 'Certificado ' + folio + ' · Visión Pecuaria';
+  } catch (e) {
+    console.error(e);
+    mostrarError('Error al cargar: ' + (e.message || e));
+  }
+}
+
+function mostrarError(msg) {
+  document.getElementById('loading').style.display = 'none';
+  document.getElementById('error').style.display = 'block';
+  document.getElementById('error-msg').innerHTML = msg;
+}
+
+cargarCertificado();
+</script>
+
+<script>
+function compartirWA() {
+  const d = window._certData; if (!d) return;
+  const txt = `🎓 ¡Completé un curso en Visión Pecuaria!\n\n"${d.curso}"\n\nMi certificado oficial (folio ${d.folio}):\n${d.verificarUrl}`;
+  window.open('https://wa.me/?text=' + encodeURIComponent(txt), '_blank');
+}
+function compartirLI() {
+  const d = window._certData; if (!d) return;
+  window.open('https://www.linkedin.com/sharing/share-offsite/?url=' + encodeURIComponent(d.verificarUrl), '_blank');
+}
+function copiarLink() {
+  const d = window._certData; if (!d) return;
+  if (navigator.clipboard) {
+    navigator.clipboard.writeText(d.verificarUrl).then(() => alert('🔗 Link copiado'));
+  } else {
+    prompt('Copia este link:', d.verificarUrl);
+  }
+}
+</script>
+
+</body>
+</html>
