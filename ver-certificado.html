@@ -178,7 +178,8 @@
   /* Contenido interior */
   .cert-inner {
     position: absolute;
-    inset: 4cqw;
+    /* top, right, bottom, left — más margen abajo para dejar espacio a la franja verde */
+    inset: 4cqw 4cqw 10cqw 4cqw;
     display: flex;
     flex-direction: column;
     z-index: 2;
@@ -337,7 +338,7 @@
     grid-template-columns: 1fr 1.4fr 1.4fr;
     gap: 2cqw;
     align-items: end;
-    padding: 0 0 2.5cqw;
+    padding: 0 0 1cqw;
     margin-top: auto;
   }
   .qr-col {
