@@ -22,6 +22,9 @@
 <!-- Stripe key para el checkout embebido de VP -->
 <meta name="stripe-pk" content="pk_live_51ThG5SDCxZfVu338m6ncLX0wUzQ4VvaJshknjfwnBTsuTFu65UiNiyx5NC1diPWQXwKqsubMOkXLMb9OGS4vEkZh00eHnjbWV4">
 
+<!-- Stripe.js para el embedded checkout -->
+<script src="https://js.stripe.com/v3/"></script>
+
 <!--
   === FACEBOOK PIXEL ===
   Pega aquí el snippet del Pixel cuando Britney tenga el ID:
@@ -274,10 +277,25 @@
     font-weight: 500;
   }
   @media (max-width: 768px) {
-    .hero-container { grid-template-columns: 1fr; gap: 40px; }
-    .hero-titulo { font-size: 36px; }
-    .precio-ahora .numero { font-size: 56px; }
-    .hero-beneficios-rapidos { grid-template-columns: 1fr; }
+    .hero-nuevo { padding: 30px 16px 40px; }
+    .hero-container { grid-template-columns: 1fr; gap: 32px; }
+    .hero-titulo { font-size: 32px; line-height: 1.15; }
+    .hero-subtitulo { font-size: .95rem; }
+    .precio-ahora .numero { font-size: 52px; }
+    .precio-ahora .moneda { font-size: 22px; }
+    .precio-ahora .mxn { font-size: 14px; }
+    .hero-beneficios-rapidos { grid-template-columns: 1fr; gap: 8px; margin-bottom: 20px; }
+    .benef { font-size: .88rem; padding: 8px 12px; }
+    .hero-cta { padding: 16px 24px; font-size: .9rem; letter-spacing: .02em; }
+    .hero-badges-top { padding: 0 16px; margin-bottom: 20px; gap: 8px; flex-wrap: wrap; }
+    .badge-oferta, .badge-cupos { font-size: .68rem; padding: 6px 12px; }
+    .hero-video-wrapper { border-radius: 16px; }
+    .hero-precio { padding: 18px 20px; }
+  }
+  @media (max-width: 480px) {
+    .hero-titulo { font-size: 28px; }
+    .precio-ahora .numero { font-size: 44px; }
+    .hero-cta { width: 100%; }
   }
 
   /* ============ LOGOS ============ */
@@ -1084,6 +1102,77 @@
                       text-decoration: none; font-weight: 600;
                       font-size: 14px; transition: all 0.2s; }
   .faq-whatsapp-btn:hover { background: #1DA851; transform: translateY(-1px); }
+
+  /* ============ MOBILE FIRST · Reforzar todos los breakpoints ============ */
+  @media (max-width: 768px) {
+    /* Containers generales */
+    .tabs-section-nueva { padding: 40px 14px; }
+    .tabs-container { padding: 0; }
+    .tabs-titulo { font-size: 26px; }
+    .tab-panel { padding: 22px 18px; border-radius: 16px; }
+    .tabs-nav { padding: 4px; gap: 4px; }
+    .tab-btn { padding: 10px 6px; font-size: 11px; gap: 4px; }
+    .tab-icon { font-size: 18px; }
+
+    /* Speaker (Ponente) */
+    .speaker { text-align: center; }
+    .speaker-photo { margin: 0 auto 16px; max-width: 200px; }
+    .speaker h3 { font-size: 1.2rem; }
+
+    /* Learn grid + Incluye */
+    .learn-grid { grid-template-columns: 1fr; gap: 12px; }
+    .learn-item { padding: 14px; }
+    .learn-item p { font-size: .88rem; }
+
+    /* Temario */
+    .mod summary { padding: 14px 16px; gap: 10px; font-size: .92rem; }
+    .mod-num { min-width: 30px; padding: 3px 6px; font-size: .78rem; }
+    .mod ul { padding: 12px 16px 18px 46px; }
+    .mod ul li { font-size: .85rem; }
+
+    /* Testimonios */
+    .testimonials-grid { grid-template-columns: 1fr !important; gap: 14px; }
+    .testimonial-card { padding: 20px; }
+    .section-title { font-size: 26px !important; }
+    .section-subtitle { font-size: .9rem; }
+
+    /* FAQ */
+    .faq-section { padding: 40px 16px; }
+    .faq-item summary { padding: 14px 16px; font-size: .92rem; }
+    .faq-answer { padding: 0 16px 14px; font-size: .88rem; }
+
+    /* Compra final */
+    .compra-final-wow { padding: 40px 16px; }
+    .compra-container { padding: 32px 22px; }
+    .compra-header h2 { font-size: 22px; }
+    .compra-precio-mega .mega-numero { font-size: 68px; }
+    .compra-lista li { font-size: .9rem; padding: 10px 14px; }
+    .compra-cta-mega { padding: 16px; font-size: .95rem; }
+
+    /* Contacto footer */
+    .contacto-section { padding: 40px 20px; }
+
+    /* Modal en mobile: bottom sheet */
+    .pay-modal { max-width: 100%; border-radius: 22px 22px 0 0; max-height: 94vh; }
+    .pay-head { padding: 14px 18px; }
+    .ins-hero { padding: 22px 20px 4px; }
+    .ins-hero h3 { font-size: 1.2rem; }
+    .ins-hero p { font-size: .88rem; }
+    .ins-form { padding: 18px 20px 4px; }
+    .ins-field label { font-size: .74rem; }
+    .ins-field input { padding: 12px 14px; font-size: 16px; /* evita zoom en iOS */ }
+    .ins-submit { padding: 14px; font-size: .92rem; }
+    .ins-note { padding: 14px 20px 20px; font-size: .78rem; }
+  }
+
+  @media (max-width: 480px) {
+    .compra-precio-mega .mega-numero { font-size: 58px; }
+    .compra-precio-mega .mega-moneda { font-size: 26px; }
+    .stat-number { font-size: 30px; }
+    .stat-label { font-size: 11px; }
+    .tabs-titulo { font-size: 22px; }
+    .tab-btn .tab-label { font-size: 10.5px; }
+  }
 </style>
 </head>
 <body data-slug="gallinas-de-postura">
@@ -1715,7 +1804,7 @@
 </div>
 
 <!-- ═══ MODAL: Inscripción con 3 campos (IPCIL flow) ═════════ -->
-<div class="pay-overlay" id="modal-inscripcion" role="dialog" aria-modal="true" aria-label="Formulario de inscripción">
+<div class="pay-overlay modal" id="modal-inscripcion" role="dialog" aria-modal="true" aria-label="Formulario de inscripción">
   <div class="pay-modal" style="max-width:520px;">
     <div class="pay-head">
       <b>Inscríbete al curso</b>
@@ -1766,7 +1855,7 @@
 </div>
 
 <!-- ═══ MODAL: Checkout Stripe (no cambiar) ═════════════════ -->
-<div class="pay-overlay" id="modal-checkout" role="dialog" aria-modal="true" aria-label="Pago del curso">
+<div class="pay-overlay modal" id="modal-checkout" role="dialog" aria-modal="true" aria-label="Pago del curso">
   <div class="pay-modal">
     <div class="pay-head">
       <b>Completa tu pago · <span data-precio-full>$650 MXN</span></b>
