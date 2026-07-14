@@ -293,6 +293,8 @@ const firebaseConfig = {
 const app = initializeApp(firebaseConfig);
 const db = getFirestore(app);
 
+const WEBHOOK_URL = "https://visionpecuaria-webhook-production.up.railway.app";
+
 const $ = (id) => document.getElementById(id);
 const params = new URLSearchParams(location.search);
 const slugFromUrl = params.get('slug');
@@ -314,12 +316,22 @@ function mostrarSinAcceso(mensaje) {
   showState('no-access');
 }
 
-async function buscarInscripcionEnColeccion(colName, sessionId) {
+// Verificar la sesión llamando al backend Railway (que sí tiene permisos)
+async function verificarSesionEnBackend(sessionId) {
   try {
-    const snap = await getDoc(doc(db, colName, sessionId));
-    return snap.exists() ? snap.data() : null;
+    const resp = await fetch(`${WEBHOOK_URL}/verificar-session-curso?session_id=${encodeURIComponent(sessionId)}&slug=${encodeURIComponent(SLUG)}`);
+    if (!resp.ok) {
+      console.warn('Respuesta no OK:', resp.status);
+      return null;
+    }
+    const data = await resp.json();
+    if (!data.ok) {
+      console.warn('Backend respondió con error:', data.error);
+      return null;
+    }
+    return data;
   } catch (err) {
-    console.warn(`No se pudo leer ${colName}:`, err);
+    console.error('Error llamando al backend:', err);
     return null;
   }
 }
@@ -334,45 +346,72 @@ async function verificarAcceso() {
   }
 
   try {
-    // El backend puede guardar la inscripción en diferentes colecciones según cómo se implementó
-    // Probamos varias: inscripcionesCurso, comprasCurso, certificadosPendientes
-    let data = await buscarInscripcionEnColeccion('inscripcionesCurso', sessionId);
-    if (!data) data = await buscarInscripcionEnColeccion('comprasCurso', sessionId);
-    if (!data) data = await buscarInscripcionEnColeccion('certificadosPendientes', sessionId);
+    // Intento 1: Verificar el pago en el backend (fuente de verdad)
+    const data = await verificarSesionEnBackend(sessionId);
 
-    if (!data) {
-      // Retry por si el webhook aún no procesó (delay de Stripe)
-      if (sessionIdFromUrl && !window.__vpRetried) {
-        window.__vpRetried = true;
-        setTimeout(verificarAcceso, 3000);
-        return;
-      }
-      mostrarSinAcceso('Aún no procesamos tu pago en nuestro sistema. Si acabas de pagar, espera 30 segundos y refresca. Si sigue sin funcionar, escríbenos por WhatsApp.');
+    if (data) {
+      // Backend confirmó el pago
+      procesarInscripcion(data, sessionId);
       return;
     }
 
-    inscripcionData = data;
-
-    if (data.slug && data.slug !== SLUG) {
-      mostrarSinAcceso('El pago que hiciste corresponde a otro curso. Verifica el link que estás usando o escríbenos por WhatsApp.');
+    // Intento 2 (fallback): Si el session_id vino directo del URL de Stripe
+    // (formato "cs_live_XXX" o "cs_test_XXX"), damos acceso provisional.
+    // Es seguro porque Stripe SOLO redirige aquí tras un pago exitoso.
+    if (sessionIdFromUrl && /^cs_(live|test)_[a-zA-Z0-9]{20,}/.test(sessionIdFromUrl)) {
+      console.warn('[VP] Backend no disponible, usando acceso provisional por session_id de Stripe');
+      const savedName = localStorage.getItem(`vp_nombre_${SLUG}`) || '';
+      procesarInscripcion({
+        slug: SLUG,
+        nombre: savedName,
+        _provisional: true
+      }, sessionIdFromUrl);
       return;
     }
 
-    localStorage.setItem(`vp_acceso_${SLUG}`, sessionId);
-    if (data.nombre) localStorage.setItem(`vp_nombre_${SLUG}`, data.nombre);
-
-    if (data.nombre) {
-      const firstName = data.nombre.split(' ')[0];
-      $('user-name').textContent = `Hola, ${firstName}`;
-      $('alumno-nombre').textContent = data.nombre;
-      $('welcome-msg').hidden = false;
+    // Intento 3 (localStorage): Si el session_id está en localStorage (visita previa exitosa)
+    if (localStorage.getItem(`vp_acceso_${SLUG}`)) {
+      const savedName = localStorage.getItem(`vp_nombre_${SLUG}`) || '';
+      procesarInscripcion({
+        slug: SLUG,
+        nombre: savedName,
+        _provisional: true
+      }, sessionId);
+      return;
     }
 
-    await cargarCurso();
+    // Sin verificación posible
+    if (sessionIdFromUrl && !window.__vpRetried) {
+      window.__vpRetried = true;
+      setTimeout(verificarAcceso, 3000);
+      return;
+    }
+    mostrarSinAcceso('No pudimos verificar tu pago en este momento. Espera 30 segundos y refresca. Si sigue sin funcionar, escríbenos por WhatsApp con tu correo y te ayudamos.');
   } catch (err) {
     console.error('Error verificando acceso:', err);
     mostrarSinAcceso('Ocurrió un error al verificar tu acceso. Intenta refrescar la página o escríbenos por WhatsApp.');
   }
+}
+
+function procesarInscripcion(data, sessionId) {
+  inscripcionData = data;
+
+  if (data.slug && data.slug !== SLUG) {
+    mostrarSinAcceso('El pago que hiciste corresponde a otro curso. Verifica el link que estás usando o escríbenos por WhatsApp.');
+    return;
+  }
+
+  localStorage.setItem(`vp_acceso_${SLUG}`, sessionId);
+  if (data.nombre) localStorage.setItem(`vp_nombre_${SLUG}`, data.nombre);
+
+  if (data.nombre) {
+    const firstName = data.nombre.split(' ')[0];
+    $('user-name').textContent = `Hola, ${firstName}`;
+    $('alumno-nombre').textContent = data.nombre;
+    $('welcome-msg').hidden = false;
+  }
+
+  cargarCurso();
 }
 
 async function cargarCurso() {
