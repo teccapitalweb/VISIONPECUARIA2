@@ -3,246 +3,517 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
-<meta name="theme-color" content="#0a1f12">
+<meta name="theme-color" content="#EA580C">
 <title>Mi curso · Visión Pecuaria</title>
 <meta name="robots" content="noindex,nofollow">
 
 <link rel="icon" type="image/x-icon" href="/assets/brand/favicon.ico">
-<link rel="apple-touch-icon" sizes="180x180" href="/assets/brand/apple-touch-icon.png">
 
-<link rel="preconnect" href="https://fonts.googleapis.com">
-<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-<link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@600;700;800;900&family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+<style>
+@import url('https://fonts.googleapis.com/css2?family=Instrument+Serif:ital@0;1&family=Geist:wght@400;500;600;700;800;900&display=swap');
 
-<link rel="stylesheet" href="/assets/css/curso-landing.css">
-<link rel="stylesheet" href="/assets/css/curso-acceso.css">
+:root {
+  --ink: #0A0A0A;
+  --ink-soft: #262626;
+  --ink-mute: #525252;
+  --paper: #FEFCF7;
+  --paper-soft: #FAF6EE;
+  --paper-warm: #F5EDD9;
+  --brand: #EA580C;
+  --brand-light: #FB923C;
+  --brand-dark: #C2410C;
+  --brand-bg: #FFF4E6;
+  --success: #10B981;
+  --danger: #DC2626;
+  --line: rgba(10, 10, 10, 0.06);
+  --line-strong: rgba(10, 10, 10, 0.12);
+  --font-sans: 'Geist', -apple-system, BlinkMacSystemFont, sans-serif;
+  --shadow-sm: 0 2px 8px rgba(10, 10, 10, 0.06);
+  --shadow: 0 8px 24px rgba(10, 10, 10, 0.08);
+  --shadow-lg: 0 20px 48px rgba(10, 10, 10, 0.10);
+  --shadow-brand: 0 8px 24px rgba(234, 88, 12, 0.25);
+}
+
+* { box-sizing: border-box; margin: 0; padding: 0; }
+html { scroll-behavior: smooth; }
+body {
+  font-family: var(--font-sans);
+  color: var(--ink);
+  background: var(--paper);
+  line-height: 1.55;
+  font-size: 16px;
+  -webkit-font-smoothing: antialiased;
+  min-height: 100vh;
+  display: flex;
+  flex-direction: column;
+}
+img { max-width: 100%; height: auto; display: block; }
+a { color: inherit; text-decoration: none; }
+button { font-family: inherit; cursor: pointer; border: none; background: none; color: inherit; }
+
+.container { max-width: 1200px; margin: 0 auto; padding: 0 24px; width: 100%; }
+@media (max-width: 640px) { .container { padding: 0 16px; } }
+
+.hdr { background: var(--ink); color: var(--paper); padding: 16px 0; border-bottom: 1px solid rgba(255,255,255,0.08); }
+.hdr__inner { display: flex; align-items: center; justify-content: space-between; gap: 16px; }
+.hdr__brand { display: flex; align-items: center; gap: 12px; }
+.hdr__brand-mark { width: 38px; height: 38px; display: grid; place-items: center; background: rgba(255,255,255,0.08); border-radius: 10px; padding: 6px; }
+.hdr__brand-mark img { width: 100%; height: 100%; object-fit: contain; }
+.hdr__brand-text b { display: block; font-weight: 800; font-size: 1rem; letter-spacing: -.01em; }
+.hdr__brand-text small { display: block; color: var(--brand-light); font-size: .68rem; letter-spacing: .18em; text-transform: uppercase; margin-top: 3px; font-weight: 700; }
+.hdr__user { display: flex; align-items: center; gap: 12px; font-size: .9rem; color: rgba(254, 252, 247, 0.85); }
+.hdr__user-name { display: none; }
+@media (min-width: 640px) { .hdr__user-name { display: inline; } }
+
+main { flex: 1; padding: 40px 0 60px; }
+
+.loading { display: flex; flex-direction: column; align-items: center; justify-content: center; min-height: 60vh; gap: 20px; text-align: center; }
+.loader { width: 40px; height: 40px; border: 3px solid var(--line-strong); border-top-color: var(--brand); border-radius: 50%; animation: spin .8s linear infinite; }
+@keyframes spin { to { transform: rotate(360deg); } }
+.loading p { color: var(--ink-mute); font-size: .95rem; }
+
+.no-access { max-width: 480px; margin: 60px auto; text-align: center; padding: 40px 32px; background: #fff; border-radius: 24px; box-shadow: var(--shadow-lg); border: 1px solid var(--line); }
+.no-access__ico { width: 72px; height: 72px; border-radius: 20px; background: var(--brand-bg); color: var(--brand); display: grid; place-items: center; margin: 0 auto 20px; }
+.no-access__ico svg { width: 32px; height: 32px; }
+.no-access h1 { font-family: var(--font-sans); font-size: 1.5rem; font-weight: 800; color: var(--ink); margin-bottom: 12px; letter-spacing: -.02em; }
+.no-access p { color: var(--ink-mute); margin-bottom: 24px; line-height: 1.6; font-size: .95rem; }
+
+.btn { display: inline-flex; align-items: center; justify-content: center; gap: 8px; padding: 13px 22px; border-radius: 12px; font-weight: 600; font-size: .92rem; transition: transform .18s ease, background .18s ease, box-shadow .18s ease; }
+.btn--primary { background: var(--brand); color: #fff; box-shadow: var(--shadow-brand); }
+.btn--primary:hover { background: var(--brand-dark); transform: translateY(-2px); }
+.btn--outline { background: transparent; color: var(--ink); border: 1.5px solid var(--line-strong); }
+.btn--outline:hover { border-color: var(--brand); color: var(--brand); }
+.btn--wa { background: #25D366; color: #fff; }
+.btn--wa:hover { background: #1EA952; transform: translateY(-2px); }
+.btn svg { width: 16px; height: 16px; }
+
+.curso-hero { background: linear-gradient(135deg, var(--brand), var(--brand-dark)); color: #fff; padding: 44px 0; margin-bottom: 40px; border-radius: 0 0 32px 32px; }
+.curso-hero__badge { display: inline-flex; align-items: center; gap: 8px; padding: 7px 14px; background: rgba(255,255,255,0.15); border-radius: 999px; font-size: .78rem; font-weight: 600; letter-spacing: -.005em; margin-bottom: 16px; backdrop-filter: blur(8px); }
+.curso-hero__badge svg { width: 14px; height: 14px; }
+.curso-hero h1 { font-family: var(--font-sans); font-size: clamp(1.7rem, 4vw, 2.4rem); font-weight: 800; line-height: 1.1; letter-spacing: -.03em; margin-bottom: 10px; }
+.curso-hero__sub { font-size: .98rem; opacity: 0.9; max-width: 600px; line-height: 1.55; }
+.curso-hero__welcome { margin-top: 18px; padding-top: 18px; border-top: 1px solid rgba(255,255,255,0.15); font-size: .93rem; opacity: 0.95; }
+.curso-hero__welcome b { font-weight: 700; }
+
+.curso-layout { display: grid; grid-template-columns: 1fr 340px; gap: 32px; margin-bottom: 40px; }
+@media (max-width: 900px) { .curso-layout { grid-template-columns: 1fr; } }
+
+.clase-actual { background: #fff; border-radius: 20px; overflow: hidden; box-shadow: var(--shadow-sm); border: 1px solid var(--line); }
+.clase-video { position: relative; width: 100%; aspect-ratio: 16 / 9; background: var(--ink); }
+.clase-video iframe { position: absolute; inset: 0; width: 100%; height: 100%; border: 0; }
+.clase-info { padding: 22px 26px; }
+.clase-info__num { display: inline-block; font-size: .74rem; font-weight: 700; letter-spacing: .1em; text-transform: uppercase; color: var(--brand); margin-bottom: 8px; }
+.clase-info h2 { font-family: var(--font-sans); font-size: 1.35rem; font-weight: 800; color: var(--ink); letter-spacing: -.02em; margin-bottom: 8px; }
+.clase-info__meta { display: flex; align-items: center; gap: 16px; color: var(--ink-mute); font-size: .86rem; }
+.clase-info__meta span { display: inline-flex; align-items: center; gap: 6px; }
+.clase-info__meta svg { width: 14px; height: 14px; }
+
+.clases-sidebar { background: #fff; border-radius: 20px; overflow: hidden; box-shadow: var(--shadow-sm); border: 1px solid var(--line); height: fit-content; position: sticky; top: 24px; }
+.clases-sidebar__head { padding: 18px 22px; border-bottom: 1px solid var(--line); background: var(--paper-soft); }
+.clases-sidebar__head h3 { font-family: var(--font-sans); font-size: .98rem; font-weight: 800; color: var(--ink); letter-spacing: -.01em; margin-bottom: 4px; }
+.clases-sidebar__head small { color: var(--ink-mute); font-size: .78rem; }
+.clases-list { list-style: none; max-height: 480px; overflow-y: auto; }
+.clases-list::-webkit-scrollbar { width: 4px; }
+.clases-list::-webkit-scrollbar-thumb { background: var(--line-strong); border-radius: 2px; }
+.clase-item { display: flex; align-items: flex-start; gap: 12px; padding: 14px 22px; cursor: pointer; border-bottom: 1px solid var(--line); transition: background .15s ease; }
+.clase-item:hover { background: var(--paper-soft); }
+.clase-item.is-active { background: var(--brand-bg); border-left: 3px solid var(--brand); padding-left: 19px; }
+.clase-item__num { width: 28px; height: 28px; border-radius: 8px; background: var(--paper-warm); color: var(--ink); display: grid; place-items: center; font-weight: 700; font-size: .78rem; flex-shrink: 0; }
+.clase-item.is-active .clase-item__num { background: var(--brand); color: #fff; }
+.clase-item__info { flex: 1; min-width: 0; }
+.clase-item__info b { display: block; font-size: .9rem; font-weight: 600; color: var(--ink); line-height: 1.35; margin-bottom: 4px; letter-spacing: -.005em; }
+.clase-item.is-active .clase-item__info b { color: var(--brand-dark); }
+.clase-item__info small { color: var(--ink-mute); font-size: .74rem; display: inline-flex; align-items: center; gap: 4px; }
+.clase-item__info small svg { width: 11px; height: 11px; }
+
+.recursos-section { background: #fff; border-radius: 20px; padding: 30px 32px; box-shadow: var(--shadow-sm); border: 1px solid var(--line); margin-bottom: 28px; }
+.recursos-section h2 { display: flex; align-items: center; gap: 10px; font-family: var(--font-sans); font-size: 1.25rem; font-weight: 800; color: var(--ink); letter-spacing: -.02em; margin-bottom: 20px; }
+.recursos-section h2 svg { width: 22px; height: 22px; color: var(--brand); }
+.recursos-list { list-style: none; display: grid; grid-template-columns: repeat(auto-fill, minmax(280px, 1fr)); gap: 12px; }
+.recurso-card { display: flex; align-items: center; gap: 14px; padding: 16px 18px; background: var(--paper-soft); border: 1px solid var(--line); border-radius: 14px; transition: transform .18s ease, box-shadow .18s ease, border-color .18s ease; }
+.recurso-card:hover { transform: translateY(-2px); border-color: var(--brand); box-shadow: var(--shadow-sm); background: #fff; }
+.recurso-card__ico { width: 42px; height: 42px; border-radius: 10px; background: var(--brand); color: #fff; display: grid; place-items: center; flex-shrink: 0; }
+.recurso-card__ico svg { width: 20px; height: 20px; }
+.recurso-card__ico--pdf { background: #DC2626; }
+.recurso-card__ico--xlsx { background: #16A34A; }
+.recurso-card__info { flex: 1; min-width: 0; }
+.recurso-card__info b { display: block; font-size: .9rem; font-weight: 700; color: var(--ink); margin-bottom: 2px; }
+.recurso-card__info small { color: var(--ink-mute); font-size: .74rem; text-transform: uppercase; letter-spacing: .06em; }
+.recurso-card__arrow { color: var(--ink-mute); transition: color .15s ease, transform .15s ease; }
+.recurso-card:hover .recurso-card__arrow { color: var(--brand); transform: translateX(2px); }
+.recurso-card__arrow svg { width: 18px; height: 18px; }
+
+.help-wa { background: linear-gradient(135deg, #25D366, #128C7E); color: #fff; padding: 22px 26px; border-radius: 20px; display: flex; align-items: center; gap: 18px; box-shadow: 0 8px 24px rgba(37, 211, 102, 0.25); }
+.help-wa__ico { width: 48px; height: 48px; border-radius: 14px; background: rgba(255,255,255,0.2); display: grid; place-items: center; flex-shrink: 0; backdrop-filter: blur(8px); }
+.help-wa__ico svg { width: 24px; height: 24px; }
+.help-wa__info { flex: 1; min-width: 0; }
+.help-wa__info b { display: block; font-weight: 800; font-size: 1rem; margin-bottom: 4px; letter-spacing: -.01em; }
+.help-wa__info span { display: block; opacity: 0.9; font-size: .86rem; }
+.help-wa a { padding: 10px 18px; background: #fff; color: #128C7E; border-radius: 999px; font-weight: 700; font-size: .86rem; white-space: nowrap; transition: transform .18s ease; }
+.help-wa a:hover { transform: translateY(-2px); }
+@media (max-width: 640px) { .help-wa { flex-direction: column; text-align: center; } }
+
+.footer { background: var(--ink); color: rgba(254, 252, 247, 0.6); padding: 32px 0; text-align: center; font-size: .84rem; }
+.footer b { color: rgba(254, 252, 247, 0.85); }
+</style>
 </head>
 
 <body data-slug="embutidos-artesanales">
 
-<!-- ═══════ HEADER PREMIUM ═══════ -->
-<header class="acc-header">
-  <div class="container acc-header__inner">
-    <a href="/" class="acc-header__brand" aria-label="Visión Pecuaria — Inicio">
-      <div class="acc-header__brand-mark">
-        <img src="/assets/brand/logo-vp.png" alt="VP">
-      </div>
-      <div class="acc-header__brand-text">
+<header class="hdr">
+  <div class="container hdr__inner">
+    <a href="/" class="hdr__brand">
+      <div class="hdr__brand-mark"><img src="/assets/brand/logo-vp.png" alt=""></div>
+      <div class="hdr__brand-text">
         <b>Visión Pecuaria</b>
         <small>Panel del alumno</small>
       </div>
     </a>
-    <div class="acc-header__actions">
-      <span class="acc-header__hi" data-user-hi>—</span>
-      <button class="acc-header__logout" id="btn-logout" aria-label="Cerrar sesión">
-        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M9 21H5a2 2 0 01-2-2V5a2 2 0 012-2h4"/><polyline points="16 17 21 12 16 7"/><line x1="21" y1="12" x2="9" y2="12"/></svg>
-        <span>Salir</span>
-      </button>
+    <div class="hdr__user">
+      <span class="hdr__user-name" id="user-name"></span>
+      <a href="/" class="btn btn--outline" style="padding:8px 16px;font-size:.85rem;border-color:rgba(255,255,255,0.2);color:#fff;">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M9 21H5a2 2 0 01-2-2V5a2 2 0 012-2h4"/><polyline points="16 17 21 12 16 7"/><line x1="21" y1="12" x2="9" y2="12"/></svg>
+        Inicio
+      </a>
     </div>
   </div>
 </header>
 
-<!-- ═══════ ESTADO: CARGANDO ═══════ -->
-<div class="acc-loading" id="acceso-loading">
-  <div class="acc-loading__box">
-    <div class="acc-loading__spinner"></div>
-    <p>Verificando tu acceso...</p>
-  </div>
-</div>
-
-<!-- ═══════ ESTADO: SIN ACCESO ═══════ -->
-<div class="acc-denegado" id="acceso-denegado" hidden>
-  <div class="container">
-    <div class="acc-denegado__card">
-      <div class="acc-denegado__ico">
-        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="11" width="18" height="10" rx="2"/><path d="M7 11V7a5 5 0 0110 0v4"/></svg>
-      </div>
-      <h2 data-denegado-title>Inicia sesión para ver tu curso</h2>
-      <p data-denegado-msg>Necesitamos verificar que la cuenta con la que iniciaste sesión coincide con la que usaste al pagar.</p>
-      <div class="acc-denegado__actions">
-        <button class="btn-primary" id="btn-signin-acceso">
-          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"><path d="M20 21v-2a4 4 0 00-4-4H8a4 4 0 00-4 4v2"/><circle cx="12" cy="7" r="4"/></svg>
-          Iniciar sesión con Google
-        </button>
-        <a href="/embutidos-artesanales.html" class="btn-secondary">Ver el curso</a>
-      </div>
+<main>
+  <div class="container" id="state-loading">
+    <div class="loading">
+      <div class="loader"></div>
+      <p>Verificando tu acceso...</p>
     </div>
   </div>
-</div>
 
-<!-- ═══════ ESTADO: CON ACCESO ═══════ -->
-<main class="acc-main" id="acceso-main" hidden>
-
-  <!-- HERO PREMIUM -->
-  <section class="acc-hero">
-    <div class="acc-hero__bg">
-      <picture>
-        <source type="image/webp" srcset="/assets/curso-chorizo/hero-chef-1024.webp 1024w, /assets/curso-chorizo/hero-chef-1600.webp 1600w, /assets/curso-chorizo/hero-chef-2400.webp 2400w" sizes="100vw">
-        <img src="/assets/curso-chorizo/hero-chef-1600.jpg" alt="" loading="eager">
-      </picture>
+  <div class="container" id="state-no-access" hidden>
+    <div class="no-access">
+      <div class="no-access__ico">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="11" width="18" height="11" rx="2" ry="2"/><path d="M7 11V7a5 5 0 0110 0v4"/></svg>
+      </div>
+      <h1 id="no-access-title">Aún no tenemos registro de tu pago</h1>
+      <p id="no-access-msg">Si acabas de pagar, espera unos segundos y refresca. Si sigue sin funcionar, escríbenos por WhatsApp y te ayudamos.</p>
+      <div style="display:flex;gap:10px;flex-wrap:wrap;justify-content:center;">
+        <a href="javascript:location.reload()" class="btn btn--primary">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="1 4 1 10 7 10"/><path d="M3.51 15a9 9 0 102.13-9.36L1 10"/></svg>
+          Refrescar
+        </a>
+        <a href="https://wa.me/522382514313?text=Hola%2C%20acabo%20de%20pagar%20el%20curso%20y%20no%20puedo%20acceder" class="btn btn--wa" target="_blank" rel="noopener">
+          <svg viewBox="0 0 24 24" fill="currentColor"><path d="M20.52 3.48A11.86 11.86 0 0012.06 0C5.5 0 .16 5.34.16 11.9c0 2.1.55 4.14 1.6 5.94L0 24l6.32-1.66a11.87 11.87 0 005.73 1.46h.01c6.56 0 11.9-5.34 11.9-11.9 0-3.18-1.24-6.16-3.48-8.42z"/></svg>
+          WhatsApp
+        </a>
+      </div>
     </div>
-    <div class="acc-hero__overlay"></div>
-    <div class="container acc-hero__inner">
-      <span class="acc-hero__eyebrow">
-        <span class="acc-hero__dot"></span>
-        Acceso activo · Bienvenido
-      </span>
-      <h1 class="acc-hero__title" data-curso-titulo>Tu curso</h1>
-      <p class="acc-hero__sub">Tienes acceso permanente al contenido, materiales descargables y tu certificado digital.</p>
+  </div>
 
-      <div class="acc-hero__meta">
-        <div class="acc-hero__meta-item">
-          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"/><path d="M12 6v6l4 2"/></svg>
-          <span data-curso-duracion>—</span>
+  <div id="state-course" hidden>
+    <div class="curso-hero">
+      <div class="container">
+        <div class="curso-hero__badge">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"/></svg>
+          Acceso activo
         </div>
-        <div class="acc-hero__meta-item">
-          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 2v20M17 5H9.5a3.5 3.5 0 000 7h5a3.5 3.5 0 010 7H6"/></svg>
-          <span data-curso-instructor>—</span>
-        </div>
-        <div class="acc-hero__meta-item">
-          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M22 11.08V12a10 10 0 11-5.93-9.14"/><polyline points="22 4 12 14.01 9 11.01"/></svg>
-          <span>Certificado con folio</span>
+        <h1 id="curso-nombre">Cargando curso...</h1>
+        <p class="curso-hero__sub" id="curso-sub"></p>
+        <div class="curso-hero__welcome" id="welcome-msg" hidden>
+          Bienvenido/a, <b id="alumno-nombre"></b>. Puedes ver las clases cuando quieras: el acceso es permanente.
         </div>
       </div>
     </div>
-  </section>
 
-  <!-- CONTENIDO -->
-  <div class="acc-container">
-
-    <!-- CLASES -->
-    <section class="acc-section" id="section-clases">
-      <div class="acc-section__head">
-        <div>
-          <span class="acc-eyebrow">Contenido del curso</span>
-          <h2 class="acc-section__title">Videoclases</h2>
-          <p class="acc-section__sub" data-clases-info>Reproduce en el orden que prefieras. Acceso permanente.</p>
-        </div>
-      </div>
-      <div class="clases-grid" id="clases-grid"></div>
-    </section>
-
-    <!-- RECURSOS -->
-    <section class="acc-section" id="section-recursos">
-      <div class="acc-section__head">
-        <div>
-          <span class="acc-eyebrow">Herramientas</span>
-          <h2 class="acc-section__title">Materiales descargables</h2>
-          <p class="acc-section__sub">Guárdalos en tu compu o celular. Descárgalos cuantas veces necesites.</p>
-        </div>
-      </div>
-      <div class="recursos-grid" id="recursos-grid"></div>
-    </section>
-
-    <!-- CERTIFICADO -->
-    <section class="acc-section" id="section-certificado">
-      <div class="acc-section__head">
-        <div>
-          <span class="acc-eyebrow">Tu diploma digital</span>
-          <h2 class="acc-section__title">Certificado con QR verificable</h2>
-        </div>
-      </div>
-      <div class="cert-card" id="certificado-card">
-        <div class="cert-card__shine"></div>
-        <div class="cert-card__inner">
-          <div class="cert-card__ico">
-            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="8" r="7"/><polyline points="8.21 13.89 7 23 12 20 17 23 15.79 13.88"/></svg>
+    <div class="container">
+      <div class="curso-layout">
+        <div class="clase-actual">
+          <div class="clase-video">
+            <iframe id="video-iframe" src="" allow="autoplay; fullscreen" allowfullscreen></iframe>
           </div>
-          <div class="cert-card__body">
-            <div class="cert-card__estado" data-cert-estado>Verificando tu certificado...</div>
-            <div class="cert-card__folio" data-cert-folio></div>
-            <p class="cert-card__desc">Tu certificado ya fue emitido y enviado por email. Aquí puedes verlo, descargarlo como PDF o compartir el link con LinkedIn, Facebook o WhatsApp.</p>
-            <div class="cert-card__actions">
-              <a href="#" class="btn-primary btn--gold" id="btn-ver-certificado" hidden>
-                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"><path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z"/><circle cx="12" cy="12" r="3"/></svg>
-                Ver mi certificado
-              </a>
-              <button class="btn-secondary btn-secondary--light" id="btn-reenviar-email">
-                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M4 4h16c1.1 0 2 .9 2 2v12c0 1.1-.9 2-2 2H4c-1.1 0-2-.9-2-2V6c0-1.1.9-2 2-2z"/><polyline points="22,6 12,13 2,6"/></svg>
-                Reenviar por email
-              </button>
+          <div class="clase-info">
+            <div class="clase-info__num" id="clase-num">Clase 01</div>
+            <h2 id="clase-titulo">Cargando...</h2>
+            <div class="clase-info__meta">
+              <span>
+                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"/><polyline points="12 6 12 12 16 14"/></svg>
+                <span id="clase-duracion">-</span>
+              </span>
             </div>
           </div>
         </div>
-      </div>
-    </section>
 
-    <!-- COMUNIDAD -->
-    <section class="acc-section" id="section-comunidad">
-      <div class="acc-section__head">
-        <div>
-          <span class="acc-eyebrow">Estemos en contacto</span>
-          <h2 class="acc-section__title">Únete a la comunidad</h2>
+        <aside class="clases-sidebar">
+          <div class="clases-sidebar__head">
+            <h3>Clases del curso</h3>
+            <small id="clases-count">-</small>
+          </div>
+          <ul class="clases-list" id="clases-list"></ul>
+        </aside>
+      </div>
+
+      <div class="recursos-section" id="recursos-section" hidden>
+        <h2>
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M14 2H6a2 2 0 00-2 2v16a2 2 0 002 2h12a2 2 0 002-2V8z"/><polyline points="14 2 14 8 20 8"/></svg>
+          Recursos descargables
+        </h2>
+        <ul class="recursos-list" id="recursos-list"></ul>
+      </div>
+
+      <div class="help-wa">
+        <div class="help-wa__ico">
+          <svg viewBox="0 0 24 24" fill="currentColor"><path d="M20.52 3.48A11.86 11.86 0 0012.06 0C5.5 0 .16 5.34.16 11.9c0 2.1.55 4.14 1.6 5.94L0 24l6.32-1.66a11.87 11.87 0 005.73 1.46h.01c6.56 0 11.9-5.34 11.9-11.9 0-3.18-1.24-6.16-3.48-8.42z"/></svg>
         </div>
+        <div class="help-wa__info">
+          <b>¿Tienes dudas sobre alguna clase?</b>
+          <span>Escríbenos al WhatsApp del curso y te ayudamos personalmente.</span>
+        </div>
+        <a href="https://wa.me/522382514313?text=Hola%2C%20tengo%20una%20duda%20sobre%20el%20curso" target="_blank" rel="noopener">Contactar</a>
       </div>
-      <div class="comunidad-grid">
-        <a href="https://whatsapp.com/channel/0029VbBxvxG8F2pBBhVO6O0m" target="_blank" rel="noopener" class="comunidad-card comunidad-card--canal">
-          <div class="comunidad-card__ico">
-            <svg viewBox="0 0 24 24" fill="currentColor"><path d="M20.52 3.48A11.86 11.86 0 0012.06 0C5.5 0 .16 5.34.16 11.9c0 2.1.55 4.14 1.6 5.94L0 24l6.32-1.66a11.87 11.87 0 005.73 1.46h.01c6.56 0 11.9-5.34 11.9-11.9 0-3.18-1.24-6.16-3.48-8.42z"/></svg>
-          </div>
-          <div>
-            <b>Canal VIP de WhatsApp</b>
-            <small>Novedades, tips exclusivos y avisos de nuevas capacitaciones</small>
-          </div>
-          <div class="comunidad-card__arrow">
-            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12h14M13 5l7 7-7 7"/></svg>
-          </div>
-        </a>
-        <a href="https://wa.me/522382514313" target="_blank" rel="noopener" class="comunidad-card comunidad-card--soporte">
-          <div class="comunidad-card__ico">
-            <svg viewBox="0 0 24 24" fill="currentColor"><path d="M20.52 3.48A11.86 11.86 0 0012.06 0C5.5 0 .16 5.34.16 11.9c0 2.1.55 4.14 1.6 5.94L0 24l6.32-1.66a11.87 11.87 0 005.73 1.46h.01c6.56 0 11.9-5.34 11.9-11.9 0-3.18-1.24-6.16-3.48-8.42z"/></svg>
-          </div>
-          <div>
-            <b>Soporte del curso</b>
-            <small>238-251-4313 · Dudas técnicas o de contenido</small>
-          </div>
-          <div class="comunidad-card__arrow">
-            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12h14M13 5l7 7-7 7"/></svg>
-          </div>
-        </a>
-      </div>
-    </section>
-
+    </div>
   </div>
 </main>
 
-<!-- ═══════ MODAL VIDEO PLAYER ═══════ -->
-<div class="modal" id="modal-video" role="dialog" aria-modal="true">
-  <div class="modal__card modal__card--video">
-    <div class="modal__head">
-      <span class="modal__title" data-video-titulo>Clase</span>
-      <button class="modal__close" data-close-modal="modal-video" aria-label="Cerrar">
-        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><line x1="18" y1="6" x2="6" y2="18"/><line x1="6" y1="6" x2="18" y2="18"/></svg>
-      </button>
-    </div>
-    <div class="modal__body modal__body--video">
-      <div class="video-player-wrap"></div>
-      <div class="video-player-info" data-video-info></div>
-    </div>
-  </div>
-</div>
-
-<div class="toast" id="toast" role="status" aria-live="polite"></div>
-
-<!-- ═══════ FOOTER MINIMAL ═══════ -->
-<footer class="acc-footer">
-  <div class="container acc-footer__inner">
-    <div class="acc-footer__brand">
-      <img src="/assets/brand/logo-vp.png" alt="Visión Pecuaria">
-      <div>
-        <b>Visión Pecuaria</b>
-        <small>© 2026 · Excelencia en producción animal</small>
-      </div>
-    </div>
-    <div class="acc-footer__links">
-      <a href="/">Inicio</a>
-      <a href="https://wa.me/522382514313" target="_blank" rel="noopener">WhatsApp</a>
-      <a href="https://www.instagram.com/visionpecuaria/" target="_blank" rel="noopener">Instagram</a>
-    </div>
+<footer class="footer">
+  <div class="container">
+    © 2026 <b>Visión Pecuaria</b> · Excelencia en producción animal · IPCIL
   </div>
 </footer>
 
-<script type="module" src="/assets/js/curso-acceso.js"></script>
+<script type="module">
+import { initializeApp } from "https://www.gstatic.com/firebasejs/10.11.0/firebase-app.js";
+import { getFirestore, doc, getDoc } from "https://www.gstatic.com/firebasejs/10.11.0/firebase-firestore.js";
+
+const firebaseConfig = {
+  apiKey: "AIzaSyDQXkIo-BWPIeLZzHeTMN986WMDn0TrTJU",
+  authDomain: "visionpecuaria-vip.firebaseapp.com",
+  projectId: "visionpecuaria-vip",
+  storageBucket: "visionpecuaria-vip.firebasestorage.app",
+  messagingSenderId: "978318807782",
+  appId: "1:978318807782:web:626e67bb30795c15b02127"
+};
+
+const app = initializeApp(firebaseConfig);
+const db = getFirestore(app);
+
+const $ = (id) => document.getElementById(id);
+const params = new URLSearchParams(location.search);
+const slugFromUrl = params.get('slug');
+const sessionIdFromUrl = params.get('session_id');
+const SLUG = slugFromUrl || document.body.dataset.slug || 'embutidos-artesanales';
+
+let cursoData = null;
+let inscripcionData = null;
+let claseActualIdx = 0;
+
+function showState(state) {
+  ['state-loading', 'state-no-access', 'state-course'].forEach(id => {
+    $(id).hidden = (id !== 'state-' + state);
+  });
+}
+
+function mostrarSinAcceso(mensaje) {
+  if (mensaje) $('no-access-msg').textContent = mensaje;
+  showState('no-access');
+}
+
+async function buscarInscripcionEnColeccion(colName, sessionId) {
+  try {
+    const snap = await getDoc(doc(db, colName, sessionId));
+    return snap.exists() ? snap.data() : null;
+  } catch (err) {
+    console.warn(`No se pudo leer ${colName}:`, err);
+    return null;
+  }
+}
+
+async function verificarAcceso() {
+  let sessionId = sessionIdFromUrl;
+  if (!sessionId) sessionId = localStorage.getItem(`vp_acceso_${SLUG}`);
+
+  if (!sessionId) {
+    mostrarSinAcceso('No encontramos tu registro de pago. Si aún no has comprado el curso, ve a la landing para inscribirte. Si ya pagaste, escríbenos por WhatsApp.');
+    return;
+  }
+
+  try {
+    // El backend puede guardar la inscripción en diferentes colecciones según cómo se implementó
+    // Probamos varias: inscripcionesCurso, comprasCurso, certificadosPendientes
+    let data = await buscarInscripcionEnColeccion('inscripcionesCurso', sessionId);
+    if (!data) data = await buscarInscripcionEnColeccion('comprasCurso', sessionId);
+    if (!data) data = await buscarInscripcionEnColeccion('certificadosPendientes', sessionId);
+
+    if (!data) {
+      // Retry por si el webhook aún no procesó (delay de Stripe)
+      if (sessionIdFromUrl && !window.__vpRetried) {
+        window.__vpRetried = true;
+        setTimeout(verificarAcceso, 3000);
+        return;
+      }
+      mostrarSinAcceso('Aún no procesamos tu pago en nuestro sistema. Si acabas de pagar, espera 30 segundos y refresca. Si sigue sin funcionar, escríbenos por WhatsApp.');
+      return;
+    }
+
+    inscripcionData = data;
+
+    if (data.slug && data.slug !== SLUG) {
+      mostrarSinAcceso('El pago que hiciste corresponde a otro curso. Verifica el link que estás usando o escríbenos por WhatsApp.');
+      return;
+    }
+
+    localStorage.setItem(`vp_acceso_${SLUG}`, sessionId);
+    if (data.nombre) localStorage.setItem(`vp_nombre_${SLUG}`, data.nombre);
+
+    if (data.nombre) {
+      const firstName = data.nombre.split(' ')[0];
+      $('user-name').textContent = `Hola, ${firstName}`;
+      $('alumno-nombre').textContent = data.nombre;
+      $('welcome-msg').hidden = false;
+    }
+
+    await cargarCurso();
+  } catch (err) {
+    console.error('Error verificando acceso:', err);
+    mostrarSinAcceso('Ocurrió un error al verificar tu acceso. Intenta refrescar la página o escríbenos por WhatsApp.');
+  }
+}
+
+async function cargarCurso() {
+  try {
+    const cursoSnap = await getDoc(doc(db, 'cursosVenta', SLUG));
+
+    if (!cursoSnap.exists()) {
+      mostrarSinAcceso('No encontramos este curso. Escríbenos por WhatsApp para ayudarte.');
+      return;
+    }
+
+    cursoData = cursoSnap.data();
+    $('curso-nombre').textContent = cursoData.nombre || 'Mi curso';
+    $('curso-sub').textContent = cursoData.subtitulo || '';
+    document.title = `${cursoData.nombre || 'Mi curso'} · Visión Pecuaria`;
+
+    pintarClases();
+    pintarRecursos();
+    showState('course');
+  } catch (err) {
+    console.error('Error cargando curso:', err);
+    mostrarSinAcceso('No pudimos cargar el contenido del curso. Refresca o escríbenos por WhatsApp.');
+  }
+}
+
+function pintarClases() {
+  const clases = (cursoData.clases || []).slice().sort((a, b) => (a.orden || 0) - (b.orden || 0));
+
+  if (!clases.length) {
+    $('clases-list').innerHTML = '<li style="padding:20px 24px;color:var(--ink-mute);font-size:.9rem;">Aún no hay clases publicadas. Vuelve pronto.</li>';
+    $('clases-count').textContent = 'Sin clases aún';
+    $('clase-titulo').textContent = 'Aún no hay clases disponibles';
+    $('clase-duracion').textContent = '-';
+    return;
+  }
+
+  $('clases-count').textContent = `${clases.length} ${clases.length === 1 ? 'clase' : 'clases'} · Acceso permanente`;
+
+  const list = $('clases-list');
+  list.innerHTML = '';
+  clases.forEach((clase, idx) => {
+    const li = document.createElement('li');
+    li.className = 'clase-item' + (idx === 0 ? ' is-active' : '');
+    li.dataset.idx = idx;
+    li.innerHTML = `
+      <div class="clase-item__num">${String(idx + 1).padStart(2, '0')}</div>
+      <div class="clase-item__info">
+        <b></b>
+        <small>
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"/><polyline points="12 6 12 12 16 14"/></svg>
+          ${clase.duracionMin || 60} min
+        </small>
+      </div>
+    `;
+    li.querySelector('b').textContent = clase.titulo || `Clase ${idx + 1}`;
+    li.addEventListener('click', () => cambiarClase(idx));
+    list.appendChild(li);
+  });
+
+  cambiarClase(0);
+}
+
+function cambiarClase(idx) {
+  const clases = (cursoData.clases || []).slice().sort((a, b) => (a.orden || 0) - (b.orden || 0));
+  const clase = clases[idx];
+  if (!clase) return;
+
+  claseActualIdx = idx;
+
+  let videoSrc = clase.embedUrl || '';
+  if (!videoSrc && clase.driveUrl) {
+    const m = clase.driveUrl.match(/\/d\/([^\/]+)/);
+    if (m) videoSrc = `https://drive.google.com/file/d/${m[1]}/preview`;
+  }
+
+  $('video-iframe').src = videoSrc || 'about:blank';
+  $('clase-num').textContent = `Clase ${String(idx + 1).padStart(2, '0')}`;
+  $('clase-titulo').textContent = clase.titulo || `Clase ${idx + 1}`;
+  $('clase-duracion').textContent = `${clase.duracionMin || 60} min`;
+
+  document.querySelectorAll('.clase-item').forEach((el, i) => {
+    el.classList.toggle('is-active', i === idx);
+  });
+
+  if (window.innerWidth < 900) {
+    $('video-iframe').scrollIntoView({ behavior: 'smooth', block: 'center' });
+  }
+}
+
+function pintarRecursos() {
+  const recursos = cursoData.recursosDescargables || [];
+  if (!recursos.length) {
+    $('recursos-section').hidden = true;
+    return;
+  }
+
+  $('recursos-section').hidden = false;
+  const list = $('recursos-list');
+  list.innerHTML = '';
+
+  recursos.forEach(r => {
+    const tipo = (r.tipo || '').toLowerCase();
+    let icoClass = '';
+    let icoSvg = '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M14 2H6a2 2 0 00-2 2v16a2 2 0 002 2h12a2 2 0 002-2V8z"/><polyline points="14 2 14 8 20 8"/></svg>';
+    if (tipo === 'pdf') {
+      icoClass = 'recurso-card__ico--pdf';
+      icoSvg = '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M14 2H6a2 2 0 00-2 2v16a2 2 0 002 2h12a2 2 0 002-2V8z"/><polyline points="14 2 14 8 20 8"/><line x1="9" y1="15" x2="15" y2="15"/></svg>';
+    } else if (tipo === 'xlsx' || tipo === 'xls') {
+      icoClass = 'recurso-card__ico--xlsx';
+      icoSvg = '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="3" width="18" height="18" rx="2"/><path d="M8 7v10M16 7v10M3 12h18"/></svg>';
+    }
+
+    const li = document.createElement('li');
+    const isExternal = r.url && (r.url.startsWith('http://') || r.url.startsWith('https://'));
+    const a = document.createElement('a');
+    a.href = r.url || '#';
+    a.className = 'recurso-card';
+    if (isExternal) {
+      a.target = '_blank';
+      a.rel = 'noopener';
+    } else {
+      a.setAttribute('download', '');
+    }
+    a.innerHTML = `
+      <div class="recurso-card__ico ${icoClass}">${icoSvg}</div>
+      <div class="recurso-card__info">
+        <b></b>
+        <small>${(r.tipo || 'archivo').toUpperCase()}</small>
+      </div>
+      <div class="recurso-card__arrow">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"><path d="M12 3v13"/><polyline points="7 8 12 3 17 8"/><path d="M20 21H4"/></svg>
+      </div>
+    `;
+    a.querySelector('b').textContent = r.titulo || 'Recurso';
+    li.appendChild(a);
+    list.appendChild(li);
+  });
+}
+
+verificarAcceso();
+</script>
 
 </body>
 </html>
