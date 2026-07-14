@@ -203,24 +203,24 @@
     <div class="tab-panel is-active" data-panel="instructor">
       <div class="instructor-card">
         <div class="instructor-photo">
-          <img src="/assets/curso-chorizo/instructor-castillo-800.jpg" alt="M.V.Z. José Antonio Castillo García">
+          <img data-instructor-foto src="/assets/curso-chorizo/instructor-castillo-800.jpg" alt="Foto del ponente">
         </div>
         <div class="instructor-info">
           <div class="instructor-eyebrow">
             <span style="font-size:1rem;line-height:1;">👨‍🏫</span>
             Ponente del curso
           </div>
-          <h3 class="instructor-name">M.V.Z. José Antonio Castillo García</h3>
-          <p class="instructor-role">Médico Veterinario Zootecnista · <b>Especialista en Embutidos Artesanales</b></p>
+          <h3 class="instructor-name" data-instructor-nombre>M.V.Z. José Antonio Castillo García</h3>
+          <p class="instructor-role" data-instructor-titulo>Médico Veterinario Zootecnista · <b>Especialista en Embutidos Artesanales</b></p>
 
-          <p class="instructor-bio">
+          <p class="instructor-bio" data-instructor-bio1>
             Egresado de la Facultad de Medicina Veterinaria y Zootecnia. Con más de <b>15 años de experiencia</b> en producción cárnica, transformación de alimentos artesanales y capacitación técnica en comunidades rurales de Puebla, Tlaxcala y Estado de México.
           </p>
-          <p class="instructor-bio">
+          <p class="instructor-bio" data-instructor-bio2>
             Ha capacitado a más de <b>800 productores</b> en técnicas tradicionales mexicanas de elaboración de chorizo, longaniza, carne enchilada y otros embutidos artesanales. Colaborador de programas SAGARPA/SADER de fortalecimiento a la agricultura familiar.
           </p>
 
-          <div class="instructor-tags">
+          <div class="instructor-tags" data-instructor-tags>
             <span class="pill">
               <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"/><polyline points="12 6 12 12 16 14"/></svg>
               15+ años de experiencia
@@ -928,9 +928,88 @@ async function actualizarPreciosDesdeFirestore() {
         el.textContent = restantes;
       });
     }
+
+    // Cargar datos del instructor (2 estrategias)
+    await cargarInstructor(data);
   } catch (err) {
     console.warn('[VP] Error leyendo precios de Firestore:', err);
   }
+}
+
+async function cargarInstructor(cursoData) {
+  try {
+    let instructor = null;
+
+    // Estrategia A: si el curso tiene campos directos del instructor, usarlos
+    if (cursoData.instructorNombre || cursoData.instructorFoto || cursoData.instructorBio1) {
+      instructor = {
+        nombre: cursoData.instructorNombre,
+        titulo: cursoData.instructorTitulo,
+        foto: cursoData.instructorFoto,
+        bio1: cursoData.instructorBio1,
+        bio2: cursoData.instructorBio2,
+        tags: cursoData.instructorTags || []
+      };
+    }
+    // Estrategia B: si tiene instructorId, buscar en colección instructores/{id}
+    else if (cursoData.instructorId) {
+      try {
+        const instSnap = await getDoc(doc(db, 'instructores', cursoData.instructorId));
+        if (instSnap.exists()) instructor = instSnap.data();
+      } catch (e) {
+        console.warn('[VP] No se pudo leer instructores/' + cursoData.instructorId);
+      }
+    }
+
+    if (!instructor) return;
+
+    // Actualizar DOM (solo si el campo tiene valor, si no deja el fallback)
+    if (instructor.nombre) {
+      document.querySelectorAll('[data-instructor-nombre]').forEach(el => {
+        el.textContent = instructor.nombre;
+      });
+    }
+    if (instructor.titulo) {
+      document.querySelectorAll('[data-instructor-titulo]').forEach(el => {
+        el.innerHTML = instructor.titulo;  // permite <b> dentro
+      });
+    }
+    if (instructor.foto) {
+      document.querySelectorAll('[data-instructor-foto]').forEach(el => {
+        el.src = instructor.foto;
+        el.alt = instructor.nombre || 'Ponente';
+      });
+    }
+    if (instructor.bio1) {
+      document.querySelectorAll('[data-instructor-bio1]').forEach(el => {
+        el.innerHTML = instructor.bio1;
+      });
+    }
+    if (instructor.bio2) {
+      document.querySelectorAll('[data-instructor-bio2]').forEach(el => {
+        el.innerHTML = instructor.bio2;
+      });
+    }
+    if (Array.isArray(instructor.tags) && instructor.tags.length > 0) {
+      const cont = document.querySelector('[data-instructor-tags]');
+      if (cont) {
+        cont.innerHTML = instructor.tags.map(tag => `
+          <span class="pill">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"/></svg>
+            ${escapeHtml(tag)}
+          </span>
+        `).join('');
+      }
+    }
+  } catch (err) {
+    console.warn('[VP] Error cargando instructor:', err);
+  }
+}
+
+function escapeHtml(str) {
+  const div = document.createElement('div');
+  div.textContent = str || '';
+  return div.innerHTML;
 }
 
 actualizarPreciosDesdeFirestore();
