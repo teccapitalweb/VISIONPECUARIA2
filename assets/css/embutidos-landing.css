@@ -1308,6 +1308,13 @@ input, textarea { font-family: inherit; }
   overflow-y: auto;
   box-shadow: var(--shadow-xl);
   animation: slideUp .3s ease;
+  scrollbar-width: none;
+  -ms-overflow-style: none;
+}
+.modal__card::-webkit-scrollbar {
+  display: none;
+  width: 0;
+  height: 0;
 }
 @keyframes slideUp {
   from { transform: translateY(20px); opacity: 0; }
