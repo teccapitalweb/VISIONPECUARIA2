@@ -2136,95 +2136,82 @@
     if (cont) cont.innerHTML =
       '<div class="pay-loading"><div class="spinner"></div>Preparando pago seguro…</div>';
 
-    var payload = {
-      slug: COURSE_SLUG,
-      nombre: datos.nombre,
-      email: datos.email,
-      telefono: datos.telefono
-    };
-
-    // Endpoints candidatos (el backend acepta uno de estos según su versión)
-    var endpoints = [
-      // Patrón Sinergia (gerberas usa este exacto)
-      '/stripe/' + COURSE_SLUG + '/checkout-session',
-      '/stripe/curso/' + COURSE_SLUG + '/checkout-session',
-      '/stripe/curso/checkout-session',
-      '/stripe/checkout-session',
-      '/stripe/checkout',
-      // Patrones comunes IPCIL/VP
-      '/crear-checkout-session-curso',
-      '/crear-checkout-session',
-      '/crear-checkout-curso',
-      '/crear-checkout',
-      '/checkout-session-curso',
-      '/checkout-curso',
-      '/curso/checkout',
-      '/curso/checkout-session',
-      // API prefijado
-      '/api/checkout',
-      '/api/checkout-session',
-      '/api/stripe/checkout',
-      '/api/stripe/checkout-session',
-      '/api/curso/checkout',
-      // Últimos recursos
-      '/inscripcion',
-      '/inscribir',
-      '/pago',
-      '/pago-curso',
-      '/checkout'
-    ];
-
-    var intentos = [];
-    for (var i = 0; i < endpoints.length; i++) {
-      var url = BACKEND_URL + endpoints[i];
-      try {
-        var resp = await fetch(url, {
-          method: 'POST',
-          headers: { 'Content-Type': 'application/json' },
-          body: JSON.stringify(payload)
-        });
-
-        var ct = resp.headers.get('content-type') || '';
-
-        if (!resp.ok) {
-          var txt = await resp.text();
-          intentos.push(endpoints[i] + ' → ' + resp.status);
-          continue;
-        }
-
-        if (ct.indexOf('application/json') === -1) {
-          var txt2 = await resp.text();
-          intentos.push(endpoints[i] + ' → 200 pero no-JSON');
-          continue;
-        }
-
-        var data = await resp.json();
-        if (!data.clientSecret) {
-          intentos.push(endpoints[i] + ' → 200 JSON pero sin clientSecret');
-          continue;
-        }
-
-        // ¡Éxito! Montar Stripe embedded
-        var pk = data.publishableKey || STRIPE_PK;
-        if (!window.Stripe) {
-          renderCheckoutError('Stripe.js no cargó. Recarga la página con Ctrl+F5.');
-          opening = false;
-          return;
-        }
-        var stripeClient = window.Stripe(pk);
-        checkoutInstance = await stripeClient.initEmbeddedCheckout({ clientSecret: data.clientSecret });
-        if (cont) cont.innerHTML = '';
-        checkoutInstance.mount('#checkout-container');
-        opening = false;
-        console.log('[VP] Endpoint que funcionó:', endpoints[i]);
-        return;
-
-      } catch (err) {
-        intentos.push(endpoints[i] + ' → ' + (err.message || err));
-      }
+    // Generar UID sintético desde email (para el backend)
+    async function uidDeEmail(email){
+      var enc = new TextEncoder().encode(email.toLowerCase().trim());
+      var hash = await crypto.subtle.digest('SHA-256', enc);
+      var hex = Array.from(new Uint8Array(hash)).map(function(b){ return b.toString(16).padStart(2,'0'); }).join('');
+      return 'ipcil-' + hex.substring(0, 24);
     }
 
-    var lastError = 'Backend: ' + BACKEND_URL + '\nSlug: ' + COURSE_SLUG + '\n\nEndpoints probados:\n' + intentos.join('\n');
+    var uid = await uidDeEmail(datos.email);
+    var payload = {
+      slug: COURSE_SLUG,
+      uid: uid,
+      email: datos.email,
+      nombre: datos.nombre,
+      whatsapp: datos.telefono.replace(/\D/g, '')
+    };
+
+    // Endpoint correcto del webhook VP (confirmado en repo)
+    var url = BACKEND_URL + '/crear-checkout-curso';
+    var intentos = [];
+
+    try {
+      var resp = await fetch(url, {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify(payload)
+      });
+
+      var ct = resp.headers.get('content-type') || '';
+      var isJSON = ct.indexOf('application/json') !== -1;
+      var data = isJSON ? await resp.json() : { error: (await resp.text()).substring(0, 300) };
+
+      // Caso especial: ya compró este curso antes
+      if (!resp.ok && data.yaComprado) {
+        var contYa = document.getElementById('checkout-container');
+        if (contYa) contYa.innerHTML =
+          '<div style="text-align:center;padding:30px 24px;">' +
+            '<div style="font-size:56px;margin-bottom:12px;">🎉</div>' +
+            '<h3 style="font-family:\'Archivo\',sans-serif;font-size:1.3rem;color:var(--base-negro);margin-bottom:10px;">Ya tienes acceso</h3>' +
+            '<p style="color:var(--ink-soft);font-size:.95rem;line-height:1.5;margin-bottom:22px;">Ya compraste este curso antes con este correo. Puedes ver el contenido cuando quieras.</p>' +
+            '<a href="/curso-acceso.html?slug=' + encodeURIComponent(COURSE_SLUG) + '" style="display:inline-block;padding:14px 28px;background:var(--base);color:#fff;text-decoration:none;border-radius:12px;font-family:\'Archivo\',sans-serif;font-weight:700;">Ir al contenido →</a>' +
+          '</div>';
+        opening = false;
+        return;
+      }
+
+      if (!resp.ok) {
+        intentos.push('POST /crear-checkout-curso → ' + resp.status + ': ' + (data.error || JSON.stringify(data)));
+        throw new Error(data.error || 'Error ' + resp.status);
+      }
+
+      if (!data.clientSecret) {
+        intentos.push('POST /crear-checkout-curso → 200 pero sin clientSecret');
+        throw new Error('Respuesta incompleta del servidor');
+      }
+
+      // ¡Éxito! Montar Stripe embedded
+      var pk = data.publishableKey || STRIPE_PK;
+      if (!window.Stripe) {
+        renderCheckoutError('Stripe.js no cargó. Recarga la página con Ctrl+F5.');
+        opening = false;
+        return;
+      }
+      var stripeClient = window.Stripe(pk);
+      checkoutInstance = await stripeClient.initEmbeddedCheckout({ clientSecret: data.clientSecret });
+      if (cont) cont.innerHTML = '';
+      checkoutInstance.mount('#checkout-container');
+      opening = false;
+      console.log('[VP] Checkout montado correctamente');
+      return;
+
+    } catch (err) {
+      intentos.push('Error: ' + (err.message || err));
+    }
+
+    var lastError = 'Backend: ' + BACKEND_URL + '\nSlug: ' + COURSE_SLUG + '\nUID generado: ' + uid + '\nEmail: ' + datos.email + '\n\n' + intentos.join('\n');
 
     // Ningún endpoint funcionó
     renderCheckoutError(
