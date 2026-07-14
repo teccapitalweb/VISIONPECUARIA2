@@ -2131,10 +2131,19 @@
     if (opening) return;
     opening = true;
 
-    // Mostrar spinner
     var cont = document.getElementById('checkout-container');
-    if (cont) cont.innerHTML =
-      '<div class="pay-loading"><div class="spinner"></div>Preparando pago seguro…</div>';
+
+    function setPaso(mensaje, esError){
+      console.log('[VP checkout]', mensaje);
+      if (!cont) return;
+      cont.innerHTML =
+        '<div class="pay-loading" style="min-height:220px;">' +
+          (esError ? '' : '<div class="spinner"></div>') +
+          '<div style="text-align:center; font-size:.9rem; color:' + (esError ? '#b91c1c' : 'var(--ink-soft)') + ';">' + mensaje + '</div>' +
+        '</div>';
+    }
+
+    setPaso('Preparando tu inscripción…');
 
     // Generar UID sintético desde email (para el backend)
     async function uidDeEmail(email){
@@ -2153,20 +2162,32 @@
       whatsapp: datos.telefono.replace(/\D/g, '')
     };
 
+    console.log('[VP checkout] payload →', payload);
+
+    setPaso('Conectando con el servidor de pagos… (puede tardar unos segundos)');
+
     // Endpoint correcto del webhook VP (confirmado en repo)
     var url = BACKEND_URL + '/crear-checkout-curso';
     var intentos = [];
+
+    // Timeout de 25 segundos (Railway cold start puede tardar)
+    var controller = new AbortController();
+    var timeoutId = setTimeout(function(){ controller.abort(); }, 25000);
 
     try {
       var resp = await fetch(url, {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify(payload)
+        body: JSON.stringify(payload),
+        signal: controller.signal
       });
+      clearTimeout(timeoutId);
 
+      console.log('[VP checkout] status:', resp.status);
       var ct = resp.headers.get('content-type') || '';
       var isJSON = ct.indexOf('application/json') !== -1;
       var data = isJSON ? await resp.json() : { error: (await resp.text()).substring(0, 300) };
+      console.log('[VP checkout] respuesta:', data);
 
       // Caso especial: ya compró este curso antes
       if (!resp.ok && data.yaComprado) {
@@ -2192,23 +2213,51 @@
         throw new Error('Respuesta incompleta del servidor');
       }
 
+      setPaso('Cargando Stripe…');
+
       // ¡Éxito! Montar Stripe embedded
       var pk = data.publishableKey || STRIPE_PK;
       if (!window.Stripe) {
-        renderCheckoutError('Stripe.js no cargó. Recarga la página con Ctrl+F5.');
+        // Intentar cargar Stripe.js dinámicamente si no está
+        console.log('[VP checkout] Stripe.js no está cargado, cargando…');
+        await new Promise(function(resolve, reject){
+          var s = document.createElement('script');
+          s.src = 'https://js.stripe.com/v3/';
+          s.onload = resolve;
+          s.onerror = function(){ reject(new Error('No se pudo cargar Stripe.js')); };
+          document.head.appendChild(s);
+        });
+      }
+      if (!window.Stripe) {
+        renderCheckoutError('No pudimos cargar el sistema de pago (Stripe.js). Verifica tu conexión.');
         opening = false;
         return;
       }
+
+      setPaso('Preparando formulario de tarjeta…');
+      console.log('[VP checkout] Inicializando Stripe con pk:', pk.substring(0, 20) + '...');
+
       var stripeClient = window.Stripe(pk);
       checkoutInstance = await stripeClient.initEmbeddedCheckout({ clientSecret: data.clientSecret });
-      if (cont) cont.innerHTML = '';
+
+      // Preparar container con altura mínima para que Stripe tenga dónde renderizar
+      if (cont) {
+        cont.innerHTML = '';
+        cont.style.minHeight = '500px';
+      }
       checkoutInstance.mount('#checkout-container');
+      console.log('[VP checkout] ✅ Stripe montado correctamente');
       opening = false;
-      console.log('[VP] Checkout montado correctamente');
       return;
 
     } catch (err) {
-      intentos.push('Error: ' + (err.message || err));
+      clearTimeout(timeoutId);
+      console.error('[VP checkout] Error:', err);
+      if (err.name === 'AbortError') {
+        intentos.push('Timeout: el servidor no respondió en 25 segundos (Railway puede estar dormido)');
+      } else {
+        intentos.push('Error: ' + (err.message || err));
+      }
     }
 
     var lastError = 'Backend: ' + BACKEND_URL + '\nSlug: ' + COURSE_SLUG + '\nUID generado: ' + uid + '\nEmail: ' + datos.email + '\n\n' + intentos.join('\n');
