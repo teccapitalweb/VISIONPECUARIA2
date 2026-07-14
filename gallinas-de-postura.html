@@ -1823,20 +1823,20 @@
 
       <form class="ins-form" id="form-inscripcion" novalidate>
         <div class="ins-field" id="field-nombre">
-          <label>Nombre completo <span class="req">*</span></label>
-          <input type="text" id="input-nombre" placeholder="Ej. María González Ramírez" autocomplete="name" required>
+          <label for="input-nombre">Nombre completo <span class="req">*</span></label>
+          <input type="text" id="input-nombre" name="nombre" placeholder="Ej. María González Ramírez" autocomplete="name" required>
           <small class="hint">Escríbelo tal como quieres que aparezca en tu certificado <b>IPCIL</b></small>
           <small class="error-msg">Ingresa tu nombre completo (mínimo 2 palabras)</small>
         </div>
         <div class="ins-field" id="field-email">
-          <label>Correo electrónico <span class="req">*</span></label>
-          <input type="email" id="input-email" placeholder="tu.correo@ejemplo.com" autocomplete="email" inputmode="email" required>
+          <label for="input-email">Correo electrónico <span class="req">*</span></label>
+          <input type="email" id="input-email" name="email" placeholder="tu.correo@ejemplo.com" autocomplete="email" inputmode="email" required>
           <small class="hint">Aquí llegarán las clases y tu certificado oficial</small>
           <small class="error-msg">Ingresa un correo electrónico válido</small>
         </div>
         <div class="ins-field" id="field-telefono">
-          <label>WhatsApp <span class="req">*</span></label>
-          <input type="tel" id="input-telefono" placeholder="55 1234 5678" autocomplete="tel" inputmode="tel" required>
+          <label for="input-telefono">WhatsApp <span class="req">*</span></label>
+          <input type="tel" id="input-telefono" name="telefono" placeholder="55 1234 5678" autocomplete="tel" inputmode="tel" required>
           <small class="hint">Para invitarte al grupo VIP del curso</small>
           <small class="error-msg">Ingresa un número válido (10 dígitos)</small>
         </div>
