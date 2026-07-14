@@ -207,7 +207,7 @@
         </div>
         <div class="instructor-info">
           <div class="instructor-eyebrow">
-            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 1a3 3 0 00-3 3v8a3 3 0 006 0V4a3 3 0 00-3-3z"/><path d="M19 10v2a7 7 0 01-14 0v-2"/><line x1="12" y1="19" x2="12" y2="23"/><line x1="8" y1="23" x2="16" y2="23"/></svg>
+            <span style="font-size:1rem;line-height:1;">👨‍🏫</span>
             Ponente del curso
           </div>
           <h3 class="instructor-name">M.V.Z. José Antonio Castillo García</h3>
@@ -766,25 +766,99 @@ const showError = (fid, show) => {
 });
 
 const form = document.getElementById('form-inscripcion');
+const btnSubmit = document.getElementById('btn-continuar-checkout');
+
+// Toast helper
+const showToast = (msg, type = '') => {
+  const t = document.getElementById('toast');
+  if (!t) return;
+  t.textContent = msg;
+  t.className = 'toast is-visible' + (type ? ' toast--' + type : '');
+  setTimeout(() => t.classList.remove('is-visible'), 3500);
+};
+
+// Fallback si el botón NO está dentro del form o el submit falla
+if (btnSubmit) {
+  btnSubmit.addEventListener('click', (e) => {
+    // Solo si el form no está manejando bien el submit, forzar el flujo
+    if (form && e.type === 'click') {
+      // El form lo va a manejar via submit, no hacemos nada aquí
+      // Este listener solo es para debugging
+      console.log('[VP] Click en Continuar al pago');
+    }
+  });
+}
+
+const procesarInscripcion = async () => {
+  const nombre = document.getElementById('input-nombre').value.trim();
+  const email = document.getElementById('input-email').value.trim();
+  const telefono = document.getElementById('input-telefono').value.trim();
+  let ok = true;
+  if (!validarNombre(nombre)) { showError('field-nombre', true); ok = false; }
+  if (!validarEmail(email)) { showError('field-email', true); ok = false; }
+  if (!validarTelefono(telefono)) { showError('field-telefono', true); ok = false; }
+  if (!ok) {
+    showToast('Revisa los campos marcados en rojo', 'error');
+    return;
+  }
+
+  // Deshabilitar botón mientras procesa
+  if (btnSubmit) {
+    btnSubmit.disabled = true;
+    btnSubmit.innerHTML = '<div class="loader"></div> Procesando...';
+  }
+
+  // Esperar hasta 5 segundos a que cargue el módulo checkout-curso.js
+  const esperarModulo = () => new Promise((resolve) => {
+    let intentos = 0;
+    const check = () => {
+      if (window.__vp && window.__vp.iniciarCheckoutConDatos) {
+        resolve(true);
+        return;
+      }
+      intentos++;
+      if (intentos >= 50) { resolve(false); return; }
+      setTimeout(check, 100);
+    };
+    check();
+  });
+
+  const listo = await esperarModulo();
+
+  if (!listo) {
+    // Restaurar botón
+    if (btnSubmit) {
+      btnSubmit.disabled = false;
+      btnSubmit.innerHTML = 'Continuar al pago <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12h14M13 5l7 7-7 7"/></svg>';
+    }
+    showToast('El sistema de pago no cargó. Intenta recargar la página o contáctanos por WhatsApp.', 'error');
+    console.error('[VP] window.__vp.iniciarCheckoutConDatos no disponible tras 5s');
+    return;
+  }
+
+  // Cerrar modal de datos, abrir modal de checkout
+  closeModal('modal-inscripcion');
+  openModal('modal-checkout');
+
+  try {
+    await window.__vp.iniciarCheckoutConDatos({ nombre, email, telefono });
+  } catch (err) {
+    console.error('[VP] Error en checkout:', err);
+    showToast('Ocurrió un error al procesar el pago. Intenta de nuevo.', 'error');
+  }
+
+  // Restaurar botón (por si vuelven al modal de inscripción)
+  if (btnSubmit) {
+    btnSubmit.disabled = false;
+    btnSubmit.innerHTML = 'Continuar al pago <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12h14M13 5l7 7-7 7"/></svg>';
+  }
+};
+
 if (form) {
   form.addEventListener('submit', async (e) => {
     e.preventDefault();
-    const nombre = document.getElementById('input-nombre').value.trim();
-    const email = document.getElementById('input-email').value.trim();
-    const telefono = document.getElementById('input-telefono').value.trim();
-    let ok = true;
-    if (!validarNombre(nombre)) { showError('field-nombre', true); ok = false; }
-    if (!validarEmail(email)) { showError('field-email', true); ok = false; }
-    if (!validarTelefono(telefono)) { showError('field-telefono', true); ok = false; }
-    if (!ok) return;
-
-    closeModal('modal-inscripcion');
-    openModal('modal-checkout');
-    if (window.__vp && window.__vp.iniciarCheckoutConDatos) {
-      window.__vp.iniciarCheckoutConDatos({ nombre, email, telefono });
-    } else {
-      window.__pendingInscripcion = { nombre, email, telefono };
-    }
+    e.stopPropagation();
+    await procesarInscripcion();
   });
 }
 </script>
