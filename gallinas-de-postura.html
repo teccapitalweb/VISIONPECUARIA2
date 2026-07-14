@@ -1197,13 +1197,13 @@
       </p>
 
       <div class="hero-precio">
-        <div class="precio-tachado">Antes $1,050 MXN</div>
+        <div class="precio-tachado"><span data-precio-antes>Antes $1,050 MXN</span></div>
         <div class="precio-ahora">
           <span class="moneda">$</span>
-          <span class="numero" data-precio>650</span>
+          <span class="numero" data-precio data-precio-actual>650</span>
           <span class="mxn">MXN</span>
         </div>
-        <div class="precio-ahorro">🎁 Ahorras $400 · Incluye BONUS Curso de Sexaje Avícola GRATIS</div>
+        <div class="precio-ahorro">🎁 Ahorras <span data-ahorro>$400 pesos</span> · Incluye BONUS Curso de Sexaje Avícola GRATIS</div>
       </div>
 
       <div class="hero-beneficios-rapidos">
@@ -1214,7 +1214,7 @@
       </div>
 
       <button class="hero-cta" data-action="inscribir">
-        INSCRIBIRME AHORA POR $650
+        INSCRIBIRME AHORA POR <b data-precio-btn>$650</b>
         <span class="cta-flecha">→</span>
       </button>
 
@@ -1719,14 +1719,14 @@
     </div>
 
     <div class="compra-precio-mega">
-      <div class="precio-mega-tachado">Antes $1,050 MXN</div>
+      <div class="precio-mega-tachado"><span data-precio-antes>Antes $1,050 MXN</span></div>
       <div class="precio-mega-actual">
         <span class="mega-moneda">$</span>
-        <span class="mega-numero" data-precio>650</span>
+        <span class="mega-numero" data-precio data-precio-actual>650</span>
         <span class="mega-mxn">MXN</span>
       </div>
       <div class="precio-mega-ahorro">
-        🎉 AHORRAS $400 · INCLUYE BONUS Curso de Sexaje Avícola GRATIS
+        🎉 AHORRAS <span data-ahorro>$400 pesos</span> · INCLUYE BONUS Curso de Sexaje Avícola GRATIS
       </div>
     </div>
 
@@ -1799,7 +1799,7 @@
 
 <!-- ============ STICKY CTA ============ -->
 <div class="sticky-cta" id="stickyCta">
-  <div class="sticky-price"><b data-precio-full>$650 MXN</b><span>Inicia 27 de julio</span></div>
+  <div class="sticky-price"><b data-precio-full data-precio-actual-full>$650 MXN</b><span>Inicia 27 de julio</span></div>
   <a class="btn btn-fire" data-action="inscribir" href="#" rel="noopener">Inscribirme</a>
 </div>
 
@@ -1858,7 +1858,7 @@
 <div class="pay-overlay modal" id="modal-checkout" role="dialog" aria-modal="true" aria-label="Pago del curso">
   <div class="pay-modal">
     <div class="pay-head">
-      <b>Completa tu pago · <span data-precio-full>$650 MXN</span></b>
+      <b>Completa tu pago · <span data-precio-full data-precio-actual-full>$650 MXN</span></b>
       <button class="pay-close" data-close-modal="modal-checkout" aria-label="Cerrar">
         <svg width="16" height="16" viewBox="0 0 24 24" fill="none"><path d="M6 6l12 12M18 6L6 18" stroke="currentColor" stroke-width="2.2" stroke-linecap="round"/></svg>
       </button>
@@ -2296,6 +2296,68 @@
 
 <!-- El flujo de pago va INLINE arriba, no depende del checkout-curso.js compartido -->
 <!-- <script type="module" src="/assets/js/checkout-curso.js"></script> -->
+
+<!-- ═════════════════════════════════════════════════════════════════════════
+     PRECIOS DINÁMICOS DESDE FIRESTORE
+     Lee cursosVenta/{slug} y actualiza todos los elementos con data-* del precio.
+     Al cambiar el precio en el panel admin, se refleja automáticamente aquí.
+     ═════════════════════════════════════════════════════════════════════════ -->
+<script type="module">
+import { initializeApp } from "https://www.gstatic.com/firebasejs/10.11.0/firebase-app.js";
+import { getFirestore, doc, getDoc } from "https://www.gstatic.com/firebasejs/10.11.0/firebase-firestore.js";
+
+const firebaseConfig = {
+  apiKey: "AIzaSyDQXkIo-BWPIeLZzHeTMN986WMDn0TrTJU",
+  authDomain: "visionpecuaria-vip.firebaseapp.com",
+  projectId: "visionpecuaria-vip",
+  storageBucket: "visionpecuaria-vip.firebasestorage.app",
+  messagingSenderId: "978318807782",
+  appId: "1:978318807782:web:626e67bb30795c15b02127"
+};
+
+const app = initializeApp(firebaseConfig);
+const db = getFirestore(app);
+
+const SLUG = document.body.dataset.slug || 'gallinas-de-postura';
+
+const fmtMxn = (c) => '$' + Math.floor(c / 100).toLocaleString('es-MX') + ' MXN';
+const fmtMxnCorto = (c) => '$' + Math.floor(c / 100).toLocaleString('es-MX');
+const fmtNum = (c) => Math.floor(c / 100).toLocaleString('es-MX');
+
+async function actualizarPreciosDesdeFirestore() {
+  try {
+    const snap = await getDoc(doc(db, 'cursosVenta', SLUG));
+    if (!snap.exists()) return;
+    const data = snap.data();
+
+    const precioNormalC = data.precioNormalCentavos || 105000;
+    const precioActualC = data.precioLanzamientoCentavos || 65000;
+    const ahorroC = Math.max(0, precioNormalC - precioActualC);
+    const descuento = precioNormalC > 0 ? Math.round((ahorroC / precioNormalC) * 100) : 0;
+
+    // Convención del ecosistema VP (usada por todos los cursos)
+    document.querySelectorAll('[data-precio-antes]').forEach(el => el.textContent = 'Antes ' + fmtMxn(precioNormalC));
+    document.querySelectorAll('[data-precio-actual]').forEach(el => el.textContent = fmtNum(precioActualC));
+    document.querySelectorAll('[data-precio-actual-full]').forEach(el => el.textContent = fmtMxn(precioActualC));
+    document.querySelectorAll('[data-precio-btn]').forEach(el => el.textContent = fmtMxnCorto(precioActualC));
+    document.querySelectorAll('[data-ahorro]').forEach(el => el.textContent = fmtMxnCorto(ahorroC) + ' pesos');
+    document.querySelectorAll('[data-descuento]').forEach(el => el.textContent = descuento + '%');
+
+    // Compatibilidad con atributos internos ya existentes en este HTML
+    document.querySelectorAll('[data-precio]').forEach(el => el.textContent = fmtNum(precioActualC));
+    document.querySelectorAll('[data-precio-full]').forEach(el => el.textContent = fmtMxn(precioActualC));
+
+    if (typeof data.cupoLanzamientoMax === 'number') {
+      const restantes = Math.max(0, (data.cupoLanzamientoMax || 0) - (data.cupoLanzamientoTomados || 0));
+      document.querySelectorAll('[data-cupo-restante]').forEach(el => el.textContent = restantes);
+    }
+  } catch (err) {
+    console.warn('[VP] Error leyendo precios:', err);
+  }
+}
+
+actualizarPreciosDesdeFirestore();
+</script>
 
 
 </body>
