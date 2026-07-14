@@ -28,6 +28,7 @@
   --line: rgba(10, 10, 10, 0.06);
   --line-strong: rgba(10, 10, 10, 0.12);
   --font-sans: 'Geist', -apple-system, BlinkMacSystemFont, sans-serif;
+  --font-serif: 'Instrument Serif', Georgia, serif;
   --shadow-sm: 0 2px 8px rgba(10, 10, 10, 0.06);
   --shadow: 0 8px 24px rgba(10, 10, 10, 0.08);
   --shadow-lg: 0 20px 48px rgba(10, 10, 10, 0.10);
@@ -87,13 +88,278 @@ main { flex: 1; padding: 40px 0 60px; }
 .btn--wa:hover { background: #1EA952; transform: translateY(-2px); }
 .btn svg { width: 16px; height: 16px; }
 
-.curso-hero { background: linear-gradient(135deg, var(--brand), var(--brand-dark)); color: #fff; padding: 44px 0; margin-bottom: 40px; border-radius: 0 0 32px 32px; }
-.curso-hero__badge { display: inline-flex; align-items: center; gap: 8px; padding: 7px 14px; background: rgba(255,255,255,0.15); border-radius: 999px; font-size: .78rem; font-weight: 600; letter-spacing: -.005em; margin-bottom: 16px; backdrop-filter: blur(8px); }
-.curso-hero__badge svg { width: 14px; height: 14px; }
-.curso-hero h1 { font-family: var(--font-sans); font-size: clamp(1.7rem, 4vw, 2.4rem); font-weight: 800; line-height: 1.1; letter-spacing: -.03em; margin-bottom: 10px; }
-.curso-hero__sub { font-size: .98rem; opacity: 0.9; max-width: 600px; line-height: 1.55; }
-.curso-hero__welcome { margin-top: 18px; padding-top: 18px; border-top: 1px solid rgba(255,255,255,0.15); font-size: .93rem; opacity: 0.95; }
-.curso-hero__welcome b { font-weight: 700; }
+/* ═══════ HERO PREMIUM (estilo aula) ═══════ */
+.curso-hero-wrap { padding: 20px 0 32px; }
+.curso-hero-card {
+  background: #fff;
+  border-radius: 24px;
+  border: 1px solid var(--line);
+  box-shadow: var(--shadow-sm);
+  padding: 36px 40px;
+  display: grid;
+  grid-template-columns: 1fr auto;
+  gap: 40px;
+  align-items: center;
+}
+.curso-hero-card__badge {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  padding: 6px 14px;
+  background: var(--brand-bg);
+  color: var(--brand);
+  border-radius: 999px;
+  font-size: .8rem;
+  font-weight: 700;
+  letter-spacing: -.005em;
+  margin-bottom: 14px;
+}
+.curso-hero-card__badge::before {
+  content: '';
+  width: 6px;
+  height: 6px;
+  border-radius: 50%;
+  background: var(--brand);
+  animation: pulse 2s ease-in-out infinite;
+}
+@keyframes pulse {
+  0%, 100% { opacity: 1; }
+  50% { opacity: 0.4; }
+}
+.curso-hero-card__title {
+  font-family: var(--font-sans);
+  font-size: clamp(1.6rem, 3.4vw, 2.2rem);
+  font-weight: 800;
+  line-height: 1.15;
+  letter-spacing: -.03em;
+  color: var(--ink);
+  margin-bottom: 12px;
+}
+.curso-hero-card__title .highlight {
+  position: relative;
+  color: var(--brand);
+  font-family: var(--font-serif);
+  font-style: italic;
+  font-weight: 400;
+  padding: 0 4px;
+  white-space: nowrap;
+}
+.curso-hero-card__title .highlight::after {
+  content: '';
+  position: absolute;
+  left: 0;
+  right: 0;
+  bottom: 2px;
+  height: 8px;
+  background: var(--brand-bg);
+  z-index: -1;
+  border-radius: 4px;
+}
+.curso-hero-card__instructor {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  color: var(--ink-mute);
+  font-size: .93rem;
+  margin-bottom: 20px;
+}
+.curso-hero-card__instructor svg {
+  width: 16px;
+  height: 16px;
+  color: var(--ink-mute);
+}
+
+.curso-hero-card__pbar {
+  background: var(--paper-soft);
+  border-radius: 14px;
+  padding: 18px 20px;
+  margin-bottom: 20px;
+}
+.curso-hero-card__pbar-head {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 12px;
+}
+.curso-hero-card__pbar-label {
+  font-size: .72rem;
+  color: var(--ink-mute);
+  font-weight: 700;
+  letter-spacing: .12em;
+  text-transform: uppercase;
+}
+.curso-hero-card__pbar-percent {
+  font-weight: 700;
+  color: var(--brand);
+  font-size: .95rem;
+}
+.curso-hero-card__pbar-track {
+  height: 8px;
+  background: rgba(10,10,10,0.06);
+  border-radius: 999px;
+  overflow: hidden;
+  margin-bottom: 10px;
+}
+.curso-hero-card__pbar-fill {
+  height: 100%;
+  background: linear-gradient(90deg, var(--brand), var(--brand-light));
+  border-radius: 999px;
+  transition: width .6s cubic-bezier(.4,0,.2,1);
+}
+.curso-hero-card__pbar-meta {
+  font-size: .85rem;
+  color: var(--ink-mute);
+}
+.curso-hero-card__pbar-meta b { color: var(--ink-soft); font-weight: 600; }
+
+.curso-hero-card__continue {
+  display: inline-flex;
+  align-items: center;
+  gap: 14px;
+  padding: 14px 22px;
+  background: linear-gradient(135deg, var(--brand), var(--brand-dark));
+  color: #fff;
+  border-radius: 16px;
+  font-family: var(--font-sans);
+  text-align: left;
+  box-shadow: var(--shadow-brand);
+  cursor: pointer;
+  transition: transform .18s ease, box-shadow .18s ease;
+  border: none;
+}
+.curso-hero-card__continue:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 12px 32px rgba(234, 88, 12, 0.35);
+}
+.curso-hero-card__continue-ico {
+  width: 36px;
+  height: 36px;
+  border-radius: 10px;
+  background: rgba(255,255,255,0.2);
+  display: grid;
+  place-items: center;
+  flex-shrink: 0;
+  backdrop-filter: blur(8px);
+}
+.curso-hero-card__continue-ico svg { width: 16px; height: 16px; }
+.curso-hero-card__continue-txt { display: flex; flex-direction: column; gap: 2px; }
+.curso-hero-card__continue-txt b { font-size: .95rem; font-weight: 800; letter-spacing: -.01em; }
+.curso-hero-card__continue-txt span { font-size: .78rem; opacity: 0.9; font-weight: 500; }
+
+/* Anillo grande derecho */
+.curso-hero-card__ring-col {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 14px;
+  flex-shrink: 0;
+}
+.curso-hero-card__ring {
+  position: relative;
+  width: 180px;
+  height: 180px;
+}
+.curso-hero-card__ring svg {
+  width: 100%;
+  height: 100%;
+  transform: rotate(-90deg);
+}
+.curso-hero-card__ring-track { stroke: var(--brand-bg); }
+.curso-hero-card__ring-fill {
+  stroke: var(--brand);
+  transition: stroke-dashoffset .8s cubic-bezier(.4,0,.2,1);
+}
+.curso-hero-card__ring-inner {
+  position: absolute;
+  inset: 0;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  text-align: center;
+  gap: 2px;
+}
+.curso-hero-card__ring-percent {
+  font-family: var(--font-sans);
+  font-size: 2.1rem;
+  font-weight: 800;
+  color: var(--ink);
+  letter-spacing: -.03em;
+  line-height: 1;
+}
+.curso-hero-card__ring-label {
+  font-size: .7rem;
+  color: var(--ink-mute);
+  font-weight: 700;
+  letter-spacing: .14em;
+  text-transform: uppercase;
+}
+.curso-hero-card__ring-sub {
+  font-size: .8rem;
+  color: var(--ink-mute);
+  font-weight: 500;
+}
+
+/* Dots de módulos abajo */
+.curso-hero-dots {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 16px 24px;
+  background: #fff;
+  border: 1px solid var(--line);
+  border-radius: 16px;
+  margin-top: 14px;
+  gap: 16px;
+  flex-wrap: wrap;
+}
+.curso-hero-dots__text {
+  font-size: .88rem;
+  color: var(--ink-mute);
+}
+.curso-hero-dots__text b { color: var(--ink); font-weight: 700; }
+.curso-hero-dots__dots {
+  display: flex;
+  gap: 6px;
+}
+.curso-hero-dot {
+  width: 32px;
+  height: 6px;
+  border-radius: 3px;
+  background: rgba(10,10,10,0.08);
+  transition: background .3s ease;
+}
+.curso-hero-dot.is-completed {
+  background: var(--brand);
+}
+.curso-hero-dot.is-current {
+  background: var(--brand);
+  box-shadow: 0 0 0 3px var(--brand-bg);
+}
+
+/* Responsive del hero */
+@media (max-width: 900px) {
+  .curso-hero-card {
+    grid-template-columns: 1fr;
+    padding: 28px 24px;
+    gap: 28px;
+  }
+  .curso-hero-card__ring-col {
+    align-items: flex-start;
+    flex-direction: row;
+    gap: 20px;
+  }
+  .curso-hero-card__ring { width: 110px; height: 110px; }
+  .curso-hero-card__ring-percent { font-size: 1.4rem; }
+}
+@media (max-width: 640px) {
+  .curso-hero-wrap { padding: 16px 0 24px; }
+  .curso-hero-card { padding: 24px 20px; border-radius: 20px; }
+  .curso-hero-card__ring-col { flex-direction: column; align-items: center; }
+  .curso-hero-dots { flex-direction: column; align-items: flex-start; padding: 14px 18px; }
+  .curso-hero-dot { flex: 1; min-width: 20px; }
+  .curso-hero-dots__dots { width: 100%; }
+}
 
 .curso-layout { display: grid; grid-template-columns: 1fr 340px; gap: 32px; margin-bottom: 40px; }
 @media (max-width: 900px) { .curso-layout { grid-template-columns: 1fr; } }
@@ -156,6 +422,254 @@ main { flex: 1; padding: 40px 0 60px; }
 
 .footer { background: var(--ink); color: rgba(254, 252, 247, 0.6); padding: 32px 0; text-align: center; font-size: .84rem; }
 .footer b { color: rgba(254, 252, 247, 0.85); }
+
+/* ═══════ SISTEMA DE PROGRESO ═══════ */
+
+/* Anillo grande de progreso general (dentro del hero) */
+.hero-progress {
+  display: flex;
+  align-items: center;
+  gap: 20px;
+  margin-top: 20px;
+  padding-top: 20px;
+  border-top: 1px solid rgba(255,255,255,0.15);
+}
+.hero-progress__ring {
+  position: relative;
+  width: 88px;
+  height: 88px;
+  flex-shrink: 0;
+}
+.hero-progress__ring svg { width: 100%; height: 100%; transform: rotate(-90deg); }
+.hero-progress__ring-track { stroke: rgba(255,255,255,0.18); }
+.hero-progress__ring-fill {
+  stroke: #fff;
+  transition: stroke-dashoffset .6s cubic-bezier(.4,0,.2,1);
+}
+.hero-progress__percent {
+  position: absolute;
+  inset: 0;
+  display: grid;
+  place-items: center;
+  font-family: var(--font-sans);
+  font-size: 1.15rem;
+  font-weight: 800;
+  color: #fff;
+  letter-spacing: -.02em;
+}
+.hero-progress__info { flex: 1; min-width: 0; }
+.hero-progress__label {
+  font-size: .72rem;
+  text-transform: uppercase;
+  letter-spacing: .12em;
+  font-weight: 700;
+  opacity: 0.75;
+  margin-bottom: 4px;
+}
+.hero-progress__count {
+  font-size: .95rem;
+  opacity: 0.92;
+  margin-bottom: 10px;
+}
+.hero-progress__count b { font-weight: 800; }
+.hero-progress__continue {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  padding: 9px 16px;
+  background: rgba(255,255,255,0.2);
+  color: #fff;
+  border-radius: 999px;
+  font-weight: 600;
+  font-size: .84rem;
+  border: 1.5px solid rgba(255,255,255,0.3);
+  cursor: pointer;
+  transition: background .15s ease, transform .15s ease;
+  backdrop-filter: blur(8px);
+}
+.hero-progress__continue:hover {
+  background: rgba(255,255,255,0.28);
+  transform: translateY(-1px);
+}
+.hero-progress__continue svg { width: 14px; height: 14px; }
+.hero-progress__continue[hidden] { display: none; }
+
+/* Donut pequeño en cada clase del sidebar */
+.clase-item__donut {
+  position: relative;
+  width: 40px;
+  height: 40px;
+  flex-shrink: 0;
+  display: grid;
+  place-items: center;
+}
+.clase-item__donut svg {
+  position: absolute;
+  inset: 0;
+  transform: rotate(-90deg);
+}
+.clase-item__donut-track { stroke: rgba(10,10,10,0.08); }
+.clase-item__donut-fill {
+  stroke: var(--brand);
+  transition: stroke-dashoffset .5s cubic-bezier(.4,0,.2,1);
+}
+.clase-item__donut-num {
+  position: relative;
+  z-index: 2;
+  font-family: var(--font-sans);
+  font-weight: 700;
+  font-size: .82rem;
+  color: var(--ink);
+  letter-spacing: -.02em;
+}
+.clase-item.is-completed .clase-item__donut-fill { stroke: var(--success); }
+.clase-item.is-completed .clase-item__donut-num { display: none; }
+.clase-item__done-check {
+  position: absolute;
+  inset: 0;
+  display: none;
+  place-items: center;
+  color: var(--success);
+}
+.clase-item.is-completed .clase-item__done-check {
+  display: grid;
+}
+.clase-item__done-check svg { width: 20px; height: 20px; }
+
+/* Cambios en la lista de clases para acomodar el donut */
+.clase-item { padding-left: 18px; }
+.clase-item.is-active { padding-left: 15px; }
+
+/* Barra de progreso debajo del video */
+.clase-progress-bar {
+  padding: 16px 26px 20px;
+  border-top: 1px solid var(--line);
+  background: var(--paper-soft);
+}
+.clase-progress-bar__head {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  gap: 12px;
+  margin-bottom: 10px;
+  flex-wrap: wrap;
+}
+.clase-progress-bar__label {
+  font-size: .74rem;
+  color: var(--ink-mute);
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: .08em;
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+}
+.clase-progress-bar__label svg { width: 12px; height: 12px; }
+.clase-progress-bar__percent {
+  font-family: var(--font-sans);
+  font-weight: 800;
+  color: var(--brand);
+  font-size: .92rem;
+}
+.clase-progress-bar__track {
+  height: 8px;
+  background: rgba(10,10,10,0.06);
+  border-radius: 999px;
+  overflow: hidden;
+  position: relative;
+}
+.clase-progress-bar__fill {
+  height: 100%;
+  background: linear-gradient(90deg, var(--brand), var(--brand-light));
+  border-radius: 999px;
+  transition: width .5s cubic-bezier(.4,0,.2,1);
+  position: relative;
+}
+.clase-progress-bar__fill.is-completed {
+  background: linear-gradient(90deg, var(--success), #34d399);
+}
+.clase-progress-bar__actions {
+  margin-top: 12px;
+  display: flex;
+  gap: 8px;
+  justify-content: flex-end;
+  flex-wrap: wrap;
+}
+.btn-completa, .btn-descompleta {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  padding: 8px 14px;
+  border-radius: 10px;
+  font-weight: 600;
+  font-size: .84rem;
+  cursor: pointer;
+  transition: transform .15s ease, background .15s ease;
+  border: 1.5px solid;
+}
+.btn-completa {
+  background: var(--brand);
+  color: #fff;
+  border-color: var(--brand);
+}
+.btn-completa:hover {
+  background: var(--brand-dark);
+  border-color: var(--brand-dark);
+  transform: translateY(-1px);
+}
+.btn-descompleta {
+  background: rgba(16,185,129,.12);
+  color: var(--success);
+  border-color: rgba(16,185,129,.35);
+}
+.btn-descompleta:hover {
+  background: rgba(16,185,129,.2);
+  transform: translateY(-1px);
+}
+.btn-completa svg, .btn-descompleta svg { width: 14px; height: 14px; }
+
+/* Toast de completado (celebración) */
+.completed-toast {
+  position: fixed;
+  bottom: 32px;
+  right: 32px;
+  z-index: 1000;
+  padding: 16px 22px;
+  background: linear-gradient(135deg, var(--success), #059669);
+  color: #fff;
+  border-radius: 16px;
+  box-shadow: 0 20px 40px rgba(16,185,129,0.35);
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  transform: translateX(400px);
+  opacity: 0;
+  transition: transform .4s cubic-bezier(.4,0,.2,1), opacity .4s ease;
+  max-width: 340px;
+}
+.completed-toast.is-visible {
+  transform: translateX(0);
+  opacity: 1;
+}
+.completed-toast__ico {
+  width: 40px;
+  height: 40px;
+  border-radius: 12px;
+  background: rgba(255,255,255,0.2);
+  display: grid;
+  place-items: center;
+  flex-shrink: 0;
+}
+.completed-toast__ico svg { width: 22px; height: 22px; }
+.completed-toast__text b { display: block; font-weight: 800; font-size: .95rem; margin-bottom: 2px; }
+.completed-toast__text span { display: block; opacity: 0.9; font-size: .82rem; }
+
+/* Responsive */
+@media (max-width: 640px) {
+  .hero-progress { flex-direction: column; align-items: flex-start; text-align: left; }
+  .hero-progress__ring { width: 76px; height: 76px; }
+  .completed-toast { right: 16px; left: 16px; bottom: 16px; max-width: none; }
+}
 </style>
 </head>
 
@@ -209,16 +723,69 @@ main { flex: 1; padding: 40px 0 60px; }
   </div>
 
   <div id="state-course" hidden>
-    <div class="curso-hero">
+    <!-- ═══ HERO PREMIUM ═══ -->
+    <div class="curso-hero-wrap">
       <div class="container">
-        <div class="curso-hero__badge">
-          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"/></svg>
-          Acceso activo
+        <div class="curso-hero-card">
+          <div class="curso-hero-card__main">
+            <div class="curso-hero-card__badge" id="hero-badge">
+              <span id="hero-badge-text">En progreso</span>
+            </div>
+            <h1 class="curso-hero-card__title" id="curso-nombre-h1">
+              <span id="curso-nombre">Cargando curso...</span>
+            </h1>
+            <div class="curso-hero-card__instructor" id="curso-instructor" hidden>
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"/><circle cx="12" cy="7" r="4"/></svg>
+              <span id="curso-instructor-nombre"></span>
+            </div>
+
+            <div class="curso-hero-card__pbar">
+              <div class="curso-hero-card__pbar-head">
+                <span class="curso-hero-card__pbar-label">Tu progreso</span>
+                <span class="curso-hero-card__pbar-percent" id="hero-pbar-percent">0% completado</span>
+              </div>
+              <div class="curso-hero-card__pbar-track">
+                <div class="curso-hero-card__pbar-fill" id="hero-pbar-fill" style="width:0%;"></div>
+              </div>
+              <div class="curso-hero-card__pbar-meta">
+                <b id="hero-clases-completadas">0</b> de <b id="hero-clases-total">0</b> clases completadas · <b id="hero-tiempo-restante">— restantes</b>
+              </div>
+            </div>
+
+            <button class="curso-hero-card__continue" id="btn-continuar" hidden>
+              <div class="curso-hero-card__continue-ico">
+                <svg viewBox="0 0 24 24" fill="currentColor"><polygon points="7 4 20 12 7 20 7 4"/></svg>
+              </div>
+              <div class="curso-hero-card__continue-txt">
+                <b id="btn-continuar-titulo">Continuar</b>
+                <span id="btn-continuar-sub">Clase 1</span>
+              </div>
+            </button>
+          </div>
+
+          <!-- Anillo grande -->
+          <div class="curso-hero-card__ring-col">
+            <div class="curso-hero-card__ring">
+              <svg viewBox="0 0 100 100">
+                <circle class="curso-hero-card__ring-track" cx="50" cy="50" r="44" stroke-width="8" fill="none"/>
+                <circle id="hero-ring-fill" class="curso-hero-card__ring-fill" cx="50" cy="50" r="44" stroke-width="8" fill="none"
+                  stroke-dasharray="276.46" stroke-dashoffset="276.46" stroke-linecap="round"/>
+              </svg>
+              <div class="curso-hero-card__ring-inner">
+                <div class="curso-hero-card__ring-percent" id="hero-percent">0%</div>
+                <div class="curso-hero-card__ring-label">Completado</div>
+              </div>
+            </div>
+            <div class="curso-hero-card__ring-sub" id="hero-ring-sub">0 de 0 clases</div>
+          </div>
         </div>
-        <h1 id="curso-nombre">Cargando curso...</h1>
-        <p class="curso-hero__sub" id="curso-sub"></p>
-        <div class="curso-hero__welcome" id="welcome-msg" hidden>
-          Bienvenido/a, <b id="alumno-nombre"></b>. Puedes ver las clases cuando quieras: el acceso es permanente.
+
+        <!-- Dots de módulos -->
+        <div class="curso-hero-dots">
+          <div class="curso-hero-dots__text" id="dots-text">
+            Empieza a ver las clases para avanzar
+          </div>
+          <div class="curso-hero-dots__dots" id="dots-container"></div>
         </div>
       </div>
     </div>
@@ -237,6 +804,30 @@ main { flex: 1; padding: 40px 0 60px; }
                 <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"/><polyline points="12 6 12 12 16 14"/></svg>
                 <span id="clase-duracion">-</span>
               </span>
+            </div>
+          </div>
+
+          <!-- Barra de progreso de la clase actual -->
+          <div class="clase-progress-bar" id="clase-progress-bar" hidden>
+            <div class="clase-progress-bar__head">
+              <span class="clase-progress-bar__label">
+                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"><path d="M3 3v18h18"/><path d="M7 12l4-4 4 4 6-6"/></svg>
+                Tu progreso en esta clase
+              </span>
+              <span class="clase-progress-bar__percent" id="clase-progreso-percent">0%</span>
+            </div>
+            <div class="clase-progress-bar__track">
+              <div class="clase-progress-bar__fill" id="clase-progreso-fill" style="width:0%;"></div>
+            </div>
+            <div class="clase-progress-bar__actions">
+              <button class="btn-completa" id="btn-marcar-completa">
+                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.6" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"/></svg>
+                Marcar como completada
+              </button>
+              <button class="btn-descompleta" id="btn-desmarcar-completa" hidden>
+                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"/></svg>
+                Completada · Marcar como no vista
+              </button>
             </div>
           </div>
         </div>
@@ -288,6 +879,17 @@ main { flex: 1; padding: 40px 0 60px; }
     © 2026 <b>Visión Pecuaria</b> · Excelencia en producción animal · IPCIL
   </div>
 </footer>
+
+<!-- Toast de clase completada -->
+<div class="completed-toast" id="completed-toast">
+  <div class="completed-toast__ico">
+    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.6" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"/></svg>
+  </div>
+  <div class="completed-toast__text">
+    <b id="toast-title">¡Clase completada!</b>
+    <span id="toast-sub">Sigue así, vas por buen camino</span>
+  </div>
+</div>
 
 <script type="module">
 import { initializeApp } from "https://www.gstatic.com/firebasejs/10.11.0/firebase-app.js";
@@ -436,9 +1038,45 @@ async function cargarCurso() {
     }
 
     cursoData = cursoSnap.data();
-    $('curso-nombre').textContent = cursoData.nombre || 'Mi curso';
-    $('curso-sub').textContent = cursoData.subtitulo || '';
-    document.title = `${cursoData.nombre || 'Mi curso'} · Visión Pecuaria`;
+
+    // Nombre con highlight opcional
+    const nombreCompleto = cursoData.nombre || 'Mi curso';
+    const palabraClave = cursoData.palabraClave || '';
+    const nombreH1 = $('curso-nombre');
+    if (palabraClave && nombreCompleto.toLowerCase().includes(palabraClave.toLowerCase())) {
+      // Localizar y envolver la palabra clave con highlight
+      const idx = nombreCompleto.toLowerCase().indexOf(palabraClave.toLowerCase());
+      const antes = nombreCompleto.substring(0, idx);
+      const clave = nombreCompleto.substring(idx, idx + palabraClave.length);
+      const despues = nombreCompleto.substring(idx + palabraClave.length);
+      nombreH1.innerHTML = `${escapeHtmlSafe(antes)}<span class="highlight">${escapeHtmlSafe(clave)}</span>${escapeHtmlSafe(despues)}`;
+    } else {
+      nombreH1.textContent = nombreCompleto;
+    }
+    document.title = `${nombreCompleto} · Visión Pecuaria`;
+
+    // Instructor
+    if (cursoData.instructorNombre) {
+      $('curso-instructor-nombre').textContent = cursoData.instructorNombre;
+      $('curso-instructor').hidden = false;
+    } else if (cursoData.instructorId) {
+      // Intentar leer de la colección instructores
+      try {
+        const instSnap = await getDoc(doc(db, 'instructores', cursoData.instructorId));
+        if (instSnap.exists()) {
+          const inst = instSnap.data();
+          if (inst.nombre) {
+            $('curso-instructor-nombre').textContent = inst.nombre;
+            $('curso-instructor').hidden = false;
+          }
+        }
+      } catch(e) { /* silent */ }
+    }
+
+    // Aplicar color de marca del curso si existe
+    if (cursoData.colorMarca) {
+      aplicarColorMarca(cursoData.colorMarca);
+    }
 
     // Mostrar canal de WhatsApp de VP si está configurado en el doc
     if (cursoData.canalWhatsapp) {
@@ -453,6 +1091,56 @@ async function cargarCurso() {
     console.error('Error cargando curso:', err);
     mostrarSinAcceso('No pudimos cargar el contenido del curso. Refresca o escríbenos por WhatsApp.');
   }
+}
+
+// ═══════ SISTEMA DE COLOR DE MARCA POR CURSO ═══════
+function hexToRgb(hex) {
+  const clean = hex.replace('#', '').trim();
+  if (!/^[0-9a-fA-F]{6}$/.test(clean)) return null;
+  return {
+    r: parseInt(clean.substring(0, 2), 16),
+    g: parseInt(clean.substring(2, 4), 16),
+    b: parseInt(clean.substring(4, 6), 16)
+  };
+}
+
+function rgbToHex(r, g, b) {
+  const c = (n) => Math.max(0, Math.min(255, Math.round(n))).toString(16).padStart(2, '0');
+  return '#' + c(r) + c(g) + c(b);
+}
+
+function ajustarLuminosidad(hex, porcentaje) {
+  const rgb = hexToRgb(hex);
+  if (!rgb) return hex;
+  const factor = porcentaje / 100;
+  const r = factor >= 0 ? rgb.r + (255 - rgb.r) * factor : rgb.r * (1 + factor);
+  const g = factor >= 0 ? rgb.g + (255 - rgb.g) * factor : rgb.g * (1 + factor);
+  const b = factor >= 0 ? rgb.b + (255 - rgb.b) * factor : rgb.b * (1 + factor);
+  return rgbToHex(r, g, b);
+}
+
+function hexToRgba(hex, alpha) {
+  const rgb = hexToRgb(hex);
+  if (!rgb) return hex;
+  return `rgba(${rgb.r}, ${rgb.g}, ${rgb.b}, ${alpha})`;
+}
+
+function aplicarColorMarca(colorHex) {
+  let color = String(colorHex || '').trim();
+  if (!color.startsWith('#')) color = '#' + color;
+  if (!/^#[0-9a-fA-F]{6}$/.test(color)) {
+    console.warn('[VP] colorMarca inválido:', colorHex);
+    return;
+  }
+
+  const root = document.documentElement;
+  root.style.setProperty('--brand', color);
+  root.style.setProperty('--brand-light', ajustarLuminosidad(color, 20));
+  root.style.setProperty('--brand-dark', ajustarLuminosidad(color, -20));
+  root.style.setProperty('--brand-bg', hexToRgba(color, 0.10));
+
+  const themeMeta = document.querySelector('meta[name="theme-color"]');
+  if (themeMeta) themeMeta.content = color;
 }
 
 function pintarClases() {
@@ -470,32 +1158,62 @@ function pintarClases() {
 
   const list = $('clases-list');
   list.innerHTML = '';
+  const progreso = obtenerProgreso();
+
   clases.forEach((clase, idx) => {
+    const progClase = (progreso.clases || {})[idx] || { segundos: 0, completada: false };
+    const durTotalSeg = (clase.duracionMin || 60) * 60;
+    // Meta: 90% del tiempo esperado = 100% de progreso visual
+    const metaSeg = durTotalSeg * 0.9;
+    const pct = progClase.completada ? 100 : Math.min(100, Math.round((progClase.segundos / metaSeg) * 100));
+
+    // Circumferencia del donut chico (r=17): 2πr ≈ 106.81
+    const CIRC = 106.81;
+    const dashOffset = CIRC * (1 - pct / 100);
+
     const li = document.createElement('li');
-    li.className = 'clase-item' + (idx === 0 ? ' is-active' : '');
+    li.className = 'clase-item' + (idx === 0 ? ' is-active' : '') + (progClase.completada ? ' is-completed' : '');
     li.dataset.idx = idx;
     li.innerHTML = `
-      <div class="clase-item__num">${String(idx + 1).padStart(2, '0')}</div>
+      <div class="clase-item__donut">
+        <svg viewBox="0 0 40 40" width="40" height="40">
+          <circle class="clase-item__donut-track" cx="20" cy="20" r="17" stroke-width="3" fill="none"/>
+          <circle class="clase-item__donut-fill" cx="20" cy="20" r="17" stroke-width="3" fill="none"
+            stroke-dasharray="${CIRC.toFixed(2)}" stroke-dashoffset="${dashOffset.toFixed(2)}" stroke-linecap="round"/>
+        </svg>
+        <div class="clase-item__donut-num">${String(idx + 1).padStart(2, '0')}</div>
+        <div class="clase-item__done-check">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"/></svg>
+        </div>
+      </div>
       <div class="clase-item__info">
         <b></b>
         <small>
           <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"/><polyline points="12 6 12 12 16 14"/></svg>
-          ${clase.duracionMin || 60} min
+          ${clase.duracionMin || 60} min${progClase.completada ? ' · <span style="color:var(--success);font-weight:700;">Completada ✓</span>' : (pct > 0 ? ` · <span style="color:var(--brand);font-weight:700;">${pct}%</span>` : '')}
         </small>
       </div>
     `;
-    li.querySelector('b').textContent = clase.titulo || `Clase ${idx + 1}`;
+    li.querySelector('.clase-item__info b').textContent = clase.titulo || `Clase ${idx + 1}`;
     li.addEventListener('click', () => cambiarClase(idx));
     list.appendChild(li);
   });
 
-  cambiarClase(0);
+  // Cargar la primera clase (o la última vista si hay progreso)
+  const idxInicial = typeof progreso.ultimaClase === 'number' ? progreso.ultimaClase : 0;
+  cambiarClase(idxInicial);
+
+  // Actualizar hero progress (dots, anillo, botón continuar, etc.)
+  actualizarProgresoGeneral();
 }
 
 function cambiarClase(idx) {
   const clases = (cursoData.clases || []).slice().sort((a, b) => (a.orden || 0) - (b.orden || 0));
   const clase = clases[idx];
   if (!clase) return;
+
+  // Detener tracking de la clase anterior (persistir su progreso)
+  detenerTracking();
 
   claseActualIdx = idx;
 
@@ -514,10 +1232,315 @@ function cambiarClase(idx) {
     el.classList.toggle('is-active', i === idx);
   });
 
+  // Guardar "última clase abierta"
+  const progreso = obtenerProgreso();
+  progreso.ultimaClase = idx;
+  guardarProgreso(progreso);
+
+  // Mostrar barra de progreso y actualizar UI
+  $('clase-progress-bar').hidden = false;
+  actualizarBarraProgresoClase(idx);
+  actualizarProgresoGeneral();
+
+  // Iniciar tracking automático de tiempo activo
+  iniciarTracking(idx);
+
   if (window.innerWidth < 900) {
     $('video-iframe').scrollIntoView({ behavior: 'smooth', block: 'center' });
   }
 }
+
+// ═══════ SISTEMA DE PROGRESO ═══════
+
+function claveProgreso() {
+  const sessionId = localStorage.getItem(`vp_acceso_${SLUG}`) || 'anon';
+  return `vp_progreso_${SLUG}_${sessionId.substring(0, 20)}`;
+}
+
+function obtenerProgreso() {
+  try {
+    const raw = localStorage.getItem(claveProgreso());
+    if (!raw) return { clases: {}, ultimaClase: 0 };
+    const p = JSON.parse(raw);
+    return { clases: p.clases || {}, ultimaClase: typeof p.ultimaClase === 'number' ? p.ultimaClase : 0 };
+  } catch (e) {
+    return { clases: {}, ultimaClase: 0 };
+  }
+}
+
+function guardarProgreso(progreso) {
+  try {
+    localStorage.setItem(claveProgreso(), JSON.stringify(progreso));
+  } catch (e) {
+    console.warn('No se pudo guardar el progreso:', e);
+  }
+}
+
+let intervaloTracking = null;
+let ultimoGuardado = 0;
+
+function iniciarTracking(idxClase) {
+  detenerTracking();
+  intervaloTracking = setInterval(() => {
+    // Solo contamos si la ventana tiene foco y el usuario está en la página
+    if (!document.hasFocus() || document.hidden) return;
+
+    const progreso = obtenerProgreso();
+    if (!progreso.clases[idxClase]) progreso.clases[idxClase] = { segundos: 0, completada: false };
+    progreso.clases[idxClase].segundos += 1;
+    progreso.clases[idxClase].ultimaVisita = Date.now();
+
+    // Guardar cada 5 segundos (para no saturar localStorage)
+    if (Date.now() - ultimoGuardado > 5000) {
+      guardarProgreso(progreso);
+      ultimoGuardado = Date.now();
+      actualizarBarraProgresoClase(idxClase);
+    }
+
+    // Auto-completar al 90% del tiempo esperado
+    const clases = (cursoData.clases || []).slice().sort((a, b) => (a.orden || 0) - (b.orden || 0));
+    const clase = clases[idxClase];
+    if (clase && !progreso.clases[idxClase].completada) {
+      const durTotalSeg = (clase.duracionMin || 60) * 60;
+      const metaSeg = durTotalSeg * 0.9;
+      if (progreso.clases[idxClase].segundos >= metaSeg) {
+        marcarComoCompletada(idxClase, true);
+      }
+    }
+  }, 1000);
+}
+
+function detenerTracking() {
+  if (intervaloTracking) {
+    clearInterval(intervaloTracking);
+    intervaloTracking = null;
+    // Guardar antes de detener
+    const progreso = obtenerProgreso();
+    guardarProgreso(progreso);
+  }
+}
+
+function actualizarBarraProgresoClase(idxClase) {
+  const progreso = obtenerProgreso();
+  const progClase = progreso.clases[idxClase] || { segundos: 0, completada: false };
+  const clases = (cursoData.clases || []).slice().sort((a, b) => (a.orden || 0) - (b.orden || 0));
+  const clase = clases[idxClase];
+  if (!clase) return;
+
+  const durTotalSeg = (clase.duracionMin || 60) * 60;
+  const metaSeg = durTotalSeg * 0.9;
+  const pct = progClase.completada ? 100 : Math.min(100, Math.round((progClase.segundos / metaSeg) * 100));
+
+  $('clase-progreso-percent').textContent = `${pct}%`;
+  const fill = $('clase-progreso-fill');
+  fill.style.width = pct + '%';
+  fill.classList.toggle('is-completed', progClase.completada);
+
+  // Alternar botones
+  $('btn-marcar-completa').hidden = !!progClase.completada;
+  $('btn-desmarcar-completa').hidden = !progClase.completada;
+}
+
+function actualizarDonutClase(idxClase) {
+  const progreso = obtenerProgreso();
+  const progClase = progreso.clases[idxClase] || { segundos: 0, completada: false };
+  const clases = (cursoData.clases || []).slice().sort((a, b) => (a.orden || 0) - (b.orden || 0));
+  const clase = clases[idxClase];
+  if (!clase) return;
+
+  const durTotalSeg = (clase.duracionMin || 60) * 60;
+  const metaSeg = durTotalSeg * 0.9;
+  const pct = progClase.completada ? 100 : Math.min(100, Math.round((progClase.segundos / metaSeg) * 100));
+
+  const CIRC = 106.81;
+  const dashOffset = CIRC * (1 - pct / 100);
+
+  const li = document.querySelector(`.clase-item[data-idx="${idxClase}"]`);
+  if (!li) return;
+  li.classList.toggle('is-completed', progClase.completada);
+  const fill = li.querySelector('.clase-item__donut-fill');
+  if (fill) fill.style.strokeDashoffset = dashOffset.toFixed(2);
+
+  const small = li.querySelector('.clase-item__info small');
+  if (small && clase) {
+    small.innerHTML = `<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"/><polyline points="12 6 12 12 16 14"/></svg> ${clase.duracionMin || 60} min${progClase.completada ? ' · <span style="color:var(--success);font-weight:700;">Completada ✓</span>' : (pct > 0 ? ` · <span style="color:var(--brand);font-weight:700;">${pct}%</span>` : '')}`;
+  }
+}
+
+function escapeHtmlSafe(str) {
+  const div = document.createElement('div');
+  div.textContent = str || '';
+  return div.innerHTML;
+}
+
+function formatearTiempoRestante(minutos) {
+  if (minutos <= 0) return 'Todas las clases vistas';
+  if (minutos < 60) return `${minutos} min restantes`;
+  const h = Math.floor(minutos / 60);
+  const m = minutos % 60;
+  if (m === 0) return `${h} h restantes`;
+  return `${h} h ${m} min restantes`;
+}
+
+function actualizarProgresoGeneral() {
+  const clases = (cursoData.clases || []).slice().sort((a, b) => (a.orden || 0) - (b.orden || 0));
+  if (!clases.length) return;
+  const progreso = obtenerProgreso();
+  const total = clases.length;
+  const completadas = Object.entries(progreso.clases || {}).filter(([k, v]) => v.completada).length;
+  const pct = Math.round((completadas / total) * 100);
+
+  // Anillo grande
+  $('hero-percent').textContent = `${pct}%`;
+  $('hero-ring-sub').textContent = `${completadas} de ${total} clases`;
+
+  // Circumferencia r=44 → 2π*44 ≈ 276.46
+  const CIRC = 276.46;
+  const dashOffset = CIRC * (1 - pct / 100);
+  $('hero-ring-fill').style.strokeDashoffset = dashOffset.toFixed(2);
+
+  // Barra lineal + meta
+  $('hero-pbar-percent').textContent = `${pct}% completado`;
+  $('hero-pbar-fill').style.width = pct + '%';
+  $('hero-clases-completadas').textContent = completadas;
+  $('hero-clases-total').textContent = total;
+
+  // Tiempo restante (sumar duracionMin de clases NO completadas)
+  const minutosRestantes = clases.reduce((sum, clase, idx) => {
+    const progC = (progreso.clases || {})[idx] || { completada: false };
+    if (progC.completada) return sum;
+    return sum + (clase.duracionMin || 60);
+  }, 0);
+  $('hero-tiempo-restante').textContent = formatearTiempoRestante(minutosRestantes);
+
+  // Badge dinámico
+  const badgeText = $('hero-badge-text');
+  if (completadas === 0) badgeText.textContent = 'Recién empiezas';
+  else if (completadas === total) badgeText.textContent = 'Curso completado ✓';
+  else badgeText.textContent = 'En progreso';
+
+  // Dots visuales
+  const dotsCont = $('dots-container');
+  if (dotsCont) {
+    dotsCont.innerHTML = '';
+    clases.forEach((_, idx) => {
+      const progC = (progreso.clases || {})[idx] || { completada: false };
+      const esActual = idx === claseActualIdx;
+      const dot = document.createElement('span');
+      dot.className = 'curso-hero-dot' +
+        (progC.completada ? ' is-completed' : '') +
+        (esActual && !progC.completada ? ' is-current' : '');
+      dotsCont.appendChild(dot);
+    });
+  }
+
+  // Texto de dots
+  const dotsText = $('dots-text');
+  if (dotsText) {
+    if (completadas === 0) {
+      dotsText.innerHTML = `Llevas <b>0 de ${total} clases</b> · Faltan ${total} clases para tu certificado`;
+    } else if (completadas === total) {
+      dotsText.innerHTML = `<b>¡Todas las clases completadas!</b> Tu certificado IPCIL llegará en unos días.`;
+    } else {
+      const restan = total - completadas;
+      dotsText.innerHTML = `Llevas <b>${completadas} de ${total} clases</b> · Faltan ${restan} clase${restan === 1 ? '' : 's'} para tu certificado`;
+    }
+  }
+
+  // Botón continuar: siguiente clase no completada
+  const btnCont = $('btn-continuar');
+  if (btnCont) {
+    // Buscar la primera clase con progreso pero no completada, o la primera no completada
+    let siguienteIdx = -1;
+    const conProgreso = clases.findIndex((_, idx) => {
+      const p = (progreso.clases || {})[idx];
+      return p && p.segundos > 30 && !p.completada;
+    });
+    if (conProgreso !== -1) siguienteIdx = conProgreso;
+    else {
+      const primeraNoCompletada = clases.findIndex((_, idx) => {
+        const p = (progreso.clases || {})[idx] || {};
+        return !p.completada;
+      });
+      if (primeraNoCompletada !== -1) siguienteIdx = primeraNoCompletada;
+    }
+
+    if (siguienteIdx !== -1 && siguienteIdx !== claseActualIdx) {
+      const claseSig = clases[siguienteIdx];
+      const numFmt = String(siguienteIdx + 1).padStart(2, '0');
+      $('btn-continuar-titulo').textContent = 'Continuar';
+      $('btn-continuar-sub').textContent = `Clase ${numFmt} · ${claseSig.titulo || 'Siguiente clase'}`;
+      btnCont.hidden = false;
+      btnCont.onclick = () => {
+        cambiarClase(siguienteIdx);
+        $('video-iframe').scrollIntoView({ behavior: 'smooth', block: 'center' });
+      };
+    } else {
+      btnCont.hidden = true;
+    }
+  }
+}
+
+function marcarComoCompletada(idxClase, mostrarCelebracion) {
+  const progreso = obtenerProgreso();
+  if (!progreso.clases[idxClase]) progreso.clases[idxClase] = { segundos: 0, completada: false };
+  const yaEstaba = progreso.clases[idxClase].completada;
+  progreso.clases[idxClase].completada = true;
+  progreso.clases[idxClase].fechaCompletada = Date.now();
+  guardarProgreso(progreso);
+
+  actualizarBarraProgresoClase(idxClase);
+  actualizarDonutClase(idxClase);
+  actualizarProgresoGeneral();
+
+  if (mostrarCelebracion && !yaEstaba) {
+    const clases = (cursoData.clases || []).slice().sort((a, b) => (a.orden || 0) - (b.orden || 0));
+    const completadas = Object.values(progreso.clases).filter(c => c.completada).length;
+    const total = clases.length;
+    if (completadas === total) {
+      mostrarToast('¡Curso completado! 🎉', 'Terminaste todas las clases. En unos días recibirás tu certificado IPCIL.');
+    } else {
+      mostrarToast('¡Clase completada!', `Vas ${completadas} de ${total}. Sigue así.`);
+    }
+  }
+}
+
+function desmarcarCompletada(idxClase) {
+  const progreso = obtenerProgreso();
+  if (progreso.clases[idxClase]) {
+    progreso.clases[idxClase].completada = false;
+    delete progreso.clases[idxClase].fechaCompletada;
+    guardarProgreso(progreso);
+  }
+  actualizarBarraProgresoClase(idxClase);
+  actualizarDonutClase(idxClase);
+  actualizarProgresoGeneral();
+}
+
+function mostrarToast(titulo, sub) {
+  const toast = $('completed-toast');
+  $('toast-title').textContent = titulo;
+  $('toast-sub').textContent = sub || '';
+  toast.classList.add('is-visible');
+  clearTimeout(window.__toastTimer);
+  window.__toastTimer = setTimeout(() => toast.classList.remove('is-visible'), 4500);
+}
+
+// Event listeners de los botones (se registran de inmediato porque este módulo carga tras el DOM)
+const btnMarcar = document.getElementById('btn-marcar-completa');
+const btnDesmarcar = document.getElementById('btn-desmarcar-completa');
+if (btnMarcar) btnMarcar.addEventListener('click', () => marcarComoCompletada(claseActualIdx, true));
+if (btnDesmarcar) btnDesmarcar.addEventListener('click', () => desmarcarCompletada(claseActualIdx));
+
+// Detener tracking al cerrar la pestaña
+window.addEventListener('beforeunload', () => detenerTracking());
+// Guardar progreso al perder foco / minimizar
+document.addEventListener('visibilitychange', () => {
+  if (document.hidden) {
+    const progreso = obtenerProgreso();
+    guardarProgreso(progreso);
+  }
+});
 
 function pintarRecursos() {
   const recursos = cursoData.recursosDescargables || [];
