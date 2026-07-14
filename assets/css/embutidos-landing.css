@@ -5,31 +5,27 @@
    ═══════════════════════════════════════════════════════════════════════════ */
 
 :root {
-  /* Paleta principal — inspirada en tonos de embutidos artesanales mexicanos */
-  --borgo-900: #3d1414;
-  --borgo-800: #5a1c1c;
-  --borgo-700: #7c2d12;
-  --borgo-600: #991b1b;
-  --borgo-500: #b91c1c;
-  --borgo-400: #dc2626;
+  /* Paleta modernizada — cognac + terracota sutil + neutros premium */
+  --brand-900: #1a0e08;
+  --brand-800: #3c1f10;
+  --brand-700: #7c3a1e;
+  --brand-600: #a04d2a;
+  --brand-500: #c2632f;
+  --brand-400: #d97843;
+  --brand-300: #e89568;
 
-  --cognac-700: #78350f;
-  --cognac-600: #92400e;
-  --cognac-500: #b45309;
-  --cognac-400: #d97706;
-  --cognac-300: #f59e0b;
-  --cognac-200: #fbbf24;
+  --accent-700: #92400e;
+  --accent-600: #b45309;
+  --accent-500: #d97706;
+  --accent-400: #f59e0b;
+  --accent-300: #fbbf24;
 
-  --marfil-50: #fefdfb;
-  --marfil-100: #fef9e7;
-  --marfil-200: #fef3c7;
-  --marfil-300: #fde68a;
+  --cream-50: #fdfcfa;
+  --cream-100: #faf6ee;
+  --cream-200: #f5eddb;
+  --cream-300: #ebdcbe;
 
-  --madera-900: #1c0a03;
-  --madera-800: #451a03;
-  --madera-700: #713f12;
-  --madera-600: #854d0e;
-
+  --neutral-950: #0c0a09;
   --neutral-900: #1c1917;
   --neutral-800: #292524;
   --neutral-700: #44403c;
@@ -42,18 +38,20 @@
   --neutral-50: #fafaf9;
 
   --success: #16a34a;
+  --success-light: #dcfce7;
 
-  --font-display: 'Playfair Display', Georgia, serif;
+  /* Tipografía moderna: Bricolage o Instrument Serif como display + Inter body */
+  --font-display: 'Playfair Display', 'Instrument Serif', Georgia, serif;
   --font-body: 'Inter', -apple-system, BlinkMacSystemFont, sans-serif;
 
-  --radius: 14px;
+  --radius: 16px;
   --radius-sm: 10px;
-  --radius-lg: 20px;
+  --radius-lg: 24px;
 
-  --shadow-sm: 0 2px 8px rgba(60, 20, 20, .08);
-  --shadow-md: 0 8px 24px rgba(60, 20, 20, .12);
-  --shadow-lg: 0 20px 50px rgba(60, 20, 20, .18);
-  --shadow-xl: 0 30px 70px rgba(60, 20, 20, .25);
+  --shadow-sm: 0 1px 3px rgba(28, 25, 23, .06), 0 1px 2px rgba(28, 25, 23, .04);
+  --shadow-md: 0 4px 12px rgba(28, 25, 23, .08), 0 2px 4px rgba(28, 25, 23, .04);
+  --shadow-lg: 0 12px 32px rgba(28, 25, 23, .12), 0 4px 12px rgba(28, 25, 23, .06);
+  --shadow-xl: 0 24px 60px rgba(28, 25, 23, .16), 0 8px 20px rgba(28, 25, 23, .08);
 }
 
 * { box-sizing: border-box; margin: 0; padding: 0; }
@@ -61,7 +59,7 @@ html { scroll-behavior: smooth; }
 body {
   font-family: var(--font-body);
   color: var(--neutral-800);
-  background: var(--marfil-50);
+  background: var(--cream-50);
   line-height: 1.55;
   -webkit-font-smoothing: antialiased;
   text-rendering: optimizeLegibility;
@@ -82,16 +80,16 @@ button { font-family: inherit; cursor: pointer; border: none; background: none; 
 }
 
 /* ═══════════════════════════════════════════════════════════════════════════
-   HEADER STICKY
+   HEADER STICKY — Limpio, sin bordes duros
    ═══════════════════════════════════════════════════════════════════════════ */
 .hdr {
   position: sticky;
   top: 0;
   z-index: 100;
-  background: rgba(254, 253, 251, .92);
-  backdrop-filter: blur(14px);
-  -webkit-backdrop-filter: blur(14px);
-  border-bottom: 1px solid rgba(60, 20, 20, .08);
+  background: rgba(253, 252, 250, .82);
+  backdrop-filter: blur(20px) saturate(1.4);
+  -webkit-backdrop-filter: blur(20px) saturate(1.4);
+  border-bottom: 1px solid rgba(28, 25, 23, .06);
 }
 .hdr__inner {
   display: flex;
@@ -106,16 +104,11 @@ button { font-family: inherit; cursor: pointer; border: none; background: none; 
   gap: 12px;
 }
 .hdr__brand-mark {
-  width: 44px;
-  height: 44px;
-  border-radius: 12px;
-  background: #fff;
-  border: 2px solid var(--borgo-700);
-  padding: 4px;
+  width: 40px;
+  height: 40px;
   display: grid;
   place-items: center;
   flex-shrink: 0;
-  box-shadow: var(--shadow-sm);
 }
 .hdr__brand-mark img { width: 100%; height: 100%; object-fit: contain; }
 .hdr__brand-text {
@@ -126,39 +119,39 @@ button { font-family: inherit; cursor: pointer; border: none; background: none; 
 .hdr__brand-text b {
   font-family: var(--font-display);
   font-weight: 700;
-  font-size: 1.05rem;
-  color: var(--borgo-800);
+  font-size: 1.1rem;
+  color: var(--neutral-900);
+  letter-spacing: -.01em;
 }
 .hdr__brand-text small {
   font-size: .68rem;
-  letter-spacing: .12em;
+  letter-spacing: .14em;
   text-transform: uppercase;
-  color: var(--cognac-600);
-  margin-top: 2px;
+  color: var(--brand-600);
+  margin-top: 3px;
   font-weight: 600;
 }
 .hdr__cta {
   display: inline-flex;
   align-items: center;
   gap: 8px;
-  padding: 12px 22px;
-  background: linear-gradient(135deg, var(--borgo-700), var(--borgo-800));
+  padding: 11px 22px;
+  background: var(--neutral-900);
   color: #fff;
   border-radius: 999px;
-  font-weight: 700;
+  font-weight: 600;
   font-size: .9rem;
-  letter-spacing: .02em;
-  box-shadow: 0 6px 16px rgba(124, 45, 18, .35);
-  transition: transform .2s, box-shadow .2s;
+  letter-spacing: -.01em;
+  transition: background .2s, transform .15s;
 }
 .hdr__cta:hover {
+  background: var(--brand-700);
   transform: translateY(-1px);
-  box-shadow: 0 10px 24px rgba(124, 45, 18, .5);
 }
-.hdr__cta svg { width: 16px; height: 16px; }
+.hdr__cta svg { width: 15px; height: 15px; }
 @media (max-width: 640px) {
   .hdr__brand-text small { display: none; }
-  .hdr__brand-text b { font-size: .95rem; }
+  .hdr__brand-text b { font-size: 1rem; }
   .hdr__cta { padding: 10px 16px; font-size: .82rem; }
 }
 
@@ -166,18 +159,24 @@ button { font-family: inherit; cursor: pointer; border: none; background: none; 
    HERO
    ═══════════════════════════════════════════════════════════════════════════ */
 .hero {
-  background:
-    radial-gradient(ellipse at top left, rgba(217, 119, 6, .10) 0%, transparent 50%),
-    radial-gradient(ellipse at bottom right, rgba(124, 45, 18, .08) 0%, transparent 50%),
-    linear-gradient(180deg, var(--marfil-100) 0%, var(--marfil-50) 100%);
-  padding: 48px 0 64px;
+  background: var(--cream-50);
+  padding: 56px 0 72px;
   position: relative;
-  overflow: hidden;
+}
+.hero::before {
+  content: '';
+  position: absolute;
+  inset: 0;
+  background:
+    radial-gradient(ellipse 800px 400px at 15% 20%, rgba(217, 119, 6, .04) 0%, transparent 50%),
+    radial-gradient(ellipse 600px 300px at 85% 80%, rgba(124, 58, 30, .03) 0%, transparent 50%);
+  pointer-events: none;
 }
 .hero__grid {
+  position: relative;
   display: grid;
-  grid-template-columns: 1.15fr 1fr;
-  gap: 60px;
+  grid-template-columns: 1.1fr 1fr;
+  gap: 64px;
   align-items: center;
 }
 .hero__badges {
@@ -200,23 +199,23 @@ button { font-family: inherit; cursor: pointer; border: none; background: none; 
 }
 .badge svg { width: 14px; height: 14px; }
 .badge--offer {
-  background: linear-gradient(135deg, var(--cognac-400), var(--cognac-500));
+  background: linear-gradient(135deg, var(--accent-400), var(--accent-500));
 }
 .badge--cupo {
-  background: linear-gradient(135deg, var(--borgo-600), var(--borgo-700));
+  background: linear-gradient(135deg, var(--brand-600), var(--brand-700));
 }
 
 .hero__title {
   font-family: var(--font-display);
   font-size: clamp(2.4rem, 5.4vw, 3.8rem);
   font-weight: 800;
-  color: var(--madera-900);
+  color: var(--neutral-950);
   line-height: 1.05;
   letter-spacing: -.02em;
   margin-bottom: 20px;
 }
 .hero__title--accent {
-  background: linear-gradient(135deg, var(--borgo-600) 0%, var(--cognac-500) 100%);
+  background: linear-gradient(135deg, var(--brand-600) 0%, var(--accent-500) 100%);
   -webkit-background-clip: text;
   background-clip: text;
   -webkit-text-fill-color: transparent;
@@ -229,7 +228,7 @@ button { font-family: inherit; cursor: pointer; border: none; background: none; 
   max-width: 540px;
   line-height: 1.65;
 }
-.hero__lead b { color: var(--borgo-800); font-weight: 700; }
+.hero__lead b { color: var(--brand-800); font-weight: 700; }
 
 /* Pricing card */
 .hero__pricing {
@@ -261,14 +260,14 @@ button { font-family: inherit; cursor: pointer; border: none; background: none; 
 .hero__pricing-currency {
   font-family: var(--font-display);
   font-size: 2.2rem;
-  color: var(--borgo-700);
+  color: var(--brand-700);
   font-weight: 700;
 }
 .hero__pricing-amount {
   font-family: var(--font-display);
   font-size: 4.5rem;
   font-weight: 900;
-  color: var(--borgo-700);
+  color: var(--brand-700);
   line-height: 1;
   letter-spacing: -.02em;
 }
@@ -312,7 +311,7 @@ button { font-family: inherit; cursor: pointer; border: none; background: none; 
   width: 24px;
   height: 24px;
   border-radius: 50%;
-  background: linear-gradient(135deg, var(--borgo-600), var(--borgo-700));
+  background: linear-gradient(135deg, var(--brand-600), var(--brand-700));
   color: #fff;
   display: grid;
   place-items: center;
@@ -330,7 +329,7 @@ button { font-family: inherit; cursor: pointer; border: none; background: none; 
   width: 100%;
   max-width: 540px;
   padding: 20px 28px;
-  background: linear-gradient(135deg, var(--borgo-700), var(--borgo-800));
+  background: linear-gradient(135deg, var(--brand-700), var(--brand-800));
   color: #fff;
   border-radius: var(--radius);
   font-family: var(--font-body);
@@ -364,7 +363,7 @@ button { font-family: inherit; cursor: pointer; border: none; background: none; 
 .hero__guarantee svg {
   width: 16px;
   height: 16px;
-  color: var(--cognac-500);
+  color: var(--accent-500);
 }
 
 /* Video preview */
@@ -377,7 +376,7 @@ button { font-family: inherit; cursor: pointer; border: none; background: none; 
   overflow: hidden;
   box-shadow: var(--shadow-xl);
   aspect-ratio: 16 / 10;
-  background: var(--madera-900);
+  background: var(--neutral-950);
   border: 3px solid rgba(124, 45, 18, .2);
 }
 .video-frame video {
@@ -395,7 +394,7 @@ button { font-family: inherit; cursor: pointer; border: none; background: none; 
   gap: 8px;
   padding: 10px 16px;
   background: rgba(255, 255, 255, .92);
-  color: var(--madera-900);
+  color: var(--neutral-950);
   border-radius: 999px;
   font-size: .82rem;
   font-weight: 700;
@@ -419,7 +418,7 @@ button { font-family: inherit; cursor: pointer; border: none; background: none; 
   color: var(--neutral-600);
   font-weight: 600;
 }
-.hero__video-label svg { width: 16px; height: 16px; color: var(--borgo-700); }
+.hero__video-label svg { width: 16px; height: 16px; color: var(--brand-700); }
 
 @media (max-width: 900px) {
   .hero__grid { grid-template-columns: 1fr; gap: 40px; }
@@ -435,7 +434,7 @@ button { font-family: inherit; cursor: pointer; border: none; background: none; 
    STATS
    ═══════════════════════════════════════════════════════════════════════════ */
 .stats {
-  background: var(--madera-900);
+  background: var(--neutral-950);
   padding: 40px 0;
   color: #fff;
 }
@@ -449,7 +448,7 @@ button { font-family: inherit; cursor: pointer; border: none; background: none; 
   font-family: var(--font-display);
   font-size: clamp(1.8rem, 4vw, 2.6rem);
   font-weight: 800;
-  color: var(--cognac-300);
+  color: var(--accent-300);
   line-height: 1;
   margin-bottom: 6px;
 }
@@ -480,7 +479,7 @@ button { font-family: inherit; cursor: pointer; border: none; background: none; 
   font-size: .78rem;
   letter-spacing: .2em;
   text-transform: uppercase;
-  color: var(--cognac-600);
+  color: var(--accent-600);
   font-weight: 700;
   margin-bottom: 12px;
   padding: 6px 16px;
@@ -491,7 +490,7 @@ button { font-family: inherit; cursor: pointer; border: none; background: none; 
   font-family: var(--font-display);
   font-size: clamp(1.8rem, 4vw, 2.6rem);
   font-weight: 800;
-  color: var(--madera-900);
+  color: var(--neutral-950);
   line-height: 1.15;
   letter-spacing: -.01em;
   margin-bottom: 12px;
@@ -531,10 +530,10 @@ button { font-family: inherit; cursor: pointer; border: none; background: none; 
   white-space: nowrap;
   transition: color .2s, border-color .2s;
 }
-.tab-btn:hover { color: var(--borgo-700); }
+.tab-btn:hover { color: var(--brand-700); }
 .tab-btn.is-active {
-  color: var(--borgo-800);
-  border-bottom-color: var(--cognac-400);
+  color: var(--brand-800);
+  border-bottom-color: var(--accent-400);
 }
 .tab-btn svg { width: 18px; height: 18px; }
 
@@ -555,7 +554,7 @@ button { font-family: inherit; cursor: pointer; border: none; background: none; 
   gap: 40px;
   align-items: start;
   padding: 32px;
-  background: linear-gradient(135deg, var(--marfil-100), var(--marfil-50));
+  background: linear-gradient(135deg, var(--cream-100), var(--cream-50));
   border-radius: var(--radius-lg);
   border: 1px solid rgba(124, 45, 18, .12);
 }
@@ -564,7 +563,7 @@ button { font-family: inherit; cursor: pointer; border: none; background: none; 
   aspect-ratio: 1;
   border-radius: var(--radius-lg);
   overflow: hidden;
-  background: linear-gradient(135deg, var(--borgo-700), var(--madera-800));
+  background: linear-gradient(135deg, var(--brand-700), var(--neutral-900));
   border: 4px solid #fff;
   box-shadow: var(--shadow-lg);
 }
@@ -577,7 +576,7 @@ button { font-family: inherit; cursor: pointer; border: none; background: none; 
   font-size: .78rem;
   letter-spacing: .2em;
   text-transform: uppercase;
-  color: var(--cognac-600);
+  color: var(--accent-600);
   font-weight: 700;
   margin-bottom: 8px;
 }
@@ -585,12 +584,12 @@ button { font-family: inherit; cursor: pointer; border: none; background: none; 
   font-family: var(--font-display);
   font-size: 2rem;
   font-weight: 800;
-  color: var(--madera-900);
+  color: var(--neutral-950);
   line-height: 1.15;
   margin-bottom: 4px;
 }
 .instructor-role {
-  color: var(--borgo-700);
+  color: var(--brand-700);
   font-weight: 600;
   margin-bottom: 20px;
   font-size: 1rem;
@@ -600,7 +599,7 @@ button { font-family: inherit; cursor: pointer; border: none; background: none; 
   line-height: 1.7;
   margin-bottom: 14px;
 }
-.instructor-bio b { color: var(--madera-800); font-weight: 700; }
+.instructor-bio b { color: var(--neutral-900); font-weight: 700; }
 .instructor-tags {
   display: flex;
   gap: 10px;
@@ -617,9 +616,9 @@ button { font-family: inherit; cursor: pointer; border: none; background: none; 
   border-radius: 999px;
   font-size: .82rem;
   font-weight: 600;
-  color: var(--borgo-800);
+  color: var(--brand-800);
 }
-.pill svg { width: 14px; height: 14px; color: var(--cognac-500); }
+.pill svg { width: 14px; height: 14px; color: var(--accent-500); }
 
 @media (max-width: 720px) {
   .instructor-card { grid-template-columns: 1fr; padding: 20px; gap: 20px; }
@@ -639,7 +638,7 @@ button { font-family: inherit; cursor: pointer; border: none; background: none; 
   display: flex;
   gap: 16px;
   padding: 20px 24px;
-  background: var(--marfil-50);
+  background: var(--cream-50);
   border-radius: var(--radius);
   border: 1px solid rgba(124, 45, 18, .1);
 }
@@ -647,7 +646,7 @@ button { font-family: inherit; cursor: pointer; border: none; background: none; 
   width: 32px;
   height: 32px;
   border-radius: 50%;
-  background: linear-gradient(135deg, var(--borgo-600), var(--borgo-700));
+  background: linear-gradient(135deg, var(--brand-600), var(--brand-700));
   color: #fff;
   display: grid;
   place-items: center;
@@ -655,7 +654,7 @@ button { font-family: inherit; cursor: pointer; border: none; background: none; 
   box-shadow: 0 4px 10px rgba(124, 45, 18, .3);
 }
 .check-ico svg { width: 14px; height: 14px; }
-.aprender-list b { color: var(--borgo-800); font-weight: 700; }
+.aprender-list b { color: var(--brand-800); font-weight: 700; }
 @media (max-width: 640px) {
   .aprender-list { grid-template-columns: 1fr; }
 }
@@ -683,7 +682,7 @@ button { font-family: inherit; cursor: pointer; border: none; background: none; 
   width: 56px;
   height: 56px;
   border-radius: 16px;
-  background: linear-gradient(135deg, var(--cognac-400), var(--cognac-500));
+  background: linear-gradient(135deg, var(--accent-400), var(--accent-500));
   color: #fff;
   display: grid;
   place-items: center;
@@ -695,7 +694,7 @@ button { font-family: inherit; cursor: pointer; border: none; background: none; 
   font-family: var(--font-display);
   font-weight: 700;
   font-size: 1.1rem;
-  color: var(--madera-900);
+  color: var(--neutral-950);
   margin-bottom: 8px;
 }
 .incluye-card p {
@@ -719,7 +718,7 @@ button { font-family: inherit; cursor: pointer; border: none; background: none; 
   overflow: hidden;
   transition: border-color .2s;
 }
-.modulo[open] { border-color: var(--cognac-400); box-shadow: var(--shadow-md); }
+.modulo[open] { border-color: var(--accent-400); box-shadow: var(--shadow-md); }
 .modulo summary {
   display: flex;
   align-items: center;
@@ -730,12 +729,12 @@ button { font-family: inherit; cursor: pointer; border: none; background: none; 
   transition: background .2s;
 }
 .modulo summary::-webkit-details-marker { display: none; }
-.modulo summary:hover { background: var(--marfil-50); }
+.modulo summary:hover { background: var(--cream-50); }
 .modulo-num {
   font-family: var(--font-display);
   font-weight: 800;
   font-size: 1.5rem;
-  color: var(--cognac-500);
+  color: var(--accent-500);
   min-width: 44px;
   line-height: 1;
 }
@@ -743,14 +742,14 @@ button { font-family: inherit; cursor: pointer; border: none; background: none; 
   flex: 1;
   font-weight: 700;
   font-size: 1.02rem;
-  color: var(--madera-900);
+  color: var(--neutral-950);
 }
 .modulo-caret {
   color: var(--neutral-500);
   transition: transform .3s;
 }
 .modulo-caret svg { width: 20px; height: 20px; }
-.modulo[open] .modulo-caret { transform: rotate(180deg); color: var(--borgo-700); }
+.modulo[open] .modulo-caret { transform: rotate(180deg); color: var(--brand-700); }
 .modulo ul {
   list-style: none;
   padding: 0 24px 24px 84px;
@@ -771,7 +770,7 @@ button { font-family: inherit; cursor: pointer; border: none; background: none; 
   width: 6px;
   height: 6px;
   border-radius: 50%;
-  background: var(--cognac-400);
+  background: var(--accent-400);
 }
 @media (max-width: 640px) {
   .modulo summary { padding: 16px 18px; gap: 12px; }
@@ -791,7 +790,7 @@ button { font-family: inherit; cursor: pointer; border: none; background: none; 
   display: flex;
   gap: 16px;
   padding: 20px 24px;
-  background: var(--marfil-50);
+  background: var(--cream-50);
   border-radius: var(--radius);
   border: 1px solid rgba(124, 45, 18, .12);
   align-items: flex-start;
@@ -800,7 +799,7 @@ button { font-family: inherit; cursor: pointer; border: none; background: none; 
   width: 40px;
   height: 40px;
   border-radius: 12px;
-  background: linear-gradient(135deg, var(--borgo-600), var(--borgo-800));
+  background: linear-gradient(135deg, var(--brand-600), var(--brand-800));
   color: #fff;
   display: grid;
   place-items: center;
@@ -808,7 +807,7 @@ button { font-family: inherit; cursor: pointer; border: none; background: none; 
   box-shadow: 0 4px 10px rgba(124, 45, 18, .3);
 }
 .dirigido-ico svg { width: 18px; height: 18px; }
-.dirigido-list b { color: var(--borgo-800); font-weight: 700; }
+.dirigido-list b { color: var(--brand-800); font-weight: 700; }
 @media (max-width: 640px) { .dirigido-list { grid-template-columns: 1fr; } }
 
 /* ═══════════════════════════════════════════════════════════════════════════
@@ -816,7 +815,7 @@ button { font-family: inherit; cursor: pointer; border: none; background: none; 
    ═══════════════════════════════════════════════════════════════════════════ */
 .testimonios {
   padding: 80px 0;
-  background: linear-gradient(180deg, var(--marfil-100), var(--marfil-50));
+  background: linear-gradient(180deg, var(--cream-100), var(--cream-50));
 }
 .testimonios-grid {
   display: grid;
@@ -842,7 +841,7 @@ button { font-family: inherit; cursor: pointer; border: none; background: none; 
   width: 48px;
   height: 48px;
   border-radius: 50%;
-  background: linear-gradient(135deg, var(--borgo-700), var(--madera-800));
+  background: linear-gradient(135deg, var(--brand-700), var(--neutral-900));
   color: #fff;
   display: grid;
   place-items: center;
@@ -850,7 +849,7 @@ button { font-family: inherit; cursor: pointer; border: none; background: none; 
   font-size: 1rem;
   letter-spacing: .05em;
 }
-.testi-stars { display: flex; gap: 2px; color: var(--cognac-400); }
+.testi-stars { display: flex; gap: 2px; color: var(--accent-400); }
 .testi-stars svg { width: 16px; height: 16px; }
 .testi-body {
   color: var(--neutral-700);
@@ -865,7 +864,7 @@ button { font-family: inherit; cursor: pointer; border: none; background: none; 
   padding-top: 16px;
   border-top: 1px solid var(--neutral-200);
 }
-.testi-name b { color: var(--madera-900); font-weight: 700; }
+.testi-name b { color: var(--neutral-950); font-weight: 700; }
 .testi-name small { color: var(--neutral-500); font-size: .82rem; }
 
 .testimonios-avg {
@@ -882,9 +881,9 @@ button { font-family: inherit; cursor: pointer; border: none; background: none; 
   margin-left: auto;
   margin-right: auto;
 }
-.testi-avg-stars { display: flex; gap: 2px; color: var(--cognac-400); }
+.testi-avg-stars { display: flex; gap: 2px; color: var(--accent-400); }
 .testi-avg-stars svg { width: 18px; height: 18px; }
-.testimonios-avg b { color: var(--madera-900); font-weight: 800; }
+.testimonios-avg b { color: var(--neutral-950); font-weight: 800; }
 
 @media (max-width: 900px) { .testimonios-grid { grid-template-columns: 1fr; max-width: 480px; margin: 0 auto; } }
 
@@ -903,13 +902,13 @@ button { font-family: inherit; cursor: pointer; border: none; background: none; 
   gap: 12px;
 }
 .faq-item {
-  background: var(--marfil-50);
+  background: var(--cream-50);
   border: 1.5px solid var(--neutral-200);
   border-radius: var(--radius);
   overflow: hidden;
   transition: border-color .2s;
 }
-.faq-item[open] { border-color: var(--cognac-400); }
+.faq-item[open] { border-color: var(--accent-400); }
 .faq-item summary {
   display: flex;
   justify-content: space-between;
@@ -919,7 +918,7 @@ button { font-family: inherit; cursor: pointer; border: none; background: none; 
   cursor: pointer;
   list-style: none;
   font-weight: 700;
-  color: var(--madera-900);
+  color: var(--neutral-950);
   font-size: 1rem;
   transition: background .2s;
 }
@@ -928,7 +927,7 @@ button { font-family: inherit; cursor: pointer; border: none; background: none; 
 .faq-item summary svg {
   width: 20px;
   height: 20px;
-  color: var(--borgo-700);
+  color: var(--brand-700);
   transition: transform .3s;
   flex-shrink: 0;
 }
@@ -947,7 +946,7 @@ button { font-family: inherit; cursor: pointer; border: none; background: none; 
   gap: 16px;
   margin-top: 40px;
   padding: 20px 32px;
-  background: var(--marfil-100);
+  background: var(--cream-100);
   border-radius: var(--radius-lg);
   max-width: 640px;
   margin-left: auto;
@@ -975,7 +974,7 @@ button { font-family: inherit; cursor: pointer; border: none; background: none; 
    ═══════════════════════════════════════════════════════════════════════════ */
 .cta-final {
   padding: 80px 0;
-  background: linear-gradient(135deg, var(--madera-900), var(--borgo-900) 60%, var(--madera-800));
+  background: linear-gradient(135deg, var(--neutral-950), var(--brand-900) 60%, var(--neutral-900));
   position: relative;
   overflow: hidden;
 }
@@ -1002,7 +1001,7 @@ button { font-family: inherit; cursor: pointer; border: none; background: none; 
 .cta-badge {
   display: inline-block;
   padding: 8px 20px;
-  background: linear-gradient(135deg, var(--cognac-400), var(--cognac-500));
+  background: linear-gradient(135deg, var(--accent-400), var(--accent-500));
   color: #fff;
   border-radius: 999px;
   font-weight: 800;
@@ -1021,7 +1020,7 @@ button { font-family: inherit; cursor: pointer; border: none; background: none; 
   font-family: var(--font-display);
   font-size: clamp(3rem, 8vw, 4.5rem);
   font-weight: 900;
-  color: var(--borgo-700);
+  color: var(--brand-700);
   line-height: 1;
   letter-spacing: -.02em;
   margin-bottom: 8px;
@@ -1057,7 +1056,7 @@ button { font-family: inherit; cursor: pointer; border: none; background: none; 
   gap: 14px;
   align-items: flex-start;
   padding: 18px 20px;
-  background: linear-gradient(135deg, var(--marfil-100), var(--marfil-50));
+  background: linear-gradient(135deg, var(--cream-100), var(--cream-50));
   border: 1.5px solid rgba(217, 119, 6, .25);
   border-radius: var(--radius);
   text-align: left;
@@ -1066,12 +1065,12 @@ button { font-family: inherit; cursor: pointer; border: none; background: none; 
 .cta-guarantee-box > svg {
   width: 32px;
   height: 32px;
-  color: var(--cognac-500);
+  color: var(--accent-500);
   flex-shrink: 0;
 }
 .cta-guarantee-box b {
   display: block;
-  color: var(--madera-900);
+  color: var(--neutral-950);
   margin-bottom: 4px;
   font-weight: 800;
 }
@@ -1098,7 +1097,7 @@ button { font-family: inherit; cursor: pointer; border: none; background: none; 
    FOOTER
    ═══════════════════════════════════════════════════════════════════════════ */
 .footer {
-  background: var(--madera-900);
+  background: var(--neutral-950);
   color: rgba(255, 255, 255, .8);
   padding: 48px 0 32px;
 }
@@ -1124,7 +1123,7 @@ button { font-family: inherit; cursor: pointer; border: none; background: none; 
 }
 .footer__brand small {
   display: block;
-  color: var(--cognac-300);
+  color: var(--accent-300);
   font-size: .72rem;
   letter-spacing: .12em;
   text-transform: uppercase;
@@ -1145,7 +1144,7 @@ button { font-family: inherit; cursor: pointer; border: none; background: none; 
   font-weight: 600;
   transition: color .2s;
 }
-.footer__links a:hover { color: var(--cognac-300); }
+.footer__links a:hover { color: var(--accent-300); }
 .footer__links svg { width: 16px; height: 16px; }
 .footer__legal {
   font-size: .76rem;
@@ -1181,7 +1180,7 @@ button { font-family: inherit; cursor: pointer; border: none; background: none; 
   display: block;
   font-family: var(--font-display);
   font-size: 1.4rem;
-  color: var(--borgo-700);
+  color: var(--brand-700);
   font-weight: 800;
   line-height: 1;
 }
@@ -1196,7 +1195,7 @@ button { font-family: inherit; cursor: pointer; border: none; background: none; 
   align-items: center;
   gap: 8px;
   padding: 14px 24px;
-  background: linear-gradient(135deg, var(--borgo-700), var(--borgo-800));
+  background: linear-gradient(135deg, var(--brand-700), var(--brand-800));
   color: #fff;
   border-radius: 999px;
   font-weight: 800;
@@ -1250,7 +1249,7 @@ button { font-family: inherit; cursor: pointer; border: none; background: none; 
 .modal__title {
   font-family: var(--font-display);
   font-weight: 700;
-  color: var(--madera-900);
+  color: var(--neutral-950);
   font-size: 1.15rem;
 }
 .modal__close {
@@ -1260,7 +1259,7 @@ button { font-family: inherit; cursor: pointer; border: none; background: none; 
   color: var(--neutral-500);
   transition: background .2s, color .2s;
 }
-.modal__close:hover { background: var(--neutral-100); color: var(--madera-900); }
+.modal__close:hover { background: var(--neutral-100); color: var(--neutral-950); }
 .modal__close svg { width: 18px; height: 18px; margin: 0 auto; }
 .modal__body { padding: 28px 24px; }
 
@@ -1272,7 +1271,7 @@ button { font-family: inherit; cursor: pointer; border: none; background: none; 
   width: 64px;
   height: 64px;
   border-radius: 18px;
-  background: linear-gradient(135deg, var(--borgo-700), var(--madera-800));
+  background: linear-gradient(135deg, var(--brand-700), var(--neutral-900));
   color: #fff;
   display: grid;
   place-items: center;
@@ -1282,7 +1281,7 @@ button { font-family: inherit; cursor: pointer; border: none; background: none; 
 .auth-hero h3, .nombre-hero h3 {
   font-family: var(--font-display);
   font-weight: 700;
-  color: var(--madera-900);
+  color: var(--neutral-950);
   font-size: 1.15rem;
   margin-bottom: 8px;
   line-height: 1.3;
@@ -1303,33 +1302,33 @@ button { font-family: inherit; cursor: pointer; border: none; background: none; 
   background: #fff;
   border: 2px solid var(--neutral-200);
   border-radius: var(--radius);
-  color: var(--madera-900);
+  color: var(--neutral-950);
   font-weight: 700;
   font-size: .95rem;
   transition: border-color .2s, background .2s;
   min-height: 50px;
 }
-.btn-google:hover { border-color: var(--borgo-700); background: var(--marfil-50); }
+.btn-google:hover { border-color: var(--brand-700); background: var(--cream-50); }
 .btn-google img { width: 20px; height: 20px; }
 
 .auth-note {
   margin-top: 20px;
   padding: 14px;
-  background: var(--marfil-50);
+  background: var(--cream-50);
   border-radius: var(--radius);
   color: var(--neutral-600);
   font-size: .82rem;
   line-height: 1.55;
   text-align: center;
 }
-.auth-note b { color: var(--madera-900); font-weight: 700; }
+.auth-note b { color: var(--neutral-950); font-weight: 700; }
 
 .nombre-field {
   margin-bottom: 20px;
 }
 .nombre-field label {
   display: block;
-  color: var(--madera-900);
+  color: var(--neutral-950);
   font-weight: 700;
   margin-bottom: 8px;
   font-size: .9rem;
@@ -1337,17 +1336,17 @@ button { font-family: inherit; cursor: pointer; border: none; background: none; 
 .nombre-field input {
   width: 100%;
   padding: 14px 16px;
-  background: var(--marfil-50);
+  background: var(--cream-50);
   border: 2px solid var(--neutral-200);
   border-radius: var(--radius);
   font-family: var(--font-body);
   font-size: 1rem;
-  color: var(--madera-900);
+  color: var(--neutral-950);
   transition: border-color .2s, background .2s;
 }
 .nombre-field input:focus {
   outline: none;
-  border-color: var(--borgo-700);
+  border-color: var(--brand-700);
   background: #fff;
 }
 .nombre-hint {
@@ -1364,7 +1363,7 @@ button { font-family: inherit; cursor: pointer; border: none; background: none; 
   gap: 10px;
   width: 100%;
   padding: 16px 24px;
-  background: linear-gradient(135deg, var(--borgo-700), var(--borgo-800));
+  background: linear-gradient(135deg, var(--brand-700), var(--brand-800));
   color: #fff;
   border-radius: var(--radius);
   font-weight: 800;
@@ -1385,7 +1384,7 @@ button { font-family: inherit; cursor: pointer; border: none; background: none; 
   transform: translateX(-50%) translateY(120%);
   z-index: 300;
   padding: 14px 24px;
-  background: var(--madera-900);
+  background: var(--neutral-950);
   color: #fff;
   border-radius: 999px;
   font-weight: 600;
@@ -1395,7 +1394,7 @@ button { font-family: inherit; cursor: pointer; border: none; background: none; 
   max-width: calc(100vw - 40px);
 }
 .toast.is-visible { transform: translateX(-50%) translateY(0); }
-.toast--error { background: var(--borgo-700); }
+.toast--error { background: var(--brand-700); }
 .toast--success { background: var(--success); }
 
 /* ═══════════════════════════════════════════════════════════════════════════
@@ -1414,9 +1413,9 @@ button { font-family: inherit; cursor: pointer; border: none; background: none; 
   width: 24px;
   height: 24px;
   border: 3px solid rgba(124, 45, 18, .15);
-  border-top-color: var(--borgo-700);
+  border-top-color: var(--brand-700);
   border-radius: 50%;
   animation: spin .8s linear infinite;
 }
-.loader--dark { border-color: rgba(60, 20, 20, .15); border-top-color: var(--madera-900); }
+.loader--dark { border-color: rgba(60, 20, 20, .15); border-top-color: var(--neutral-950); }
 @keyframes spin { to { transform: rotate(360deg); } }
