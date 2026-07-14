@@ -2418,6 +2418,24 @@ async function actualizarPreciosDesdeFirestore() {
       const restantes = Math.max(0, (data.cupoLanzamientoMax || 0) - (data.cupoLanzamientoTomados || 0));
       document.querySelectorAll('[data-cupo-restante]').forEach(el => el.textContent = restantes);
     }
+
+    // Video preview dinámico — se puede reemplazar desde el panel admin.
+    // Si Firestore tiene videoPreviewUrl, la usa; si no, mantiene el <source> local.
+    if (data.videoPreviewUrl) {
+      const video = document.getElementById('hero-video');
+      if (video) {
+        // Limpiar sources existentes y poner la URL nueva
+        while (video.firstChild) video.removeChild(video.firstChild);
+        const src = document.createElement('source');
+        src.src = data.videoPreviewUrl;
+        src.type = data.videoPreviewMimeType || 'video/mp4';
+        video.appendChild(src);
+        if (data.videoPreviewPoster) video.poster = data.videoPreviewPoster;
+        video.load();
+        var pl = video.play();
+        if (pl && typeof pl.then === 'function') pl.catch(function(){});
+      }
+    }
   } catch (err) {
     console.warn('[VP] Error leyendo precios:', err);
   }
