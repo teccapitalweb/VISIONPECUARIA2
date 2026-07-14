@@ -882,6 +882,131 @@
     .stat-number { font-size: 36px; }
   }
 
+  /* ============ ACCESO POST-PAGO ============ */
+  .acceso-post {
+    padding: 70px 20px;
+    background: linear-gradient(180deg, #ffffff 0%, var(--crema) 100%);
+    position: relative;
+  }
+  .acceso-wrap { max-width: 1080px; margin: 0 auto; }
+  .acceso-head { text-align: center; margin-bottom: 40px; }
+  .acceso-eyebrow {
+    display: inline-block;
+    font-family: 'Archivo', sans-serif;
+    font-weight: 700;
+    font-size: 0.72rem;
+    color: var(--acc-osc);
+    background: rgba(46,125,50,.10);
+    padding: 6px 14px;
+    border-radius: 999px;
+    margin-bottom: 12px;
+    letter-spacing: 0.12em;
+    text-transform: uppercase;
+  }
+  .acceso-titulo {
+    font-family: 'Archivo', sans-serif;
+    font-weight: 800;
+    font-size: clamp(1.7rem, 4.5vw, 2.6rem);
+    color: var(--base-negro);
+    line-height: 1.15;
+    letter-spacing: -0.02em;
+    margin-bottom: 10px;
+  }
+  .acceso-titulo .hi {
+    color: var(--acc-osc);
+    background: linear-gradient(120deg, transparent 0%, transparent 50%, rgba(255,201,60,.35) 50%, rgba(255,201,60,.35) 100%);
+    padding: 0 4px;
+  }
+  .acceso-sub {
+    color: var(--ink-soft);
+    font-size: 1rem;
+    max-width: 60ch;
+    margin: 0 auto;
+    line-height: 1.6;
+  }
+  .acceso-grid {
+    display: grid;
+    grid-template-columns: repeat(2, 1fr);
+    gap: 16px;
+    margin-bottom: 28px;
+  }
+  @media (min-width: 900px) {
+    .acceso-grid { grid-template-columns: repeat(4, 1fr); gap: 20px; }
+  }
+  .acceso-card {
+    background: #fff;
+    padding: 24px 22px;
+    border-radius: 20px;
+    border: 1px solid rgba(46,125,50,.10);
+    box-shadow: 0 4px 20px rgba(0,0,0,0.04);
+    transition: transform 0.18s, box-shadow 0.18s, border-color 0.18s;
+    position: relative;
+    overflow: hidden;
+  }
+  .acceso-card::before {
+    content: "";
+    position: absolute;
+    top: 0; left: 0; right: 0;
+    height: 3px;
+    background: linear-gradient(90deg, var(--base), var(--hi));
+    opacity: 0;
+    transition: opacity 0.2s;
+  }
+  .acceso-card:hover {
+    transform: translateY(-3px);
+    box-shadow: 0 12px 32px rgba(0,0,0,0.08);
+    border-color: rgba(46,125,50,.24);
+  }
+  .acceso-card:hover::before { opacity: 1; }
+  .acceso-card__ico {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    width: 48px;
+    height: 48px;
+    background: linear-gradient(135deg, var(--base), var(--acc-osc));
+    color: var(--hi);
+    border-radius: 14px;
+    margin-bottom: 14px;
+    box-shadow: 0 6px 16px rgba(46,125,50,.22);
+  }
+  .acceso-card h3 {
+    font-family: 'Archivo', sans-serif;
+    font-weight: 700;
+    font-size: 1.05rem;
+    color: var(--base-negro);
+    margin-bottom: 8px;
+    line-height: 1.25;
+  }
+  .acceso-card p {
+    color: var(--ink-soft);
+    font-size: 0.88rem;
+    line-height: 1.55;
+  }
+  .acceso-nota {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 10px;
+    padding: 14px 22px;
+    background: #fff;
+    border: 1px dashed var(--acc);
+    border-radius: 14px;
+    color: var(--acc-osc);
+    font-family: 'Archivo', sans-serif;
+    font-weight: 600;
+    font-size: 0.85rem;
+    text-align: center;
+    max-width: 720px;
+    margin: 0 auto;
+    line-height: 1.5;
+  }
+  .acceso-nota svg { flex-shrink: 0; color: var(--acc); }
+  @media (max-width: 600px) {
+    .acceso-post { padding: 50px 16px; }
+    .acceso-nota { flex-direction: column; gap: 6px; padding: 14px; font-size: 0.82rem; }
+  }
+
   .testimonials-section { padding: 60px 20px; background: #f9f9f9; }
   .testimonials-wrapper { max-width: 1200px; margin: 0 auto; }
   .section-title { text-align: center; font-size: 32px; font-weight: 700;
@@ -1231,6 +1356,56 @@
   </div>
 </section>
 
+<!-- ============ AL PAGAR RECIBES · ACCESO AL AULA ============ -->
+<section class="acceso-post" aria-label="Acceso post-pago">
+  <div class="acceso-wrap">
+    <div class="acceso-head">
+      <span class="acceso-eyebrow">Al confirmar tu pago</span>
+      <h2 class="acceso-titulo">Accedes de inmediato a tu <span class="hi">aula virtual</span></h2>
+      <p class="acceso-sub">Todo lo que necesitas para el curso en un solo lugar. Ordenado y disponible desde tu celular o computadora.</p>
+    </div>
+
+    <div class="acceso-grid">
+      <div class="acceso-card">
+        <div class="acceso-card__ico">
+          <svg width="26" height="26" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="8" r="7"/><polyline points="8.21 13.89 7 23 12 20 17 23 15.79 13.88"/></svg>
+        </div>
+        <h3>Tu certificado IPCIL</h3>
+        <p>Certificado oficial con QR verificable y folio único, emitido por IPCIL. Llega a tu correo al finalizar el curso.</p>
+      </div>
+
+      <div class="acceso-card">
+        <div class="acceso-card__ico">
+          <svg width="26" height="26" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polygon points="23 7 16 12 23 17 23 7"/><rect x="1" y="5" width="15" height="14" rx="2"/></svg>
+        </div>
+        <h3>Las 5 clases del curso</h3>
+        <p>5 sesiones en vivo por Google Meet + grabaciones con acceso permanente para repasar cuando quieras.</p>
+      </div>
+
+      <div class="acceso-card">
+        <div class="acceso-card__ico">
+          <svg width="26" height="26" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M14.7 6.3a1 1 0 000 1.4l1.6 1.6a1 1 0 001.4 0l3.77-3.77a6 6 0 01-7.94 7.94l-6.91 6.91a2.12 2.12 0 01-3-3l6.91-6.91a6 6 0 017.94-7.94l-3.76 3.76z"/></svg>
+        </div>
+        <h3>Herramientas descargables</h3>
+        <p>Manual de manejo avícola (PDF), corrida financiera (Excel), formatos, checklist sanitarios y registros de postura.</p>
+      </div>
+
+      <div class="acceso-card">
+        <div class="acceso-card__ico">
+          <svg width="26" height="26" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M2 3h6a4 4 0 014 4v14a3 3 0 00-3-3H2z"/><path d="M22 3h-6a4 4 0 00-4 4v14a3 3 0 013-3h7z"/></svg>
+        </div>
+        <h3>Temario completo</h3>
+        <p>Los 5 módulos con todas sus lecciones, indicando lo que ya viste y lo que sigue. Aprende a tu ritmo.</p>
+      </div>
+    </div>
+
+    <div class="acceso-nota">
+      <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/></svg>
+      <span>Acceso inmediato al confirmarse el pago · Sin fecha de caducidad · Compatible con celular, tablet y PC</span>
+    </div>
+  </div>
+</section>
+
 <!-- ============ TESTIMONIOS ============ -->
 <section class="testimonials-section" aria-label="Testimonios de alumnos">
   <div class="testimonials-wrapper">
@@ -1539,51 +1714,61 @@
   <a class="btn btn-fire" data-action="inscribir" href="#" rel="noopener">Inscribirme</a>
 </div>
 
-<!-- ═══ MODAL: Auth Google (VP) ══════════════════════════════ -->
-<div class="pay-overlay" id="modal-auth" role="dialog" aria-modal="true" aria-label="Iniciar sesión">
-  <div class="pay-modal" style="max-width:440px;">
+<!-- ═══ MODAL: Inscripción con 3 campos (IPCIL flow) ═════════ -->
+<div class="pay-overlay" id="modal-inscripcion" role="dialog" aria-modal="true" aria-label="Formulario de inscripción">
+  <div class="pay-modal" style="max-width:520px;">
     <div class="pay-head">
-      <b>Iniciar sesión</b>
-      <button class="pay-close" data-close-modal="modal-auth" aria-label="Cerrar">
+      <b>Inscríbete al curso</b>
+      <button class="pay-close" data-close-modal="modal-inscripcion" aria-label="Cerrar">
         <svg width="16" height="16" viewBox="0 0 24 24" fill="none"><path d="M6 6l12 12M18 6L6 18" stroke="currentColor" stroke-width="2.2" stroke-linecap="round"/></svg>
       </button>
     </div>
-    <div class="pay-body" style="padding:28px 22px;">
-      <p style="color:var(--ink-soft);margin-bottom:20px;font-size:.95rem;line-height:1.5;">Usa tu cuenta de Google para acceder al curso. Es rápido y seguro.</p>
-      <button id="btn-signin-google" style="width:100%;padding:14px;background:#4285f4;color:white;border:none;border-radius:12px;font-weight:700;font-size:.95rem;cursor:pointer;font-family:inherit;display:inline-flex;align-items:center;justify-content:center;gap:10px;">
-        <svg viewBox="0 0 24 24" width="20" height="20"><path fill="#fff" d="M22.56 12.25c0-.78-.07-1.53-.2-2.25H12v4.26h5.92c-.26 1.37-1.04 2.53-2.21 3.31v2.77h3.57c2.08-1.92 3.28-4.74 3.28-8.09z"/><path fill="#fff" d="M12 23c2.97 0 5.46-.98 7.28-2.66l-3.57-2.77c-.98.66-2.23 1.06-3.71 1.06-2.86 0-5.29-1.93-6.16-4.53H2.18v2.84C3.99 20.53 7.7 23 12 23z"/><path fill="#fff" d="M5.84 14.09c-.22-.66-.35-1.36-.35-2.09s.13-1.43.35-2.09V7.07H2.18C1.43 8.55 1 10.22 1 12s.43 3.45 1.18 4.93l2.85-2.22.81-.62z"/><path fill="#fff" d="M12 5.38c1.62 0 3.06.56 4.21 1.64l3.15-3.15C17.45 2.09 14.97 1 12 1 7.7 1 3.99 3.47 2.18 7.07l3.66 2.84c.87-2.6 3.3-4.53 6.16-4.53z"/></svg>
-        Continuar con Google
-      </button>
+    <div class="pay-body ins-body">
+      <div class="ins-hero">
+        <div class="ins-hero__ico">
+          <svg width="26" height="26" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M14 2H6a2 2 0 00-2 2v16a2 2 0 002 2h12a2 2 0 002-2V8z"/><polyline points="14 2 14 8 20 8"/><line x1="9" y1="15" x2="15" y2="15"/><line x1="9" y1="11" x2="15" y2="11"/></svg>
+        </div>
+        <h3>Reserva tu lugar en el curso</h3>
+        <p>Completa tus datos para procesar tu pago y activar tu acceso al aula virtual.</p>
+      </div>
+
+      <form class="ins-form" id="form-inscripcion" novalidate>
+        <div class="ins-field" id="field-nombre">
+          <label>Nombre completo <span class="req">*</span></label>
+          <input type="text" id="input-nombre" placeholder="Ej. María González Ramírez" autocomplete="name" required>
+          <small class="hint">Escríbelo tal como quieres que aparezca en tu certificado <b>IPCIL</b></small>
+          <small class="error-msg">Ingresa tu nombre completo (mínimo 2 palabras)</small>
+        </div>
+        <div class="ins-field" id="field-email">
+          <label>Correo electrónico <span class="req">*</span></label>
+          <input type="email" id="input-email" placeholder="tu.correo@ejemplo.com" autocomplete="email" inputmode="email" required>
+          <small class="hint">Aquí llegarán las clases y tu certificado oficial</small>
+          <small class="error-msg">Ingresa un correo electrónico válido</small>
+        </div>
+        <div class="ins-field" id="field-telefono">
+          <label>WhatsApp <span class="req">*</span></label>
+          <input type="tel" id="input-telefono" placeholder="55 1234 5678" autocomplete="tel" inputmode="tel" required>
+          <small class="hint">Para invitarte al grupo VIP del curso</small>
+          <small class="error-msg">Ingresa un número válido (10 dígitos)</small>
+        </div>
+        <button type="submit" class="ins-submit">
+          Continuar al pago
+          <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><line x1="5" y1="12" x2="19" y2="12"/><polyline points="12 5 19 12 12 19"/></svg>
+        </button>
+      </form>
+
+      <div class="ins-note">
+        🔒 Tus datos se envían a <b>IPCIL</b> (Instituto Profesional de Certificación Industrial Latinoamericano) para emitir tu certificado oficial y activar tu acceso al curso. Nunca compartimos tus datos ni enviamos spam.
+      </div>
     </div>
   </div>
 </div>
 
-<!-- ═══ MODAL: Nombre en certificado ═════════════════════════ -->
-<div class="pay-overlay" id="modal-nombre" role="dialog" aria-modal="true" aria-label="Nombre certificado">
-  <div class="pay-modal" style="max-width:480px;">
-    <div class="pay-head">
-      <b>Tu nombre en el certificado</b>
-      <button class="pay-close" data-close-modal="modal-nombre" aria-label="Cerrar">
-        <svg width="16" height="16" viewBox="0 0 24 24" fill="none"><path d="M6 6l12 12M18 6L6 18" stroke="currentColor" stroke-width="2.2" stroke-linecap="round"/></svg>
-      </button>
-    </div>
-    <div class="pay-body" style="padding:24px 22px;">
-      <p style="color:var(--ink-soft);margin-bottom:18px;font-size:.92rem;line-height:1.5;">Escribe tu nombre tal cual quieres que aparezca en tu constancia oficial.</p>
-      <label style="display:block;font-weight:700;font-size:.8rem;color:var(--base-negro);margin-bottom:6px;letter-spacing:.03em;text-transform:uppercase;">Nombre completo</label>
-      <input type="text" id="input-nombre-certificado" placeholder="Ej. María López Hernández" style="width:100%;padding:12px 14px;border:2px solid var(--line);border-radius:10px;font-size:1rem;font-family:inherit;color:var(--ink);margin-bottom:8px;">
-      <p style="font-size:.78rem;color:var(--ink-soft);margin-bottom:18px;">Este nombre aparecerá tal cual en tu constancia con QR y folio.</p>
-      <button id="btn-continuar-nombre" style="width:100%;padding:14px;background:var(--base);color:white;border:none;border-radius:12px;font-weight:700;font-size:.95rem;cursor:pointer;font-family:inherit;">
-        Continuar al pago
-      </button>
-    </div>
-  </div>
-</div>
-
-<!-- ═══ MODAL: Checkout Stripe ══════════════════════════════ -->
+<!-- ═══ MODAL: Checkout Stripe (no cambiar) ═════════════════ -->
 <div class="pay-overlay" id="modal-checkout" role="dialog" aria-modal="true" aria-label="Pago del curso">
   <div class="pay-modal">
     <div class="pay-head">
-      <b>Inscripción · <span data-precio-full>$650 MXN</span></b>
+      <b>Completa tu pago · <span data-precio-full>$650 MXN</span></b>
       <button class="pay-close" data-close-modal="modal-checkout" aria-label="Cerrar">
         <svg width="16" height="16" viewBox="0 0 24 24" fill="none"><path d="M6 6l12 12M18 6L6 18" stroke="currentColor" stroke-width="2.2" stroke-linecap="round"/></svg>
       </button>
@@ -1599,19 +1784,134 @@
   </div>
 </div>
 
-<!-- Toast para mensajes del checkout -->
+<!-- Toast -->
 <div id="toast" style="position:fixed;bottom:100px;left:50%;transform:translateX(-50%) translateY(20px);background:var(--base-negro);color:white;padding:14px 22px;border-radius:12px;font-size:.9rem;font-weight:600;z-index:200;opacity:0;transition:opacity .25s,transform .25s;pointer-events:none;box-shadow:0 20px 60px rgba(0,0,0,.3);"></div>
 
 <style>
-  /* Overlays de VP: usar mismos estilos que pay-overlay pero con estado 'data-open' */
-  .pay-overlay[data-open]{display:flex;animation:ovFade .25s ease;}
+  /* Overlays con estado 'data-open' o class 'is-open' */
+  .pay-overlay[data-open], .pay-overlay.is-open { display:flex; animation:ovFade .25s ease; }
   #toast[data-visible]{opacity:1;transform:translateX(-50%) translateY(0);}
   #toast.toast--error{background:#7f1d1d;}
   #toast.toast--ok{background:var(--base);}
+
+  /* Modal de inscripción — 3 campos */
+  .ins-body{ padding:0; }
+  .ins-hero{
+    padding:26px 26px 4px;
+    text-align:center;
+    background:linear-gradient(135deg, var(--crema), #ffffff);
+    border-bottom:1px solid rgba(46,125,50,.08);
+  }
+  .ins-hero__ico{
+    display:inline-flex; align-items:center; justify-content:center;
+    width:56px; height:56px;
+    background:linear-gradient(135deg, var(--base), var(--acc-osc));
+    color:var(--hi);
+    border-radius:16px;
+    margin-bottom:12px;
+    box-shadow:0 8px 20px rgba(46,125,50,.25);
+  }
+  .ins-hero h3{
+    font-family:'Archivo', sans-serif;
+    font-size:1.4rem;
+    color:var(--base-negro);
+    margin-bottom:6px;
+    line-height:1.2;
+  }
+  .ins-hero p{
+    color:var(--ink-soft);
+    font-size:.92rem;
+    line-height:1.5;
+    margin-bottom:16px;
+    max-width:38ch;
+    margin-left:auto; margin-right:auto;
+  }
+  .ins-form{ padding:22px 26px 4px; }
+  .ins-field{ margin-bottom:16px; }
+  .ins-field label{
+    display:block;
+    font-family:'Archivo', sans-serif;
+    font-weight:700;
+    font-size:.78rem;
+    color:var(--base-negro);
+    margin-bottom:6px;
+    letter-spacing:.03em;
+    text-transform:uppercase;
+  }
+  .ins-field .req{ color:var(--acc); }
+  .ins-field input{
+    width:100%;
+    padding:13px 15px;
+    border:2px solid rgba(46,125,50,.14);
+    border-radius:12px;
+    font-size:1rem;
+    font-family:inherit;
+    color:var(--ink);
+    background:#fff;
+    transition:border-color .18s, box-shadow .18s;
+  }
+  .ins-field input:focus{
+    outline:none;
+    border-color:var(--acc);
+    box-shadow:0 0 0 3px rgba(46,125,50,.15);
+  }
+  .ins-field .hint{
+    display:block;
+    font-size:.78rem;
+    color:var(--ink-soft);
+    margin-top:6px;
+    line-height:1.4;
+  }
+  .ins-field .error-msg{
+    display:none;
+    font-size:.78rem;
+    color:#b91c1c;
+    margin-top:6px;
+    font-weight:600;
+  }
+  .ins-field.is-error input{
+    border-color:#dc2626;
+    background:#fef2f2;
+  }
+  .ins-field.is-error .error-msg{ display:block; }
+  .ins-field.is-error .hint{ display:none; }
+  .ins-submit{
+    width:100%;
+    padding:16px;
+    background:linear-gradient(135deg, var(--base), var(--acc-osc));
+    color:#fff;
+    border:none;
+    border-radius:14px;
+    font-family:'Archivo', sans-serif;
+    font-weight:800;
+    font-size:1rem;
+    cursor:pointer;
+    display:inline-flex;
+    align-items:center;
+    justify-content:center;
+    gap:8px;
+    margin-top:8px;
+    box-shadow:0 8px 20px rgba(46,125,50,.25);
+    transition:transform .12s, box-shadow .18s;
+    letter-spacing:.02em;
+    text-transform:uppercase;
+  }
+  .ins-submit:hover{ transform:translateY(-1px); box-shadow:0 12px 26px rgba(46,125,50,.32); }
+  .ins-submit:active{ transform:translateY(0); }
+  .ins-note{
+    padding:16px 26px 24px;
+    color:var(--ink-soft);
+    font-size:.8rem;
+    line-height:1.5;
+    text-align:center;
+    border-top:1px solid rgba(46,125,50,.08);
+    background:rgba(232,245,233,.4);
+  }
+  .ins-note b{ color:var(--base-negro); }
 </style>
 
 <script>
-  /* Tabs (queda como en gerberas) */
+  /* Tabs */
   document.querySelectorAll('.tab-btn').forEach(btn => {
     btn.addEventListener('click', () => {
       const target = btn.dataset.tab;
@@ -1633,15 +1933,100 @@
   /* Ocultar sticky cuando el bloque de compra está visible */
   var sticky = document.getElementById('stickyCta');
   if (sticky) {
-    new IntersectionObserver(function(entries){
-      entries.forEach(function(e){
-        sticky.style.transform = e.isIntersecting ? 'translateY(120%)' : 'translateY(0)';
-      });
-    },{threshold:.25}).observe(document.getElementById('inscribete'));
+    var target = document.getElementById('inscribete');
+    if (target) {
+      new IntersectionObserver(function(entries){
+        entries.forEach(function(e){
+          sticky.style.transform = e.isIntersecting ? 'translateY(120%)' : 'translateY(0)';
+        });
+      },{threshold:.25}).observe(target);
+    }
+  }
+
+  /* ═══════════════════════════════════════════════════════════════
+     NUEVO FLUJO IPCIL: Modal 3 campos → Stripe embebido
+     ═══════════════════════════════════════════════════════════════ */
+
+  // Delegación global de clicks: abre/cierra modales
+  document.addEventListener('click', function(e){
+    // Abrir modal de inscripción con [data-action="inscribir"]
+    var abrir = e.target.closest('[data-action="inscribir"]');
+    if (abrir) {
+      e.preventDefault();
+      var modal = document.getElementById('modal-inscripcion');
+      modal.classList.add('is-open');
+      modal.setAttribute('data-open','');
+      document.body.style.overflow = 'hidden';
+      setTimeout(function(){ document.getElementById('input-nombre')?.focus(); }, 200);
+      return;
+    }
+    // Cerrar con botón X
+    var cerrarBtn = e.target.closest('[data-close-modal]');
+    if (cerrarBtn) {
+      var id = cerrarBtn.dataset.closeModal;
+      var m = document.getElementById(id);
+      m.classList.remove('is-open');
+      m.removeAttribute('data-open');
+      document.body.style.overflow = '';
+      return;
+    }
+    // Cerrar clickando el fondo
+    if (e.target.classList && e.target.classList.contains('pay-overlay')) {
+      e.target.classList.remove('is-open');
+      e.target.removeAttribute('data-open');
+      document.body.style.overflow = '';
+    }
+  });
+
+  // Validaciones
+  var validarNombre    = function(v){ return v.trim().split(/\s+/).length >= 2 && v.trim().length >= 3; };
+  var validarEmail     = function(v){ return /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(v.trim()); };
+  var validarTelefono  = function(v){ return v.replace(/\D/g, '').length >= 10; };
+
+  function showError(fieldId, show){
+    var field = document.getElementById(fieldId);
+    if (!field) return;
+    field.classList.toggle('is-error', !!show);
+  }
+
+  ['input-nombre','input-email','input-telefono'].forEach(function(id){
+    var el = document.getElementById(id);
+    if (el) el.addEventListener('input', function(){ showError('field-' + id.replace('input-',''), false); });
+  });
+
+  // Submit del formulario
+  var form = document.getElementById('form-inscripcion');
+  if (form) {
+    form.addEventListener('submit', function(e){
+      e.preventDefault();
+      var nombre   = document.getElementById('input-nombre').value.trim();
+      var email    = document.getElementById('input-email').value.trim();
+      var telefono = document.getElementById('input-telefono').value.trim();
+
+      var ok = true;
+      if (!validarNombre(nombre))    { showError('field-nombre', true);   ok = false; }
+      if (!validarEmail(email))      { showError('field-email', true);    ok = false; }
+      if (!validarTelefono(telefono)){ showError('field-telefono', true); ok = false; }
+      if (!ok) return;
+
+      // Cerrar modal de datos, abrir modal de pago
+      var mIns = document.getElementById('modal-inscripcion');
+      mIns.classList.remove('is-open'); mIns.removeAttribute('data-open');
+      var mChk = document.getElementById('modal-checkout');
+      mChk.classList.add('is-open');    mChk.setAttribute('data-open','');
+
+      // Llamar al checkout compartido
+      if (window.__vp && typeof window.__vp.iniciarCheckoutConDatos === 'function') {
+        window.__vp.iniciarCheckoutConDatos({ nombre: nombre, email: email, telefono: telefono });
+      } else {
+        // Fallback: guardar y esperar a que cargue el JS
+        window.__pendingInscripcion = { nombre: nombre, email: email, telefono: telefono };
+      }
+    });
   }
 </script>
 
-<!-- Checkout compartido de VP: Firebase Auth + Stripe embebido + Resend -->
+<!-- Checkout compartido de VP (nuevo flujo IPCIL) -->
 <script type="module" src="/assets/js/checkout-curso.js"></script>
 
 </body>
