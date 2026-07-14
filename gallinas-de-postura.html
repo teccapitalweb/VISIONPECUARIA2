@@ -2145,13 +2145,36 @@
 
     // Endpoints candidatos (el backend acepta uno de estos según su versión)
     var endpoints = [
+      // Patrón Sinergia (gerberas usa este exacto)
+      '/stripe/' + COURSE_SLUG + '/checkout-session',
+      '/stripe/curso/' + COURSE_SLUG + '/checkout-session',
+      '/stripe/curso/checkout-session',
+      '/stripe/checkout-session',
+      '/stripe/checkout',
+      // Patrones comunes IPCIL/VP
       '/crear-checkout-session-curso',
-      '/checkout-session-curso',
+      '/crear-checkout-session',
+      '/crear-checkout-curso',
       '/crear-checkout',
+      '/checkout-session-curso',
+      '/checkout-curso',
+      '/curso/checkout',
+      '/curso/checkout-session',
+      // API prefijado
+      '/api/checkout',
+      '/api/checkout-session',
+      '/api/stripe/checkout',
+      '/api/stripe/checkout-session',
+      '/api/curso/checkout',
+      // Últimos recursos
+      '/inscripcion',
+      '/inscribir',
+      '/pago',
+      '/pago-curso',
       '/checkout'
     ];
 
-    var lastError = null;
+    var intentos = [];
     for (var i = 0; i < endpoints.length; i++) {
       var url = BACKEND_URL + endpoints[i];
       try {
@@ -2161,22 +2184,23 @@
           body: JSON.stringify(payload)
         });
 
+        var ct = resp.headers.get('content-type') || '';
+
         if (!resp.ok) {
           var txt = await resp.text();
-          lastError = 'Status ' + resp.status + ' en ' + endpoints[i] + '\n' + txt.substring(0, 200);
+          intentos.push(endpoints[i] + ' → ' + resp.status);
           continue;
         }
 
-        var ct = resp.headers.get('content-type') || '';
         if (ct.indexOf('application/json') === -1) {
           var txt2 = await resp.text();
-          lastError = 'Respuesta no-JSON en ' + endpoints[i] + '\n' + txt2.substring(0, 200);
+          intentos.push(endpoints[i] + ' → 200 pero no-JSON');
           continue;
         }
 
         var data = await resp.json();
         if (!data.clientSecret) {
-          lastError = 'Falta clientSecret en la respuesta de ' + endpoints[i];
+          intentos.push(endpoints[i] + ' → 200 JSON pero sin clientSecret');
           continue;
         }
 
@@ -2192,12 +2216,15 @@
         if (cont) cont.innerHTML = '';
         checkoutInstance.mount('#checkout-container');
         opening = false;
+        console.log('[VP] Endpoint que funcionó:', endpoints[i]);
         return;
 
       } catch (err) {
-        lastError = 'Error de red en ' + endpoints[i] + ': ' + (err.message || err);
+        intentos.push(endpoints[i] + ' → ' + (err.message || err));
       }
     }
+
+    var lastError = 'Backend: ' + BACKEND_URL + '\nSlug: ' + COURSE_SLUG + '\n\nEndpoints probados:\n' + intentos.join('\n');
 
     // Ningún endpoint funcionó
     renderCheckoutError(
