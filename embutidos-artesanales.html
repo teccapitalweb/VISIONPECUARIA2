@@ -724,71 +724,82 @@
   </button>
 </div>
 
-<!-- ═══════ MODAL AUTH ═══════ -->
-<div class="modal" id="modal-auth" role="dialog" aria-modal="true" aria-labelledby="modal-auth-title">
+<!-- ═══════ MODAL DE INSCRIPCIÓN (nombre + email + WhatsApp) ═══════ -->
+<div class="modal" id="modal-inscripcion" role="dialog" aria-modal="true" aria-labelledby="modal-inscripcion-title">
   <div class="modal__card">
     <div class="modal__head">
-      <span class="modal__title" id="modal-auth-title">Inicia sesión para inscribirte</span>
-      <button class="modal__close" data-close-modal="modal-auth" aria-label="Cerrar">
+      <span class="modal__title" id="modal-inscripcion-title">Inscríbete al curso</span>
+      <button class="modal__close" data-close-modal="modal-inscripcion" aria-label="Cerrar">
         <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><line x1="18" y1="6" x2="6" y2="18"/><line x1="6" y1="6" x2="18" y2="18"/></svg>
       </button>
     </div>
     <div class="modal__body">
-      <div class="auth-hero">
-        <div class="auth-hero__ico">
-          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M20 21v-2a4 4 0 00-4-4H8a4 4 0 00-4 4v2"/><circle cx="12" cy="7" r="4"/></svg>
+      <div class="inscripcion-hero">
+        <div class="inscripcion-hero__ico">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M14 2H6a2 2 0 00-2 2v16a2 2 0 002 2h12a2 2 0 002-2V8z"/><polyline points="14 2 14 8 20 8"/><line x1="16" y1="13" x2="8" y2="13"/><line x1="16" y1="17" x2="8" y2="17"/><polyline points="10 9 9 9 8 9"/></svg>
         </div>
-        <h3>Un solo clic con Google</h3>
-        <p>Vinculamos tu cuenta para darte acceso al curso apenas confirmes el pago.</p>
+        <h3>Reserva tu lugar en el curso</h3>
+        <p>Completa tus datos para procesar tu pago y activar tu acceso inmediato.</p>
       </div>
-      <button class="btn-google" id="btn-google-signin"></button>
-      <div class="auth-note">
-        Usamos tu correo solo para <b>emitir tu certificado</b> y darte acceso al contenido. Nunca compartimos tus datos ni enviamos spam.
+      <form class="inscripcion-form" id="form-inscripcion" novalidate>
+        <div class="field" id="field-nombre">
+          <label for="input-nombre">Nombre completo <span class="req">*</span></label>
+          <input
+            type="text"
+            id="input-nombre"
+            name="nombre"
+            placeholder="Ej. José Antonio Castillo García"
+            autocomplete="name"
+            maxlength="80"
+            required>
+          <small class="hint">Escríbelo tal como quieres que aparezca en tu certificado</small>
+          <small class="error-msg">Ingresa tu nombre completo (mínimo 3 letras)</small>
+        </div>
+
+        <div class="field" id="field-email">
+          <label for="input-email">Correo electrónico <span class="req">*</span></label>
+          <input
+            type="email"
+            id="input-email"
+            name="email"
+            placeholder="tu.correo@ejemplo.com"
+            autocomplete="email"
+            required>
+          <small class="hint">Aquí llegarán las clases y tu confirmación</small>
+          <small class="error-msg">Ingresa un correo electrónico válido</small>
+        </div>
+
+        <div class="field" id="field-telefono">
+          <label for="input-telefono">WhatsApp <span class="req">*</span></label>
+          <input
+            type="tel"
+            id="input-telefono"
+            name="telefono"
+            placeholder="55 1234 5678"
+            autocomplete="tel"
+            required>
+          <small class="hint">Con lada, para invitarte al grupo VIP del curso</small>
+          <small class="error-msg">Ingresa un número de teléfono válido (10 dígitos)</small>
+        </div>
+
+        <button type="submit" class="btn-primary" id="btn-continuar-checkout">
+          Continuar al pago
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12h14M13 5l7 7-7 7"/></svg>
+        </button>
+      </form>
+
+      <div class="inscripcion-note">
+        Tus datos se usan únicamente para <b>emitir tu certificado</b> y activar tu acceso al curso. Nunca los compartimos ni enviamos spam.
       </div>
     </div>
   </div>
 </div>
 
-<!-- ═══════ MODAL CONFIRMAR NOMBRE ═══════ -->
-<div class="modal" id="modal-nombre" role="dialog" aria-modal="true" aria-labelledby="modal-nombre-title">
-  <div class="modal__card">
-    <div class="modal__head">
-      <span class="modal__title" id="modal-nombre-title">Tu nombre en el certificado</span>
-      <button class="modal__close" data-close-modal="modal-nombre" aria-label="Cerrar">
-        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><line x1="18" y1="6" x2="6" y2="18"/><line x1="6" y1="6" x2="18" y2="18"/></svg>
-      </button>
-    </div>
-    <div class="modal__body">
-      <div class="nombre-hero">
-        <div class="nombre-hero__ico">
-          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="8" r="7"/><polyline points="8.21 13.89 7 23 12 20 17 23 15.79 13.88"/></svg>
-        </div>
-        <h3>Confirma cómo quieres que aparezca en tu diploma</h3>
-        <p>Este es el nombre que quedará impreso en tu certificado con QR verificable. Puedes editarlo si Google trajo mal alguna letra.</p>
-      </div>
-      <div class="nombre-field">
-        <label for="input-nombre-cert">Nombre completo</label>
-        <input
-          type="text"
-          id="input-nombre-cert"
-          placeholder="Ej. José Antonio Castillo García"
-          autocomplete="name"
-          maxlength="80">
-        <small class="nombre-hint">Escríbelo con acentos y mayúsculas como quieres que aparezca</small>
-      </div>
-      <button class="btn-primary" id="btn-continuar-checkout">
-        Continuar al pago
-        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12h14M13 5l7 7-7 7"/></svg>
-      </button>
-    </div>
-  </div>
-</div>
-
-<!-- ═══════ MODAL CHECKOUT ═══════ -->
+<!-- ═══════ MODAL CHECKOUT (Stripe embebido) ═══════ -->
 <div class="modal" id="modal-checkout" role="dialog" aria-modal="true" aria-labelledby="modal-checkout-title">
   <div class="modal__card">
     <div class="modal__head">
-      <span class="modal__title" id="modal-checkout-title">Completa tu inscripción</span>
+      <span class="modal__title" id="modal-checkout-title">Completa tu pago</span>
       <button class="modal__close" data-close-modal="modal-checkout" aria-label="Cerrar">
         <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><line x1="18" y1="6" x2="6" y2="18"/><line x1="6" y1="6" x2="18" y2="18"/></svg>
       </button>
@@ -802,8 +813,11 @@
 <!-- ═══════ TOAST ═══════ -->
 <div class="toast" id="toast" role="status" aria-live="polite"></div>
 
-<!-- ═══════ TABS SCRIPT ═══════ -->
+<!-- ═══════ SCRIPTS ═══════ -->
 <script>
+// ─────────────────────────────────────────────────────────────
+// TABS
+// ─────────────────────────────────────────────────────────────
 document.querySelectorAll('.tab-btn').forEach(btn => {
   btn.addEventListener('click', () => {
     const tab = btn.dataset.tab;
@@ -818,13 +832,162 @@ document.querySelectorAll('.tab-btn').forEach(btn => {
   });
 });
 
-// Botón activar sonido del video
+// ─────────────────────────────────────────────────────────────
+// VIDEO SOUND
+// ─────────────────────────────────────────────────────────────
 const video = document.getElementById('preview-video');
 const btnSound = document.getElementById('btn-sound');
 if (video && btnSound) {
   btnSound.addEventListener('click', () => {
     video.muted = !video.muted;
     btnSound.classList.toggle('is-unmuted', !video.muted);
+  });
+}
+
+// ─────────────────────────────────────────────────────────────
+// CONTADORES ANIMADOS AL SCROLL
+// ─────────────────────────────────────────────────────────────
+const animateCounter = (el) => {
+  const targetText = el.getAttribute('data-target') || el.textContent.trim();
+  // Extraer prefijo (+), número, y sufijo
+  const match = targetText.match(/^([^\d.]*)([\d,\.]+)(.*)$/);
+  if (!match) return;
+  const prefix = match[1];
+  const numStr = match[2].replace(/,/g, '');
+  const suffix = match[3] || '';
+  const target = parseFloat(numStr);
+  const hasDecimal = numStr.includes('.');
+  const duration = 1600;
+  const start = performance.now();
+
+  const step = (now) => {
+    const p = Math.min((now - start) / duration, 1);
+    // ease-out cubic
+    const eased = 1 - Math.pow(1 - p, 3);
+    const current = target * eased;
+    let display;
+    if (hasDecimal) {
+      display = current.toFixed(1);
+    } else {
+      display = Math.floor(current).toLocaleString('es-MX');
+    }
+    // Reconstruir con prefijo y sufijo html
+    el.innerHTML = prefix + display + suffix;
+    if (p < 1) requestAnimationFrame(step);
+    else el.innerHTML = targetText;
+  };
+  requestAnimationFrame(step);
+};
+
+// Guardar textos originales antes de resetear
+document.querySelectorAll('.stat__num').forEach(el => {
+  el.setAttribute('data-target', el.innerHTML.trim());
+});
+
+const statsObserver = new IntersectionObserver((entries) => {
+  entries.forEach(entry => {
+    if (entry.isIntersecting) {
+      document.querySelectorAll('.stat__num').forEach(animateCounter);
+      statsObserver.disconnect();
+    }
+  });
+}, { threshold: 0.4 });
+
+const statsEl = document.querySelector('.stats');
+if (statsEl) statsObserver.observe(statsEl);
+
+// ─────────────────────────────────────────────────────────────
+// PLACEHOLDER DEL INSTRUCTOR (si la foto no carga)
+// ─────────────────────────────────────────────────────────────
+const instructorImg = document.querySelector('.instructor-photo img');
+if (instructorImg) {
+  instructorImg.onerror = () => {
+    const parent = instructorImg.parentElement;
+    parent.innerHTML = '<div class="instructor-photo-placeholder">JC</div>';
+  };
+}
+
+// ─────────────────────────────────────────────────────────────
+// MODAL DE INSCRIPCIÓN — Flujo simple sin Google Sign-In
+// ─────────────────────────────────────────────────────────────
+const openModal = (id) => {
+  const m = document.getElementById(id);
+  if (m) { m.classList.add('is-open'); document.body.style.overflow = 'hidden'; }
+};
+const closeModal = (id) => {
+  const m = document.getElementById(id);
+  if (m) { m.classList.remove('is-open'); document.body.style.overflow = ''; }
+};
+
+// Botón "Inscribirme" — abre modal de datos
+document.addEventListener('click', (e) => {
+  if (e.target.closest('[data-action="inscribir"]')) {
+    e.preventDefault();
+    openModal('modal-inscripcion');
+    setTimeout(() => document.getElementById('input-nombre')?.focus(), 200);
+  }
+  // Botones que cierran
+  const closeBtn = e.target.closest('[data-close-modal]');
+  if (closeBtn) closeModal(closeBtn.dataset.closeModal);
+  // Click en overlay
+  if (e.target.classList.contains('modal')) closeModal(e.target.id);
+});
+
+// ─────────────────────────────────────────────────────────────
+// VALIDACIÓN Y ENVÍO DEL FORMULARIO
+// ─────────────────────────────────────────────────────────────
+const form = document.getElementById('form-inscripcion');
+const validarNombre = (v) => v.trim().split(/\s+/).length >= 2 && v.trim().length >= 3;
+const validarEmail = (v) => /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(v.trim());
+const validarTelefono = (v) => v.replace(/\D/g, '').length >= 10;
+
+const showError = (fieldId, show) => {
+  const field = document.getElementById(fieldId);
+  if (!field) return;
+  field.classList.toggle('is-error', show);
+  const input = field.querySelector('input');
+  input?.classList.toggle('is-error', show);
+};
+
+// Limpiar error al editar
+['input-nombre', 'input-email', 'input-telefono'].forEach(id => {
+  const input = document.getElementById(id);
+  if (input) {
+    input.addEventListener('input', () => {
+      const fieldId = 'field-' + id.replace('input-', '');
+      showError(fieldId, false);
+    });
+  }
+});
+
+if (form) {
+  form.addEventListener('submit', async (e) => {
+    e.preventDefault();
+
+    const nombre = document.getElementById('input-nombre').value.trim();
+    const email = document.getElementById('input-email').value.trim();
+    const telefono = document.getElementById('input-telefono').value.trim();
+
+    let ok = true;
+    if (!validarNombre(nombre)) { showError('field-nombre', true); ok = false; }
+    if (!validarEmail(email)) { showError('field-email', true); ok = false; }
+    if (!validarTelefono(telefono)) { showError('field-telefono', true); ok = false; }
+    if (!ok) return;
+
+    // Guardar datos globalmente para que checkout-curso.js los tome
+    window.__inscripcionData = { nombre, email, telefono };
+
+    // Cerrar modal de datos, abrir modal de checkout
+    closeModal('modal-inscripcion');
+    openModal('modal-checkout');
+
+    // Disparar el flujo de Stripe (checkout-curso.js lo maneja)
+    if (window.__vp && window.__vp.iniciarCheckoutConDatos) {
+      window.__vp.iniciarCheckoutConDatos({ nombre, email, telefono });
+    } else {
+      // Fallback: esperar a que checkout-curso.js cargue y luego disparar
+      window.__pendingInscripcion = { nombre, email, telefono };
+    }
   });
 }
 </script>
