@@ -2034,55 +2034,178 @@
   }
 
   /* ═══════════════════════════════════════════════════════════════
-     NUEVO FLUJO IPCIL: Modal 3 campos → Stripe embebido
+     FLUJO IPCIL COMPLETO: Modal 3 campos → Stripe embebido
+     Implementación INDEPENDIENTE del checkout-curso.js compartido
+     para evitar errores del JS global.
      ═══════════════════════════════════════════════════════════════ */
 
-  // Delegación global de clicks: abre/cierra modales
+  // Config del backend VP
+  var BACKEND_URL = 'https://visionpecuaria-webhook-production.up.railway.app';
+  var COURSE_SLUG = document.body.getAttribute('data-slug') || 'gallinas-de-postura';
+  var STRIPE_PK   = document.querySelector('meta[name="stripe-pk"]')?.content;
+  var WA_FALLBACK = 'https://wa.me/522382514313?text=Hola%2C%20quiero%20inscribirme%20al%20curso%20de%20Gallinas%20de%20Postura%20pero%20tuve%20un%20problema%20con%20el%20pago';
+
+  var checkoutInstance = null;
+  var opening = false;
+
+  function abrirModal(id){
+    var m = document.getElementById(id);
+    if (!m) return;
+    m.classList.add('is-open');
+    m.setAttribute('data-open','');
+    document.body.style.overflow = 'hidden';
+  }
+  function cerrarModal(id){
+    var m = document.getElementById(id);
+    if (!m) return;
+    m.classList.remove('is-open');
+    m.removeAttribute('data-open');
+    document.body.style.overflow = '';
+    if (id === 'modal-checkout' && checkoutInstance) {
+      try { checkoutInstance.destroy(); } catch(e){}
+      checkoutInstance = null;
+    }
+  }
+
+  // Delegación global — captura clicks ANTES de que llegue al JS compartido
   document.addEventListener('click', function(e){
-    // Abrir modal de inscripción con [data-action="inscribir"]
     var abrir = e.target.closest('[data-action="inscribir"]');
     if (abrir) {
       e.preventDefault();
-      var modal = document.getElementById('modal-inscripcion');
-      modal.classList.add('is-open');
-      modal.setAttribute('data-open','');
-      document.body.style.overflow = 'hidden';
+      e.stopImmediatePropagation();     // corta la cadena de otros listeners
+      abrirModal('modal-inscripcion');
       setTimeout(function(){ document.getElementById('input-nombre')?.focus(); }, 200);
       return;
     }
-    // Cerrar con botón X
     var cerrarBtn = e.target.closest('[data-close-modal]');
     if (cerrarBtn) {
-      var id = cerrarBtn.dataset.closeModal;
-      var m = document.getElementById(id);
-      m.classList.remove('is-open');
-      m.removeAttribute('data-open');
-      document.body.style.overflow = '';
+      cerrarModal(cerrarBtn.dataset.closeModal);
       return;
     }
-    // Cerrar clickando el fondo
     if (e.target.classList && e.target.classList.contains('pay-overlay')) {
-      e.target.classList.remove('is-open');
-      e.target.removeAttribute('data-open');
-      document.body.style.overflow = '';
+      var id = e.target.getAttribute('id');
+      if (id) cerrarModal(id);
     }
-  });
+  }, true);  // capture: se ejecuta ANTES del bubbling normal
 
   // Validaciones
-  var validarNombre    = function(v){ return v.trim().split(/\s+/).length >= 2 && v.trim().length >= 3; };
-  var validarEmail     = function(v){ return /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(v.trim()); };
-  var validarTelefono  = function(v){ return v.replace(/\D/g, '').length >= 10; };
+  function validarNombre(v)    { return v.trim().split(/\s+/).length >= 2 && v.trim().length >= 3; }
+  function validarEmail(v)     { return /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(v.trim()); }
+  function validarTelefono(v)  { return v.replace(/\D/g, '').length >= 10; }
 
   function showError(fieldId, show){
-    var field = document.getElementById(fieldId);
-    if (!field) return;
-    field.classList.toggle('is-error', !!show);
+    var f = document.getElementById(fieldId);
+    if (f) f.classList.toggle('is-error', !!show);
   }
 
-  ['input-nombre','input-email','input-telefono'].forEach(function(id){
-    var el = document.getElementById(id);
-    if (el) el.addEventListener('input', function(){ showError('field-' + id.replace('input-',''), false); });
+  ['nombre','email','telefono'].forEach(function(k){
+    var el = document.getElementById('input-' + k);
+    if (el) el.addEventListener('input', function(){ showError('field-' + k, false); });
   });
+
+  // Muestra error visible dentro del modal-checkout
+  function renderCheckoutError(msg, detalle){
+    var cont = document.getElementById('checkout-container');
+    if (!cont) return;
+    cont.innerHTML =
+      '<div style="padding:30px 24px; text-align:center;">' +
+        '<div style="font-size:48px; margin-bottom:12px;">⚠️</div>' +
+        '<h3 style="font-family:\'Archivo\',sans-serif; font-size:1.2rem; color:var(--base-negro); margin-bottom:10px;">No pudimos abrir el pago</h3>' +
+        '<p style="color:var(--ink-soft); font-size:.92rem; line-height:1.5; margin-bottom:20px;">' + msg + '</p>' +
+        (detalle ? '<pre style="background:#f7f5eb; border:1px solid var(--line); padding:12px; border-radius:8px; font-size:.72rem; text-align:left; color:#7a5b00; overflow-x:auto; margin-bottom:20px; max-height:120px;">' + detalle + '</pre>' : '') +
+        '<div style="display:flex; gap:10px; flex-direction:column;">' +
+          '<button onclick="window.__vpRetry()" style="width:100%; padding:14px; background:var(--base); color:#fff; border:none; border-radius:12px; font-family:\'Archivo\',sans-serif; font-weight:700; font-size:.95rem; cursor:pointer;">Reintentar</button>' +
+          '<a href="' + WA_FALLBACK + '" target="_blank" rel="noopener" style="width:100%; padding:14px; background:#25D366; color:#fff; border:none; border-radius:12px; font-family:\'Archivo\',sans-serif; font-weight:700; font-size:.95rem; cursor:pointer; text-decoration:none; text-align:center; display:block;">💬 Contactar por WhatsApp</a>' +
+        '</div>' +
+      '</div>';
+  }
+
+  // Retry global
+  window.__vpRetry = function(){
+    cerrarModal('modal-checkout');
+    abrirModal('modal-inscripcion');
+  };
+
+  // Fetch al backend + montaje de Stripe embebido
+  async function iniciarPago(datos){
+    if (opening) return;
+    opening = true;
+
+    // Mostrar spinner
+    var cont = document.getElementById('checkout-container');
+    if (cont) cont.innerHTML =
+      '<div class="pay-loading"><div class="spinner"></div>Preparando pago seguro…</div>';
+
+    var payload = {
+      slug: COURSE_SLUG,
+      nombre: datos.nombre,
+      email: datos.email,
+      telefono: datos.telefono
+    };
+
+    // Endpoints candidatos (el backend acepta uno de estos según su versión)
+    var endpoints = [
+      '/crear-checkout-session-curso',
+      '/checkout-session-curso',
+      '/crear-checkout',
+      '/checkout'
+    ];
+
+    var lastError = null;
+    for (var i = 0; i < endpoints.length; i++) {
+      var url = BACKEND_URL + endpoints[i];
+      try {
+        var resp = await fetch(url, {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify(payload)
+        });
+
+        if (!resp.ok) {
+          var txt = await resp.text();
+          lastError = 'Status ' + resp.status + ' en ' + endpoints[i] + '\n' + txt.substring(0, 200);
+          continue;
+        }
+
+        var ct = resp.headers.get('content-type') || '';
+        if (ct.indexOf('application/json') === -1) {
+          var txt2 = await resp.text();
+          lastError = 'Respuesta no-JSON en ' + endpoints[i] + '\n' + txt2.substring(0, 200);
+          continue;
+        }
+
+        var data = await resp.json();
+        if (!data.clientSecret) {
+          lastError = 'Falta clientSecret en la respuesta de ' + endpoints[i];
+          continue;
+        }
+
+        // ¡Éxito! Montar Stripe embedded
+        var pk = data.publishableKey || STRIPE_PK;
+        if (!window.Stripe) {
+          renderCheckoutError('Stripe.js no cargó. Recarga la página con Ctrl+F5.');
+          opening = false;
+          return;
+        }
+        var stripeClient = window.Stripe(pk);
+        checkoutInstance = await stripeClient.initEmbeddedCheckout({ clientSecret: data.clientSecret });
+        if (cont) cont.innerHTML = '';
+        checkoutInstance.mount('#checkout-container');
+        opening = false;
+        return;
+
+      } catch (err) {
+        lastError = 'Error de red en ' + endpoints[i] + ': ' + (err.message || err);
+      }
+    }
+
+    // Ningún endpoint funcionó
+    renderCheckoutError(
+      'El sistema de pago no está respondiendo en este momento. Puedes reintentar o escribirnos por WhatsApp para que te ayudemos a inscribirte manualmente.',
+      lastError
+    );
+    opening = false;
+  }
 
   // Submit del formulario
   var form = document.getElementById('form-inscripcion');
@@ -2099,25 +2222,16 @@
       if (!validarTelefono(telefono)){ showError('field-telefono', true); ok = false; }
       if (!ok) return;
 
-      // Cerrar modal de datos, abrir modal de pago
-      var mIns = document.getElementById('modal-inscripcion');
-      mIns.classList.remove('is-open'); mIns.removeAttribute('data-open');
-      var mChk = document.getElementById('modal-checkout');
-      mChk.classList.add('is-open');    mChk.setAttribute('data-open','');
-
-      // Llamar al checkout compartido
-      if (window.__vp && typeof window.__vp.iniciarCheckoutConDatos === 'function') {
-        window.__vp.iniciarCheckoutConDatos({ nombre: nombre, email: email, telefono: telefono });
-      } else {
-        // Fallback: guardar y esperar a que cargue el JS
-        window.__pendingInscripcion = { nombre: nombre, email: email, telefono: telefono };
-      }
+      cerrarModal('modal-inscripcion');
+      abrirModal('modal-checkout');
+      iniciarPago({ nombre: nombre, email: email, telefono: telefono });
     });
   }
 </script>
 
-<!-- Checkout compartido de VP (nuevo flujo IPCIL) -->
-<script type="module" src="/assets/js/checkout-curso.js"></script>
+<!-- El flujo de pago va INLINE arriba, no depende del checkout-curso.js compartido -->
+<!-- <script type="module" src="/assets/js/checkout-curso.js"></script> -->
+
 
 </body>
 </html>
