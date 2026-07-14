@@ -75,16 +75,16 @@
       <div class="pricing-block">
         <div class="pricing-antes">
           <span class="pricing-antes__label">Antes</span>
-          <span class="pricing-antes__amount">$1,050 MXN</span>
+          <span class="pricing-antes__amount" data-precio-antes>$1,050 MXN</span>
         </div>
         <div class="pricing-now">
           <span class="pricing-now__currency">$</span>
-          <span class="pricing-now__amount">450</span>
+          <span class="pricing-now__amount" data-precio-actual>450</span>
           <span class="pricing-now__unit">MXN</span>
         </div>
         <div class="pricing-save">
           <svg viewBox="0 0 24 24" fill="currentColor"><path d="M12 2l3 6 6 1-4.5 4.5 1 6-5.5-3-5.5 3 1-6L3 9l6-1z"/></svg>
-          Ahorras <b>$600 pesos</b> · <b>57%</b> OFF
+          Ahorras <b data-ahorro>$600 pesos</b> · <b data-descuento>57%</b> OFF
         </div>
       </div>
 
@@ -545,11 +545,11 @@
   <div class="container">
     <div class="cta-card">
       <div class="cta-badge">🔥 Inscripciones abiertas</div>
-      <div class="cta-price-before">Antes <s>$1,050 MXN</s></div>
-      <div class="cta-price-now">$450 <small>MXN</small></div>
+      <div class="cta-price-before">Antes <s data-precio-antes>$1,050 MXN</s></div>
+      <div class="cta-price-now"><span data-precio-actual-full>$450</span> <small>MXN</small></div>
       <div class="cta-save-badge">
         <svg viewBox="0 0 24 24" fill="currentColor"><path d="M12 2l3 6 6 1-4.5 4.5 1 6-5.5-3-5.5 3 1-6L3 9l6-1z"/></svg>
-        Ahorras <b>$600 pesos</b> · 57% OFF
+        Ahorras <b data-ahorro>$600 pesos</b> · <span data-descuento>57%</span> OFF
       </div>
       <p class="cta-sub">Pago único · Acceso inmediato desde tu casa</p>
 
@@ -607,7 +607,7 @@
 <!-- ═══════ STICKY BAR (móvil) ═══════ -->
 <div class="sticky-bar">
   <div class="sticky-bar__price">
-    <b>$450 MXN</b>
+    <b data-precio-actual-full>$450 MXN</b>
     <small>Acceso inmediato</small>
   </div>
   <button class="sticky-bar__cta" data-action="inscribir">
@@ -861,6 +861,79 @@ if (form) {
     await procesarInscripcion();
   });
 }
+</script>
+
+<script type="module">
+// ═══ Actualizar precio dinámicamente desde Firestore ═══
+import { initializeApp } from "https://www.gstatic.com/firebasejs/10.11.0/firebase-app.js";
+import { getFirestore, doc, getDoc } from "https://www.gstatic.com/firebasejs/10.11.0/firebase-firestore.js";
+
+const firebaseConfig = {
+  apiKey: "AIzaSyDQXkIo-BWPIeLZzHeTMN986WMDn0TrTJU",
+  authDomain: "visionpecuaria-vip.firebaseapp.com",
+  projectId: "visionpecuaria-vip",
+  storageBucket: "visionpecuaria-vip.firebasestorage.app",
+  messagingSenderId: "978318807782",
+  appId: "1:978318807782:web:626e67bb30795c15b02127"
+};
+
+const app = initializeApp(firebaseConfig);
+const db = getFirestore(app);
+
+const SLUG = document.body.dataset.slug || 'embutidos-artesanales';
+
+// Formato $ 1,050 MXN
+const fmtMxn = (centavos) => '$' + Math.floor(centavos / 100).toLocaleString('es-MX') + ' MXN';
+const fmtMxnCorto = (centavos) => '$' + Math.floor(centavos / 100).toLocaleString('es-MX');
+const fmtNum = (centavos) => Math.floor(centavos / 100).toLocaleString('es-MX');
+
+async function actualizarPreciosDesdeFirestore() {
+  try {
+    const snap = await getDoc(doc(db, 'cursosVenta', SLUG));
+    if (!snap.exists()) {
+      console.warn('[VP] Curso no encontrado en Firestore, se usan precios hardcoded');
+      return;
+    }
+    const data = snap.data();
+
+    const precioNormalC = data.precioNormalCentavos || 105000;
+    const precioActualC = data.precioLanzamientoCentavos || 45000;
+    const ahorroC = Math.max(0, precioNormalC - precioActualC);
+    const descuento = precioNormalC > 0 ? Math.round((ahorroC / precioNormalC) * 100) : 0;
+
+    // Actualizar todos los elementos con data-attrs
+    document.querySelectorAll('[data-precio-antes]').forEach(el => {
+      el.textContent = fmtMxn(precioNormalC);
+    });
+    document.querySelectorAll('[data-precio-actual]').forEach(el => {
+      el.textContent = fmtNum(precioActualC);
+    });
+    document.querySelectorAll('[data-precio-actual-full]').forEach(el => {
+      el.textContent = fmtMxn(precioActualC);
+    });
+    document.querySelectorAll('[data-precio-btn]').forEach(el => {
+      el.textContent = fmtMxnCorto(precioActualC);
+    });
+    document.querySelectorAll('[data-ahorro]').forEach(el => {
+      el.textContent = fmtMxnCorto(ahorroC) + ' pesos';
+    });
+    document.querySelectorAll('[data-descuento]').forEach(el => {
+      el.textContent = descuento + '%';
+    });
+
+    // Cupos restantes
+    if (typeof data.cupoLanzamientoMax === 'number') {
+      const restantes = Math.max(0, (data.cupoLanzamientoMax || 0) - (data.cupoLanzamientoTomados || 0));
+      document.querySelectorAll('[data-cupo-restante]').forEach(el => {
+        el.textContent = restantes;
+      });
+    }
+  } catch (err) {
+    console.warn('[VP] Error leyendo precios de Firestore:', err);
+  }
+}
+
+actualizarPreciosDesdeFirestore();
 </script>
 
 <script type="module" src="/assets/js/checkout-curso.js"></script>
