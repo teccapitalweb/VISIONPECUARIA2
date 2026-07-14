@@ -2192,12 +2192,14 @@
       // Caso especial: ya compró este curso antes
       if (!resp.ok && data.yaComprado) {
         var contYa = document.getElementById('checkout-container');
+        var linkContenido = '/curso-acceso.html?slug=' + encodeURIComponent(COURSE_SLUG) +
+                            (data.sessionId ? '&session_id=' + encodeURIComponent(data.sessionId) : '');
         if (contYa) contYa.innerHTML =
           '<div style="text-align:center;padding:30px 24px;">' +
             '<div style="font-size:56px;margin-bottom:12px;">🎉</div>' +
             '<h3 style="font-family:\'Archivo\',sans-serif;font-size:1.3rem;color:var(--base-negro);margin-bottom:10px;">Ya tienes acceso</h3>' +
             '<p style="color:var(--ink-soft);font-size:.95rem;line-height:1.5;margin-bottom:22px;">Ya compraste este curso antes con este correo. Puedes ver el contenido cuando quieras.</p>' +
-            '<a href="/curso-acceso.html?slug=' + encodeURIComponent(COURSE_SLUG) + '" style="display:inline-block;padding:14px 28px;background:var(--base);color:#fff;text-decoration:none;border-radius:12px;font-family:\'Archivo\',sans-serif;font-weight:700;">Ir al contenido →</a>' +
+            '<a href="' + linkContenido + '" style="display:inline-block;padding:14px 28px;background:var(--base);color:#fff;text-decoration:none;border-radius:12px;font-family:\'Archivo\',sans-serif;font-weight:700;">Ir al contenido →</a>' +
           '</div>';
         opening = false;
         return;
