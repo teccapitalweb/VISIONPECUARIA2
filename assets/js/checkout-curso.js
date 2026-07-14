@@ -162,21 +162,46 @@ function closeModal(id) {
 
 // ─── FLUJO DE INSCRIPCIÓN ─────────────────────────────────────────────────────
 async function iniciarInscripcion() {
+  // Si el HTML tiene el NUEVO modal de inscripción (3 campos), NO hacer nada aquí.
+  // El HTML abre solo su modal, valida los datos, y llama a iniciarCheckoutConDatos()
+  if (document.getElementById('modal-inscripcion')) {
+    return; // El listener del HTML se encarga
+  }
+
   if (!auth) {
     toast('El sistema de pago no está disponible. Escríbenos por WhatsApp.', 'error');
     return;
   }
-  // Paso 1: Login con Google (si no está logueado)
+  // Flujo antiguo con Google Sign-In (compatible con otros cursos que aún lo usan)
   if (!currentUser) {
     openModal('modal-auth');
     return;
   }
-  // Paso 2: Confirmar nombre para el certificado (si aún no lo confirmó en esta sesión)
   if (!nombreConfirmado || nombreConfirmado.trim().length < 3) {
     abrirModalNombre();
     return;
   }
-  // Paso 3: Checkout
+  openCheckout();
+}
+
+// ─── NUEVO: Flujo simple sin Google Sign-In ──────────────────────────────────
+// El HTML llama a esto después de validar el formulario con nombre + email + tel
+async function iniciarCheckoutConDatos({ nombre, email, telefono }) {
+  // Guardar en variables globales del módulo
+  nombreConfirmado = nombre;
+  // uid sintético = hash(email) truncado a 28 chars, para agrupación en Firestore
+  const encoder = new TextEncoder();
+  const data = encoder.encode(email.toLowerCase().trim());
+  const hashBuf = await crypto.subtle.digest('SHA-256', data);
+  const hashArr = Array.from(new Uint8Array(hashBuf));
+  const hashHex = hashArr.map(b => b.toString(16).padStart(2, '0')).join('');
+  const uidSintetico = hashHex.substring(0, 28);
+
+  // Simular usuario para openCheckout
+  currentUser = { uid: uidSintetico, email: email.trim(), displayName: nombre };
+  window.__vp.currentUser = () => currentUser;
+  window.__vp.telefono = telefono;
+
   openCheckout();
 }
 
@@ -217,7 +242,7 @@ async function openCheckout() {
         uid:  currentUser.uid,
         email: currentUser.email,
         nombre: nombreConfirmado || currentUser.displayName || '',
-        whatsapp: ''
+        whatsapp: (window.__vp && window.__vp.telefono) || ''
       })
     });
     const data = await resp.json();
@@ -538,5 +563,19 @@ if (document.readyState === 'loading') {
   boot();
 }
 
-// Exponer al scope global para debugging manual
-window.__vp = { iniciarInscripcion, openCheckout, currentUser: () => currentUser, cursoData: () => cursoData };
+// Exponer al scope global
+window.__vp = {
+  iniciarInscripcion,
+  iniciarCheckoutConDatos,
+  openCheckout,
+  currentUser: () => currentUser,
+  cursoData: () => cursoData,
+  telefono: ''
+};
+
+// Si el HTML envió datos ANTES de que este JS cargue, procesarlos ahora
+if (window.__pendingInscripcion) {
+  const d = window.__pendingInscripcion;
+  window.__pendingInscripcion = null;
+  setTimeout(() => iniciarCheckoutConDatos(d), 300);
+}
