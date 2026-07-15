@@ -89,7 +89,9 @@ main { flex: 1; padding: 40px 0 60px; }
 .btn svg { width: 16px; height: 16px; }
 
 /* ═══════ HERO PREMIUM (estilo aula) ═══════ */
-.curso-hero-wrap { padding: 20px 0 32px; }
+.curso-hero-wrap { padding: 28px 0 8px; }
+.curso-hero-min { padding: 4px 0 12px; }
+.curso-hero-min .curso-hero-card__title { margin-bottom: 8px; }
 .curso-hero-card {
   background: #fff;
   border-radius: 24px;
@@ -719,69 +721,17 @@ main { flex: 1; padding: 40px 0 60px; }
   </div>
 
   <div id="state-course" hidden>
-    <!-- ═══ HERO PREMIUM ═══ -->
+    <!-- ═══ ENCABEZADO MINIMALISTA ═══ -->
     <div class="curso-hero-wrap">
       <div class="container">
-        <div class="curso-hero-card">
-          <div class="curso-hero-card__main">
-            <div class="curso-hero-card__badge" id="hero-badge">
-              <span id="hero-badge-text">En progreso</span>
-            </div>
-            <h1 class="curso-hero-card__title" id="curso-nombre-h1">
-              <span id="curso-nombre">Cargando curso...</span>
-            </h1>
-            <div class="curso-hero-card__instructor" id="curso-instructor" hidden>
-              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"/><circle cx="12" cy="7" r="4"/></svg>
-              <span id="curso-instructor-nombre"></span>
-            </div>
-
-            <div class="curso-hero-card__pbar">
-              <div class="curso-hero-card__pbar-head">
-                <span class="curso-hero-card__pbar-label">Tu progreso</span>
-                <span class="curso-hero-card__pbar-percent" id="hero-pbar-percent">0% completado</span>
-              </div>
-              <div class="curso-hero-card__pbar-track">
-                <div class="curso-hero-card__pbar-fill" id="hero-pbar-fill" style="width:0%;"></div>
-              </div>
-              <div class="curso-hero-card__pbar-meta">
-                <b id="hero-clases-completadas">0</b> de <b id="hero-clases-total">0</b> clases completadas · <b id="hero-tiempo-restante">— restantes</b>
-              </div>
-            </div>
-
-            <button class="curso-hero-card__continue" id="btn-continuar" hidden>
-              <div class="curso-hero-card__continue-ico">
-                <svg viewBox="0 0 24 24" fill="currentColor"><polygon points="7 4 20 12 7 20 7 4"/></svg>
-              </div>
-              <div class="curso-hero-card__continue-txt">
-                <b id="btn-continuar-titulo">Continuar</b>
-                <span id="btn-continuar-sub">Clase 1</span>
-              </div>
-            </button>
+        <div class="curso-hero-min">
+          <h1 class="curso-hero-card__title" id="curso-nombre-h1">
+            <span id="curso-nombre">Cargando curso...</span>
+          </h1>
+          <div class="curso-hero-card__instructor" id="curso-instructor" hidden>
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"/><circle cx="12" cy="7" r="4"/></svg>
+            <span id="curso-instructor-nombre"></span>
           </div>
-
-          <!-- Anillo grande -->
-          <div class="curso-hero-card__ring-col">
-            <div class="curso-hero-card__ring">
-              <svg viewBox="0 0 100 100">
-                <circle class="curso-hero-card__ring-track" cx="50" cy="50" r="44" stroke-width="8" fill="none"/>
-                <circle id="hero-ring-fill" class="curso-hero-card__ring-fill" cx="50" cy="50" r="44" stroke-width="8" fill="none"
-                  stroke-dasharray="276.46" stroke-dashoffset="276.46" stroke-linecap="round"/>
-              </svg>
-              <div class="curso-hero-card__ring-inner">
-                <div class="curso-hero-card__ring-percent" id="hero-percent">0%</div>
-                <div class="curso-hero-card__ring-label">Completado</div>
-              </div>
-            </div>
-            <div class="curso-hero-card__ring-sub" id="hero-ring-sub">0 de 0 clases</div>
-          </div>
-        </div>
-
-        <!-- Dots de módulos -->
-        <div class="curso-hero-dots">
-          <div class="curso-hero-dots__text" id="dots-text">
-            Empieza a ver las clases para avanzar
-          </div>
-          <div class="curso-hero-dots__dots" id="dots-container"></div>
         </div>
       </div>
     </div>
@@ -1386,39 +1336,38 @@ function actualizarProgresoGeneral() {
   const completadas = Object.entries(progreso.clases || {}).filter(([k, v]) => v.completada).length;
   const pct = Math.round((completadas / total) * 100);
 
-  // Anillo grande
-  $('hero-percent').textContent = `${pct}%`;
-  $('hero-ring-sub').textContent = `${completadas} de ${total} clases`;
+  // NOTA: el bloque de progreso del hero fue removido por decisión de diseño.
+  // Todas las referencias son defensivas: si el elemento no existe, se omite.
+  const set = (id, fn) => { const el = $(id); if (el) fn(el); };
 
-  // Circumferencia r=44 → 2π*44 ≈ 276.46
-  const CIRC = 276.46;
-  const dashOffset = CIRC * (1 - pct / 100);
-  $('hero-ring-fill').style.strokeDashoffset = dashOffset.toFixed(2);
+  set('hero-percent', el => el.textContent = `${pct}%`);
+  set('hero-ring-sub', el => el.textContent = `${completadas} de ${total} clases`);
+  set('hero-ring-fill', el => {
+    const CIRC = 276.46;
+    el.style.strokeDashoffset = (CIRC * (1 - pct / 100)).toFixed(2);
+  });
+  set('hero-pbar-percent', el => el.textContent = `${pct}% completado`);
+  set('hero-pbar-fill', el => el.style.width = pct + '%');
+  set('hero-clases-completadas', el => el.textContent = completadas);
+  set('hero-clases-total', el => el.textContent = total);
 
-  // Barra lineal + meta
-  $('hero-pbar-percent').textContent = `${pct}% completado`;
-  $('hero-pbar-fill').style.width = pct + '%';
-  $('hero-clases-completadas').textContent = completadas;
-  $('hero-clases-total').textContent = total;
+  set('hero-tiempo-restante', el => {
+    const minutosRestantes = clases.reduce((sum, clase, idx) => {
+      const progC = (progreso.clases || {})[idx] || { completada: false };
+      if (progC.completada) return sum;
+      return sum + (clase.duracionMin || 60);
+    }, 0);
+    el.textContent = formatearTiempoRestante(minutosRestantes);
+  });
 
-  // Tiempo restante (sumar duracionMin de clases NO completadas)
-  const minutosRestantes = clases.reduce((sum, clase, idx) => {
-    const progC = (progreso.clases || {})[idx] || { completada: false };
-    if (progC.completada) return sum;
-    return sum + (clase.duracionMin || 60);
-  }, 0);
-  $('hero-tiempo-restante').textContent = formatearTiempoRestante(minutosRestantes);
+  set('hero-badge-text', el => {
+    if (completadas === 0) el.textContent = 'Recién empiezas';
+    else if (completadas === total) el.textContent = 'Curso completado ✓';
+    else el.textContent = 'En progreso';
+  });
 
-  // Badge dinámico
-  const badgeText = $('hero-badge-text');
-  if (completadas === 0) badgeText.textContent = 'Recién empiezas';
-  else if (completadas === total) badgeText.textContent = 'Curso completado ✓';
-  else badgeText.textContent = 'En progreso';
-
-  // Dots visuales
-  const dotsCont = $('dots-container');
-  if (dotsCont) {
-    dotsCont.innerHTML = '';
+  set('dots-container', el => {
+    el.innerHTML = '';
     clases.forEach((_, idx) => {
       const progC = (progreso.clases || {})[idx] || { completada: false };
       const esActual = idx === claseActualIdx;
@@ -1426,27 +1375,24 @@ function actualizarProgresoGeneral() {
       dot.className = 'curso-hero-dot' +
         (progC.completada ? ' is-completed' : '') +
         (esActual && !progC.completada ? ' is-current' : '');
-      dotsCont.appendChild(dot);
+      el.appendChild(dot);
     });
-  }
+  });
 
-  // Texto de dots
-  const dotsText = $('dots-text');
-  if (dotsText) {
+  set('dots-text', el => {
     if (completadas === 0) {
-      dotsText.innerHTML = `Llevas <b>0 de ${total} clases</b> · Faltan ${total} clases para tu certificado`;
+      el.innerHTML = `Llevas <b>0 de ${total} clases</b> · Faltan ${total} clases para tu certificado`;
     } else if (completadas === total) {
-      dotsText.innerHTML = `<b>¡Todas las clases completadas!</b> Tu certificado IPCIL llegará en unos días.`;
+      el.innerHTML = `<b>¡Todas las clases completadas!</b> Tu certificado IPCIL llegará en unos días.`;
     } else {
       const restan = total - completadas;
-      dotsText.innerHTML = `Llevas <b>${completadas} de ${total} clases</b> · Faltan ${restan} clase${restan === 1 ? '' : 's'} para tu certificado`;
+      el.innerHTML = `Llevas <b>${completadas} de ${total} clases</b> · Faltan ${restan} clase${restan === 1 ? '' : 's'} para tu certificado`;
     }
-  }
+  });
 
-  // Botón continuar: siguiente clase no completada
+  // Botón continuar (si existe en el DOM)
   const btnCont = $('btn-continuar');
   if (btnCont) {
-    // Buscar la primera clase con progreso pero no completada, o la primera no completada
     let siguienteIdx = -1;
     const conProgreso = clases.findIndex((_, idx) => {
       const p = (progreso.clases || {})[idx];
@@ -1464,8 +1410,8 @@ function actualizarProgresoGeneral() {
     if (siguienteIdx !== -1 && siguienteIdx !== claseActualIdx) {
       const claseSig = clases[siguienteIdx];
       const numFmt = String(siguienteIdx + 1).padStart(2, '0');
-      $('btn-continuar-titulo').textContent = 'Continuar';
-      $('btn-continuar-sub').textContent = `Clase ${numFmt} · ${claseSig.titulo || 'Siguiente clase'}`;
+      set('btn-continuar-titulo', el => el.textContent = 'Continuar');
+      set('btn-continuar-sub', el => el.textContent = `Clase ${numFmt} · ${claseSig.titulo || 'Siguiente clase'}`);
       btnCont.hidden = false;
       btnCont.onclick = () => {
         cambiarClase(siguienteIdx);
