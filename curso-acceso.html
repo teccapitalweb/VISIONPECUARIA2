@@ -344,18 +344,14 @@ main { flex: 1; padding: 40px 0 60px; }
     padding: 28px 24px;
     gap: 28px;
   }
-  .curso-hero-card__ring-col {
-    align-items: flex-start;
-    flex-direction: row;
-    gap: 20px;
-  }
-  .curso-hero-card__ring { width: 110px; height: 110px; }
-  .curso-hero-card__ring-percent { font-size: 1.4rem; }
+  /* El anillo grande solo aporta en desktop; en tablet/móvil la barra lineal basta */
+  .curso-hero-card__ring-col { display: none; }
 }
 @media (max-width: 640px) {
   .curso-hero-wrap { padding: 16px 0 24px; }
   .curso-hero-card { padding: 24px 20px; border-radius: 20px; }
-  .curso-hero-card__ring-col { flex-direction: column; align-items: center; }
+  /* En móvil ocultamos el anillo grande: la barra lineal ya comunica el progreso */
+  .curso-hero-card__ring-col { display: none; }
   .curso-hero-dots { flex-direction: column; align-items: flex-start; padding: 14px 18px; }
   .curso-hero-dot { flex: 1; min-width: 20px; }
   .curso-hero-dots__dots { width: 100%; }
