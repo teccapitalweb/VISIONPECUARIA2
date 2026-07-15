@@ -1018,11 +1018,11 @@ function procesarInscripcion(data, sessionId) {
   localStorage.setItem(`vp_acceso_${SLUG}`, sessionId);
   if (data.nombre) localStorage.setItem(`vp_nombre_${SLUG}`, data.nombre);
 
+  // Actualizar header con saludo
   if (data.nombre) {
     const firstName = data.nombre.split(' ')[0];
-    $('user-name').textContent = `Hola, ${firstName}`;
-    $('alumno-nombre').textContent = data.nombre;
-    $('welcome-msg').hidden = false;
+    const elUserName = $('user-name');
+    if (elUserName) elUserName.textContent = `Hola, ${firstName}`;
   }
 
   cargarCurso();
