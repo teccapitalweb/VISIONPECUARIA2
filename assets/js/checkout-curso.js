@@ -249,12 +249,10 @@ async function openCheckout() {
     if (!resp.ok) {
       if (data.yaComprado) {
         container.innerHTML = `
-          <div style="text-align:center;padding:24px 0;">
-            <div class="auth-hero__ico" style="margin:0 auto 20px;background:linear-gradient(135deg,#16a34a,#0f7a37);color:#fff;">
-              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M20 6L9 17l-5-5"/></svg>
-            </div>
-            <h3 style="font-family:var(--font-display);font-weight:800;font-size:1.2rem;margin-bottom:8px;">Ya tienes acceso 🎉</h3>
-            <p style="color:var(--muted);margin-bottom:20px;">Ya compraste este curso antes. Puedes ver el contenido cuando quieras.</p>
+          <div style="text-align:center;padding:30px 24px;">
+            <div style="font-size:56px;margin-bottom:12px;">🎉</div>
+            <h3 style="font-family:var(--font-display);font-weight:800;font-size:1.3rem;margin-bottom:10px;">Ya tienes acceso</h3>
+            <p style="color:var(--muted);font-size:.95rem;line-height:1.5;margin-bottom:22px;">Ya compraste este curso antes con este correo. Puedes ver el contenido cuando quieras.</p>
             <a href="/curso-acceso.html?slug=${encodeURIComponent(SLUG)}" class="btn-primary" style="text-decoration:none;display:inline-flex;">
               Ir al contenido
               <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12h14M13 5l7 7-7 7"/></svg>
