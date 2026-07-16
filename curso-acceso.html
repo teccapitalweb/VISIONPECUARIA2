@@ -878,29 +878,39 @@ function mostrarSinAcceso(mensaje) {
   showState('no-access');
 }
 
-// Verificar la sesión llamando al backend Railway (que sí tiene permisos)
+// Verificar la sesión llamando al backend Railway (que sí tiene permisos).
+// Devuelve { status: 'valido', data } | { status: 'invalido', motivo } | { status: 'inalcanzable' }.
+// La denegación solo se acepta si el BODY del backend lo dice explícitamente
+// (valido:false, o ok:false en el backend viejo); un código HTTP de error sin
+// ese body puede venir de un proxy caído y se trata como "inalcanzable".
 async function verificarSesionEnBackend(sessionId) {
   try {
     const resp = await fetch(`${WEBHOOK_URL}/verificar-session-curso?session_id=${encodeURIComponent(sessionId)}&slug=${encodeURIComponent(SLUG)}`);
-    if (!resp.ok) {
-      console.warn('Respuesta no OK:', resp.status);
-      return null;
-    }
-    const data = await resp.json();
-    if (!data.ok) {
-      console.warn('Backend respondió con error:', data.error);
-      return null;
-    }
-    return data;
+    let data = null;
+    try { data = await resp.json(); } catch (_) { /* body no-JSON */ }
+
+    if (data && data.valido === true) return { status: 'valido', data };
+    if (data && data.valido === false) return { status: 'invalido', motivo: data.motivo || data.error || '' };
+    if (data && data.valido === null) return { status: 'inalcanzable' };
+
+    // Compatibilidad con el backend viejo (sin campo `valido`): solo con 200 el
+    // body es confiable; ahí ok:false significa "el pago no existe".
+    if (resp.ok && data && data.ok === true) return { status: 'valido', data };
+    if (resp.ok && data && data.ok === false) return { status: 'invalido', motivo: data.error || '' };
+
+    console.warn('Respuesta no interpretable del backend:', resp.status);
+    return { status: 'inalcanzable' };
   } catch (err) {
     console.error('Error llamando al backend:', err);
-    return null;
+    return { status: 'inalcanzable' };
   }
 }
 
+let intentosVerificacion = 0;
+
 async function verificarAcceso() {
-  let sessionId = sessionIdFromUrl;
-  if (!sessionId) sessionId = localStorage.getItem(`vp_acceso_${SLUG}`);
+  const sessionGuardada = localStorage.getItem(`vp_acceso_${SLUG}`);
+  const sessionId = sessionIdFromUrl || sessionGuardada;
 
   if (!sessionId) {
     mostrarSinAcceso('No encontramos tu registro de pago. Si aún no has comprado el curso, ve a la landing para inscribirte. Si ya pagaste, escríbenos por WhatsApp.');
@@ -908,54 +918,60 @@ async function verificarAcceso() {
   }
 
   try {
-    // Intento 1: Verificar el pago en el backend (fuente de verdad)
-    const data = await verificarSesionEnBackend(sessionId);
+    const resultado = await verificarSesionEnBackend(sessionId);
 
-    if (data) {
-      // Backend confirmó el pago
-      procesarInscripcion(data, sessionId);
+    // 1) El backend confirmó el pago → acceso normal
+    if (resultado.status === 'valido') {
+      procesarInscripcion(resultado.data, sessionId, { verificado: true });
       return;
     }
 
-    // Intento 2 (fallback): Si el session_id vino directo del URL de Stripe
-    // (formato "cs_live_XXX" o "cs_test_XXX"), damos acceso provisional.
-    // Es seguro porque Stripe SOLO redirige aquí tras un pago exitoso.
-    if (sessionIdFromUrl && /^cs_(live|test)_[a-zA-Z0-9]{20,}/.test(sessionIdFromUrl)) {
-      console.warn('[VP] Backend no disponible, usando acceso provisional por session_id de Stripe');
+    // 2) El backend dijo explícitamente que este pago NO existe → sin acceso.
+    //    Aquí NUNCA se da acceso provisional: un session_id inventado cae en este caso.
+    if (resultado.status === 'invalido') {
+      // Si el link traía un id inválido pero hay una compra verificada antes en
+      // este navegador, se intenta esa (también contra el backend, sin excepciones).
+      if (sessionIdFromUrl && sessionGuardada && sessionGuardada !== sessionIdFromUrl) {
+        const rescate = await verificarSesionEnBackend(sessionGuardada);
+        if (rescate.status === 'valido') {
+          procesarInscripcion(rescate.data, sessionGuardada, { verificado: true });
+          return;
+        }
+        if (rescate.status === 'invalido') localStorage.removeItem(`vp_acceso_${SLUG}`);
+      } else if (!sessionIdFromUrl) {
+        // El id inválido era el guardado: dejar de usarlo
+        localStorage.removeItem(`vp_acceso_${SLUG}`);
+      }
+      mostrarSinAcceso('No encontramos tu compra con este enlace. Si ya pagaste, escríbenos por WhatsApp con tu correo y te ayudamos a recuperar el acceso.');
+      return;
+    }
+
+    // 3) Backend inalcanzable (red/servidor caído): reintentar antes de decidir.
+    if (intentosVerificacion < 3) {
+      intentosVerificacion++;
+      console.warn(`[VP] Backend inalcanzable, reintento ${intentosVerificacion}/3…`);
+      setTimeout(verificarAcceso, 2500 * intentosVerificacion);
+      return;
+    }
+
+    // Tras agotar reintentos: acceso provisional SOLO si este navegador ya tuvo
+    // una compra verificada por el backend en una visita anterior (nunca por el
+    // simple formato del session_id del URL).
+    if (sessionGuardada) {
+      console.warn('[VP] Backend inalcanzable, acceso provisional por compra verificada previamente');
       const savedName = localStorage.getItem(`vp_nombre_${SLUG}`) || '';
-      procesarInscripcion({
-        slug: SLUG,
-        nombre: savedName,
-        _provisional: true
-      }, sessionIdFromUrl);
+      procesarInscripcion({ slug: SLUG, nombre: savedName, _provisional: true }, sessionGuardada, { verificado: false });
       return;
     }
 
-    // Intento 3 (localStorage): Si el session_id está en localStorage (visita previa exitosa)
-    if (localStorage.getItem(`vp_acceso_${SLUG}`)) {
-      const savedName = localStorage.getItem(`vp_nombre_${SLUG}`) || '';
-      procesarInscripcion({
-        slug: SLUG,
-        nombre: savedName,
-        _provisional: true
-      }, sessionId);
-      return;
-    }
-
-    // Sin verificación posible
-    if (sessionIdFromUrl && !window.__vpRetried) {
-      window.__vpRetried = true;
-      setTimeout(verificarAcceso, 3000);
-      return;
-    }
-    mostrarSinAcceso('No pudimos verificar tu pago en este momento. Espera 30 segundos y refresca. Si sigue sin funcionar, escríbenos por WhatsApp con tu correo y te ayudamos.');
+    mostrarSinAcceso('No pudimos verificar tu pago en este momento (servicio temporalmente no disponible). Tu compra está segura: espera unos minutos y refresca esta página, o escríbenos por WhatsApp con tu correo.');
   } catch (err) {
     console.error('Error verificando acceso:', err);
     mostrarSinAcceso('Ocurrió un error al verificar tu acceso. Intenta refrescar la página o escríbenos por WhatsApp.');
   }
 }
 
-function procesarInscripcion(data, sessionId) {
+function procesarInscripcion(data, sessionId, { verificado = false } = {}) {
   inscripcionData = data;
 
   if (data.slug && data.slug !== SLUG) {
@@ -963,7 +979,9 @@ function procesarInscripcion(data, sessionId) {
     return;
   }
 
-  localStorage.setItem(`vp_acceso_${SLUG}`, sessionId);
+  // Solo una verificación real del backend deja huella: el acceso provisional
+  // no debe convertirse en "evidencia" para futuras visitas.
+  if (verificado) localStorage.setItem(`vp_acceso_${SLUG}`, sessionId);
   if (data.nombre) localStorage.setItem(`vp_nombre_${SLUG}`, data.nombre);
 
   // Actualizar header con saludo
