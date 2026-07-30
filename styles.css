@@ -508,6 +508,63 @@ button{cursor:pointer;border:none;background:none;font:inherit}
 }
 .btn.btn-login:hover { background: var(--g800); color: #fff; }
 
+.btn.btn-club {
+  position: relative;
+  isolation: isolate;
+  overflow: hidden;
+  color: #163d28;
+  background: linear-gradient(120deg, #f8dc7a 0%, #dba51c 46%, #f4cf5b 100%);
+  border: 1px solid rgba(123, 86, 0, .24);
+  box-shadow:
+    0 8px 22px rgba(212, 160, 23, .32),
+    inset 0 1px 0 rgba(255, 255, 255, .72);
+  text-shadow: 0 1px 0 rgba(255, 255, 255, .38);
+  animation: clubButtonPulse 2.8s ease-in-out infinite;
+}
+.btn.btn-club::before {
+  content: "";
+  position: absolute;
+  z-index: -1;
+  inset: 0;
+  width: 45%;
+  transform: translateX(-160%) skewX(-18deg);
+  background: linear-gradient(90deg, transparent, rgba(255, 255, 255, .72), transparent);
+  animation: clubButtonShine 3.6s ease-in-out infinite;
+}
+.btn.btn-club:hover {
+  color: #0e2d1d;
+  filter: saturate(1.08) brightness(1.04);
+  transform: translateY(-2px) scale(1.025);
+  box-shadow:
+    0 13px 30px rgba(212, 160, 23, .43),
+    inset 0 1px 0 rgba(255, 255, 255, .8);
+}
+.btn.btn-club:focus-visible {
+  outline: 3px solid rgba(212, 160, 23, .38);
+  outline-offset: 3px;
+}
+.btn.btn-club > span,
+.btn.btn-club > svg {
+  position: relative;
+  z-index: 1;
+}
+
+@keyframes clubButtonPulse {
+  0%, 100% { box-shadow: 0 8px 22px rgba(212, 160, 23, .28), inset 0 1px 0 rgba(255, 255, 255, .72); }
+  50% { box-shadow: 0 10px 29px rgba(212, 160, 23, .48), 0 0 0 5px rgba(212, 160, 23, .09), inset 0 1px 0 rgba(255, 255, 255, .72); }
+}
+@keyframes clubButtonShine {
+  0%, 58% { transform: translateX(-160%) skewX(-18deg); }
+  82%, 100% { transform: translateX(310%) skewX(-18deg); }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .btn.btn-club,
+  .btn.btn-club::before {
+    animation: none;
+  }
+}
+
 .header-auth {
   display: flex; gap: 8px; align-items: center;
 }
@@ -546,6 +603,12 @@ button{cursor:pointer;border:none;background:none;font:inherit}
   cursor: pointer;
   box-shadow: 0 8px 24px rgba(22,61,40,.35);
   transition: transform .2s, box-shadow .2s;
+}
+.btn-cta-vip.btn-club {
+  padding: 15px 28px;
+  color: #163d28;
+  border-color: rgba(123, 86, 0, .28);
+  font-weight: 800;
 }
 .btn-cta-vip:hover {
   transform: translateY(-2px);
