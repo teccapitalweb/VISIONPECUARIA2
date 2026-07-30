@@ -512,13 +512,17 @@ button{cursor:pointer;border:none;background:none;font:inherit}
   position: relative;
   isolation: isolate;
   overflow: hidden;
-  color: #163d28;
-  background: linear-gradient(120deg, #f8dc7a 0%, #dba51c 46%, #f4cf5b 100%);
-  border: 1px solid rgba(123, 86, 0, .24);
+  min-height: 46px;
+  color: #fff;
+  background:
+    radial-gradient(circle at 18% 0%, rgba(255,255,255,.18), transparent 34%),
+    linear-gradient(135deg, #163d28 0%, #1f5c40 52%, #2d7a56 100%);
+  border: 1px solid rgba(232, 196, 101, .92);
   box-shadow:
-    0 8px 22px rgba(212, 160, 23, .32),
-    inset 0 1px 0 rgba(255, 255, 255, .72);
-  text-shadow: 0 1px 0 rgba(255, 255, 255, .38);
+    0 10px 26px rgba(22, 61, 40, .28),
+    0 0 0 4px rgba(212, 160, 23, .1),
+    inset 0 1px 0 rgba(255, 255, 255, .2);
+  text-shadow: 0 1px 1px rgba(0, 0, 0, .18);
   animation: clubButtonPulse 2.8s ease-in-out infinite;
 }
 .btn.btn-club::before {
@@ -528,16 +532,17 @@ button{cursor:pointer;border:none;background:none;font:inherit}
   inset: 0;
   width: 45%;
   transform: translateX(-160%) skewX(-18deg);
-  background: linear-gradient(90deg, transparent, rgba(255, 255, 255, .72), transparent);
+  background: linear-gradient(90deg, transparent, rgba(248, 220, 122, .58), transparent);
   animation: clubButtonShine 3.6s ease-in-out infinite;
 }
 .btn.btn-club:hover {
-  color: #0e2d1d;
-  filter: saturate(1.08) brightness(1.04);
+  color: #fff;
+  filter: saturate(1.08) brightness(1.08);
   transform: translateY(-2px) scale(1.025);
   box-shadow:
-    0 13px 30px rgba(212, 160, 23, .43),
-    inset 0 1px 0 rgba(255, 255, 255, .8);
+    0 14px 34px rgba(22, 61, 40, .36),
+    0 0 0 5px rgba(212, 160, 23, .16),
+    inset 0 1px 0 rgba(255, 255, 255, .24);
 }
 .btn.btn-club:focus-visible {
   outline: 3px solid rgba(212, 160, 23, .38);
@@ -550,8 +555,8 @@ button{cursor:pointer;border:none;background:none;font:inherit}
 }
 
 @keyframes clubButtonPulse {
-  0%, 100% { box-shadow: 0 8px 22px rgba(212, 160, 23, .28), inset 0 1px 0 rgba(255, 255, 255, .72); }
-  50% { box-shadow: 0 10px 29px rgba(212, 160, 23, .48), 0 0 0 5px rgba(212, 160, 23, .09), inset 0 1px 0 rgba(255, 255, 255, .72); }
+  0%, 100% { box-shadow: 0 10px 26px rgba(22, 61, 40, .28), 0 0 0 4px rgba(212, 160, 23, .09), inset 0 1px 0 rgba(255, 255, 255, .2); }
+  50% { box-shadow: 0 13px 34px rgba(22, 61, 40, .36), 0 0 0 6px rgba(212, 160, 23, .15), inset 0 1px 0 rgba(255, 255, 255, .24); }
 }
 @keyframes clubButtonShine {
   0%, 58% { transform: translateX(-160%) skewX(-18deg); }
@@ -606,9 +611,14 @@ button{cursor:pointer;border:none;background:none;font:inherit}
 }
 .btn-cta-vip.btn-club {
   padding: 15px 28px;
-  color: #163d28;
-  border-color: rgba(123, 86, 0, .28);
+  color: #fff;
+  border-color: rgba(232, 196, 101, .92);
   font-weight: 800;
+}
+.btn-club-icon {
+  color: #f8dc7a;
+  font-size: 1.08rem;
+  filter: drop-shadow(0 0 6px rgba(248, 220, 122, .55));
 }
 .btn-cta-vip:hover {
   transform: translateY(-2px);
@@ -1389,4 +1399,96 @@ button{cursor:pointer;border:none;background:none;font:inherit}
   .auth-modal { padding: 26px 22px; border-radius: 20px; }
   .auth-title { font-size: 1.25rem; }
   .auth-orb--1, .auth-orb--2 { width: 280px; height: 280px; }
+}
+
+/* ═══════════════════════════════════════════════════════════
+   PULIDO MÓVIL — tacto, áreas seguras y pantallas pequeñas
+   ═══════════════════════════════════════════════════════════ */
+@media (max-width: 640px) {
+  html { scroll-padding-top: 74px; }
+  body {
+    min-width: 0;
+    -webkit-text-size-adjust: 100%;
+    overscroll-behavior-y: contain;
+  }
+  .container {
+    padding-left: max(16px, env(safe-area-inset-left));
+    padding-right: max(16px, env(safe-area-inset-right));
+  }
+  .header {
+    padding-top: env(safe-area-inset-top);
+  }
+  .nav {
+    height: 64px;
+  }
+  .brand {
+    gap: 9px;
+    min-width: 0;
+  }
+  .brand img {
+    width: 40px;
+    height: 40px;
+  }
+  .brand-copy span {
+    font-size: .88rem;
+    white-space: nowrap;
+  }
+  .menu-toggle {
+    width: 44px;
+    height: 44px;
+    align-items: center;
+    justify-content: center;
+    touch-action: manipulation;
+  }
+  .menu {
+    top: calc(64px + env(safe-area-inset-top));
+    left: max(10px, env(safe-area-inset-left));
+    right: max(10px, env(safe-area-inset-right));
+    max-height: calc(100dvh - 84px - env(safe-area-inset-top));
+    overflow-y: auto;
+    overscroll-behavior: contain;
+    border-radius: 22px;
+    padding: 12px;
+  }
+  .menu a,
+  .btn {
+    min-height: 46px;
+    touch-action: manipulation;
+  }
+  .menu .mobile-register {
+    margin-top: 8px;
+  }
+  .hero {
+    padding-top: 20px;
+  }
+  .hero-copy {
+    padding: 20px 18px 22px;
+  }
+  .btn-cta-vip.btn-club {
+    min-height: 52px;
+    padding: 15px 20px;
+    font-size: .94rem;
+  }
+  .whatsapp-float {
+    bottom: max(12px, env(safe-area-inset-bottom));
+    min-height: 48px;
+  }
+  .modal-overlay {
+    padding: max(8px, env(safe-area-inset-top)) max(8px, env(safe-area-inset-right))
+      max(8px, env(safe-area-inset-bottom)) max(8px, env(safe-area-inset-left));
+  }
+  .modal-panel {
+    max-height: calc(100dvh - 16px - env(safe-area-inset-top) - env(safe-area-inset-bottom));
+    overscroll-behavior: contain;
+  }
+}
+
+@media (max-width: 370px) {
+  .brand-copy span { font-size: .78rem; }
+  .brand img { width: 36px; height: 36px; }
+  .hero-copy { padding-inline: 16px; }
+  .hero-copy h1 { font-size: 1.52rem; }
+  .benefits-grid,
+  .community-grid { grid-template-columns: 1fr; }
+  .stats-grid { grid-template-columns: 1fr; }
 }
