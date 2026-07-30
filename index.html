@@ -11,8 +11,9 @@
   <link rel="stylesheet" href="styles.css" />
 </head>
 <body>
-  <!-- Funciones globales tempranas para que onclick funcione antes del módulo Firebase -->
-  <script>
+  <!-- Flujo anterior conservado como referencia, pero desactivado.
+       La autenticación y los pagos viven únicamente en El Rancho Digital. -->
+  <script type="text/plain" data-legacy-auth-disabled>
     window.abrirModalAuth = function(tab) {
       const overlay = document.getElementById('authOverlay');
       if (!overlay) return;
@@ -93,20 +94,16 @@
         <a href="#nosotros">Nosotros</a>
         <a href="#beneficios">Beneficios</a>
         <a href="#cursos">Cursos</a>
-        <a href="#alumnos">Alumnos</a>
-        <a href="#resenas">Reseñas</a>
-        <a href="#planes" class="link-vip">✨ Plan VIP</a>
         <a href="#contacto">Contacto</a>
-        <button class="btn btn-login mobile-login" onclick="abrirModalAuth('login')">Iniciar sesión</button>
-        <button class="btn btn-primary mobile-register" onclick="abrirModalAuth('registro')">Crear cuenta gratis</button>
+        <a class="btn btn-login mobile-login" href="https://teccapitalweb.github.io/VisionPecuaria/login.html?tab=login">Iniciar sesión</a>
+        <a class="btn btn-primary mobile-register" href="https://teccapitalweb.github.io/VisionPecuaria/login.html?tab=registro">Crear cuenta gratis</a>
         <a class="btn btn-whatsapp mobile-whatsapp" href="https://wa.me/522361049715" target="_blank" rel="noopener noreferrer">Escríbenos por WhatsApp</a>
       </nav>
 
       <div class="header-auth">
-        <button class="btn btn-login" onclick="abrirModalAuth('login')">Iniciar sesión</button>
-        <button class="btn btn-primary" onclick="abrirModalAuth('registro')">Crear cuenta gratis</button>
+        <a class="btn btn-login" href="https://teccapitalweb.github.io/VisionPecuaria/login.html?tab=login">Iniciar sesión</a>
+        <a class="btn btn-primary" href="https://teccapitalweb.github.io/VisionPecuaria/login.html?tab=registro">Crear cuenta gratis</a>
       </div>
-      <a class="btn btn-whatsapp desktop-whatsapp" href="https://wa.me/522361049715" target="_blank" rel="noopener noreferrer">WhatsApp</a>
     </div>
   </header>
 
@@ -123,12 +120,12 @@
           </p>
 
           <div class="hero-actions">
-            <button class="btn btn-cta-vip" onclick="document.getElementById('planes').scrollIntoView({behavior:'smooth'})">
+            <a class="btn btn-cta-vip" href="https://teccapitalweb.github.io/VisionPecuaria/login.html?tab=login">
               <span class="btn-cta-shine"></span>
-              <span>👑 Ver Plan Élite Pecuario</span>
+              <span>Entrar a El Rancho Digital</span>
               <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><line x1="5" y1="12" x2="19" y2="12"/><polyline points="12 5 19 12 12 19"/></svg>
-            </button>
-            <button class="btn btn-secondary" onclick="abrirModalAuth('registro')">🎁 Crear cuenta gratis</button>
+            </a>
+            <a class="btn btn-secondary" href="#cursos">Conocer los cursos</a>
           </div>
 
           <div class="hero-stats">
@@ -152,13 +149,13 @@
         </div>
 
         <div class="hero-media">
-          <img src="assets/banner/banner-principal.jpg" alt="Banner principal de Visión Pecuaria">
+          <img src="assets/banner/banner-principal-236-104-9715.png" alt="Banner principal de Visión Pecuaria con atención al 236 104 9715">
         </div>
       </div>
 
       <!-- Banner visible solo en móvil, debajo del copy -->
       <div class="container hero-banner-mobile">
-        <img src="assets/banner/banner-principal.jpg" alt="Banner Visión Pecuaria">
+        <img src="assets/banner/banner-principal-236-104-9715.png" alt="Banner Visión Pecuaria con atención al 236 104 9715">
       </div>
     </section>
 
@@ -413,7 +410,7 @@
     <!-- ════════════════════════════════════════════════════════════ -->
     <!-- ✨ SECCIÓN: PLAN ÉLITE PECUARIO — pricing premium con animaciones -->
     <!-- ════════════════════════════════════════════════════════════ -->
-    <section class="section planes-section" id="planes">
+    <section class="section planes-section" id="planes" hidden aria-hidden="true">
       <div class="planes-bg">
         <div class="planes-orb planes-orb--1"></div>
         <div class="planes-orb planes-orb--2"></div>
@@ -691,7 +688,7 @@
   <!-- ═══════════════════════════════════════════════════════════ -->
   <!-- 🔐 MODAL DE AUTENTICACIÓN — versión premium oscura            -->
   <!-- ═══════════════════════════════════════════════════════════ -->
-  <div class="auth-overlay" id="authOverlay" onclick="if(event.target===this)cerrarModalAuth()">
+  <div class="auth-overlay" id="authOverlay" hidden aria-hidden="true">
     <div class="auth-bg-orbs">
       <div class="auth-orb auth-orb--1"></div>
       <div class="auth-orb auth-orb--2"></div>
@@ -791,7 +788,7 @@
   <!-- ═══════════════════════════════════════════════════════════ -->
   <!-- 🔥 FIREBASE — Auth + Firestore con autologin cross-domain    -->
   <!-- ═══════════════════════════════════════════════════════════ -->
-  <script type="module">
+  <script type="text/plain" data-legacy-auth-disabled>
     import { initializeApp } from "https://www.gstatic.com/firebasejs/10.11.0/firebase-app.js";
     import {
       getAuth, createUserWithEmailAndPassword, signInWithEmailAndPassword,
@@ -1092,7 +1089,7 @@
   </script>
 
 
-  <script>
+  <script type="text/plain" data-legacy-checkout-disabled>
     // ════════════════════════════════════════════════════════════
     // 👑 SUSCRIPCIÓN ÉLITE PECUARIO — Stripe Checkout
     // ════════════════════════════════════════════════════════════
@@ -1156,7 +1153,7 @@
 
         throw new Error('Respuesta inesperada del servidor de pagos');
       } catch (e) {
-        const numero = '5212361100649';
+        const numero = '522361049715';
         const msg = encodeURIComponent('Hola, intenté pagar mi suscripción Élite Pecuario y me dio error. Email: ' + (user.email || '') + ' Plan: ' + plan);
         if (confirm('Error al procesar el pago: ' + e.message + '\n\n¿Quieres contactarnos por WhatsApp para procesar tu pago?')) {
           window.open('https://wa.me/' + numero + '?text=' + msg, '_blank');
