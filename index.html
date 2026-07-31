@@ -11,6 +11,17 @@
   <link rel="stylesheet" href="styles.css" />
 </head>
 <body>
+  <script>
+    // Compatibilidad segura con elementos heredados del diseño anterior:
+    // todo acceso y toda compra comienzan ahora en el portal oficial.
+    window.abrirModalAuth = function(tab) {
+      const destino = tab === 'login' ? 'login' : 'registro';
+      window.location.href = `https://teccapitalweb.github.io/VisionPecuaria/login.html?tab=${destino}`;
+    };
+    window.suscribirElitePecuario = function() {
+      window.location.href = 'https://teccapitalweb.github.io/VisionPecuaria/login.html?tab=registro';
+    };
+  </script>
   <!-- Flujo anterior conservado como referencia, pero desactivado.
        La autenticación y los pagos viven únicamente en El Rancho Digital. -->
   <script type="text/plain" data-legacy-auth-disabled>
@@ -645,6 +656,9 @@
         <h4>Contacto</h4>
         <a href="mailto:visionpecuaria12@gmail.com">visionpecuaria12@gmail.com</a>
         <a href="https://wa.me/522361049715" target="_blank" rel="noopener noreferrer">+52 1 236 104 9715</a>
+        <a href="privacidad.html">Aviso de privacidad</a>
+        <a href="terminos.html">Términos del servicio</a>
+        <a href="cancelaciones.html">Cancelaciones y garantía</a>
       </div>
 
       <div>
