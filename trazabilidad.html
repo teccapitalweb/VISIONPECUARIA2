@@ -1,0 +1,236 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0">
+<title>Trazabilidad · Visión Pecuaria</title>
+<style>
+  :root{
+    --primario:#2d5016;
+    --primario-oscuro:#1c3410;
+    --acento:#8bc34a;
+    --acento-claro:#c8e6a0;
+    --tierra:#795548;
+    --fondo:#f5f7f0;
+    --texto:#1e1e1e;
+    --texto-suave:#5b6b52;
+    --card-bg:rgba(255,255,255,0.72);
+    --card-borde:rgba(255,255,255,0.5);
+  }
+  *{box-sizing:border-box;margin:0;padding:0;}
+  html,body{height:100%;}
+  body{
+    font-family:-apple-system,BlinkMacSystemFont,"Segoe UI",Roboto,Helvetica,Arial,sans-serif;
+    color:var(--texto);
+    background:
+      radial-gradient(circle at 15% 8%, rgba(139,195,74,0.35), transparent 45%),
+      radial-gradient(circle at 85% 90%, rgba(45,80,22,0.30), transparent 50%),
+      linear-gradient(160deg, #eef3e6 0%, var(--fondo) 45%, #e6efd8 100%);
+    min-height:100%;
+    display:flex;
+    justify-content:center;
+    padding:28px 16px 48px;
+  }
+  .wrap{ width:100%; max-width:460px; }
+
+  .brand{
+    display:flex; align-items:center; gap:10px;
+    margin-bottom:18px;
+  }
+  .brand-mark{
+    width:38px; height:38px; border-radius:10px;
+    background:linear-gradient(135deg,var(--primario),var(--acento));
+    display:flex; align-items:center; justify-content:center;
+    flex-shrink:0;
+  }
+  .brand-name{ font-size:.95rem; font-weight:700; color:var(--primario-oscuro); letter-spacing:.2px; }
+  .brand-sub{ font-size:.72rem; color:var(--texto-suave); text-transform:uppercase; letter-spacing:1.5px; }
+
+  .card{
+    background:var(--card-bg);
+    border:1px solid var(--card-borde);
+    backdrop-filter:blur(18px);
+    -webkit-backdrop-filter:blur(18px);
+    border-radius:22px;
+    padding:26px 22px 22px;
+    box-shadow:0 12px 40px rgba(45,80,22,0.14);
+    margin-bottom:16px;
+  }
+
+  .verificado{
+    display:inline-flex; align-items:center; gap:7px;
+    background:rgba(139,195,74,0.18);
+    border:1px solid rgba(139,195,74,0.45);
+    color:var(--primario-oscuro);
+    padding:6px 13px;
+    border-radius:50px;
+    font-size:.72rem;
+    font-weight:700;
+    letter-spacing:.4px;
+    text-transform:uppercase;
+    margin-bottom:18px;
+  }
+  .verificado svg{ width:14px; height:14px; flex-shrink:0; }
+
+  .titulo{
+    font-size:1.32rem;
+    font-weight:800;
+    color:var(--primario-oscuro);
+    line-height:1.25;
+    margin-bottom:4px;
+  }
+  .subtitulo{
+    font-size:.85rem;
+    color:var(--texto-suave);
+    margin-bottom:22px;
+  }
+
+  .fecha-box{
+    background:linear-gradient(135deg,var(--primario) 0%, var(--primario-oscuro) 100%);
+    border-radius:16px;
+    padding:18px 20px;
+    color:#fff;
+    display:flex;
+    align-items:center;
+    gap:14px;
+    margin-bottom:22px;
+  }
+  .fecha-icono{
+    width:40px; height:40px; border-radius:11px;
+    background:rgba(255,255,255,0.16);
+    display:flex; align-items:center; justify-content:center;
+    flex-shrink:0;
+  }
+  .fecha-icono svg{ width:20px; height:20px; }
+  .fecha-label{ font-size:.68rem; text-transform:uppercase; letter-spacing:1.2px; opacity:.85; margin-bottom:2px; }
+  .fecha-valor{ font-size:1.08rem; font-weight:800; }
+
+  .grid{
+    display:grid;
+    grid-template-columns:1fr 1fr;
+    gap:12px;
+    margin-bottom:6px;
+  }
+  .dato{
+    background:rgba(255,255,255,0.55);
+    border:1px solid rgba(45,80,22,0.08);
+    border-radius:13px;
+    padding:13px 14px;
+  }
+  .dato-label{
+    display:flex; align-items:center; gap:6px;
+    font-size:.66rem; text-transform:uppercase; letter-spacing:.8px;
+    color:var(--texto-suave); font-weight:700; margin-bottom:5px;
+  }
+  .dato-label svg{ width:13px; height:13px; opacity:.8; }
+  .dato-valor{ font-size:.92rem; font-weight:700; color:var(--texto); }
+
+  .footer-card{
+    display:flex; align-items:center; gap:12px;
+    background:var(--card-bg);
+    border:1px solid var(--card-borde);
+    backdrop-filter:blur(18px);
+    -webkit-backdrop-filter:blur(18px);
+    border-radius:18px;
+    padding:16px 18px;
+  }
+  .footer-icono{
+    width:34px; height:34px; border-radius:9px;
+    background:rgba(45,80,22,0.08);
+    display:flex; align-items:center; justify-content:center;
+    flex-shrink:0;
+  }
+  .footer-icono svg{ width:17px; height:17px; color:var(--primario); }
+  .footer-texto{ font-size:.78rem; color:var(--texto-suave); line-height:1.45; }
+  .footer-texto b{ color:var(--primario-oscuro); }
+
+  @media (max-width:360px){
+    .grid{ grid-template-columns:1fr; }
+  }
+</style>
+</head>
+<body>
+  <div class="wrap">
+
+    <div class="brand">
+      <div class="brand-mark">
+        <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="#fff" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round">
+          <ellipse cx="12" cy="13" rx="7" ry="9"/>
+        </svg>
+      </div>
+      <div>
+        <div class="brand-name">Visión Pecuaria</div>
+        <div class="brand-sub">Trazabilidad digital</div>
+      </div>
+    </div>
+
+    <div class="card">
+      <div class="verificado">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round">
+          <polyline points="20 6 9 17 4 12"/>
+        </svg>
+        Origen verificado
+      </div>
+
+      <div class="titulo">Este huevo tiene historia</div>
+      <div class="subtitulo">Escaneado desde el empaque — aquí está su recorrido.</div>
+
+      <div class="fecha-box">
+        <div class="fecha-icono">
+          <svg viewBox="0 0 24 24" fill="none" stroke="#fff" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round">
+            <rect x="3" y="5" width="18" height="16" rx="3"/>
+            <path d="M3 10h18"/>
+            <path d="M8 3v4"/>
+            <path d="M16 3v4"/>
+          </svg>
+        </div>
+        <div>
+          <div class="fecha-label">Fecha de producción</div>
+          <div class="fecha-valor">10 de agosto de 2026</div>
+        </div>
+      </div>
+
+      <div class="grid">
+        <div class="dato">
+          <div class="dato-label">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M3 21h18"/><path d="M5 21V9l7-6 7 6v12"/><path d="M9 21v-6h6v6"/></svg>
+            Granja de origen
+          </div>
+          <div class="dato-valor">Rancho El Encino</div>
+        </div>
+        <div class="dato">
+          <div class="dato-label">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="7" width="18" height="13" rx="2"/><path d="M8 7V5a2 2 0 0 1 2-2h4a2 2 0 0 1 2 2v2"/></svg>
+            Lote
+          </div>
+          <div class="dato-valor">VP-0810-C3</div>
+        </div>
+        <div class="dato">
+          <div class="dato-label">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 2v6"/><circle cx="12" cy="14" r="8"/></svg>
+            Caseta
+          </div>
+          <div class="dato-valor">Caseta 4</div>
+        </div>
+        <div class="dato">
+          <div class="dato-label">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M20.84 4.61a5.5 5.5 0 0 0-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 0 0-7.78 7.78l1.06 1.06L12 21.23l7.78-7.78 1.06-1.06a5.5 5.5 0 0 0 0-7.78z"/></svg>
+            Bienestar animal
+          </div>
+          <div class="dato-valor">Piso libre</div>
+        </div>
+      </div>
+    </div>
+
+    <div class="footer-card">
+      <div class="footer-icono">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 22s8-4.5 8-11V5l-8-3-8 3v6c0 6.5 8 11 8 11z"/></svg>
+      </div>
+      <div class="footer-texto">
+        Trazabilidad con certificación <b>IPCI</b> · TEC CAPITAL Group
+      </div>
+    </div>
+
+  </div>
+</body>
+</html>
