@@ -101,6 +101,16 @@
 
   function iniciar(sec) {
     var slug = sec.getAttribute('data-testimonios');
+    // 1) Datos incrustados en la página (no dependen de otra petición)
+    var incrustado = document.getElementById('vt-datos-' + slug);
+    if (incrustado) {
+      try {
+        var di = JSON.parse(incrustado.textContent);
+        var li = (di && Array.isArray(di.testimonios) ? di.testimonios : []).filter(valido);
+        if (di && di.curso && di.curso !== slug) li = [];
+        if (li.length) { montar(sec, li); return; }
+      } catch (e) { /* cae al archivo JSON */ }
+    }
     var url = sec.getAttribute('data-fuente') || ('/data/testimonios/' + slug + '.json');
     fetch(url, { cache: 'no-cache' })
       .then(function (r) { return r.ok ? r.json() : { testimonios: [] }; })
