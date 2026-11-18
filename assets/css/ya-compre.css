@@ -1,0 +1,12 @@
+/* Acceso discreto para alumnos que ya pagaron (landings de cursos) */
+.ya-compre-wrap { text-align: center; margin-top: 10px; }
+.ya-compre {
+  display: inline-flex; align-items: center; gap: 7px; min-height: 44px; padding: 8px 14px;
+  font: 600 14px/1.2 'Inter', system-ui, sans-serif; color: #2e7d32; text-decoration: none;
+  border: 1px solid rgba(46, 125, 50, .28); border-radius: 999px; background: rgba(255, 255, 255, .7);
+  transition: background .2s, border-color .2s;
+}
+.ya-compre:hover, .ya-compre:focus-visible { background: #e8f5e9; border-color: #2e7d32; }
+.ya-compre svg { width: 16px; height: 16px; flex: none; }
+.ya-compre--hdr { min-height: 40px; padding: 8px 12px; font-size: 13px; margin-right: 10px; background: transparent; }
+@media (max-width: 520px) { .ya-compre--hdr { display: none; } }
