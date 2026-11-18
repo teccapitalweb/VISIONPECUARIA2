@@ -646,54 +646,6 @@
   </button>
 </div>
 
-<!-- ═══════ MODAL DE INSCRIPCIÓN ═══════ -->
-<div class="modal" id="modal-inscripcion" role="dialog" aria-modal="true">
-  <div class="modal__card">
-    <div class="modal__head">
-      <span class="modal__title">Inscríbete al curso</span>
-      <button class="modal__close" data-close-modal="modal-inscripcion" aria-label="Cerrar">
-        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><line x1="18" y1="6" x2="6" y2="18"/><line x1="6" y1="6" x2="18" y2="18"/></svg>
-      </button>
-    </div>
-    <div class="modal__body">
-      <div class="inscripcion-hero">
-        <div class="inscripcion-hero__ico">
-          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M14 2H6a2 2 0 00-2 2v16a2 2 0 002 2h12a2 2 0 002-2V8z"/><polyline points="14 2 14 8 20 8"/><line x1="16" y1="13" x2="8" y2="13"/><line x1="16" y1="17" x2="8" y2="17"/></svg>
-        </div>
-        <h3>Reserva tu lugar en el curso</h3>
-        <p>Completa tus datos para procesar tu pago y activar tu acceso inmediato.</p>
-      </div>
-      <form class="inscripcion-form" id="form-inscripcion" novalidate>
-        <div class="field" id="field-nombre">
-          <label for="input-nombre">Nombre completo <span class="req">*</span></label>
-          <input type="text" id="input-nombre" name="nombre" placeholder="Ej. José Antonio Castillo García" autocomplete="name" maxlength="80" required>
-          <small class="hint">Escríbelo tal como quieres que aparezca en tu certificado IPCIL</small>
-          <small class="error-msg">Ingresa tu nombre completo (mínimo 2 palabras)</small>
-        </div>
-        <div class="field" id="field-email">
-          <label for="input-email">Correo electrónico <span class="req">*</span></label>
-          <input type="email" id="input-email" name="email" placeholder="tu.correo@ejemplo.com" autocomplete="email" required>
-          <small class="hint">Aquí llegarán las clases y tu certificado oficial</small>
-          <small class="error-msg">Ingresa un correo electrónico válido</small>
-        </div>
-        <div class="field" id="field-telefono">
-          <label for="input-telefono">WhatsApp <span class="req">*</span></label>
-          <input type="tel" id="input-telefono" name="telefono" placeholder="55 1234 5678" autocomplete="tel" required>
-          <small class="hint">Con lada, para invitarte al grupo VIP del curso</small>
-          <small class="error-msg">Ingresa un número válido (10 dígitos mínimo)</small>
-        </div>
-        <button type="submit" class="btn-primary" id="btn-form-inscripcion">
-          Continuar al pago
-          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12h14M13 5l7 7-7 7"/></svg>
-        </button>
-      </form>
-      <div class="inscripcion-note">
-        Tus datos se envían a <b>IPCIL</b> para emitir tu certificado oficial y activar tu acceso al curso. Nunca los compartimos ni enviamos spam.
-      </div>
-    </div>
-  </div>
-</div>
-
 <!-- ═══════ MODAL CHECKOUT ═══════ -->
 <div class="modal" id="modal-checkout" role="dialog" aria-modal="true">
   <div class="modal__card">
@@ -766,39 +718,91 @@ if (instructorImg) {
   };
 }
 
-// MODALES
+// MODALES + CHECKOUT DIRECTO (Stripe recoge nombre, correo y teléfono)
 const openModal = (id) => { const m = document.getElementById(id); if (m) { m.classList.add('is-open'); document.body.style.overflow='hidden'; } };
-const closeModal = (id) => { const m = document.getElementById(id); if (m) { m.classList.remove('is-open'); document.body.style.overflow=''; } };
+const closeModal = (id) => {
+  const m = document.getElementById(id); if (m) { m.classList.remove('is-open'); document.body.style.overflow=''; }
+  if (id === 'modal-checkout' && window.__vpCheckout) { try { window.__vpCheckout.destroy(); } catch(e){} window.__vpCheckout = null; }
+};
+
+const VP_BACKEND = 'https://visionpecuaria-webhook-production.up.railway.app';
+const VP_SLUG = document.body.dataset.slug || 'embutidos-artesanales';
+const VP_PK = document.querySelector('meta[name="stripe-pk"]')?.content;
+const VP_WA = 'https://wa.me/522361049715?text=' + encodeURIComponent('Hola, quiero inscribirme al curso de Embutidos Artesanales pero tuve un problema con el pago');
+let vpAbriendo = false;
+
+function vpErrorPago(msg){
+  const cont = document.getElementById('checkout-container');
+  if (!cont) return;
+  cont.innerHTML =
+    '<div style="padding:30px 24px;text-align:center;">' +
+      '<div style="font-size:48px;margin-bottom:12px;">⚠️</div>' +
+      '<h3 style="font-size:1.15rem;margin-bottom:10px;">No pudimos abrir el pago</h3>' +
+      '<p style="font-size:.92rem;line-height:1.5;margin-bottom:20px;">' + msg + '</p>' +
+      '<div style="display:flex;gap:10px;flex-direction:column;">' +
+        '<button onclick="window.__vpRetry()" style="width:100%;padding:14px;background:#7a3016;color:#fff;border:none;border-radius:12px;font-weight:700;font-size:.95rem;cursor:pointer;">Reintentar</button>' +
+        '<a href="' + VP_WA + '" target="_blank" rel="noopener" style="width:100%;padding:14px;background:#25D366;color:#fff;border-radius:12px;font-weight:700;font-size:.95rem;text-decoration:none;text-align:center;display:block;">💬 Contactar por WhatsApp</a>' +
+      '</div>' +
+    '</div>';
+}
+window.__vpRetry = function(){ iniciarPagoDirecto(); };
+
+async function iniciarPagoDirecto(){
+  if (vpAbriendo) return;
+  vpAbriendo = true;
+  const cont = document.getElementById('checkout-container');
+  if (cont) cont.innerHTML = '<div style="min-height:220px;display:flex;align-items:center;justify-content:center;font-size:.9rem;color:#7d6a5a;">Preparando tu inscripción…</div>';
+  try {
+    const controller = new AbortController();
+    const timeoutId = setTimeout(() => controller.abort(), 25000);
+    const resp = await fetch(VP_BACKEND + '/crear-checkout-curso', {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({ slug: VP_SLUG }),
+      signal: controller.signal
+    });
+    clearTimeout(timeoutId);
+    const data = await resp.json().catch(() => ({}));
+    if (!resp.ok || !data.clientSecret) throw new Error(data.error || 'Error ' + resp.status);
+    if (!window.Stripe) {
+      await new Promise((resolve, reject) => {
+        const sc = document.createElement('script');
+        sc.src = 'https://js.stripe.com/v3/';
+        sc.onload = resolve; sc.onerror = () => reject(new Error('No se pudo cargar Stripe.js'));
+        document.head.appendChild(sc);
+      });
+    }
+    const stripeClient = window.Stripe(data.publishableKey || VP_PK);
+    if (window.__vpCheckout) { try { window.__vpCheckout.destroy(); } catch(e){} }
+    window.__vpCheckout = await stripeClient.initEmbeddedCheckout({ clientSecret: data.clientSecret });
+    if (cont) { cont.innerHTML = ''; cont.style.minHeight = '500px'; }
+    window.__vpCheckout.mount('#checkout-container');
+  } catch (err) {
+    console.error('[VP checkout]', err);
+    vpErrorPago(err.name === 'AbortError'
+      ? 'El servidor de pagos tardó demasiado en responder. Reintenta en unos segundos.'
+      : 'El sistema de pago no está respondiendo en este momento. Puedes reintentar o escribirnos por WhatsApp.');
+  }
+  vpAbriendo = false;
+}
 
 document.addEventListener('click', (e) => {
   if (e.target.closest('[data-action="inscribir"]')) {
     e.preventDefault();
-    openModal('modal-inscripcion');
-    setTimeout(() => document.getElementById('input-nombre')?.focus(), 200);
+    e.stopImmediatePropagation();
+    openModal('modal-checkout');
+    iniciarPagoDirecto();
+    return;
   }
   const closeBtn = e.target.closest('[data-close-modal]');
   if (closeBtn) closeModal(closeBtn.dataset.closeModal);
   if (e.target.classList.contains('modal')) closeModal(e.target.id);
+}, true);
+document.addEventListener('keydown', (e) => {
+  if (e.key === 'Escape') document.querySelectorAll('.modal.is-open').forEach(m => closeModal(m.id));
 });
 
-// VALIDACIÓN Y FORM
-const validarNombre = (v) => v.trim().split(/\s+/).length >= 2 && v.trim().length >= 3;
-const validarEmail = (v) => /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(v.trim());
-const validarTelefono = (v) => v.replace(/\D/g,'').length >= 10;
-const showError = (fid, show) => {
-  const f = document.getElementById(fid);
-  if (!f) return;
-  f.classList.toggle('is-error', show);
-  f.querySelector('input')?.classList.toggle('is-error', show);
-};
-['input-nombre','input-email','input-telefono'].forEach(id => {
-  document.getElementById(id)?.addEventListener('input', () => showError('field-'+id.replace('input-',''), false));
-});
-
-const form = document.getElementById('form-inscripcion');
-const btnSubmit = document.getElementById('btn-form-inscripcion');
-
-// Toast helper
+// Toast helper (lo usan otras partes de la página)
 const showToast = (msg, type = '') => {
   const t = document.getElementById('toast');
   if (!t) return;
@@ -806,91 +810,6 @@ const showToast = (msg, type = '') => {
   t.className = 'toast is-visible' + (type ? ' toast--' + type : '');
   setTimeout(() => t.classList.remove('is-visible'), 3500);
 };
-
-// Fallback si el botón NO está dentro del form o el submit falla
-if (btnSubmit) {
-  btnSubmit.addEventListener('click', (e) => {
-    // Solo si el form no está manejando bien el submit, forzar el flujo
-    if (form && e.type === 'click') {
-      // El form lo va a manejar via submit, no hacemos nada aquí
-      // Este listener solo es para debugging
-      console.log('[VP] Click en Continuar al pago');
-    }
-  });
-}
-
-const procesarInscripcion = async () => {
-  const nombre = document.getElementById('input-nombre').value.trim();
-  const email = document.getElementById('input-email').value.trim();
-  const telefono = document.getElementById('input-telefono').value.trim();
-  let ok = true;
-  if (!validarNombre(nombre)) { showError('field-nombre', true); ok = false; }
-  if (!validarEmail(email)) { showError('field-email', true); ok = false; }
-  if (!validarTelefono(telefono)) { showError('field-telefono', true); ok = false; }
-  if (!ok) {
-    showToast('Revisa los campos marcados en rojo', 'error');
-    return;
-  }
-
-  // Deshabilitar botón mientras procesa
-  if (btnSubmit) {
-    btnSubmit.disabled = true;
-    btnSubmit.innerHTML = '<div class="loader"></div> Procesando...';
-  }
-
-  // Esperar hasta 5 segundos a que cargue el módulo checkout-curso.js
-  const esperarModulo = () => new Promise((resolve) => {
-    let intentos = 0;
-    const check = () => {
-      if (window.__vp && window.__vp.iniciarCheckoutConDatos) {
-        resolve(true);
-        return;
-      }
-      intentos++;
-      if (intentos >= 50) { resolve(false); return; }
-      setTimeout(check, 100);
-    };
-    check();
-  });
-
-  const listo = await esperarModulo();
-
-  if (!listo) {
-    // Restaurar botón
-    if (btnSubmit) {
-      btnSubmit.disabled = false;
-      btnSubmit.innerHTML = 'Continuar al pago <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12h14M13 5l7 7-7 7"/></svg>';
-    }
-    showToast('El sistema de pago no cargó. Intenta recargar la página o contáctanos por WhatsApp.', 'error');
-    console.error('[VP] window.__vp.iniciarCheckoutConDatos no disponible tras 5s');
-    return;
-  }
-
-  // Cerrar modal de datos, abrir modal de checkout
-  closeModal('modal-inscripcion');
-  openModal('modal-checkout');
-
-  try {
-    await window.__vp.iniciarCheckoutConDatos({ nombre, email, telefono });
-  } catch (err) {
-    console.error('[VP] Error en checkout:', err);
-    showToast('Ocurrió un error al procesar el pago. Intenta de nuevo.', 'error');
-  }
-
-  // Restaurar botón (por si vuelven al modal de inscripción)
-  if (btnSubmit) {
-    btnSubmit.disabled = false;
-    btnSubmit.innerHTML = 'Continuar al pago <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12h14M13 5l7 7-7 7"/></svg>';
-  }
-};
-
-if (form) {
-  form.addEventListener('submit', async (e) => {
-    e.preventDefault();
-    e.stopPropagation();
-    await procesarInscripcion();
-  });
-}
 </script>
 
 <script type="module">
@@ -1045,7 +964,7 @@ function escapeHtml(str) {
 actualizarPreciosDesdeFirestore();
 </script>
 
-<script type="module" src="/assets/js/checkout-curso.js"></script>
+<!-- checkout-curso.js desconectado: el pago va inline, directo a Stripe -->
 
 <script src="/contador-cierre.js" defer></script>
 <script type="application/json" id="vt-datos-embutidos-artesanales">

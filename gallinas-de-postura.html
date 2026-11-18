@@ -1896,9 +1896,6 @@
 </footer>
 
 <!-- ============ WHATSAPP FLOTANTE ============ -->
-<a class="wa-float" href="https://wa.me/522361049715?text=Hola%2C%20tengo%20una%20duda%20sobre%20el%20curso%20de%20Cultivo%20y%20Manejo%20de%20Gallinas de Postura" target="_blank" rel="noopener" aria-label="WhatsApp">
-  <svg width="26" height="26" viewBox="0 0 24 24" fill="white"><path d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51-.173-.008-.371-.01-.57-.01-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.077 4.487.709.306 1.262.489 1.694.625.712.227 1.36.195 1.871.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413-.074-.124-.272-.198-.57-.347z"/><path d="M12 0C5.373 0 0 5.373 0 12c0 2.138.563 4.14 1.535 5.874L0 24l6.29-1.508A11.95 11.95 0 0012 24c6.627 0 12-5.373 12-12S18.627 0 12 0zm0 21.818a9.814 9.814 0 01-5.058-1.4l-.361-.214-3.735.896.944-3.653-.235-.374A9.817 9.817 0 012.182 12C2.182 6.57 6.57 2.182 12 2.182S21.818 6.57 21.818 12 17.43 21.818 12 21.818z"/></svg>
-</a>
 
 <!-- ═══ STICKY CTA MÓVIL (precio dinámico desde Firestore) ═════ -->
 <div class="sticky-cta" id="stickyCta">
@@ -1909,57 +1906,6 @@
   <button class="btn" data-action="inscribir">
     Inscribirme →
   </button>
-</div>
-
-<!-- ═══ MODAL: Inscripción con 3 campos (IPCIL flow) ═════════ -->
-<div class="pay-overlay modal" id="modal-inscripcion" role="dialog" aria-modal="true" aria-label="Formulario de inscripción">
-  <div class="pay-modal" style="max-width:520px;">
-    <div class="pay-head">
-      <b>Inscríbete al curso</b>
-      <button class="pay-close" data-close-modal="modal-inscripcion" aria-label="Cerrar">
-        <svg width="16" height="16" viewBox="0 0 24 24" fill="none"><path d="M6 6l12 12M18 6L6 18" stroke="currentColor" stroke-width="2.2" stroke-linecap="round"/></svg>
-      </button>
-    </div>
-    <div class="pay-body ins-body">
-      <div class="ins-hero">
-        <div class="ins-hero__ico">
-          <svg width="26" height="26" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M14 2H6a2 2 0 00-2 2v16a2 2 0 002 2h12a2 2 0 002-2V8z"/><polyline points="14 2 14 8 20 8"/><line x1="9" y1="15" x2="15" y2="15"/><line x1="9" y1="11" x2="15" y2="11"/></svg>
-        </div>
-        <h3>Reserva tu lugar en el curso</h3>
-        <p>Completa tus datos para procesar tu pago y activar tu acceso al aula virtual.</p>
-      </div>
-
-      <form class="ins-form" id="form-inscripcion" novalidate>
-        <div class="ins-field" id="field-nombre">
-          <label for="input-nombre">Nombre completo <span class="req">*</span></label>
-          <input type="text" id="input-nombre" name="nombre" placeholder="Ej. María González Ramírez" autocomplete="name" required>
-          <small class="hint">Escríbelo tal como quieres que aparezca en tu certificado <b>IPCIL</b></small>
-          <small class="error-msg">Ingresa tu nombre completo (mínimo 2 palabras)</small>
-        </div>
-        <div class="ins-field" id="field-email">
-          <label for="input-email">Correo electrónico <span class="req">*</span></label>
-          <input type="email" id="input-email" name="email" placeholder="tu.correo@ejemplo.com" autocomplete="email" inputmode="email" required>
-          <small class="hint">Aquí llegarán las clases y tu certificado oficial</small>
-          <small class="error-msg">Ingresa un correo electrónico válido</small>
-        </div>
-        <div class="ins-field" id="field-telefono">
-          <label for="input-telefono">WhatsApp <span class="req">*</span></label>
-          <input type="tel" id="input-telefono" name="telefono" placeholder="55 1234 5678" autocomplete="tel" inputmode="tel" required>
-          <small class="hint">Para invitarte al grupo VIP del curso</small>
-          <small class="error-msg">Ingresa un número válido (10 dígitos)</small>
-        </div>
-        <button type="submit" class="ins-submit">
-          Continuar al pago
-          <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><line x1="5" y1="12" x2="19" y2="12"/><polyline points="12 5 19 12 12 19"/></svg>
-        </button>
-      </form>
-
-      <div class="ins-note">
-        🔒 Tus datos se envían a <b>IPCIL</b> (Instituto Profesional de Certificación Industrial Latinoamericano) para emitir tu certificado oficial y activar tu acceso al curso.<br><br>
-        📜 Tu certificado con QR y folio válido llega a tu correo <b>en 1 semana</b> después de finalizar el curso. Nunca compartimos tus datos ni enviamos spam.
-      </div>
-    </div>
-  </div>
 </div>
 
 <!-- ═══ MODAL: Checkout Stripe (no cambiar) ═════════════════ -->
@@ -2196,8 +2142,8 @@
     if (abrir) {
       e.preventDefault();
       e.stopImmediatePropagation();     // corta la cadena de otros listeners
-      abrirModal('modal-inscripcion');
-      setTimeout(function(){ document.getElementById('input-nombre')?.focus(); }, 200);
+      abrirModal('modal-checkout');
+      iniciarPago({});
       return;
     }
     var cerrarBtn = e.target.closest('[data-close-modal]');
@@ -2210,6 +2156,12 @@
       if (id) cerrarModal(id);
     }
   }, true);  // capture: se ejecuta ANTES del bubbling normal
+
+  document.addEventListener('keydown', function(e){
+    if (e.key === 'Escape') {
+      document.querySelectorAll('.pay-overlay.is-open, .pay-overlay[data-open], .modal.is-open').forEach(function(m){ if (m.id) cerrarModal(m.id); });
+    }
+  });
 
   // Validaciones
   function validarNombre(v)    { return v.trim().split(/\s+/).length >= 2 && v.trim().length >= 3; }
@@ -2245,8 +2197,7 @@
 
   // Retry global
   window.__vpRetry = function(){
-    cerrarModal('modal-checkout');
-    abrirModal('modal-inscripcion');
+    iniciarPago({});
   };
 
   // Fetch al backend + montaje de Stripe embebido
@@ -2268,22 +2219,8 @@
 
     setPaso('Preparando tu inscripción…');
 
-    // Generar UID sintético desde email (para el backend)
-    async function uidDeEmail(email){
-      var enc = new TextEncoder().encode(email.toLowerCase().trim());
-      var hash = await crypto.subtle.digest('SHA-256', enc);
-      var hex = Array.from(new Uint8Array(hash)).map(function(b){ return b.toString(16).padStart(2,'0'); }).join('');
-      return 'ipcil-' + hex.substring(0, 24);
-    }
-
-    var uid = await uidDeEmail(datos.email);
-    var payload = {
-      slug: COURSE_SLUG,
-      uid: uid,
-      email: datos.email,
-      nombre: datos.nombre,
-      whatsapp: datos.telefono.replace(/\D/g, '')
-    };
+    // Stripe recoge correo, nombre y teléfono en su propio formulario
+    var payload = { slug: COURSE_SLUG };
 
     console.log('[VP checkout] payload →', payload);
 
@@ -2385,7 +2322,7 @@
       }
     }
 
-    var lastError = 'Backend: ' + BACKEND_URL + '\nSlug: ' + COURSE_SLUG + '\nUID generado: ' + uid + '\nEmail: ' + datos.email + '\n\n' + intentos.join('\n');
+    var lastError = 'Backend: ' + BACKEND_URL + '\nSlug: ' + COURSE_SLUG + '\n\n' + intentos.join('\n');
 
     // Ningún endpoint funcionó
     renderCheckoutError(
@@ -2395,26 +2332,6 @@
     opening = false;
   }
 
-  // Submit del formulario
-  var form = document.getElementById('form-inscripcion');
-  if (form) {
-    form.addEventListener('submit', function(e){
-      e.preventDefault();
-      var nombre   = document.getElementById('input-nombre').value.trim();
-      var email    = document.getElementById('input-email').value.trim();
-      var telefono = document.getElementById('input-telefono').value.trim();
-
-      var ok = true;
-      if (!validarNombre(nombre))    { showError('field-nombre', true);   ok = false; }
-      if (!validarEmail(email))      { showError('field-email', true);    ok = false; }
-      if (!validarTelefono(telefono)){ showError('field-telefono', true); ok = false; }
-      if (!ok) return;
-
-      cerrarModal('modal-inscripcion');
-      abrirModal('modal-checkout');
-      iniciarPago({ nombre: nombre, email: email, telefono: telefono });
-    });
-  }
 </script>
 
 <!-- El flujo de pago va INLINE arriba, no depende del checkout-curso.js compartido -->
