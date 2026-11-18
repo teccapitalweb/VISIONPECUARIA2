@@ -2857,6 +2857,9 @@ actualizarPreciosDesdeFirestore();
 .mc__l.vista .mc__ln svg{width:15px;height:15px;stroke-width:2.6}
 .mc__l.sig .mc__ln{border-color:var(--gold);color:#8a6200;box-shadow:0 0 0 4px rgba(240,180,41,.16)}
 .mc__l[disabled] .mc__ln{background:#f0f2ee;border-color:var(--line);color:var(--mute)}
+.mc__l.conimg{grid-template-columns:46px 92px minmax(0,1fr) auto}
+.mc__lth{width:92px;aspect-ratio:16/9;border-radius:10px;object-fit:cover;background:#eef1ec;border:1px solid var(--line);display:block}
+.mc__l[disabled] .mc__lth{filter:grayscale(.5);opacity:.75}
 .mc__lt{display:grid;gap:3px;min-width:0}
 .mc__lt em{font-style:normal;font-size:.62rem;font-weight:800;letter-spacing:.12em;text-transform:uppercase;color:var(--mute)}
 .mc__l.vista .mc__lt em{color:var(--ok)}
@@ -2967,6 +2970,9 @@ actualizarPreciosDesdeFirestore();
   .mc__hide-sm{display:none}
   .mc__wrap{padding:16px 14px calc(104px + env(safe-area-inset-bottom))}
   .mc__top{padding:8px 12px;padding-top:calc(8px + env(safe-area-inset-top))}
+  .mc__l.conimg{grid-template-columns:34px 76px minmax(0,1fr) auto;gap:7px;padding:13px 12px}
+  .mc__l.conimg .mc__ln{width:28px;height:28px;font-size:.66rem}
+  .mc__lth{width:76px;border-radius:8px}
   .mc__banner{aspect-ratio:16/9;border-radius:16px}
   .mc__stats b{font-size:.76rem}.mc__stats small{font-size:.56rem}
   .mc__ms{grid-template-columns:1fr}
@@ -2986,7 +2992,7 @@ actualizarPreciosDesdeFirestore();
 
 <div class="mc solo" id="mi-curso" hidden role="dialog" aria-modal="true" aria-labelledby="mc-titulo">
   <header class="mc__top">
-    <div class="mc__brand"><img src="/assets/brand/logo-vp-300.png" alt="" width="34" height="34" onerror="this.style.display='none'"><div><b id="mc-titulo">Mi curso</b><small><span class="mc__hide-sm">Visión Pecuaria · </span>Aula del curso</small></div></div>
+    <div class="mc__brand"><img src="/assets/brand/logo-vp-300.png" alt="" width="34" height="34" onerror="this.style.display='none'"><b id="mc-titulo">Mi curso</b></div>
     <button type="button" class="mc__me" id="mc-me" aria-label="Mi cuenta" hidden></button>
     <button type="button" class="mc__x" id="mc-cerrar" aria-label="Volver a la página del curso"><svg viewBox="0 0 24 24"><path d="M6 6l12 12M18 6 6 18"/></svg><span>Volver</span></button>
   </header>
@@ -3017,6 +3023,9 @@ const API = 'https://visionpecuaria-webhook-production.up.railway.app';
 const SLUG = document.body.dataset.slug;
 const CFG = { apiKey: "AIzaSyDQXkIo-BWPIeLZzHeTMN986WMDn0TrTJU", authDomain: "visionpecuaria-vip.firebaseapp.com", projectId: "visionpecuaria-vip",
   storageBucket: "visionpecuaria-vip.firebasestorage.app", messagingSenderId: "978318807782", appId: "1:978318807782:web:626e67bb30795c15b02127" };
+const PORTADAS_BASE = 'https://cdn.jsdelivr.net/gh/teccapitalweb/VISIONPECUARIA2@main/portadas/';
+const PORTADAS = { 'gallinas-de-postura': 'gallinas-', 'embutidos-artesanales': 'embutidos-' };
+const portadaDe = (i) => (PORTADAS[SLUG] && i >= 0 && i < 5) ? PORTADAS_BASE + PORTADAS[SLUG] + (i + 1) + '.jpg' : '';
 const NOMBRES = { 'gallinas-de-postura': 'Gallinas de Postura', 'embutidos-artesanales': 'Embutidos Artesanales' };
 const PORTADA = document.querySelector('video[poster]')?.getAttribute('poster') || document.querySelector('meta[property="og:image"]')?.content || '';
 const WA = 'https://wa.me/522361049715';
@@ -3219,7 +3228,7 @@ function vistaSinCompra() {
 }
 
 // ─── Utilidades ─────────────────────────────────────────────────────────────
-const fecha = (iso) => { try { return new Date(iso).toLocaleDateString('es-MX', { day: 'numeric', month: 'long', year: 'numeric' }); } catch (_) { return ''; } };
+const fecha = (iso) => { try { const d = new Date(iso && iso.seconds ? iso.seconds * 1000 : iso); return isNaN(d) ? '' : d.toLocaleDateString('es-MX', { day: 'numeric', month: 'long', year: 'numeric' }); } catch (_) { return ''; } };
 const fb = `onerror="this.onerror=null;this.src='${esc(PORTADA)}'"`;
 const siguiente = () => { const p = DATA.progreso; return p.ultimaClaseId && !(p.clases?.[p.ultimaClaseId]?.completada) ? p.ultimaClaseId : (DATA.clases.find(c => c.estado === 'publicada' && !p.clases?.[c.id]?.completada) || DATA.clases.find(c => c.estado === 'publicada') || {}).id; };
 const estrellas = (n) => { let h = ''; for (let i = 1; i <= 5; i++) h += i <= Math.round(n) ? '★' : '<i>★</i>'; return `<span class="mc__st" aria-label="${n} de 5">${h}</span>`; };
@@ -3238,8 +3247,10 @@ function filaClase(cl, i, d, sig) {
     : pc.completada ? `<span class="mc__chip mc__chip--line">${I.check}<span>Repasar</span></span>`
     : cl.id === sig ? `<span class="mc__chip mc__chip--gold">${I.play}<span>Ver clase</span></span>`
     : `<span class="mc__chip mc__chip--line">${I.play}<span>Ver</span></span>`;
-  return `<button type="button" class="${cls}" ${pub ? `data-clase="${esc(cl.id)}"` : 'disabled'}>
+  const th = portadaDe(i);
+  return `<button type="button" class="${cls}${th ? ' conimg' : ''}" ${pub ? `data-clase="${esc(cl.id)}"` : 'disabled'}>
     <span class="mc__ln">${pc.completada ? I.check : String(i + 1).padStart(2, '0')}</span>
+    ${th ? `<img class="mc__lth" src="${th}" alt="" loading="lazy">` : ''}
     <span class="mc__lt"><em>${em}</em><strong>${esc(cl.titulo)}</strong><small>${esc(sub)}</small></span>
     <span class="mc__la">${accion}</span>
   </button>`;
@@ -3411,7 +3422,7 @@ function vistaCertificado(msg) {
       ${ce.url ? `<a class="mc__btn mc__btn--g" style="width:100%" href="${esc(ce.url)}" target="_blank" rel="noopener">${I.cert} Ver mi certificado</a>` : `<div class="mc__card mc__estado"><p style="color:var(--soft)">Te enviamos tu certificado por correo. Si no lo encuentras, escríbenos por WhatsApp.</p></div>`}`;
   } else if (so && !CERT_EDITAR) {
     const txt = ({ pendiente: 'Recibimos tu solicitud', en_proceso: 'Tu certificado está en proceso', rechazado: 'Necesitamos revisar tus datos' })[so.estado] || 'Recibimos tu solicitud';
-    cuerpo = `<div class="mc__cfh"><i>${I.cert}</i><div><h2>${txt}</h2><p>Enviada el ${esc(fecha(so.fechaSolicitud))}. Te avisaremos por correo y WhatsApp cuando esté emitido.</p></div></div>
+    cuerpo = `<div class="mc__cfh"><i>${I.cert}</i><div><h2>${txt}</h2><p>${fecha(so.fechaSolicitud) ? 'Enviada el ' + esc(fecha(so.fechaSolicitud)) + '. ' : ''}Te avisaremos por correo y WhatsApp cuando esté emitido.</p></div></div>
       <div class="mc__card mc__estado"><dl>
         <dt>Nombre en el certificado</dt><dd><b>${esc(so.nombreCompleto)}</b></dd>
         <dt>WhatsApp</dt><dd>${esc(so.whatsapp || '—')}</dd>
@@ -3476,7 +3487,7 @@ function vistaCuenta() {
     <dt>Correo</dt><dd>${esc(u.email || '—')}</dd>
     <dt>Forma de entrar</dt><dd>${esc(prov)}</dd>
     <dt>Curso</dt><dd>${esc(d.curso.nombre)}</dd>
-    <dt>Adquirido</dt><dd>${d.acceso?.fechaCompra ? esc(fecha(d.acceso.fechaCompra)) : '—'}</dd>
+    <dt>Adquirido</dt><dd>${esc(fecha(d.acceso?.fechaCompra)) || '—'}</dd>
   </dl></div>
   <div class="mc__sec mc__card mc__fila"><div><span class="mc__chip ${ce.estado === 'emitido' ? 'mc__chip--ok' : 'mc__chip--pend'}">${I.cert} Certificado: ${estadoCertTexto()}</span>
     <p>${ce.estado === 'emitido' ? `Folio <b>${esc(ce.folio || '')}</b>, con QR verificable.` : 'Solicítalo con tus datos y te lo enviamos por correo.'}</p></div>
@@ -3517,7 +3528,7 @@ async function vistaClase(id) {
       <div class="mc__verif">${I.escudo} Contenido verificado por el equipo de Visión Pecuaria</div></div>` : ''}
     ${next ? `<div class="mc__sec"><span class="mc__eyebrow mute">A continuación · Clase ${d.clases.indexOf(next) + 1}</span>
       <button type="button" class="mc__card mc__next" style="margin-top:8px" data-clase="${esc(next.id)}">
-        <img src="${esc(next.miniatura || d.curso.portada || PORTADA)}" alt="" ${fb}>
+        <img src="${portadaDe(d.clases.indexOf(next)) || esc(next.miniatura || d.curso.portada || PORTADA)}" alt="" ${fb}>
         <span style="min-width:0;text-align:left;flex:1"><b>${esc(next.titulo)}</b><small>${next.duracionMin ? next.duracionMin + ' min · ' : ''}Lista para continuar</small></span>
         <span class="mc__go">${I.flecha}</span></button></div>` : ''}
     ${mats.length ? `<div class="mc__sec"><span class="mc__eyebrow">Tu espacio de estudio</span>
