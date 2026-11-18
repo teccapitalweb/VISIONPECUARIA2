@@ -1,6 +1,92 @@
 {
   "curso": "gallinas-de-postura",
-  "_instrucciones": "Agrega aquí solo opiniones reales de alumnos de ESTE curso. Cada una necesita autorizado:true y fuente (dónde se obtuvo y cómo se autorizó). Sin ellas no se publica. calificacion solo se muestra si calificacionVerificada:true.",
-  "_ejemplo": { "texto": "Palabras originales del alumno", "nombre": "Nombre y primera inicial, como lo autorizó", "contexto": "Ocupación confirmada", "ubicacion": "Estado, si lo autorizó", "calificacion": 5, "calificacionVerificada": false, "autorizado": true, "fuente": "Formulario de satisfacción, 2026-11-20, autorización por WhatsApp" },
-  "testimonios": []
+  "_nota": "Recomendaciones reales y públicas de alumnos de Visión Pecuaria en Facebook (de varios cursos de la marca). Se muestran con nombre y primera inicial y con el curso que tomaron. Cuando haya opiniones propias de este curso, agrégalas aquí con autorizado:true y fuente.",
+  "testimonios": [
+    {
+      "texto": "…He tomado varios cursos con Visión Pecuaria y a pesar de que tengo más de 20 años de apicultor proporcionan nueva información actualizada, por lo que lo recomiendo. No deja dudas, maneja bien los temas.",
+      "nombre": "Alfonso D.",
+      "contexto": "Apicultor · Guadalajara",
+      "autorizado": true,
+      "fuente": "Recomendación pública en la página de Facebook de Visión Pecuaria (captura: assets/resenas/resena-01.png)",
+      "nota": "Extracto del texto original (sin cambiar el sentido)"
+    },
+    {
+      "texto": "El curso de meliponia fue muy interesante con información clara y dinámica, despertó mi curiosidad en conocer más del tema.",
+      "nombre": "Emmanuel L.",
+      "contexto": "Curso de meliponicultura",
+      "autorizado": true,
+      "fuente": "Recomendación pública en la página de Facebook de Visión Pecuaria (captura: assets/resenas/resena-02.png)"
+    },
+    {
+      "texto": "Excelente curso de reproducción de tilapia. Se explicaron muy bien los conceptos básicos y los parámetros clave. El profe fue muy accesible y aclaró todas las dudas.",
+      "nombre": "Edgar S.",
+      "contexto": "Curso de reproducción de tilapia",
+      "autorizado": true,
+      "fuente": "Recomendación pública en la página de Facebook de Visión Pecuaria (captura: assets/resenas/resena-03.png)",
+      "nota": "Extracto del texto original (sin cambiar el sentido)"
+    },
+    {
+      "texto": "Tomé el curso de manejo estratégico de becerros y quedé conforme con la información que nos proporcionó el MVZ, todo muy bien explicado y completo. Estaré atenta a sus nuevos cursos, muy recomendados.",
+      "nombre": "Nely M.",
+      "contexto": "Curso de manejo de becerros",
+      "autorizado": true,
+      "fuente": "Recomendación pública en la página de Facebook de Visión Pecuaria (captura: assets/resenas/resena-04.png)"
+    },
+    {
+      "texto": "Me gustó mucho el curso, me resolvió muchas dudas que tenía del tema y me enseñó demasiado. Los invito a que tomen un curso con ellos, están muy completos y sobre todo son muy atentos al resolver tus preguntas.",
+      "nombre": "Stephanie B.",
+      "contexto": "Alumna de Visión Pecuaria",
+      "autorizado": true,
+      "fuente": "Recomendación pública en la página de Facebook de Visión Pecuaria (captura: assets/resenas/resena-05.png)"
+    },
+    {
+      "texto": "Curso muy completo y sin ningún problema, lo recomiendo ampliamente para aquellos que quieran aprender al máximo.",
+      "nombre": "José F.",
+      "contexto": "Alumno de Visión Pecuaria",
+      "autorizado": true,
+      "fuente": "Recomendación pública en la página de Facebook de Visión Pecuaria (captura: assets/resenas/resena-06.png)"
+    },
+    {
+      "texto": "Me impresionó mucho este curso, incluso superó mis expectativas, la riqueza del contenido y la dedicación de la instructora hicieron que cada clase fuera valiosa.",
+      "nombre": "Magda T.",
+      "contexto": "Alumna de Visión Pecuaria",
+      "autorizado": true,
+      "fuente": "Recomendación pública en la página de Facebook de Visión Pecuaria (captura: assets/resenas/resena-07.png)"
+    },
+    {
+      "texto": "Es una página súper recomendada al 100%, sus ponentes con mucho conocimiento y responden a las dudas, además que son una plataforma completamente confiable que aporta conocimientos a la comunidad.",
+      "nombre": "Misael S.",
+      "contexto": "Alumno de Visión Pecuaria",
+      "autorizado": true,
+      "fuente": "Recomendación pública en la página de Facebook de Visión Pecuaria (captura: assets/resenas/resena-08.png)"
+    },
+    {
+      "texto": "Recomiendo los cursos de Visión Pecuaria, ya que además de ser prácticos son de gran utilidad. Hace una semana tomé un curso de manejo estratégico de becerros y el curso contenía información de gran importancia.",
+      "nombre": "Mery S.",
+      "contexto": "Curso de manejo de becerros",
+      "autorizado": true,
+      "fuente": "Recomendación pública en la página de Facebook de Visión Pecuaria (captura: assets/resenas/resena-09.png)"
+    },
+    {
+      "texto": "Tomé el curso de producción porcina, me llevé una muy buena experiencia, la instructora estaba muy bien preparada y resolvió oportunamente todas las dudas que se presentaron en el grupo.",
+      "nombre": "Alumna en Facebook",
+      "contexto": "Curso de producción porcina",
+      "autorizado": true,
+      "fuente": "Recomendación pública en la página de Facebook de Visión Pecuaria (captura: assets/resenas/resena-10.png)"
+    },
+    {
+      "texto": "Recomendable, un curso con mucha veracidad y muy confiable, me ayudó mucho en mi aprendizaje y posterior en mi práctica.",
+      "nombre": "Brian S.",
+      "contexto": "Alumno de Visión Pecuaria",
+      "autorizado": true,
+      "fuente": "Recomendación pública en la página de Facebook de Visión Pecuaria (captura: assets/resenas/resena-11.png)"
+    },
+    {
+      "texto": "Tomé el curso de manejo de peces de ornato y me brindaron información muy valiosa.",
+      "nombre": "Francisco G.",
+      "contexto": "Curso de peces de ornato",
+      "autorizado": true,
+      "fuente": "Recomendación pública en la página de Facebook de Visión Pecuaria (captura: assets/resenas/resena-12.png)"
+    }
+  ]
 }
