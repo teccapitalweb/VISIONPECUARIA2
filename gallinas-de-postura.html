@@ -1229,6 +1229,7 @@
   }
 </style>
 <link rel="stylesheet" href="/assets/css/ya-compre.css?v=20261117">
+<link rel="stylesheet" href="/assets/css/testimonios-carrusel.css?v=20261117">
 </head>
 <body data-slug="gallinas-de-postura">
 
@@ -1567,58 +1568,15 @@
 </section>
 
 <!-- ============ TESTIMONIOS ============ -->
-<section class="testimonials-section" aria-label="Testimonios de alumnos">
-  <div class="testimonials-wrapper">
-    <h2 class="section-title">Productores que ya profesionalizaron su parvada</h2>
-    <p class="section-subtitle">Historias reales de alumnos anteriores de Visión Pecuaria</p>
-
-    <div class="testimonials-grid">
-      <article class="testimonial-card">
-        <div class="testimonial-avatar" style="background: var(--brand-primary);">
-          <span>RM</span>
-        </div>
-        <div class="testimonial-content">
-          <div class="testimonial-stars">★★★★★</div>
-          <p class="testimonial-text">"Empecé con 150 gallinas de traspatio y ahora manejo 1,800 en jaula. El módulo de nutrición por etapa me subió la postura de 68% a 91%. Los números de la corrida financiera son reales, no son teoría."</p>
-          <div class="testimonial-author">
-            <strong>Ricardo Martínez López</strong>
-            <span>Granja familiar · Puebla</span>
-          </div>
-        </div>
-      </article>
-      <article class="testimonial-card">
-        <div class="testimonial-avatar" style="background: var(--brand-primary);">
-          <span>LH</span>
-        </div>
-        <div class="testimonial-content">
-          <div class="testimonial-stars">★★★★★</div>
-          <p class="testimonial-text">"El MVZ Diego explica sin adornos y va al grano. Bajé mi mortalidad del 12% al 3% aplicando el calendario vacunal y bioseguridad que enseña. Se pagó el curso el primer mes."</p>
-          <div class="testimonial-author">
-            <strong>Laura Hernández Vega</strong>
-            <span>Avícola San Jorge · Veracruz</span>
-          </div>
-        </div>
-      </article>
-      <article class="testimonial-card">
-        <div class="testimonial-avatar" style="background: var(--brand-primary);">
-          <span>JC</span>
-        </div>
-        <div class="testimonial-content">
-          <div class="testimonial-stars">★★★★★</div>
-          <p class="testimonial-text">"Buscaba un curso serio de postura, no las generalidades de YouTube. Este cumplió. La clasificación comercial y los canales de venta me abrieron 3 restaurantes nuevos como clientes."</p>
-          <div class="testimonial-author">
-            <strong>Juan Carlos Ríos</strong>
-            <span>Productor comercial · Tlaxcala</span>
-          </div>
-        </div>
-      </article>
-    </div>
-
-    <div class="testimonial-stars-row">
-      <span class="stars">★★★★★</span>
-      <span class="rating-text">4.9/5 basado en 612 reseñas verificadas</span>
-    </div>
+<!-- Se llena desde /data/testimonios/gallinas-de-postura.json (solo opiniones autorizadas). Sin datos, queda oculta. -->
+<section class="vt" data-testimonios="gallinas-de-postura" aria-label="Testimonios de alumnos" hidden
+         style="--vt-accent:#2e7d32;--vt-bg:#f9f9f9;--vt-ink:#102015;--vt-soft:#4f6656;--vt-font:'Inter',sans-serif">
+  <div class="vt__head">
+    <h2 class="section-title">Lo que opinan nuestros alumnos</h2>
+    <p class="section-subtitle">Opiniones de participantes del curso de gallinas de postura</p>
   </div>
+  <div class="vt__controls"><button type="button" class="vt__toggle" aria-pressed="false" hidden>Detener movimiento</button></div>
+  <div class="vt__rows"></div>
 </section>
 
 <!-- ============ FAQ ============ -->
@@ -2473,5 +2431,6 @@ actualizarPreciosDesdeFirestore();
 
 
 <script src="/contador-cierre.js" defer></script>
+<script src="/assets/js/testimonios-carrusel.js?v=20261117" defer></script>
 </body>
 </html>

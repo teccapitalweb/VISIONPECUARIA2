@@ -1,0 +1,6 @@
+{
+  "curso": "gallinas-de-postura",
+  "_instrucciones": "Agrega aquí solo opiniones reales de alumnos de ESTE curso. Cada una necesita autorizado:true y fuente (dónde se obtuvo y cómo se autorizó). Sin ellas no se publica. calificacion solo se muestra si calificacionVerificada:true.",
+  "_ejemplo": { "texto": "Palabras originales del alumno", "nombre": "Nombre y primera inicial, como lo autorizó", "contexto": "Ocupación confirmada", "ubicacion": "Estado, si lo autorizó", "calificacion": 5, "calificacionVerificada": false, "autorizado": true, "fuente": "Formulario de satisfacción, 2026-11-20, autorización por WhatsApp" },
+  "testimonios": []
+}
