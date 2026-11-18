@@ -1,0 +1,58 @@
+/* ═══════════════════════════════════════════════════════════════════════════
+   Testimonios en carrusel horizontal de tres filas (componente reutilizable)
+   Cada landing define su acento con --vt-accent / --vt-font en la sección.
+   ═══════════════════════════════════════════════════════════════════════════ */
+.vt { --vt-accent: #2e7d32; --vt-ink: #102015; --vt-soft: #4f6656; --vt-bg: transparent;
+      --vt-card: #ffffff; --vt-line: rgba(16, 32, 21, .08); --vt-font: inherit;
+      --vt-w: 320px; --vt-gap: 18px;
+      position: relative; overflow: hidden; background: var(--vt-bg); padding: 64px 0; font-family: var(--vt-font); }
+.vt[hidden], .vt [hidden] { display: none !important; }
+.vt__head { max-width: 1100px; margin: 0 auto 28px; padding: 0 20px; text-align: center; }
+.vt__controls { display: flex; justify-content: center; margin: -8px 0 22px; padding: 0 20px; }
+.vt__toggle { display: inline-flex; align-items: center; gap: 8px; min-height: 44px; padding: 0 16px;
+  border-radius: 999px; border: 1px solid var(--vt-line); background: var(--vt-card); color: var(--vt-ink);
+  font: 600 14px/1 var(--vt-font); cursor: pointer; box-shadow: 0 1px 2px rgba(0,0,0,.04); }
+.vt__toggle:hover { border-color: var(--vt-accent); }
+.vt__toggle:focus-visible, .vt__card:focus-visible { outline: 3px solid var(--vt-accent); outline-offset: 3px; }
+.vt__toggle svg { width: 16px; height: 16px; }
+
+.vt__rows { display: grid; gap: var(--vt-gap); }
+.vt__row { position: relative; overflow: hidden;
+  -webkit-mask-image: linear-gradient(90deg, transparent, #000 6%, #000 94%, transparent);
+          mask-image: linear-gradient(90deg, transparent, #000 6%, #000 94%, transparent); }
+.vt__track { display: flex; gap: 0; width: max-content; padding: 6px 0 10px;
+  animation: vt-izq var(--vt-dur, 60s) linear infinite; will-change: transform; }
+.vt__row--der .vt__track { animation-name: vt-der; }
+/* Separación con margin-right (no gap): así cada mitad mide exactamente n·(ancho+separación)
+   y -50% cae justo en el primer clon = bucle sin salto */
+@keyframes vt-izq { from { transform: translate3d(0, 0, 0); } to { transform: translate3d(-50%, 0, 0); } }
+@keyframes vt-der { from { transform: translate3d(-50%, 0, 0); } to { transform: translate3d(0, 0, 0); } }
+.vt__row:hover .vt__track, .vt__row:focus-within .vt__track, .vt__row.is-tocada .vt__track { animation-play-state: paused; }
+
+.vt__card { flex: 0 0 var(--vt-w); width: var(--vt-w); margin-right: var(--vt-gap) !important; display: flex; flex-direction: column; gap: 12px;
+  background: var(--vt-card); border: 1px solid var(--vt-line); border-radius: 16px; padding: 20px 22px;
+  box-shadow: 0 1px 2px rgba(0,0,0,.04), 0 8px 22px rgba(0,0,0,.06); color: var(--vt-ink); margin-top: 0; margin-bottom: 0; margin-left: 0; }
+.vt__stars { color: #f5a623; display: flex; gap: 2px; }
+.vt__stars svg { width: 14px; height: 14px; }
+.vt__text { font-size: 15px; line-height: 1.55; margin: 0; flex: 1; quotes: "“" "”"; }
+.vt__text::before { content: open-quote; } .vt__text::after { content: close-quote; }
+.vt__who { display: grid; gap: 2px; font-size: 13px; }
+.vt__who b { color: var(--vt-accent); font-weight: 700; letter-spacing: .02em; text-transform: uppercase; font-size: 12.5px; }
+.vt__who span { color: var(--vt-soft); }
+
+/* Modo estático: movimiento reducido, pocas reseñas o pausa manual → se recorren deslizando */
+.vt.is-estatico .vt__row { -webkit-mask-image: none; mask-image: none; overflow-x: auto; scroll-snap-type: x mandatory;
+  scrollbar-width: thin; padding: 0 20px; scroll-padding: 0 20px; -webkit-overflow-scrolling: touch; }
+.vt.is-estatico .vt__track { animation: none; transform: none; }
+.vt.is-estatico .vt__clon { display: none; }
+.vt.is-estatico .vt__card { scroll-snap-align: start; }
+.vt.is-pocas .vt__track { margin: 0 auto; }
+
+@media (max-width: 600px) {
+  .vt { --vt-w: 270px; --vt-gap: 12px; padding: 48px 0; }
+  .vt__card { padding: 16px 18px; gap: 10px; }
+  .vt__text { font-size: 14px; }
+}
+@media (prefers-reduced-motion: reduce) {
+  .vt__track { animation: none !important; }
+}
