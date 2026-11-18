@@ -1,0 +1,414 @@
+<!-- MI-CURSO:INICIO · componente autocontenido (fuente: componentes/mi-curso.html · se inyecta con componentes/inyectar.py) -->
+<style id="mi-curso-css">
+.mc{--mc-accent:#2e7d32;--mc-accent-2:#12421a;--mc-dark:#07230c;--mc-gold:#ffc93c;--mc-bg:#f3f6f1;--mc-card:#fff;--mc-ink:#102015;--mc-soft:#4f6656;--mc-mute:#7c8f81;--mc-line:rgba(16,32,21,.09);
+  position:fixed;inset:0;z-index:2147483000;background:var(--mc-bg);color:var(--mc-ink);font-family:'Inter',system-ui,-apple-system,'Segoe UI',sans-serif;display:flex;flex-direction:column;overflow:hidden;-webkit-font-smoothing:antialiased}
+.mc[hidden]{display:none!important}.mc *{box-sizing:border-box}.mc [hidden]{display:none!important}
+:where(.mc) button{font:inherit;color:inherit;background:none;border:0;cursor:pointer;padding:0}
+:where(.mc) svg{width:20px;height:20px;flex:none;fill:none;stroke:currentColor;stroke-width:1.8;stroke-linecap:round;stroke-linejoin:round}
+:where(.mc) :is(h1,h2,h3){margin:0;font-family:'Archivo','Inter',system-ui,sans-serif;letter-spacing:-.015em;line-height:1.2}
+:where(.mc) p{margin:0}
+.mc__top{flex:none;display:flex;align-items:center;gap:12px;padding:12px 20px;padding-top:calc(12px + env(safe-area-inset-top));background:var(--mc-dark);color:#fff}
+.mc__brand{display:flex;align-items:center;gap:10px;min-width:0;flex:1}
+.mc__brand img{width:34px;height:34px;border-radius:9px;background:#fff;padding:3px;flex:none}
+.mc__brand>div{min-width:0}
+.mc__brand b{display:block;font-size:.95rem;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.mc__brand small{display:block;font-size:.7rem;color:var(--mc-gold);text-transform:uppercase;letter-spacing:.08em}
+.mc__x{display:inline-flex;align-items:center;gap:8px;height:40px;padding:0 14px;border-radius:10px;background:rgba(255,255,255,.1);color:#fff!important;font-weight:600;font-size:.85rem}
+.mc__x:hover{background:rgba(255,255,255,.18)}
+.mc__body{flex:1;overflow:auto;-webkit-overflow-scrolling:touch}
+.mc__wrap{max-width:1180px;margin:0 auto;padding:26px 22px calc(40px + env(safe-area-inset-bottom))}
+.mc__btn{display:inline-flex;align-items:center;justify-content:center;gap:9px;min-height:46px;padding:0 20px;border-radius:12px;font-weight:700;font-size:.95rem;text-decoration:none;transition:transform .15s}
+.mc__btn:active{transform:scale(.98)}
+.mc__btn--p{background:linear-gradient(180deg,var(--mc-accent),var(--mc-accent-2));color:#fff!important}
+.mc__btn--g{background:linear-gradient(180deg,var(--mc-gold),#e0a91f);color:var(--mc-dark)!important}
+.mc__btn--l{background:#fff;color:var(--mc-ink)!important;border:1px solid var(--mc-line)}
+.mc__btn--google{width:100%;background:#fff;color:#1f2937!important;border:1px solid #dadce0}
+.mc__btn[disabled]{opacity:.55;cursor:not-allowed}
+.mc__link{color:var(--mc-accent);font-weight:600;font-size:.88rem;text-decoration:underline;text-underline-offset:3px}
+.mc__card{background:var(--mc-card);border:1px solid var(--mc-line);border-radius:18px;box-shadow:0 1px 2px rgba(0,0,0,.04),0 8px 24px rgba(7,35,12,.06)}
+/* acceso */
+.mc__auth{max-width:420px;margin:24px auto;padding:28px 24px}
+.mc__auth h2{font-size:1.45rem;margin-bottom:6px}
+.mc__auth .mc__sub{color:var(--mc-soft);font-size:.92rem;line-height:1.5;margin-bottom:18px}
+.mc__sep{display:flex;align-items:center;gap:12px;color:var(--mc-mute);font-size:.78rem;margin:16px 0}
+.mc__sep:before,.mc__sep:after{content:'';flex:1;height:1px;background:var(--mc-line)}
+.mc__field{display:grid;gap:6px;margin-bottom:12px;font-size:.82rem;font-weight:600;color:var(--mc-soft)}
+.mc__field input{width:100%;min-width:0;height:46px;border-radius:12px;border:1px solid var(--mc-line);background:var(--mc-bg);padding:0 14px;font:inherit;font-size:1rem;color:var(--mc-ink)}
+.mc__field input:focus{outline:none;border-color:var(--mc-accent);box-shadow:0 0 0 3px rgba(46,125,50,.15)}
+.mc__msg{font-size:.85rem;border-radius:10px;padding:10px 12px;margin-bottom:12px;background:#fdecea;color:#8a1c13;line-height:1.45}
+.mc__msg.ok{background:#e8f5e9;color:#12421a}
+.mc__links{display:flex;justify-content:space-between;gap:10px;flex-wrap:wrap;margin-top:14px}
+.mc__help{margin-top:16px;font-size:.8rem;color:var(--mc-mute);line-height:1.5}
+/* sin compra */
+.mc__empty{max-width:520px;margin:30px auto;padding:30px 24px;text-align:center}
+.mc__empty h2{font-size:1.3rem;margin:10px 0 8px}
+.mc__empty p{color:var(--mc-soft);line-height:1.55;font-size:.93rem;margin-bottom:18px}
+.mc__empty .mc__acts{display:flex;flex-direction:column;gap:10px}
+/* curso */
+.mc__hero{position:relative;border-radius:22px;overflow:hidden;background:var(--mc-dark);color:#fff;display:flex;align-items:flex-end;min-height:200px}
+.mc__hero>img{position:absolute;inset:0;width:100%;height:100%;object-fit:cover;opacity:.45}
+.mc__hero:before{content:'';position:absolute;inset:0;background:linear-gradient(180deg,rgba(7,35,12,.1),rgba(7,35,12,.92));z-index:1}
+.mc__hero>div{position:relative;z-index:2;padding:24px;display:flex;gap:20px;align-items:flex-end;justify-content:space-between;width:100%;flex-wrap:wrap}
+.mc__hero h1{font-size:clamp(1.3rem,2.6vw,2rem);max-width:720px;color:#fff}
+.mc__hero p{color:#c7dcc9;margin-top:6px;font-size:.9rem}
+.mc__tag{display:inline-flex;align-items:center;gap:6px;height:26px;padding:0 10px;border-radius:8px;font-size:.74rem;font-weight:700;background:rgba(255,201,60,.2);color:#ffd971;margin-bottom:10px}
+.mc__ring{--p:0;width:84px;height:84px;border-radius:50%;display:grid;place-items:center;background:conic-gradient(var(--mc-gold) calc(var(--p)*1%),rgba(255,255,255,.15) 0);flex:none}
+.mc__ring>div{width:68px;height:68px;border-radius:50%;background:var(--mc-dark);display:grid;place-items:center;text-align:center;font-weight:800;font-size:1.1rem;line-height:1}
+.mc__ring small{display:block;font-size:.6rem;font-weight:600;color:#b9d3bc;margin-top:3px}
+.mc__sec{margin-top:28px}
+.mc__sech{display:flex;align-items:center;justify-content:space-between;gap:10px;margin-bottom:14px}
+.mc__sech h2{font-size:1.12rem}
+.mc__chip{display:inline-flex;align-items:center;gap:6px;height:26px;padding:0 10px;border-radius:8px;font-size:.74rem;font-weight:700;background:#e6eee5;color:var(--mc-soft);white-space:nowrap}
+.mc__chip svg{width:14px;height:14px}
+.mc__chip--ok{background:#e3f3e4;color:#1b5e20}.mc__chip--pend{background:#fff4d6;color:#7a5600}
+.mc__grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(320px,1fr));gap:18px}
+.mc__clase{position:relative;display:block;width:100%;aspect-ratio:16/9;border-radius:14px;overflow:hidden;background:#0d2a14;color:#fff;text-align:left;isolation:isolate;box-shadow:0 8px 24px rgba(7,35,12,.12);transition:transform .25s}
+.mc__clase:not([disabled]):hover{transform:translateY(-3px)}
+.mc__clase>img{position:absolute;inset:0;width:100%;height:100%;object-fit:cover;z-index:-2}
+.mc__clase:before{content:'';position:absolute;inset:0;z-index:-1;background:linear-gradient(180deg,rgba(7,35,12,.05) 25%,rgba(7,35,12,.9))}
+.mc__clase[disabled]{cursor:default}.mc__clase[disabled]>img{filter:grayscale(.7) brightness(.6)}
+.mc__cb{position:absolute;left:16px;right:78px;bottom:14px;display:grid;gap:8px}
+.mc__tags{display:flex;gap:6px;flex-wrap:wrap}
+.mc__tags span{display:inline-flex;align-items:center;gap:5px;height:24px;padding:0 9px;border-radius:7px;font-size:.72rem;font-weight:700;background:#d8f0da;color:#0b3311}
+.mc__tags .v{background:var(--mc-gold);color:var(--mc-dark)}.mc__tags .p{background:#fff4d6;color:#6b4e00}
+.mc__tags svg{width:13px;height:13px}
+.mc__clase h3{font-size:1rem;line-height:1.3;color:#fff;text-shadow:0 1px 8px rgba(0,0,0,.35)}
+.mc__play{position:absolute;right:14px;bottom:14px;width:50px;height:50px;border-radius:50%;background:#d8f0da;color:var(--mc-dark);display:grid;place-items:center}
+.mc__play svg{fill:currentColor;stroke:none;width:18px;height:18px;margin-left:3px}
+.mc__lock{position:absolute;right:14px;bottom:14px;width:50px;height:50px;border-radius:50%;background:rgba(255,255,255,.14);display:grid;place-items:center}
+.mc__mats{display:grid;grid-template-columns:repeat(auto-fill,minmax(270px,1fr));gap:14px}
+.mc__mat{display:flex;gap:14px;align-items:center;padding:16px;text-align:left;width:100%}
+.mc__mat i{width:44px;height:44px;border-radius:12px;display:grid;place-items:center;flex:none;background:#fdecea;color:#b3261e;font-style:normal}
+.mc__mat i.x{background:#e3f3e4;color:#1b5e20}
+.mc__mat b{display:block;font-size:.92rem}.mc__mat small{color:var(--mc-mute);font-size:.78rem}
+.mc__cert{padding:18px 20px;display:flex;gap:14px;align-items:center;justify-content:space-between;flex-wrap:wrap}
+.mc__cert p{color:var(--mc-soft);font-size:.88rem;line-height:1.5;margin-top:4px;max-width:640px}
+/* reproductor */
+.mc__pl{display:grid;grid-template-columns:minmax(0,1fr) 330px;gap:22px;align-items:start}
+.mc__player{position:relative;aspect-ratio:16/9;background:#000;border-radius:16px;overflow:hidden}
+.mc__player iframe,.mc__player video{position:absolute;inset:0;width:100%;height:100%;border:0;background:#000}
+.mc__pst{position:absolute;inset:0;display:grid;place-content:center;justify-items:center;gap:10px;color:#d9e6da;text-align:center;padding:20px;font-size:.9rem}
+.mc__spin{width:28px;height:28px;border-radius:50%;border:3px solid rgba(255,255,255,.18);border-top-color:var(--mc-gold);animation:mcspin .8s linear infinite}
+.mc__spin--d{border-color:var(--mc-line);border-top-color:var(--mc-accent);margin:40px auto}
+@keyframes mcspin{to{transform:rotate(360deg)}}
+.mc__lh{margin-top:16px;display:flex;gap:14px;justify-content:space-between;align-items:flex-start;flex-wrap:wrap}
+.mc__lh small{color:var(--mc-accent);font-weight:700;font-size:.74rem;text-transform:uppercase;letter-spacing:.08em}
+.mc__lh h1{font-size:clamp(1.15rem,2vw,1.5rem);margin-top:4px}
+.mc__nav{display:flex;gap:10px;flex-wrap:wrap;margin-top:16px}.mc__nav .mc__btn{flex:1 1 150px}
+.mc__list{padding:8px;max-height:calc(100vh - 140px);overflow:auto;position:sticky;top:0}
+.mc__list h3{font-size:.95rem;padding:10px 10px 2px}.mc__list>p{font-size:.78rem;color:var(--mc-mute);padding:0 10px 10px}
+.mc__li{width:100%;display:grid;grid-template-columns:30px 1fr;gap:10px;align-items:center;padding:10px;border-radius:10px;text-align:left;font-size:.86rem}
+.mc__li:hover:not([disabled]){background:#eef3ec}.mc__li.on{background:rgba(46,125,50,.12)}.mc__li[disabled]{opacity:.55;cursor:default}
+.mc__li span:first-child{width:30px;height:30px;border-radius:8px;display:grid;place-items:center;background:#eef3ec;font-weight:700;font-size:.78rem}
+.mc__li.vista span:first-child{background:var(--mc-accent);color:#fff}
+.mc__li small{display:block;color:var(--mc-mute);font-size:.74rem;margin-top:2px}
+.mc__toast{position:fixed;left:50%;bottom:calc(22px + env(safe-area-inset-bottom));transform:translate(-50%,20px);background:var(--mc-dark);color:#fff;padding:12px 18px;border-radius:12px;font-size:.88rem;opacity:0;pointer-events:none;transition:.3s;z-index:2147483001;max-width:calc(100vw - 32px)}
+.mc__toast.on{opacity:1;transform:translate(-50%,0)}.mc__toast.err{background:#8a1c13}
+@media (max-width:980px){.mc__pl{grid-template-columns:1fr}.mc__list{position:static;max-height:none}}
+@media (max-width:560px){.mc__wrap{padding:18px 14px calc(36px + env(safe-area-inset-bottom))}.mc__top{padding:10px 12px;padding-top:calc(10px + env(safe-area-inset-top))}
+  .mc__grid,.mc__mats{grid-template-columns:1fr;gap:14px}.mc__hero>div{padding:18px}.mc__ring{width:70px;height:70px}.mc__ring>div{width:56px;height:56px;font-size:.95rem}
+  .mc__cb{left:12px;right:64px;bottom:12px}.mc__clase h3{font-size:.92rem}.mc__play,.mc__lock{width:42px;height:42px;right:12px;bottom:12px}.mc__x span{display:none}.mc__auth{padding:22px 16px;margin:10px auto}.mc__player{border-radius:10px}}
+@media (prefers-reduced-motion:reduce){.mc *{animation:none!important;transition:none!important}}
+</style>
+
+<div class="mc" id="mi-curso" hidden role="dialog" aria-modal="true" aria-labelledby="mc-titulo">
+  <header class="mc__top">
+    <div class="mc__brand"><img src="/assets/brand/logo-vp-300.png" alt="" width="34" height="34" onerror="this.style.display='none'"><div><b id="mc-titulo">Mi curso</b><small>Visión Pecuaria · Mis clases</small></div></div>
+    <button type="button" class="mc__x" id="mc-salir-sesion" hidden><svg viewBox="0 0 24 24"><path d="M15 4h3a2 2 0 0 1 2 2v12a2 2 0 0 1-2 2h-3M10 17l-5-5 5-5M5 12h11"/></svg><span>Cerrar sesión</span></button>
+    <button type="button" class="mc__x" id="mc-cerrar" aria-label="Cerrar y volver a la página del curso"><svg viewBox="0 0 24 24"><path d="M6 6l12 12M18 6 6 18"/></svg><span>Volver</span></button>
+  </header>
+  <div class="mc__body" id="mc-body"><div class="mc__wrap" id="mc-view"></div></div>
+  <div class="mc__toast" id="mc-toast" role="status" aria-live="polite"></div>
+</div>
+
+<script type="module">
+// ═══════════════════════════════════════════════════════════════════════════
+// «Ya compré · Entrar a mi curso» — aula del curso dentro de la propia landing.
+// · Identidad: Firebase Auth (proyecto visionpecuaria-vip, el mismo del checkout).
+// · Derechos y contenido: backend /alumno/* (verifica la compra; correo verificado).
+// · Si la cuenta no compró el curso → lo manda al pago de esta misma landing.
+// ═══════════════════════════════════════════════════════════════════════════
+import { initializeApp, getApps } from "https://www.gstatic.com/firebasejs/10.11.0/firebase-app.js";
+import { getAuth, onAuthStateChanged, signInWithPopup, signInWithRedirect, getRedirectResult, GoogleAuthProvider,
+  signInWithEmailAndPassword, createUserWithEmailAndPassword, sendPasswordResetEmail, sendEmailVerification,
+  signOut, setPersistence, browserLocalPersistence } from "https://www.gstatic.com/firebasejs/10.11.0/firebase-auth.js";
+
+const API = 'https://visionpecuaria-webhook-production.up.railway.app';
+const SLUG = document.body.dataset.slug;
+const CFG = { apiKey: "AIzaSyDQXkIo-BWPIeLZzHeTMN986WMDn0TrTJU", authDomain: "visionpecuaria-vip.firebaseapp.com", projectId: "visionpecuaria-vip",
+  storageBucket: "visionpecuaria-vip.firebasestorage.app", messagingSenderId: "978318807782", appId: "1:978318807782:web:626e67bb30795c15b02127" };
+const NOMBRES = { 'gallinas-de-postura': 'Gallinas de Postura', 'embutidos-artesanales': 'Embutidos Artesanales' };
+const PORTADA = document.querySelector('video[poster]')?.getAttribute('poster') || document.querySelector('meta[property="og:image"]')?.content || '';
+
+const app = getApps().length ? getApps()[0] : initializeApp(CFG);
+const auth = getAuth(app); auth.languageCode = 'es';
+setPersistence(auth, browserLocalPersistence).catch(() => {});
+getRedirectResult(auth).catch(() => {});
+
+const $ = (s) => document.querySelector(s);
+const root = $('#mi-curso'), view = $('#mc-view');
+const esc = (s) => String(s ?? '').replace(/[&<>"']/g, c => ({ '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;', "'": '&#39;' }[c]));
+const I = {
+  play: '<svg viewBox="0 0 24 24"><path d="M7 4v16l13-8z"/></svg>', check: '<svg viewBox="0 0 24 24"><path d="m5 12 5 5 9-10"/></svg>',
+  lock: '<svg viewBox="0 0 24 24"><rect x="4" y="11" width="16" height="10" rx="2"/><path d="M8 11V7a4 4 0 0 1 8 0v4"/></svg>',
+  reloj: '<svg viewBox="0 0 24 24"><circle cx="12" cy="12" r="9"/><path d="M12 7v5l3 2"/></svg>',
+  doc: '<svg viewBox="0 0 24 24"><path d="M14 3H7a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h10a2 2 0 0 0 2-2V8z"/><path d="M14 3v5h5"/></svg>',
+  atras: '<svg viewBox="0 0 24 24"><path d="M19 12H5M11 6l-6 6 6 6"/></svg>', flecha: '<svg viewBox="0 0 24 24"><path d="M5 12h14M13 6l6 6-6 6"/></svg>',
+  cert: '<svg viewBox="0 0 24 24"><circle cx="12" cy="9" r="5"/><path d="m8.5 13-1.5 8 5-3 5 3-1.5-8"/></svg>'
+};
+const G = '<svg viewBox="0 0 24 24" style="stroke:none"><path fill="#EA4335" d="M12 10.2v3.9h5.4c-.2 1.3-1.6 3.8-5.4 3.8-3.2 0-5.9-2.7-5.9-6s2.7-6 5.9-6c1.9 0 3.1.8 3.8 1.5l2.6-2.5C16.8 3.4 14.6 2.4 12 2.4 6.7 2.4 2.4 6.7 2.4 12s4.3 9.6 9.6 9.6c5.5 0 9.2-3.9 9.2-9.4 0-.6-.1-1.1-.2-1.6H12z"/></svg>';
+
+let USER = null, DATA = null, ABIERTO = false, MODO = 'entrar', SEG = null, CLASE = null;
+
+function toast(m, err) { const t = $('#mc-toast'); t.textContent = m; t.className = 'mc__toast on' + (err ? ' err' : ''); clearTimeout(t._t); t._t = setTimeout(() => t.className = 'mc__toast', 3500); }
+async function api(path, opt = {}, otra = true) {
+  const tok = auth.currentUser && await auth.currentUser.getIdToken();
+  const r = await fetch(API + path, { method: opt.method || 'GET', keepalive: !!opt.keepalive, headers: { 'Content-Type': 'application/json', Authorization: 'Bearer ' + tok }, body: opt.body ? JSON.stringify(opt.body) : undefined });
+  let d = null; try { d = await r.json(); } catch (_) {}
+  if (r.status === 401 && otra) { await auth.currentUser?.getIdToken(true); return api(path, opt, false); }
+  if (!r.ok) throw Object.assign(new Error((d && d.error) || 'Error ' + r.status), { status: r.status });
+  return d;
+}
+
+// ─── Abrir / cerrar ──────────────────────────────────────────────────────────
+function abrir() {
+  ABIERTO = true; root.hidden = false; document.documentElement.style.overflow = 'hidden';
+  if (location.hash !== '#mi-curso') history.pushState({ mc: 1 }, '', '#mi-curso');
+  render();
+}
+async function cerrar(sinHistorial) {
+  await detener(); ABIERTO = false; root.hidden = true; document.documentElement.style.overflow = '';
+  if (!sinHistorial && location.hash.startsWith('#mi-curso')) history.replaceState(null, '', location.pathname + location.search);
+}
+function irAlPago() {
+  cerrar();
+  setTimeout(() => { const b = document.querySelector('[data-action="inscribir"]'); if (b) b.click(); }, 60);
+}
+document.addEventListener('click', (e) => {
+  const a = e.target.closest('a.ya-compre, [data-mi-curso]');
+  if (a) { e.preventDefault(); e.stopPropagation(); abrir(); }
+}, true);
+$('#mc-cerrar').addEventListener('click', () => cerrar());
+$('#mc-salir-sesion').addEventListener('click', async () => { await detener(); await signOut(auth); });
+window.addEventListener('popstate', () => {
+  const enCurso = location.hash.startsWith('#mi-curso');
+  if (ABIERTO && !enCurso) cerrar(true); else if (!ABIERTO && enCurso) abrir(); else if (ABIERTO) render();
+});
+document.addEventListener('keydown', (e) => { if (e.key === 'Escape' && ABIERTO) cerrar(); });
+
+onAuthStateChanged(auth, (u) => { USER = u; DATA = null; $('#mc-salir-sesion').hidden = !u; if (ABIERTO) render(); });
+if (location.hash.startsWith('#mi-curso') || /[?&]mi-curso\b/.test(location.search)) abrir();
+
+// ─── Vistas ─────────────────────────────────────────────────────────────────
+function cargando() { view.innerHTML = '<div class="mc__spin mc__spin--d"></div>'; }
+
+async function render() {
+  await detener();
+  $('#mc-body').scrollTop = 0;
+  if (!USER) return vistaAcceso();
+  cargando();
+  try {
+    if (!DATA) DATA = await api('/alumno/curso/' + encodeURIComponent(SLUG));
+  } catch (e) {
+    if (e.status === 403) return vistaSinCompra();
+    view.innerHTML = `<div class="mc__card mc__empty"><h2>No pudimos cargar tu curso</h2><p>${esc(e.message)}. Revisa tu conexión e intenta de nuevo.</p><div class="mc__acts"><button class="mc__btn mc__btn--p" id="mc-reint">Reintentar</button></div></div>`;
+    $('#mc-reint').onclick = render; return;
+  }
+  $('#mc-titulo').textContent = DATA.curso.nombre;
+  const m = location.hash.match(/^#mi-curso\/clase\/(.+)$/);
+  if (m) return vistaClase(decodeURIComponent(m[1]));
+  vistaCurso();
+}
+
+function vistaAcceso(msg, ok) {
+  const crear = MODO === 'crear';
+  $('#mc-titulo').textContent = 'Mi curso';
+  view.innerHTML = `<div class="mc__card mc__auth">
+    <h2>${crear ? 'Crea tu contraseña' : 'Entra a tu curso'}</h2>
+    <p class="mc__sub">Usa el <b>mismo correo con el que pagaste</b> ${esc(NOMBRES[SLUG] || 'tu curso')}. Si ya pagaste, verás tus clases grabadas y materiales.</p>
+    <button type="button" class="mc__btn mc__btn--google" id="mc-google">${G} Continuar con Google</button>
+    <div class="mc__sep">o con correo y contraseña</div>
+    <form id="mc-form" novalidate>
+      <label class="mc__field">Correo<input type="email" id="mc-email" autocomplete="email" inputmode="email" required></label>
+      <label class="mc__field">Contraseña<input type="password" id="mc-pass" autocomplete="${crear ? 'new-password' : 'current-password'}" minlength="6" required></label>
+      ${msg ? `<p class="mc__msg ${ok ? 'ok' : ''}" role="alert">${esc(msg)}</p>` : ''}
+      <button class="mc__btn mc__btn--p" style="width:100%" type="submit" id="mc-enviar">${crear ? 'Crear cuenta' : 'Entrar'}</button>
+    </form>
+    <div class="mc__links"><button type="button" class="mc__link" id="mc-modo">${crear ? 'Ya tengo cuenta · Entrar' : '¿Primera vez? Crear mi contraseña'}</button><button type="button" class="mc__link" id="mc-reset">Olvidé mi contraseña</button></div>
+    <p class="mc__help">¿Todavía no compras el curso? <button type="button" class="mc__link" id="mc-comprar">Inscríbete aquí</button></p>
+  </div>`;
+  $('#mc-google').onclick = async () => {
+    try { const p = new GoogleAuthProvider(); p.setCustomParameters({ prompt: 'select_account' }); await signInWithPopup(auth, p); }
+    catch (e) {
+      if (e && (e.code === 'auth/popup-blocked' || e.code === 'auth/operation-not-supported-in-this-environment')) return signInWithRedirect(auth, new GoogleAuthProvider());
+      if (e && e.code !== 'auth/popup-closed-by-user' && e.code !== 'auth/cancelled-popup-request') vistaAcceso('No pudimos iniciar sesión con Google. Intenta de nuevo.');
+    }
+  };
+  $('#mc-form').onsubmit = async (ev) => {
+    ev.preventDefault();
+    const email = $('#mc-email').value.trim(), pass = $('#mc-pass').value;
+    if (!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email)) return vistaAcceso('Escribe un correo válido.');
+    if (pass.length < 6) return vistaAcceso('La contraseña debe tener al menos 6 caracteres.');
+    $('#mc-enviar').disabled = true;
+    try {
+      if (crear) { const c = await createUserWithEmailAndPassword(auth, email, pass); await sendEmailVerification(c.user).catch(() => {}); }
+      else await signInWithEmailAndPassword(auth, email, pass);
+    } catch (e) {
+      const c = e && e.code || '';
+      vistaAcceso(c === 'auth/too-many-requests' ? 'Demasiados intentos. Espera unos minutos.' : c === 'auth/email-already-in-use' ? 'No pudimos crear la cuenta. Si ya tienes una, entra o restablece tu contraseña.' : 'No pudimos iniciar sesión. Revisa tus datos o restablece tu contraseña.');
+    }
+  };
+  $('#mc-modo').onclick = () => { MODO = crear ? 'entrar' : 'crear'; vistaAcceso(); };
+  $('#mc-reset').onclick = async () => {
+    const email = $('#mc-email').value.trim();
+    if (!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email)) return vistaAcceso('Escribe tu correo y vuelve a tocar «Olvidé mi contraseña».');
+    try { await sendPasswordResetEmail(auth, email); } catch (_) {}
+    vistaAcceso('Si ese correo tiene una cuenta, te enviamos un enlace para crear una nueva contraseña.', true);
+  };
+  $('#mc-comprar').onclick = irAlPago;
+}
+
+function vistaSinCompra() {
+  const verif = USER && USER.emailVerified === false && (USER.providerData || []).some(p => p.providerId === 'password');
+  $('#mc-titulo').textContent = 'Mi curso';
+  view.innerHTML = `<div class="mc__card mc__empty">
+    <h2>${verif ? 'Verifica tu correo' : 'Aún no tienes este curso'}</h2>
+    <p>${verif
+      ? `Te enviamos un enlace a <b>${esc(USER.email)}</b>. Ábrelo y toca «Ya lo verifiqué» para ver tu curso si lo pagaste con este correo.`
+      : `No encontramos una compra de <b>${esc(NOMBRES[SLUG] || 'este curso')}</b> con <b>${esc(USER.email)}</b>. Si pagaste con otro correo, entra con ese. Si todavía no lo compras, inscríbete ahora.`}</p>
+    <div class="mc__acts">
+      ${verif ? '<button class="mc__btn mc__btn--p" id="mc-ya">Ya lo verifiqué</button><button class="mc__btn mc__btn--l" id="mc-reenv">Reenviar enlace</button>' : '<button class="mc__btn mc__btn--g" id="mc-pagar">Inscribirme al curso</button>'}
+      <button class="mc__btn mc__btn--l" id="mc-otra">Entrar con otro correo</button>
+    </div>
+    <p class="mc__help">¿Ya pagaste y no aparece? <a class="mc__link" href="https://wa.me/522361049715?text=${encodeURIComponent('Hola, pagué ' + (NOMBRES[SLUG] || 'un curso') + ' y no puedo entrar a mis clases')}" target="_blank" rel="noopener">Escríbenos por WhatsApp</a> con tu comprobante.</p>
+  </div>`;
+  if (verif) {
+    $('#mc-ya').onclick = async () => { await auth.currentUser.reload(); await auth.currentUser.getIdToken(true); USER = auth.currentUser; DATA = null; render(); };
+    $('#mc-reenv').onclick = async () => { try { await sendEmailVerification(auth.currentUser); toast('Te enviamos el enlace'); } catch (_) { toast('Espera un momento antes de pedir otro', true); } };
+  } else $('#mc-pagar').onclick = irAlPago;
+  $('#mc-otra').onclick = async () => { await signOut(auth); };
+}
+
+const fecha = (iso) => { try { return new Date(iso).toLocaleDateString('es-MX', { day: 'numeric', month: 'long', year: 'numeric' }); } catch (_) { return ''; } };
+const fb = `onerror="this.onerror=null;this.src='${esc(PORTADA)}'"`;
+
+function vistaCurso() {
+  const d = DATA, c = d.curso, p = d.progreso;
+  const sig = p.ultimaClaseId || (d.clases.find(x => x.estado === 'publicada') || {}).id;
+  const pubs = d.clases.filter(x => x.estado === 'publicada').length;
+  const mats = d.materiales.filter(m => m.disponible);
+  const ce = d.certificado || { estado: 'pendiente' };
+  view.innerHTML = `
+  <section class="mc__hero"><img src="${esc(c.portada || PORTADA)}" alt="" ${fb}>
+    <div><div><span class="mc__tag">${I.check} Curso adquirido</span>
+      <h1>${esc(c.nombre)}</h1>
+      <p>${c.instructorNombre ? esc(c.instructorNombre) + ' · ' : ''}${d.clases.length} ${d.clases.length === 1 ? 'clase' : 'clases'}${d.acceso && d.acceso.fechaCompra ? ' · adquirido el ' + esc(fecha(d.acceso.fechaCompra)) : ''}</p>
+      ${sig ? `<button class="mc__btn mc__btn--g" style="margin-top:14px" data-clase="${esc(sig)}">${I.play} ${p.ultimaClaseId ? 'Continuar' : 'Empezar'}</button>` : ''}</div>
+      <div class="mc__ring" style="--p:${p.porcentaje}"><div>${p.porcentaje}%<small>${p.completadas}/${p.total}</small></div></div></div>
+  </section>
+  ${c.claseEnVivo ? `<div class="mc__sec mc__card mc__cert"><div><b>Sesión en vivo</b><p>${esc(c.claseEnVivo.fecha || 'Enlace de la sesión en vivo de tu curso')}</p></div><a class="mc__btn mc__btn--p" href="${esc(c.claseEnVivo.url)}" target="_blank" rel="noopener">Entrar a la sesión</a></div>` : ''}
+  <div class="mc__sec"><div class="mc__sech"><h2>Clases grabadas</h2><span class="mc__chip">${pubs} publicadas</span></div>
+    ${d.clases.length ? `<div class="mc__grid">${d.clases.map((cl, i) => tarjeta(cl, i)).join('')}</div>` :
+      '<div class="mc__card mc__empty"><h2>Las grabaciones aún no están publicadas</h2><p>Aparecerán aquí en cuanto se publiquen. Tu acceso ya está activo.</p></div>'}
+  </div>
+  <div class="mc__sec"><div class="mc__sech"><h2>Materiales</h2></div>
+    ${mats.length ? `<div class="mc__mats">${mats.map(mat).join('')}</div>` : '<div class="mc__card mc__cert"><p>Los materiales del curso aparecerán aquí cuando se publiquen.</p></div>'}
+  </div>
+  <div class="mc__sec"><div class="mc__sech"><h2>Certificado</h2></div>
+    <div class="mc__card mc__cert"><div><span class="mc__chip ${ce.estado === 'emitido' ? 'mc__chip--ok' : 'mc__chip--pend'}">${I.cert} ${ce.estado === 'emitido' ? 'Emitido' : 'Pendiente'}</span>
+      <p>${ce.estado === 'emitido' ? `Folio <b>${esc(ce.folio || '')}</b>, con QR verificable.` : 'Tu certificado se emite conforme a las condiciones del curso y te llegará por correo.'}</p></div>
+      ${ce.estado === 'emitido' && ce.url ? `<a class="mc__btn mc__btn--p" href="${esc(ce.url)}" target="_blank" rel="noopener">Ver certificado</a>` : ''}</div>
+  </div>`;
+  ligar();
+}
+
+function tarjeta(cl, i) {
+  const pc = (DATA.progreso.clases || {})[cl.id] || {};
+  const pub = cl.estado === 'publicada';
+  return `<button class="mc__clase" type="button" ${pub ? `data-clase="${esc(cl.id)}"` : 'disabled'} aria-label="${esc(cl.titulo)}${pub ? '' : ' (grabación pendiente)'}">
+    <img src="${esc(cl.miniatura || DATA.curso.portada || PORTADA)}" alt="" loading="lazy" ${fb}>
+    <div class="mc__cb"><div class="mc__tags"><span>Clase ${i + 1}</span>${cl.duracionMin ? `<span>${I.reloj} ${cl.duracionMin} min</span>` : ''}${pc.completada ? `<span class="v">${I.check} Vista</span>` : ''}${pub ? '' : '<span class="p">Grabación pendiente</span>'}</div>
+    <h3>${esc(cl.titulo)}</h3></div>
+    ${pub ? `<span class="mc__play">${I.play}</span>` : `<span class="mc__lock">${I.lock}</span>`}</button>`;
+}
+function mat(m) {
+  const x = m.tipo === 'xlsx' || m.tipo === 'excel';
+  return `<button class="mc__card mc__mat" type="button" data-mat="${esc(m.id)}"><i class="${x ? 'x' : ''}">${I.doc}</i><span><b>${esc(m.titulo)}</b><small>${esc(m.descripcion || (x ? 'Excel' : 'PDF'))}</small></span></button>`;
+}
+
+function ligar() {
+  view.querySelectorAll('[data-clase]').forEach(b => b.onclick = () => { history.pushState({ mc: 1 }, '', '#mi-curso/clase/' + encodeURIComponent(b.dataset.clase)); render(); });
+  view.querySelectorAll('[data-mat]').forEach(b => b.onclick = async () => {
+    const w = window.open('', '_blank');
+    try { const r = await api('/alumno/curso/' + encodeURIComponent(SLUG) + '/material', { method: 'POST', body: { materialId: b.dataset.mat } });
+      if (w) { w.opener = null; w.location.href = r.url; } else location.href = r.url; }
+    catch (e) { if (w) w.close(); toast(e.message || 'No pudimos abrir el material', true); }
+  });
+  const v = view.querySelector('[data-volver]'); if (v) v.onclick = () => { history.pushState({ mc: 1 }, '', '#mi-curso'); render(); };
+}
+
+async function vistaClase(id) {
+  const d = DATA, idx = d.clases.findIndex(c => c.id === id), cl = d.clases[idx];
+  if (!cl || cl.estado !== 'publicada') { history.replaceState({ mc: 1 }, '', '#mi-curso'); return vistaCurso(); }
+  const pubs = d.clases.filter(c => c.estado === 'publicada'), k = pubs.findIndex(c => c.id === id);
+  const prev = pubs[k - 1], next = pubs[k + 1], pc = (d.progreso.clases || {})[id] || {};
+  const mats = d.materiales.filter(m => m.disponible && (m.claseId === id || (cl.materialesIds || []).includes(m.id)));
+  view.innerHTML = `<button type="button" class="mc__link" data-volver style="display:inline-flex;gap:6px;align-items:center;margin-bottom:14px">${I.atras} Volver al curso</button>
+  <div class="mc__pl"><div>
+    <div class="mc__player" id="mc-player"><div class="mc__pst"><div class="mc__spin"></div><span>Cargando la clase…</span></div></div>
+    <div class="mc__lh"><div><small>${cl.modulo ? esc(cl.modulo) + ' · ' : ''}Clase ${idx + 1} de ${d.clases.length}</small><h1>${esc(cl.titulo)}</h1></div>
+      <span class="mc__chip ${pc.completada ? 'mc__chip--ok' : ''}" id="mc-chip">${pc.completada ? I.check + ' Vista' : (cl.duracionMin ? I.reloj + ' ' + cl.duracionMin + ' min' : 'En curso')}</span></div>
+    <div class="mc__nav">
+      ${prev ? `<button class="mc__btn mc__btn--l" data-clase="${esc(prev.id)}">${I.atras} Anterior</button>` : ''}
+      <button class="mc__btn ${pc.completada ? 'mc__btn--l' : 'mc__btn--g'}" id="mc-vista" ${pc.completada ? 'disabled' : ''}>${I.check} ${pc.completada ? 'Clase vista' : 'Marcar como vista'}</button>
+      ${next ? `<button class="mc__btn mc__btn--p" data-clase="${esc(next.id)}">Siguiente ${I.flecha}</button>` : ''}
+    </div>
+    ${cl.descripcion ? `<p style="margin-top:16px;color:var(--mc-soft);line-height:1.6">${esc(cl.descripcion)}</p>` : ''}
+    ${mats.length ? `<div class="mc__sec"><div class="mc__sech"><h2>Materiales de esta clase</h2></div><div class="mc__mats">${mats.map(mat).join('')}</div></div>` : ''}
+  </div>
+  <aside class="mc__card mc__list"><h3>${esc(d.curso.nombre)}</h3><p>${d.progreso.completadas} de ${d.progreso.total} clases vistas</p>
+    ${d.clases.map((x, i) => { const v = ((d.progreso.clases || {})[x.id] || {}).completada, pb = x.estado === 'publicada';
+      return `<button class="mc__li ${x.id === id ? 'on' : ''} ${v ? 'vista' : ''}" ${pb ? `data-clase="${esc(x.id)}"` : 'disabled'}><span>${v ? I.check : i + 1}</span><span>${esc(x.titulo)}<small>${pb ? (x.duracionMin ? x.duracionMin + ' min' : 'Grabación') : 'Grabación pendiente de publicación'}</small></span></button>`; }).join('')}
+  </aside></div>`;
+  ligar();
+  $('#mc-vista').onclick = () => guardar(true, true);
+  SEG = { id, base: Number(pc.segundos) || 0, ses: 0, env: 0, comp: !!pc.completada, pos: Number(pc.posicion) || 0, dur: cl.duracionMin, video: null, t: null };
+  try {
+    const src = await api('/alumno/curso/' + encodeURIComponent(SLUG) + '/video', { method: 'POST', body: { claseId: id } });
+    const pl = $('#mc-player'); if (!pl || !SEG || SEG.id !== id) return;
+    if (src.tipo === 'video') {
+      const v = document.createElement('video'); v.controls = true; v.playsInline = true; v.preload = 'metadata'; v.setAttribute('controlsList', 'nodownload'); v.src = src.url;
+      v.addEventListener('loadedmetadata', () => { if (SEG && SEG.pos > 5 && SEG.pos < v.duration - 10) v.currentTime = SEG.pos; });
+      v.addEventListener('ended', () => guardar(true));
+      pl.innerHTML = ''; pl.appendChild(v); SEG.video = v;
+    } else pl.innerHTML = `<iframe src="${esc(src.url)}" title="${esc(cl.titulo)}" allow="autoplay; encrypted-media; fullscreen; picture-in-picture" allowfullscreen></iframe>`;
+    SEG.t = setInterval(() => {
+      if (!SEG || document.hidden || (SEG.video && SEG.video.paused)) return;
+      SEG.ses++; if (SEG.video) SEG.pos = Math.floor(SEG.video.currentTime || 0);
+      if (!SEG.comp && !SEG.video && SEG.dur && SEG.base + SEG.ses >= SEG.dur * 48) guardar(true);
+      if (SEG.ses - SEG.env >= 20) guardar(false);
+    }, 1000);
+  } catch (e) {
+    const pl = $('#mc-player'); if (pl) pl.innerHTML = `<div class="mc__pst">${I.lock}<b>${esc(e.message || 'No pudimos abrir el video')}</b></div>`;
+  }
+}
+
+async function guardar(comp, avisar) {
+  if (!SEG) return; const s = SEG; s.env = s.ses; if (comp) s.comp = true;
+  try {
+    const r = await api('/alumno/curso/' + encodeURIComponent(SLUG) + '/progreso', { method: 'POST', keepalive: true, body: { claseId: s.id, segundos: s.base + s.ses, completada: s.comp, posicion: s.pos, clientTs: Date.now() } });
+    if (DATA && r.progreso) DATA.progreso = r.progreso;
+    if (comp && SEG === s) { const b = $('#mc-vista'); if (b) { b.disabled = true; b.className = 'mc__btn mc__btn--l'; b.innerHTML = I.check + ' Clase vista'; }
+      const ch = $('#mc-chip'); if (ch) { ch.className = 'mc__chip mc__chip--ok'; ch.innerHTML = I.check + ' Vista'; } if (avisar) toast('Clase marcada como vista'); }
+  } catch (_) { if (avisar) toast('No pudimos guardar tu progreso', true); }
+}
+async function detener() {
+  if (!SEG) return; clearInterval(SEG.t); const s = SEG;
+  if (s.ses > s.env) await guardar(false);
+  if (s.video) try { s.video.pause(); } catch (_) {}
+  SEG = null;
+}
+document.addEventListener('visibilitychange', () => { if (document.hidden && SEG && SEG.ses > SEG.env) guardar(false); });
+window.addEventListener('pagehide', () => { if (SEG && SEG.ses > SEG.env) guardar(false); });
+</script>
+<!-- MI-CURSO:FIN -->
