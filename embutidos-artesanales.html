@@ -98,6 +98,23 @@
 }
 
 </style>
+
+<style id="compacto-movil">
+/* ── Compacto móvil: insignias en una línea bajo el cronómetro ── */
+.hero__badges{flex-wrap:nowrap!important;gap:6px!important;margin-top:14px;justify-content:flex-start;max-width:100%;overflow:hidden}
+.hero__badges .badge{white-space:nowrap!important;font-size:clamp(.5rem,2.55vw,.8rem)!important;padding:5px clamp(6px,2vw,14px)!important;gap:4px!important;letter-spacing:.2px!important;flex-shrink:1;min-width:0}
+.hero__badges .badge svg{width:11px;height:11px;flex-shrink:0}
+.faq-wa{white-space:nowrap!important}
+@media (max-width:768px){
+  .stats{padding:32px 16px!important}
+  .tabs-section{padding:38px 12px!important}
+  .faq{padding:38px 16px!important}
+  .cta-final{padding:42px 16px!important}
+  .faq__item{margin-bottom:10px!important}
+  .faq__item summary,.faq-item summary{padding:13px 14px!important;font-size:.92rem!important;line-height:1.35!important}
+  h2{line-height:1.22!important}
+}
+</style>
 </head>
 
 <body data-slug="embutidos-artesanales">
@@ -129,7 +146,8 @@
   <div class="grid-bg"></div>
   <div class="container hero__grid">
     <div class="hero__content">
-      <div class="hero__badges">
+            <div data-cierre></div>
+<div class="hero__badges">
         <span class="badge badge--offer">
           <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"><path d="M12 2l3 6 6 1-4.5 4.5 1 6-5.5-3-5.5 3 1-6L3 9l6-1z"/></svg>
           OFERTA POR LANZAMIENTO
@@ -139,7 +157,6 @@
           Solo quedan <span data-cupo-restante>15</span> cupos
         </span>
       </div>
-      <div data-cierre></div>
 
       <h1 class="hero__title">
         Domina los <span class="hero__title--accent">embutidos artesanales</span> mexicanos que la industria está pidiendo.
