@@ -1228,7 +1228,7 @@ actualizarPreciosDesdeFirestore();
 .mc__brand>div{min-width:0}
 .mc__brand img{width:34px;height:34px;border-radius:9px;flex:none}
 .mc__brand b{display:block;font-size:.93rem;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
-.mc__brand small{display:block;font-size:.68rem;color:var(--mc-accent);text-transform:uppercase;letter-spacing:.09em;font-weight:700}
+.mc__brand small{display:block;font-size:.68rem;color:var(--mc-accent);text-transform:uppercase;letter-spacing:.09em;font-weight:700;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
 .mc__x{display:inline-flex;align-items:center;gap:8px;height:38px;padding:0 14px;border-radius:10px;background:var(--mc-bg);border:1px solid var(--mc-line);font-weight:600;font-size:.84rem}
 .mc__x:hover{border-color:var(--mc-accent);color:var(--mc-accent)}
 .mc__x svg{width:16px;height:16px}
@@ -1388,11 +1388,136 @@ actualizarPreciosDesdeFirestore();
   .mc__next img{width:112px}
 }
 @media (prefers-reduced-motion:reduce){.mc *{animation:none!important;transition:none!important}}
+
+/* ════════ v3 · estilo ICADEM: portada, filas de clase, cápsula inferior, certificado ════════ */
+.mc__top{gap:10px}
+.mc__me{display:inline-flex;align-items:center;justify-content:center;width:38px;height:38px;border-radius:50%;background:linear-gradient(135deg,var(--mc-accent),var(--mc-accent-2));color:#fff;font-weight:800;font-size:.85rem;letter-spacing:.02em;box-shadow:0 4px 12px rgba(18,66,26,.25)}
+.mc.solo .mc__me{display:none}
+.mc__me.on{box-shadow:0 0 0 3px rgba(255,201,60,.65)}
+/* Portada del curso */
+.mc__cover{position:relative;overflow:hidden;border-radius:22px;min-height:300px;display:flex;align-items:flex-end;justify-content:space-between;gap:22px;padding:30px;color:#fff;background:var(--mc-dark);box-shadow:0 20px 48px -24px rgba(7,35,12,.55)}
+.mc__cover>img{position:absolute;inset:0;width:100%;height:100%;object-fit:cover}
+.mc__cover:before{content:'';position:absolute;inset:0;z-index:1;background:linear-gradient(180deg,rgba(7,35,12,.05) 0%,rgba(7,35,12,.55) 45%,rgba(7,35,12,.94) 100%)}
+.mc__cover>div{position:relative;z-index:2;min-width:0}
+.mc__pills{display:flex;gap:7px;flex-wrap:wrap;margin-bottom:14px}
+.mc__pills span{display:inline-flex;align-items:center;gap:6px;padding:7px 12px;border-radius:999px;border:1px solid rgba(255,255,255,.24);background:rgba(255,255,255,.13);backdrop-filter:blur(10px);-webkit-backdrop-filter:blur(10px);font-size:.74rem;font-weight:650;line-height:1;white-space:nowrap}
+.mc__pills span svg{width:13px;height:13px}
+.mc__pills span.gold{background:rgba(255,201,60,.26);border-color:rgba(255,201,60,.45);color:#ffe08a}
+.mc__cover h1{color:#fff;font-size:clamp(1.55rem,3.6vw,2.6rem);line-height:1.06;letter-spacing:-.03em;max-width:680px}
+.mc__cover p{margin-top:12px;color:rgba(255,255,255,.78);font-size:.9rem;display:grid;gap:2px}
+.mc__cover p b{color:#fff;font-size:.95rem}
+.mc__start{display:inline-flex;align-items:center;gap:11px;min-height:52px;padding:0 20px 0 24px;border-radius:999px;background:#fff;color:var(--mc-dark)!important;font-weight:750;font-size:.92rem;white-space:nowrap;box-shadow:0 10px 24px -10px rgba(0,0,0,.55);flex:none;text-decoration:none}
+.mc__start svg{width:22px;height:22px;padding:5px;border-radius:50%;background:var(--mc-accent);color:#fff;stroke-width:2.4}
+.mc__start:hover{transform:translateY(-1px)}
+/* Encabezados de sección */
+.mc__sh{display:flex;align-items:flex-end;justify-content:space-between;gap:14px;margin:0 0 14px}
+.mc__sh span{display:block;color:var(--mc-accent);font-size:.68rem;font-weight:800;letter-spacing:.14em;text-transform:uppercase;margin-bottom:4px}
+.mc__sh h2{font-size:clamp(1.15rem,2.2vw,1.45rem);letter-spacing:-.02em}
+.mc__sh>b{padding:6px 11px;border-radius:999px;background:rgba(46,125,50,.1);color:var(--mc-accent);font-size:.74rem;font-weight:750;white-space:nowrap}
+/* Filas de clase */
+.mc__ls{display:grid;gap:10px}
+.mc__l{position:relative;width:100%;display:grid;grid-template-columns:150px minmax(0,1fr) 40px;align-items:center;gap:16px;padding:9px 14px 9px 9px;border:1px solid var(--mc-line);border-radius:16px;background:var(--mc-card);text-align:left;box-shadow:0 7px 20px rgba(7,35,12,.04);transition:transform .18s,border-color .18s,box-shadow .18s}
+.mc__l:not([disabled]):hover{transform:translateY(-2px);border-color:rgba(46,125,50,.35);box-shadow:0 13px 28px rgba(7,35,12,.09)}
+.mc__lc{position:relative;width:150px;aspect-ratio:16/9;border-radius:11px;overflow:hidden;background:#13321a}
+.mc__lc img{width:100%;height:100%;object-fit:cover;display:block}
+.mc__lc:after{content:'';position:absolute;inset:0;background:linear-gradient(180deg,rgba(0,0,0,0),rgba(0,0,0,.28))}
+.mc__lc>b{position:absolute;z-index:1;top:8px;left:8px;min-width:28px;height:24px;display:grid;place-items:center;padding:0 7px;border-radius:7px;border:1px solid rgba(255,255,255,.3);background:rgba(10,20,12,.6);backdrop-filter:blur(8px);color:#fff;font-size:.68rem;font-weight:800;letter-spacing:.04em}
+.mc__lc>i{position:absolute;z-index:1;right:8px;bottom:8px;width:28px;height:28px;display:grid;place-items:center;border-radius:50%;background:rgba(255,255,255,.92);color:var(--mc-dark);font-style:normal}
+.mc__lc>i svg{width:12px;height:12px;fill:currentColor;stroke:none}
+.mc__lt{display:grid;gap:5px;min-width:0}
+.mc__lt em{font-style:normal;color:var(--mc-accent);font-size:.66rem;font-weight:800;letter-spacing:.11em;text-transform:uppercase}
+.mc__lt strong{font-size:.96rem;line-height:1.3;letter-spacing:-.01em;display:-webkit-box;-webkit-line-clamp:2;-webkit-box-orient:vertical;overflow:hidden}
+.mc__lt small{color:var(--mc-mute);font-size:.76rem}
+.mc__la{width:38px;height:38px;display:grid;place-items:center;border-radius:50%;border:1px solid var(--mc-line);background:var(--mc-bg);color:var(--mc-soft);transition:.18s}
+.mc__la svg{width:15px;height:15px}
+.mc__l:not([disabled]):hover .mc__la{background:var(--mc-accent);border-color:var(--mc-accent);color:#fff;transform:translateX(2px)}
+.mc__l.vista{border-color:rgba(46,125,50,.35);background:linear-gradient(90deg,rgba(46,125,50,.06),var(--mc-card) 60%)}
+.mc__l.vista .mc__lc>i{background:var(--mc-accent);color:#fff}
+.mc__l.vista .mc__lc>i svg{fill:none;stroke:currentColor;stroke-width:3}
+.mc__l.sig{border-color:rgba(255,201,60,.75);box-shadow:0 0 0 3px rgba(255,201,60,.18),0 7px 20px rgba(7,35,12,.05)}
+.mc__l.sig .mc__lt em{color:#9a6b00}
+.mc__l[disabled]{cursor:default;background:#f7f9f6}
+.mc__l[disabled] .mc__lc img{filter:saturate(.2);opacity:.55}
+.mc__l[disabled] .mc__lt em{color:var(--mc-mute)}
+.mc__l[disabled] .mc__lt strong{color:var(--mc-soft)}
+/* Materiales */
+.mc__ms{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:10px}
+.mc__m{display:flex;align-items:center;gap:12px;min-width:0;padding:13px;border:1px solid var(--mc-line);border-radius:14px;background:var(--mc-card);text-align:left;width:100%;transition:.18s}
+.mc__m:hover{border-color:rgba(46,125,50,.35);background:#f8fbf7}
+.mc__m i{width:42px;height:42px;flex:none;display:grid;place-items:center;border-radius:11px;background:#fdecea;color:#b3261e;font-style:normal}
+.mc__m i.x{background:#e3f3e4;color:#1b5e20}
+.mc__m i svg{width:19px;height:19px}
+.mc__m span{display:grid;gap:3px;min-width:0;flex:1}
+.mc__m b{font-size:.88rem;line-height:1.3}
+.mc__m small{color:var(--mc-mute);font-size:.74rem;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.mc__m>svg{width:17px;height:17px;color:var(--mc-mute)}
+/* Certificado */
+.mc__cf{display:grid;grid-template-columns:minmax(0,1fr) 300px;gap:22px;align-items:start}
+.mc__cfh{position:relative;overflow:hidden;padding:24px;border-radius:20px;background:linear-gradient(140deg,var(--mc-dark),#1b5e20);color:#fff;display:flex;gap:16px;align-items:center;margin-bottom:16px}
+.mc__cfh:after{content:'';position:absolute;right:-50px;top:-60px;width:200px;height:200px;border-radius:50%;background:rgba(255,201,60,.14)}
+.mc__cfh i{width:54px;height:54px;flex:none;display:grid;place-items:center;border-radius:16px;background:rgba(255,201,60,.2);color:var(--mc-gold);font-style:normal}
+.mc__cfh i svg{width:26px;height:26px}
+.mc__cfh h2{color:#fff;font-size:1.25rem}
+.mc__cfh p{color:rgba(255,255,255,.78);font-size:.86rem;line-height:1.5;margin-top:4px}
+.mc__form{padding:20px}
+.mc__grid2{display:grid;grid-template-columns:1fr 1fr;gap:0 12px}
+.mc__field select,.mc__field textarea{width:100%;min-width:0;border-radius:12px;border:1px solid var(--mc-line);background:var(--mc-bg);padding:0 14px;font:inherit;font-size:1rem;color:var(--mc-ink)}
+.mc__field select{height:46px}
+.mc__field textarea{padding:12px 14px;min-height:76px;resize:vertical}
+.mc__field select:focus,.mc__field textarea:focus{outline:none;border-color:var(--mc-accent);box-shadow:0 0 0 3px rgba(46,125,50,.15)}
+.mc__field small{font-weight:500;color:var(--mc-mute);font-size:.74rem}
+.mc__opt{font-weight:500;color:var(--mc-mute)}
+.mc__estado{padding:20px;display:grid;gap:12px}
+.mc__estado dl{display:grid;grid-template-columns:140px 1fr;gap:8px 14px;margin:0;font-size:.88rem}
+.mc__estado dt{color:var(--mc-mute)}.mc__estado dd{margin:0;word-break:break-word}
+.mc__pasos{padding:18px;display:grid;gap:12px}
+.mc__pasos>h3{font-size:.68rem;font-weight:800;letter-spacing:.13em;text-transform:uppercase;color:var(--mc-mute)}
+.mc__paso{display:flex;gap:11px;align-items:flex-start;font-size:.84rem;color:var(--mc-soft);line-height:1.45}
+.mc__paso b{width:26px;height:26px;flex:none;display:grid;place-items:center;border-radius:50%;background:#e6eee5;color:var(--mc-soft);font-size:.74rem}
+.mc__paso.ok b{background:var(--mc-accent);color:#fff}
+.mc__cta-cert{display:flex;align-items:center;gap:14px;padding:16px 18px;border-radius:16px;border:1px solid rgba(255,201,60,.55);background:linear-gradient(120deg,rgba(255,201,60,.16),rgba(46,125,50,.06));text-align:left;width:100%}
+.mc__cta-cert i{width:42px;height:42px;flex:none;display:grid;place-items:center;border-radius:12px;background:var(--mc-gold);color:var(--mc-dark);font-style:normal}
+.mc__cta-cert span{flex:1;min-width:0}.mc__cta-cert b{display:block;font-size:.95rem}.mc__cta-cert small{color:var(--mc-soft);font-size:.8rem}
+.mc__cta-cert>svg{color:var(--mc-accent)}
+/* Barra inferior flotante (cápsula) */
+.mc__tabs{position:fixed;left:50%;bottom:max(10px,env(safe-area-inset-bottom));transform:translateX(-50%);z-index:5;width:min(560px,calc(100% - 24px));padding:6px;border-radius:24px;border:1px solid rgba(16,32,21,.1);background:rgba(255,255,255,.86);backdrop-filter:blur(22px) saturate(1.4);-webkit-backdrop-filter:blur(22px) saturate(1.4);box-shadow:0 18px 44px rgba(7,35,12,.2),0 2px 6px rgba(7,35,12,.06);justify-content:space-between;gap:4px}
+.mc__tab{position:relative;flex:1 1 0;min-width:0;min-height:56px;justify-content:center;gap:4px;padding:6px 4px;border-radius:18px;font-size:.66rem;font-weight:700;color:var(--mc-mute);transition:color .2s,background .25s}
+.mc__tab svg{width:21px;height:21px;transition:transform .25s}
+.mc__tab.on{color:var(--mc-accent);background:linear-gradient(180deg,rgba(46,125,50,.14),rgba(46,125,50,.07))}
+.mc__tab.on svg{transform:translateY(-1px) scale(1.06)}
+.mc__tab.on:after{content:'';position:absolute;top:5px;left:50%;width:5px;height:5px;margin-left:13px;border-radius:50%;background:var(--mc-gold)}
+.mc__tab .dot{position:absolute;top:7px;right:calc(50% - 16px);width:8px;height:8px;border-radius:50%;background:#e53935;border:2px solid #fff}
+@media (max-width:900px){
+  .mc__wrap{padding-bottom:calc(104px + env(safe-area-inset-bottom))}
+  .mc__toast{bottom:calc(96px + env(safe-area-inset-bottom))}
+}
+@media (max-width:1060px){.mc__cf{grid-template-columns:1fr}}
+@media (max-width:720px){
+  .mc__cover{min-height:0;flex-direction:column;align-items:stretch;justify-content:flex-end;padding:20px;border-radius:18px;padding-top:120px}
+  .mc__start{justify-content:center}
+  .mc__ms{grid-template-columns:1fr}
+  .mc__grid2{grid-template-columns:1fr}
+  .mc__estado dl{grid-template-columns:1fr;gap:2px}.mc__estado dd{margin-bottom:8px}
+}
+@media (max-width:560px){
+  .mc__l{grid-template-columns:104px minmax(0,1fr) 30px;gap:11px;padding:7px 10px 7px 7px;border-radius:14px}
+  .mc__lc{width:104px;border-radius:9px}
+  .mc__lc>b{top:5px;left:5px;min-width:24px;height:21px;font-size:.62rem}
+  .mc__lc>i{right:5px;bottom:5px;width:22px;height:22px}
+  .mc__lt strong{font-size:.86rem}
+  .mc__lt em{font-size:.6rem}
+  .mc__la{width:30px;height:30px}
+  .mc__cfh{padding:18px;border-radius:16px}
+  .mc__pills span{padding:6px 10px;font-size:.68rem}
+}
+@media (max-width:620px){.mc__hide-sm{display:none}}
+@media (max-width:360px){.mc__tab{font-size:.6rem}.mc__tab svg{width:19px;height:19px}}
 </style>
 
 <div class="mc solo" id="mi-curso" hidden role="dialog" aria-modal="true" aria-labelledby="mc-titulo">
   <header class="mc__top">
-    <div class="mc__brand"><img src="/assets/brand/logo-vp-300.png" alt="" width="34" height="34" onerror="this.style.display='none'"><div><b id="mc-titulo">Mi curso</b><small>Visión Pecuaria · Aula del curso</small></div></div>
+    <div class="mc__brand"><img src="/assets/brand/logo-vp-300.png" alt="" width="34" height="34" onerror="this.style.display='none'"><div><b id="mc-titulo">Mi curso</b><small><span class="mc__hide-sm">Visión Pecuaria · </span>Aula del curso</small></div></div>
+    <button type="button" class="mc__me" id="mc-me" aria-label="Mi cuenta" hidden></button>
     <button type="button" class="mc__x" id="mc-cerrar" aria-label="Volver a la página del curso"><svg viewBox="0 0 24 24"><path d="M6 6l12 12M18 6 6 18"/></svg><span>Volver</span></button>
   </header>
   <div class="mc__shell">
@@ -1406,8 +1531,8 @@ actualizarPreciosDesdeFirestore();
 <script type="module">
 // ═══════════════════════════════════════════════════════════════════════════
 // «Ya compré · Entrar a mi curso» — aula del curso dentro de la propia landing.
-// Navegación tipo panel: barra lateral en escritorio, 4 pestañas abajo en
-// teléfono (Inicio · Clases · Materiales · Cuenta).
+// Navegación tipo panel (estilo ICADEM): barra lateral en escritorio, cápsula flotante
+// con 4 pestañas en teléfono (Inicio · Clases · Materiales · Certificado); Cuenta va en el perfil.
 // · Identidad: Firebase Auth (proyecto visionpecuaria-vip, el mismo del checkout).
 // · Derechos y contenido: backend /alumno/* (verifica la compra; correo verificado).
 // · Si la cuenta no compró el curso → lo manda al pago de esta misma landing.
@@ -1494,25 +1619,29 @@ const TABS = [
   { id: 'inicio', t: 'Inicio', lado: 'Inicio', i: 'casa' },
   { id: 'clases', t: 'Clases', lado: 'Mis clases', i: 'clases' },
   { id: 'materiales', t: 'Materiales', lado: 'Materiales', i: 'doc' },
-  { id: 'cuenta', t: 'Cuenta', lado: 'Mi cuenta', i: 'user' }
+  { id: 'certificado', t: 'Certificado', lado: 'Mi certificado', i: 'cert' }
 ];
+const RUTAS = [...TABS.map(t => t.id), 'cuenta'];
 function rutaActual() {
   const h = location.hash;
   let m = h.match(/^#mi-curso\/clase\/(.+)$/); if (m) return { tab: 'clases', clase: decodeURIComponent(m[1]) };
-  m = h.match(/^#mi-curso\/([a-z]+)$/); if (m && TABS.some(t => t.id === m[1])) return { tab: m[1] };
+  m = h.match(/^#mi-curso\/([a-z]+)$/); if (m && RUTAS.includes(m[1])) return { tab: m[1] };
   return { tab: 'inicio' };
 }
 function ir(tab) { history.pushState({ mc: 1 }, '', tab === 'inicio' ? '#mi-curso' : '#mi-curso/' + tab); render(); }
 function irClase(id) { history.pushState({ mc: 1 }, '', '#mi-curso/clase/' + encodeURIComponent(id)); render(); }
 function pintarNav(activa) {
+  const pendCert = certPendienteDeSolicitar();
   $('#mc-side').innerHTML = `
     <div class="mc__glabel">Mi curso</div>
-    ${TABS.slice(0, 3).map(t => `<button type="button" class="mc__ni ${t.id === activa ? 'on' : ''}" data-tab="${t.id}">${I[t.i]}${t.lado}</button>`).join('')}
+    ${TABS.map(t => `<button type="button" class="mc__ni ${t.id === activa ? 'on' : ''}" data-tab="${t.id}">${I[t.i]}${t.lado}</button>`).join('')}
     <div class="mc__glabel">Mi cuenta</div>
     <button type="button" class="mc__ni ${activa === 'cuenta' ? 'on' : ''}" data-tab="cuenta">${I.user}Mi cuenta</button>
     <a class="mc__ni" href="${WA}?text=${encodeURIComponent('Hola, soy alumno de ' + (NOMBRES[SLUG] || 'un curso') + ' y necesito ayuda')}" target="_blank" rel="noopener">${I.wa}Soporte WhatsApp</a>
     <div class="mc__side-foot"><button type="button" class="mc__ni" id="mc-salir">${I.salir}Cerrar sesión</button></div>`;
-  $('#mc-tabs').innerHTML = TABS.map(t => `<button type="button" class="mc__tab ${t.id === activa ? 'on' : ''}" data-tab="${t.id}">${I[t.i]}${t.t}</button>`).join('');
+  $('#mc-tabs').innerHTML = TABS.map(t => `<button type="button" class="mc__tab ${t.id === activa ? 'on' : ''}" data-tab="${t.id}" ${t.id === activa ? 'aria-current="page"' : ''}>${I[t.i]}${t.t}${t.id === 'certificado' && pendCert && activa !== 'certificado' ? '<span class="dot"></span>' : ''}</button>`).join('');
+  const me = $('#mc-me');
+  if (me && USER) { me.hidden = false; me.textContent = ((USER.displayName || USER.email || '?').trim()[0] || '?').toUpperCase(); me.classList.toggle('on', activa === 'cuenta'); me.onclick = () => ir('cuenta'); }
   root.querySelectorAll('[data-tab]').forEach(b => b.onclick = () => ir(b.dataset.tab));
   const s = $('#mc-salir'); if (s) s.onclick = async () => { await detener(); await signOut(auth); };
 }
@@ -1523,6 +1652,7 @@ function cargando() { view.innerHTML = '<div class="mc__spin mc__spin--d"></div>
 async function render() {
   await detener();
   $('#mc-body').scrollTop = 0;
+  $('#mc-me').hidden = true;
   if (!USER) { root.classList.add('solo'); $('#mc-titulo').textContent = 'Mi curso'; return vistaAcceso(); }
   if (!DATA) {
     root.classList.add('solo'); cargando();
@@ -1541,6 +1671,7 @@ async function render() {
   if (r.tab === 'clases') return vistaClases();
   if (r.tab === 'materiales') return vistaMateriales();
   if (r.tab === 'cuenta') return vistaCuenta();
+  if (r.tab === 'certificado') return vistaCertificado();
   vistaInicio();
 }
 
@@ -1617,13 +1748,35 @@ function vistaSinCompra() {
 const fecha = (iso) => { try { return new Date(iso).toLocaleDateString('es-MX', { day: 'numeric', month: 'long', year: 'numeric' }); } catch (_) { return ''; } };
 const fb = `onerror="this.onerror=null;this.src='${esc(PORTADA)}'"`;
 const siguiente = () => { const p = DATA.progreso; return p.ultimaClaseId && !(p.clases?.[p.ultimaClaseId]?.completada) ? p.ultimaClaseId : (DATA.clases.find(c => c.estado === 'publicada' && !p.clases?.[c.id]?.completada) || DATA.clases.find(c => c.estado === 'publicada') || {}).id; };
+function certPendienteDeSolicitar() { return DATA && (DATA.certificado?.estado !== 'emitido') && !DATA.solicitudCertificado; }
+function estadoCertTexto() {
+  const ce = DATA.certificado || {}, so = DATA.solicitudCertificado;
+  if (ce.estado === 'emitido') return 'Emitido';
+  if (so) return ({ pendiente: 'Solicitado', en_proceso: 'En proceso', emitido: 'Emitido', rechazado: 'Revisión' })[so.estado] || 'Solicitado';
+  return 'Sin solicitar';
+}
+const PLAY_ICO = '<svg viewBox="0 0 24 24"><path d="M7 4v16l13-8z"/></svg>';
+function filaClase(cl, i, d, sig) {
+  const pc = d.progreso.clases?.[cl.id] || {}; const pub = cl.estado === 'publicada';
+  const cls = ['mc__l', pc.completada ? 'vista' : '', cl.id === sig && !pc.completada && pub ? 'sig' : ''].join(' ');
+  const etiqueta = pc.completada ? 'Vista' : !pub ? 'Grabación pendiente' : cl.id === sig ? 'Tu siguiente clase' : 'Clase ' + String(i + 1).padStart(2, '0');
+  return `<button type="button" class="${cls}" ${pub ? `data-clase="${esc(cl.id)}"` : 'disabled'}>
+    <span class="mc__lc"><img src="${esc(cl.miniatura || d.curso.portada || PORTADA)}" alt="" loading="lazy" ${fb}><b>${String(i + 1).padStart(2, '0')}</b><i>${pc.completada ? I.check : pub ? PLAY_ICO : I.lock}</i></span>
+    <span class="mc__lt"><em>${etiqueta}</em><strong>${esc(cl.titulo)}</strong><small>${pub ? (cl.duracionMin ? cl.duracionMin + ' min · Grabación' : 'Grabación') : 'Se publica muy pronto'}</small></span>
+    <span class="mc__la">${pub ? I.flecha : I.lock}</span>
+  </button>`;
+}
+function ctaCertificado() {
+  if (!certPendienteDeSolicitar()) return '';
+  return `<button type="button" class="mc__cta-cert" data-ir="certificado"><i>${I.cert}</i><span><b>Solicitar mi certificado</b><small>Déjanos tus datos para emitirlo con QR y folio</small></span>${I.flecha}</button>`;
+}
 function panelActividad() {
   const d = DATA, p = d.progreso, ce = d.certificado || { estado: 'pendiente' };
   return `<div class="mc__card mc__panel"><h3>Tu actividad</h3>
     <div class="mc__ring" style="--p:${p.porcentaje}"><div>${p.porcentaje}%<small>${p.completadas}/${p.total}</small></div></div>
     <div class="mc__rowstat"><span>Clases vistas</span><b>${p.completadas} / ${p.total}</b></div>
     <div class="mc__rowstat"><span>Materiales</span><b>${d.materiales.filter(m => m.disponible).length}</b></div>
-    <div class="mc__rowstat"><span>Certificado</span><span class="mc__chip ${ce.estado === 'emitido' ? 'mc__chip--ok' : 'mc__chip--pend'}">${ce.estado === 'emitido' ? 'Emitido' : 'Pendiente'}</span></div>
+    <div class="mc__rowstat"><span>Certificado</span><span class="mc__chip ${ce.estado === 'emitido' ? 'mc__chip--ok' : 'mc__chip--pend'}">${estadoCertTexto()}</span></div>
   </div>
   <div class="mc__card mc__wa"><b>¿Dudas con tu curso?</b><p>Escríbenos y te ayudamos en minutos.</p>
     <a class="mc__btn mc__btn--p mc__btn--sm" href="${WA}?text=${encodeURIComponent('Hola, soy alumno de ' + (NOMBRES[SLUG] || 'un curso') + ' y tengo una duda')}" target="_blank" rel="noopener">${I.wa} WhatsApp directo</a></div>`;
@@ -1643,29 +1796,25 @@ function ligarVista() {
 function vistaInicio() {
   const d = DATA, c = d.curso, p = d.progreso, sig = siguiente();
   const cl = d.clases.find(x => x.id === sig);
+  const pubs = d.clases.filter(x => x.estado === 'publicada').length;
   view.innerHTML = `<div class="mc__cols"><div>
-    <section class="mc__hero"><img src="${esc(c.portada || PORTADA)}" alt="" ${fb}>
-      <div><span class="mc__tag">${I.check} Curso adquirido</span>
+    <section class="mc__cover"><img src="${esc(c.portada || PORTADA)}" alt="" ${fb}>
+      <div>
+        <div class="mc__pills"><span class="gold">${I.check} Curso adquirido</span><span>${I.clases} ${pubs} ${pubs === 1 ? 'clase' : 'clases'}</span>${p.porcentaje ? `<span>${p.porcentaje}% completado</span>` : ''}</div>
         <h1>${esc(c.nombre)}</h1>
-        <p>${c.instructorNombre ? esc(c.instructorNombre) + ' · ' : ''}${d.clases.length} ${d.clases.length === 1 ? 'clase' : 'clases'}${d.acceso?.fechaCompra ? ' · adquirido el ' + esc(fecha(d.acceso.fechaCompra)) : ''}</p>
-        <div style="display:flex;gap:10px;flex-wrap:wrap;margin-top:16px">
-          ${sig ? `<button class="mc__btn mc__btn--g" data-clase="${esc(sig)}">${I.play} ${p.ultimaClaseId ? 'Continuar' : 'Empezar'}</button>` : ''}
-          <button class="mc__btn mc__btn--l" data-ir="clases">Ver temario</button>
-        </div></div>
+        <p>${c.instructorNombre ? `<b>${esc(c.instructorNombre)}</b>` : ''}<span>${d.acceso?.fechaCompra ? 'Adquirido el ' + esc(fecha(d.acceso.fechaCompra)) : 'Acceso permanente a las grabaciones'}</span></p>
+      </div>
+      ${sig ? `<button type="button" class="mc__start" data-clase="${esc(sig)}">${p.ultimaClaseId ? 'Continuar' : 'Comenzar curso'} ${PLAY_ICO}</button>` : ''}
     </section>
     ${c.claseEnVivo ? `<div class="mc__sec mc__card mc__cert"><div><b>${I.vivo} Sesión en vivo</b><p>${esc(c.claseEnVivo.fecha || 'Enlace de la sesión en vivo de tu curso')}</p></div><a class="mc__btn mc__btn--p mc__btn--sm" href="${esc(c.claseEnVivo.url)}" target="_blank" rel="noopener">Entrar a la sesión</a></div>` : ''}
-    ${cl ? `<div class="mc__sec"><div class="mc__sech"><h2>${p.ultimaClaseId ? 'Continúa donde te quedaste' : 'Tu siguiente clase'}</h2></div>
-      <button type="button" class="mc__card mc__next" style="width:100%" data-clase="${esc(cl.id)}">
-        <img src="${esc(cl.miniatura || c.portada || PORTADA)}" alt="" ${fb}>
-        <span style="min-width:0;text-align:left"><span class="mc__eyebrow">Clase ${d.clases.indexOf(cl) + 1} de ${d.clases.length}</span><b>${esc(cl.titulo)}</b><small>${cl.duracionMin ? cl.duracionMin + ' min · ' : ''}Toca para reproducir</small></span>
-        <span class="mc__go" style="margin-left:auto">${I.flecha}</span>
-      </button></div>` : `<div class="mc__sec mc__card mc__empty"><h2>Las grabaciones aún no están publicadas</h2><p>Aparecerán aquí en cuanto se publiquen. Tu acceso ya está activo.</p></div>`}
-    <div class="mc__sec"><div class="mc__sech"><h2>Accesos rápidos</h2></div>
-      <div class="mc__mats">
-        <button type="button" class="mc__card mc__mat" data-ir="clases"><i class="x">${I.clases}</i><span><b>Mis clases</b><small>${d.clases.filter(x => x.estado === 'publicada').length} grabaciones publicadas</small></span></button>
-        <button type="button" class="mc__card mc__mat" data-ir="materiales"><i>${I.doc}</i><span><b>Materiales</b><small>${d.materiales.filter(m => m.disponible).length} descargas</small></span></button>
-        <button type="button" class="mc__card mc__mat" data-ir="cuenta"><i class="x">${I.cert}</i><span><b>Certificado</b><small>${(d.certificado?.estado === 'emitido') ? 'Emitido · folio ' + esc(d.certificado.folio || '') : 'Pendiente'}</small></span></button>
-      </div></div>
+    ${ctaCertificado() ? `<div class="mc__sec">${ctaCertificado()}</div>` : ''}
+    <div class="mc__sec"><div class="mc__sh"><div><span>${p.ultimaClaseId ? 'Continúa donde te quedaste' : 'Empieza aquí'}</span><h2>Clases del curso</h2></div><b>${p.completadas}/${p.total} vistas</b></div>
+      ${d.clases.length ? `<div class="mc__ls">${d.clases.slice(0, 3).map((x, i) => filaClase(x, i, d, sig)).join('')}</div>
+      ${d.clases.length > 3 ? `<button type="button" class="mc__btn mc__btn--l" style="width:100%;margin-top:10px" data-ir="clases">Ver las ${d.clases.length} clases ${I.flecha}</button>` : ''}`
+      : `<div class="mc__card mc__empty"><h2>Las grabaciones aún no están publicadas</h2><p>Aparecerán aquí en cuanto se publiquen. Tu acceso ya está activo.</p></div>`}
+    </div>
+    ${d.materiales.some(m => m.disponible) ? `<div class="mc__sec"><div class="mc__sh"><div><span>Descargas</span><h2>Materiales</h2></div><b>${d.materiales.filter(m => m.disponible).length}</b></div>
+      <div class="mc__ms">${d.materiales.filter(m => m.disponible).slice(0, 4).map(mat).join('')}</div></div>` : ''}
   </div>
   <aside class="mc__aside">${panelActividad()}</aside></div>`;
   ligarVista();
@@ -1675,40 +1824,99 @@ function vistaInicio() {
 function vistaClases() {
   const d = DATA, p = d.progreso, sig = siguiente();
   view.innerHTML = `<div class="mc__cols"><div>
-    <span class="mc__eyebrow">Ruta de aprendizaje</span>
-    <div class="mc__sech" style="margin-top:4px"><h2 class="mc__h">Temario del curso</h2><span class="mc__chip">${d.clases.length} ${d.clases.length === 1 ? 'clase' : 'clases'}</span></div>
-    ${d.clases.length ? `<div class="mc__tem">${d.clases.map((cl, i) => {
-      const pc = p.clases?.[cl.id] || {}; const pub = cl.estado === 'publicada';
-      return `<button type="button" class="mc__card mc__row ${pc.completada ? 'vista' : ''} ${cl.id === sig && !pc.completada ? 'sig' : ''}" ${pub ? `data-clase="${esc(cl.id)}"` : 'disabled'}>
-        <span class="mc__num">${pc.completada ? I.check : String(i + 1).padStart(2, '0')}</span>
-        <span class="mc__thumb"><img src="${esc(cl.miniatura || d.curso.portada || PORTADA)}" alt="" loading="lazy" ${fb}>${pub ? '' : `<span>${I.lock}</span>`}</span>
-        <span style="min-width:0"><h3>${esc(cl.titulo)}</h3>
-          <span class="mc__rmeta">${cl.duracionMin ? `<span class="mc__chip">${I.reloj} ${cl.duracionMin} min</span>` : ''}
-          ${pc.completada ? `<span class="mc__chip mc__chip--ok">${I.check} Vista</span>` : cl.id === sig && pub ? '<span class="mc__chip mc__chip--gold">Tu siguiente clase</span>' : ''}
-          ${pub ? '' : '<span class="mc__chip mc__chip--pend">Grabación pendiente</span>'}</span></span>
-        ${pub ? `<span class="mc__go">${I.play}<span>Ver clase</span></span>` : ''}
-      </button>`; }).join('')}</div>`
+    <div class="mc__sh"><div><span>Ruta de aprendizaje</span><h2 class="mc__h">Temario del curso</h2></div><b>${d.clases.length} ${d.clases.length === 1 ? 'clase' : 'clases'}</b></div>
+    ${d.clases.length ? `<div class="mc__ls">${d.clases.map((cl, i) => filaClase(cl, i, d, sig)).join('')}</div>`
     : `<div class="mc__card mc__empty"><h2>Las grabaciones aún no están publicadas</h2><p>Aparecerán aquí en cuanto se publiquen.</p></div>`}
   </div>
   <aside class="mc__aside"><div class="mc__card mc__panel"><h3>Tu aprendizaje</h3>
     <div class="mc__ring" style="--p:${p.porcentaje}"><div>${p.porcentaje}%<small>${p.completadas}/${p.total}</small></div></div>
     <p style="text-align:center;font-size:.84rem;color:var(--mc-soft);margin-bottom:14px">${p.completadas ? `Llevas <b>${p.completadas} de ${p.total}</b> clases vistas` : 'Todo empieza aquí'}</p>
     ${sig ? `<button class="mc__btn mc__btn--p mc__btn--sm" style="width:100%" data-clase="${esc(sig)}">${I.play} ${p.ultimaClaseId ? 'Continuar' : 'Empezar'}</button>` : ''}
-  </div></aside></div>`;
+  </div>${ctaCertificado()}</aside></div>`;
   ligarVista();
 }
 
 // ─── Materiales ─────────────────────────────────────────────────────────────
 function mat(m) {
   const x = m.tipo === 'xlsx' || m.tipo === 'excel';
-  return `<button class="mc__card mc__mat" type="button" data-mat="${esc(m.id)}"><i class="${x ? 'x' : ''}">${I.doc}</i><span><b>${esc(m.titulo)}</b><small>${esc(m.descripcion || (x ? 'Excel' : 'PDF'))}</small></span></button>`;
+  return `<button class="mc__m" type="button" data-mat="${esc(m.id)}"><i class="${x ? 'x' : ''}">${I.doc}</i><span><b>${esc(m.titulo)}</b><small>${esc(m.descripcion || (x ? 'Hoja de Excel' : 'Documento PDF'))}</small></span><svg viewBox="0 0 24 24"><path d="M12 4v12M7 11l5 5 5-5M5 20h14"/></svg></button>`;
 }
 function vistaMateriales() {
   const mats = DATA.materiales.filter(m => m.disponible);
-  view.innerHTML = `<span class="mc__eyebrow">Descargas del curso</span>
-    <div class="mc__sech" style="margin-top:4px"><h2 class="mc__h">Materiales</h2><span class="mc__chip">${mats.length}</span></div>
-    ${mats.length ? `<div class="mc__mats">${mats.map(mat).join('')}</div>` : '<div class="mc__card mc__empty"><h2>Sin materiales por ahora</h2><p>Cuando se publiquen las guías y herramientas del curso, aparecerán aquí para descargar.</p></div>'}`;
+  view.innerHTML = `<div class="mc__sh"><div><span>Descargas del curso</span><h2 class="mc__h">Materiales</h2></div><b>${mats.length}</b></div>
+    ${mats.length ? `<div class="mc__ms">${mats.map(mat).join('')}</div>` : '<div class="mc__card mc__empty"><h2>Sin materiales por ahora</h2><p>Cuando se publiquen las guías y herramientas del curso, aparecerán aquí para descargar.</p></div>'}`;
   ligarVista();
+}
+
+// ─── Certificado ────────────────────────────────────────────────────────────
+const ESTADOS_MX = ['Aguascalientes','Baja California','Baja California Sur','Campeche','Chiapas','Chihuahua','Ciudad de México','Coahuila','Colima','Durango','Estado de México','Guanajuato','Guerrero','Hidalgo','Jalisco','Michoacán','Morelos','Nayarit','Nuevo León','Oaxaca','Puebla','Querétaro','Quintana Roo','San Luis Potosí','Sinaloa','Sonora','Tabasco','Tamaulipas','Tlaxcala','Veracruz','Yucatán','Zacatecas','Fuera de México'];
+let CERT_EDITAR = false;
+function vistaCertificado(msg) {
+  const d = DATA, ce = d.certificado || {}, so = d.solicitudCertificado, p = d.progreso;
+  const emitido = ce.estado === 'emitido' || so?.estado === 'emitido';
+  const pasos = `<div class="mc__card mc__pasos"><h3>Cómo funciona</h3>
+    <div class="mc__paso ${so || emitido ? 'ok' : ''}"><b>${so || emitido ? '✓' : '1'}</b><span>Envías tus datos tal como deben aparecer en el certificado.</span></div>
+    <div class="mc__paso ${so?.estado === 'en_proceso' || emitido ? 'ok' : ''}"><b>${so?.estado === 'en_proceso' || emitido ? '✓' : '2'}</b><span>Nuestro equipo revisa tu solicitud y emite el certificado con QR y folio.</span></div>
+    <div class="mc__paso ${emitido ? 'ok' : ''}"><b>${emitido ? '✓' : '3'}</b><span>Te llega a tu correo y lo verás aquí.</span></div>
+    <div class="mc__rowstat"><span>Avance del curso</span><b>${p.porcentaje}%</b></div></div>`;
+  let cuerpo;
+  if (emitido) {
+    cuerpo = `<div class="mc__cfh"><i>${I.cert}</i><div><h2>Tu certificado está listo</h2><p>${ce.folio ? `Folio <b>${esc(ce.folio)}</b> · ` : ''}con QR verificable.</p></div></div>
+      ${ce.url ? `<a class="mc__btn mc__btn--g" style="width:100%" href="${esc(ce.url)}" target="_blank" rel="noopener">${I.cert} Ver mi certificado</a>` : `<div class="mc__card mc__estado"><p style="color:var(--mc-soft)">Te enviamos tu certificado por correo. Si no lo encuentras, escríbenos por WhatsApp.</p></div>`}`;
+  } else if (so && !CERT_EDITAR) {
+    const txt = ({ pendiente: 'Recibimos tu solicitud', en_proceso: 'Tu certificado está en proceso', rechazado: 'Necesitamos revisar tus datos' })[so.estado] || 'Recibimos tu solicitud';
+    cuerpo = `<div class="mc__cfh"><i>${I.cert}</i><div><h2>${txt}</h2><p>Enviada el ${esc(fecha(so.fechaSolicitud))}. Te avisaremos por correo y WhatsApp cuando esté emitido.</p></div></div>
+      <div class="mc__card mc__estado"><dl>
+        <dt>Nombre en el certificado</dt><dd><b>${esc(so.nombreCompleto)}</b></dd>
+        <dt>WhatsApp</dt><dd>${esc(so.whatsapp || '—')}</dd>
+        <dt>Ubicación</dt><dd>${esc([so.ciudad, so.estadoRep].filter(Boolean).join(', ') || '—')}</dd>
+        <dt>Correo</dt><dd>${esc(USER.email || '—')}</dd>
+      </dl>
+      ${so.estado !== 'en_proceso' ? '<button type="button" class="mc__btn mc__btn--l mc__btn--sm" id="mc-cert-editar">Corregir mis datos</button>' : ''}</div>`;
+  } else {
+    const v = so || {};
+    cuerpo = `<div class="mc__cfh"><i>${I.cert}</i><div><h2>Solicitar mi certificado</h2><p>Escribe tu nombre exactamente como quieres que aparezca. Se emite con QR verificable y folio único.</p></div></div>
+      <form class="mc__card mc__form" id="mc-cert-form" novalidate>
+        <label class="mc__field">Nombre completo para el certificado<input id="cf-nombre" autocomplete="name" maxlength="120" value="${esc(v.nombreCompleto || USER.displayName || '')}" placeholder="Ej. María González Ramírez" required><small>Revisa acentos y mayúsculas: así se imprimirá.</small></label>
+        <div class="mc__grid2">
+          <label class="mc__field">WhatsApp<input id="cf-wa" type="tel" inputmode="tel" autocomplete="tel" maxlength="20" value="${esc(v.whatsapp || '')}" placeholder="10 dígitos" required></label>
+          <label class="mc__field">Correo<input value="${esc(USER.email || '')}" disabled></label>
+          <label class="mc__field">Estado<select id="cf-estado" required><option value="">Selecciona…</option>${ESTADOS_MX.map(e => `<option ${v.estadoRep === e ? 'selected' : ''}>${e}</option>`).join('')}</select></label>
+          <label class="mc__field">Ciudad o municipio <span class="mc__opt">(opcional)</span><input id="cf-ciudad" maxlength="80" value="${esc(v.ciudad || '')}" autocomplete="address-level2"></label>
+        </div>
+        <label class="mc__field">Ocupación <span class="mc__opt">(opcional)</span><input id="cf-ocup" maxlength="80" placeholder="Ej. Productor, estudiante, MVZ"></label>
+        <label class="mc__field">Comentarios <span class="mc__opt">(opcional)</span><textarea id="cf-com" maxlength="400" placeholder="Algo que debamos saber para tu certificado"></textarea></label>
+        ${msg ? `<p class="mc__msg" role="alert">${esc(msg)}</p>` : ''}
+        <button class="mc__btn mc__btn--g" style="width:100%" type="submit" id="cf-enviar">${I.cert} ${so ? 'Guardar cambios' : 'Enviar solicitud'}</button>
+        ${CERT_EDITAR ? '<button type="button" class="mc__btn mc__btn--l" style="width:100%;margin-top:8px" id="cf-cancelar">Cancelar</button>' : ''}
+      </form>`;
+  }
+  view.innerHTML = `<div class="mc__sh"><div><span>${esc(d.curso.nombre)}</span><h2 class="mc__h">Mi certificado</h2></div><b>${estadoCertTexto()}</b></div>
+    <div class="mc__cf"><div>${cuerpo}</div><aside class="mc__aside">${pasos}</aside></div>`;
+  ligarVista();
+  const ed = $('#mc-cert-editar'); if (ed) ed.onclick = () => { CERT_EDITAR = true; vistaCertificado(); };
+  const ca = $('#cf-cancelar'); if (ca) ca.onclick = () => { CERT_EDITAR = false; vistaCertificado(); };
+  const f = $('#mc-cert-form');
+  if (f) f.onsubmit = async (ev) => {
+    ev.preventDefault();
+    const nombre = $('#cf-nombre').value.trim(), wa = $('#cf-wa').value.trim(), est = $('#cf-estado').value;
+    if (nombre.split(/\s+/).filter(Boolean).length < 2) return vistaCertificadoErr('Escribe tu nombre completo (nombre y apellidos).');
+    if (wa.replace(/\D/g, '').length < 10) return vistaCertificadoErr('Escribe un WhatsApp de 10 dígitos.');
+    if (!est) return vistaCertificadoErr('Selecciona tu estado.');
+    const b = $('#cf-enviar'); b.disabled = true; b.textContent = 'Enviando…';
+    try {
+      const r = await api('/alumno/curso/' + encodeURIComponent(SLUG) + '/certificado/solicitar', { method: 'POST', body: {
+        nombreCompleto: nombre, whatsapp: wa, estado: est, ciudad: $('#cf-ciudad').value, ocupacion: $('#cf-ocup').value, comentarios: $('#cf-com').value } });
+      DATA.solicitudCertificado = r.solicitud; CERT_EDITAR = false;
+      toast('¡Listo! Recibimos tu solicitud de certificado');
+      pintarNav('certificado'); vistaCertificado();
+    } catch (e) { b.disabled = false; b.textContent = 'Enviar solicitud'; vistaCertificadoErr(e.message || 'No pudimos enviar tu solicitud'); }
+  };
+  function vistaCertificadoErr(m) {
+    const vals = { n: $('#cf-nombre')?.value, w: $('#cf-wa')?.value, e: $('#cf-estado')?.value, c: $('#cf-ciudad')?.value, o: $('#cf-ocup')?.value, t: $('#cf-com')?.value };
+    vistaCertificado(m);
+    if (vals.n != null) { $('#cf-nombre').value = vals.n; $('#cf-wa').value = vals.w; $('#cf-estado').value = vals.e; $('#cf-ciudad').value = vals.c; $('#cf-ocup').value = vals.o; $('#cf-com').value = vals.t; }
+  }
 }
 
 // ─── Cuenta ─────────────────────────────────────────────────────────────────
@@ -1723,9 +1931,9 @@ function vistaCuenta() {
     <dt>Curso</dt><dd>${esc(d.curso.nombre)}</dd>
     <dt>Adquirido</dt><dd>${d.acceso?.fechaCompra ? esc(fecha(d.acceso.fechaCompra)) : '—'}</dd>
   </dl></div>
-  <div class="mc__sec mc__card mc__cert"><div><span class="mc__chip ${ce.estado === 'emitido' ? 'mc__chip--ok' : 'mc__chip--pend'}">${I.cert} Certificado ${ce.estado === 'emitido' ? 'emitido' : 'pendiente'}</span>
-    <p>${ce.estado === 'emitido' ? `Folio <b>${esc(ce.folio || '')}</b>, con QR verificable.` : 'Tu certificado se emite conforme a las condiciones del curso y te llegará por correo.'}</p></div>
-    ${ce.estado === 'emitido' && ce.url ? `<a class="mc__btn mc__btn--p mc__btn--sm" href="${esc(ce.url)}" target="_blank" rel="noopener">Ver certificado</a>` : ''}</div>
+  <div class="mc__sec mc__card mc__cert"><div><span class="mc__chip ${ce.estado === 'emitido' ? 'mc__chip--ok' : 'mc__chip--pend'}">${I.cert} Certificado: ${estadoCertTexto()}</span>
+    <p>${ce.estado === 'emitido' ? `Folio <b>${esc(ce.folio || '')}</b>, con QR verificable.` : 'Solicítalo con tus datos y te lo enviamos por correo.'}</p></div>
+    <button type="button" class="mc__btn mc__btn--p mc__btn--sm" data-ir="certificado">${ce.estado === 'emitido' ? 'Ver certificado' : 'Ir a mi certificado'}</button></div>
   <div class="mc__sec mc__card mc__cert"><div><b>¿Necesitas ayuda?</b><p>Compras, facturas, acceso o cualquier duda del curso.</p></div>
     <a class="mc__btn mc__btn--l mc__btn--sm" href="${WA}?text=${encodeURIComponent('Hola, soy alumno de ' + (NOMBRES[SLUG] || 'un curso') + ' y necesito ayuda')}" target="_blank" rel="noopener">${I.wa} WhatsApp</a></div>
   <div class="mc__sec" style="display:flex;gap:10px;flex-wrap:wrap">
@@ -1777,7 +1985,7 @@ async function vistaClase(id) {
       v.addEventListener('loadedmetadata', () => { if (SEG && SEG.pos > 5 && SEG.pos < v.duration - 10) v.currentTime = SEG.pos; });
       v.addEventListener('ended', () => guardar(true));
       pl.innerHTML = ''; pl.appendChild(v); SEG.video = v;
-    } else pl.innerHTML = `<iframe src="${esc(src.url)}" title="${esc(cl.titulo)}" allow="autoplay; encrypted-media; fullscreen; picture-in-picture" allowfullscreen></iframe>`;
+    } else pl.innerHTML = `<iframe src="${esc(src.url)}" title="${esc(cl.titulo)}" loading="lazy" allow="accelerometer; gyroscope; autoplay; encrypted-media; picture-in-picture; fullscreen" allowfullscreen referrerpolicy="strict-origin-when-cross-origin"></iframe>`;
     SEG.t = setInterval(() => {
       if (!SEG || document.hidden || (SEG.video && SEG.video.paused)) return;
       SEG.ses++; if (SEG.video) SEG.pos = Math.floor(SEG.video.currentTime || 0);
