@@ -1226,7 +1226,7 @@ actualizarPreciosDesdeFirestore();
 .mc__top{flex:none;display:flex;align-items:center;gap:10px;padding:10px 18px;padding-top:calc(10px + env(safe-area-inset-top));background:var(--card);border-bottom:1px solid var(--line)}
 .mc__brand{display:flex;align-items:center;gap:10px;min-width:0;flex:1}
 .mc__brand>div{min-width:0}
-.mc__brand img{width:34px;height:34px;border-radius:9px;flex:none}
+.mc__brand img{width:auto;height:36px;max-width:112px;border-radius:0;object-fit:contain;flex:none}
 .mc__brand b{display:block;font-size:.92rem;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
 .mc__brand small{display:block;font-size:.66rem;color:var(--a);text-transform:uppercase;letter-spacing:.1em;font-weight:700;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
 .mc__me{display:inline-flex;align-items:center;justify-content:center;width:38px;height:38px;border-radius:50%;background:linear-gradient(135deg,var(--a),var(--a2));color:#fff;font-weight:800;font-size:.85rem;box-shadow:0 4px 12px rgba(18,66,26,.25);flex:none}
@@ -1428,7 +1428,7 @@ actualizarPreciosDesdeFirestore();
 .mc__li span:first-child{width:30px;height:30px;border-radius:9px;display:grid;place-items:center;background:#edf1ec;font-weight:700;font-size:.76rem}
 .mc__li.vista span:first-child{background:var(--a);color:#fff}
 .mc__li small{display:block;color:var(--mute);font-size:.72rem;margin-top:2px}
-.mc__nav{display:flex;gap:10px;flex-wrap:wrap;margin-top:14px}.mc__nav .mc__btn{flex:1 1 150px}
+.mc__nav{display:flex;gap:10px;flex-wrap:wrap;margin-top:14px}.mc__nav .mc__btn{flex:1 1 auto;white-space:nowrap;letter-spacing:0;word-spacing:normal;padding:0 16px}
 /* ── Certificado ── */
 .mc__cf{display:grid;grid-template-columns:minmax(0,1fr) 296px;gap:24px;align-items:start}
 .mc__cfh{position:relative;overflow:hidden;padding:24px;border-radius:20px;background:linear-gradient(140deg,var(--dark),#1b5e20);color:#fff;display:flex;gap:16px;align-items:center;margin-bottom:16px}
@@ -1495,7 +1495,7 @@ actualizarPreciosDesdeFirestore();
 
 <div class="mc solo" id="mi-curso" hidden role="dialog" aria-modal="true" aria-labelledby="mc-titulo">
   <header class="mc__top">
-    <div class="mc__brand"><img src="/assets/brand/logo-vp-300.png" alt="" width="34" height="34" onerror="this.style.display='none'"><b id="mc-titulo">Mi curso</b></div>
+    <div class="mc__brand"><img src="/assets/brand/logo-vp-300.png" alt="" onerror="this.style.display='none'"><b id="mc-titulo">Mi curso</b></div>
     <button type="button" class="mc__me" id="mc-me" aria-label="Mi cuenta" hidden></button>
     <button type="button" class="mc__x" id="mc-cerrar" aria-label="Volver a la página del curso"><svg viewBox="0 0 24 24"><path d="M6 6l12 12M18 6 6 18"/></svg><span>Volver</span></button>
   </header>
@@ -1913,7 +1913,9 @@ const ESTADOS_MX = ['Aguascalientes','Baja California','Baja California Sur','Ca
 let CERT_EDITAR = false;
 function vistaCertificado(msg) {
   const d = DATA, ce = d.certificado || {}, so = d.solicitudCertificado, p = d.progreso;
-  const emitido = ce.estado === 'emitido' || so?.estado === 'emitido';
+  const urlCert = (() => { const u = String(ce.url || '').trim(); if (!/^https?:\/\//i.test(u)) return '';
+    try { const x = new URL(u); return (!x.pathname || x.pathname === '/' || /^\/index\.html?$/i.test(x.pathname)) ? '' : u; } catch (_) { return ''; } })();
+  const emitido = (ce.estado === 'emitido' && (urlCert || so)) || so?.estado === 'emitido';
   const pasos = `<div class="mc__card mc__pasos"><span class="mc__eyebrow mute">Cómo funciona</span>
     <div class="mc__paso ${so || emitido ? 'ok' : ''}"><b>${so || emitido ? '✓' : '1'}</b><span>Envías tus datos tal como deben aparecer en el certificado.</span></div>
     <div class="mc__paso ${so?.estado === 'en_proceso' || emitido ? 'ok' : ''}"><b>${so?.estado === 'en_proceso' || emitido ? '✓' : '2'}</b><span>Nuestro equipo revisa tu solicitud y emite el certificado con QR y folio.</span></div>
@@ -1922,7 +1924,7 @@ function vistaCertificado(msg) {
   let cuerpo;
   if (emitido) {
     cuerpo = `<div class="mc__cfh"><i>${I.cert}</i><div><h2>Tu certificado está listo</h2><p>${ce.folio ? `Folio <b>${esc(ce.folio)}</b> · ` : ''}con QR verificable.</p></div></div>
-      ${ce.url ? `<a class="mc__btn mc__btn--g" style="width:100%" href="${esc(ce.url)}" target="_blank" rel="noopener">${I.cert} Ver mi certificado</a>` : `<div class="mc__card mc__estado"><p style="color:var(--soft)">Te enviamos tu certificado por correo. Si no lo encuentras, escríbenos por WhatsApp.</p></div>`}`;
+      ${urlCert ? `<a class="mc__btn mc__btn--g" style="width:100%" href="${esc(urlCert)}" target="_blank" rel="noopener">${I.cert} Ver mi certificado</a>` : `<div class="mc__card mc__estado"><p style="color:var(--soft)">Te enviamos tu certificado por correo. Si no lo encuentras, escríbenos por WhatsApp.</p></div>`}`;
   } else if (so && !CERT_EDITAR) {
     const txt = ({ pendiente: 'Recibimos tu solicitud', en_proceso: 'Tu certificado está en proceso', rechazado: 'Necesitamos revisar tus datos' })[so.estado] || 'Recibimos tu solicitud';
     cuerpo = `<div class="mc__cfh"><i>${I.cert}</i><div><h2>${txt}</h2><p>${fecha(so.fechaSolicitud) ? 'Enviada el ' + esc(fecha(so.fechaSolicitud)) + '. ' : ''}Te avisaremos por correo y WhatsApp cuando esté emitido.</p></div></div>
