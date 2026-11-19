@@ -1222,6 +1222,45 @@ actualizarPreciosDesdeFirestore();
 :where(.mc) svg{width:18px;height:18px;flex:none;fill:none;stroke:currentColor;stroke-width:1.9;stroke-linecap:round;stroke-linejoin:round}
 :where(.mc) :is(h1,h2,h3){margin:0;font-family:'Archivo','Inter',system-ui,sans-serif;letter-spacing:-.02em;line-height:1.15}
 :where(.mc) p{margin:0}
+/* ── Materiales · cards editoriales ── */
+.mc__mhero{position:relative;overflow:hidden;border-radius:22px;padding:24px 22px 22px;color:#fff;background:radial-gradient(120% 90% at 100% 0%,rgba(240,180,41,.22),transparent 55%),linear-gradient(150deg,#123f1a 0%,#0c2410 62%,#081a0b 100%);box-shadow:0 18px 40px -22px rgba(12,36,16,.7)}
+.mc__mhero h2{font-family:'Archivo',sans-serif;font-size:clamp(1.55rem,5.4vw,2.05rem);line-height:1.04;letter-spacing:-.025em;font-weight:800;max-width:15ch}
+.mc__mhero p{margin-top:10px;font-size:.9rem;line-height:1.5;color:rgba(255,255,255,.78);max-width:46ch}
+.mc__mhero .chk{display:flex;gap:9px;align-items:flex-start;margin-top:16px;font-size:.8rem;font-weight:700;color:rgba(255,255,255,.92)}
+.mc__mhero .chk svg{width:16px;height:16px;flex:none;color:#7ee08a;margin-top:1px}
+.mc__mhero .box{margin-top:18px;padding:15px 16px;border-radius:16px;background:rgba(255,255,255,.07);border:1px solid rgba(255,255,255,.12);display:flex;align-items:center;gap:14px}
+.mc__mhero .box b{font-family:'Archivo',sans-serif;font-size:2rem;font-weight:800;line-height:1;letter-spacing:-.02em}
+.mc__mhero .box small{display:block;font-size:.6rem;letter-spacing:.16em;text-transform:uppercase;color:rgba(255,255,255,.6);font-weight:800}
+.mc__mhero .box span{font-size:.78rem;color:rgba(255,255,255,.75)}
+.mc__mhead{margin:26px 0 4px}
+.mc__mhead h2{font-family:'Archivo',sans-serif;font-size:1.32rem;font-weight:800;letter-spacing:-.02em}
+.mc__mhead p{font-size:.84rem;color:var(--soft);margin-top:4px;line-height:1.45}
+.mc__mcount{display:block;margin:16px 0 10px;font-size:.78rem;font-weight:800;color:var(--mute)}
+.mc__mgrid{display:grid;grid-template-columns:1fr;gap:16px}
+@media(min-width:700px){.mc__mgrid{grid-template-columns:repeat(2,minmax(0,1fr))}}
+@media(min-width:1180px){.mc__mgrid{grid-template-columns:repeat(3,minmax(0,1fr))}}
+.mc__mc{display:flex;flex-direction:column;background:var(--card);border:1.5px solid rgba(19,31,22,.13);border-radius:22px;overflow:hidden;box-shadow:0 10px 26px -20px rgba(12,36,16,.5);transition:transform .18s,box-shadow .18s}
+.mc__mc:hover{transform:translateY(-2px);box-shadow:0 18px 34px -20px rgba(12,36,16,.55)}
+.mc__mcov{position:relative;display:block;width:100%;aspect-ratio:16/9;background:linear-gradient(135deg,#e8efe6,#d5e3d3);overflow:hidden}
+.mc__mcov img{width:100%;height:100%;object-fit:cover;display:block;transition:transform .5s}
+.mc__mc:hover .mc__mcov img{transform:scale(1.035)}
+.mc__mcov .tag{position:absolute;top:14px;left:14px;padding:7px 13px;border-radius:999px;background:#fff;color:#1c2a20;font-family:ui-monospace,'SFMono-Regular',Menlo,monospace;font-size:.62rem;font-weight:700;letter-spacing:.14em;text-transform:uppercase;box-shadow:0 4px 12px -6px rgba(0,0,0,.35)}
+.mc__mcov .num{position:absolute;top:14px;right:14px;padding:7px 12px;border-radius:999px;background:rgba(12,36,16,.82);color:#fff;font-family:ui-monospace,'SFMono-Regular',Menlo,monospace;font-size:.62rem;font-weight:700;letter-spacing:.14em;backdrop-filter:blur(6px)}
+.mc__mcov .ph{position:absolute;inset:0;display:grid;place-items:center;color:var(--a)}
+.mc__mcov .ph svg{width:46px;height:46px;opacity:.55}
+.mc__mbody{display:flex;flex-direction:column;flex:1;padding:20px 22px 20px}
+.mc__mcat{font-family:ui-monospace,'SFMono-Regular',Menlo,monospace;font-size:.66rem;font-weight:700;letter-spacing:.16em;text-transform:uppercase;color:var(--a)}
+.mc__mbody h3{font-family:'Archivo',sans-serif;font-size:1.13rem;line-height:1.28;font-weight:800;letter-spacing:-.012em;margin-top:9px;color:var(--ink)}
+.mc__mbody p{font-size:.88rem;line-height:1.55;color:var(--soft);margin-top:9px;flex:1}
+.mc__mfol{display:flex;align-items:center;gap:8px;margin-top:18px;padding-top:16px;border-top:1px solid var(--line);font-size:.76rem;color:var(--mute)}
+.mc__mfol svg{width:15px;height:15px;flex:none}
+.mc__mfoot{display:flex;align-items:center;justify-content:space-between;gap:12px;margin-top:16px}
+.mc__mown{display:inline-flex;align-items:center;gap:8px;font-size:.88rem;font-weight:800;color:var(--ink)}
+.mc__mown svg{width:17px;height:17px;stroke-width:2.6}
+.mc__mopen{min-height:46px;padding:0 30px;border-radius:13px;background:linear-gradient(180deg,#22874a,#176b38);color:#fff;font-weight:800;font-size:.92rem;box-shadow:0 10px 20px -10px rgba(23,107,56,.8);transition:transform .15s,filter .15s}
+.mc__mopen:hover{filter:brightness(1.06)}.mc__mopen:active{transform:scale(.97)}
+.mc__mnote{display:flex;gap:10px;margin-top:18px;padding:14px 16px;border:1px solid var(--line);border-radius:16px;background:var(--card);font-size:.78rem;line-height:1.5;color:var(--mute)}
+.mc__mnote svg{width:17px;height:17px;flex:none;color:var(--a);margin-top:1px}
 /* ── Topbar ── */
 .mc__top{flex:none;display:flex;align-items:center;gap:10px;padding:10px 18px;padding-top:calc(10px + env(safe-area-inset-top));background:var(--card);border-bottom:1px solid var(--line)}
 .mc__brand{display:flex;align-items:center;gap:10px;min-width:0;flex:1}
@@ -1529,6 +1568,8 @@ const CFG = { apiKey: "AIzaSyDQXkIo-BWPIeLZzHeTMN986WMDn0TrTJU", authDomain: "vi
 const PORTADAS_BASE = 'https://cdn.jsdelivr.net/gh/teccapitalweb/VISIONPECUARIA2@main/portadas/';
 const PORTADAS = { 'gallinas-de-postura': 'gallinas-', 'embutidos-artesanales': 'embutidos-' };
 const portadaDe = (i) => (PORTADAS[SLUG] && i >= 0 && i < 5) ? PORTADAS_BASE + PORTADAS[SLUG] + (i + 1) + '.jpg' : '';
+const portadaMat = (i) => (PORTADAS[SLUG] && i >= 0 && i < 5) ? PORTADAS_BASE + 'mat-' + PORTADAS[SLUG] + (i + 1) + '.jpg' : '';
+const TIPO_MAT = { pptx: 'Presentación', ppt: 'Presentación', pdf: 'Documento', docx: 'Documento', doc: 'Documento', xlsx: 'Excel', xls: 'Excel', zip: 'Paquete' };
 const NOMBRES = { 'gallinas-de-postura': 'Gallinas de Postura', 'embutidos-artesanales': 'Embutidos Artesanales' };
 const PORTADA = document.querySelector('video[poster]')?.getAttribute('poster') || document.querySelector('meta[property="og:image"]')?.content || '';
 const WA = 'https://wa.me/522361049715';
@@ -1897,14 +1938,42 @@ function vistaClases() {
 // ─── Materiales ─────────────────────────────────────────────────────────────
 function mat(m) {
   const x = m.tipo === 'xlsx' || m.tipo === 'excel';
-  return `<button class="mc__m" type="button" data-mat="${esc(m.id)}"><i class="${x ? 'x' : ''}">${I.doc}</i><span><b>${esc(m.titulo)}</b><small>${esc(m.descripcion || (x ? 'Hoja de Excel' : 'Documento PDF'))}</small></span>${I.descarga}</button>`;
+  return `<button class="mc__m" type="button" data-mat="${esc(m.id)}"><i class="${x ? 'x' : ''}">${I.doc}</i><span><b>${esc(m.titulo)}</b><small>${esc(m.categoria ? (TIPO_MAT[m.tipo] || 'Documento') + ' · ' + m.categoria : (TIPO_MAT[m.tipo] || (x ? 'Hoja de Excel' : 'Documento PDF')))}</small></span>${I.descarga}</button>`;
+}
+function matCard(m, i) {
+  const cov = portadaMat(i);
+  const tipo = TIPO_MAT[m.tipo] || 'Documento';
+  return `<article class="mc__mc">
+    <button type="button" class="mc__mcov" data-mat="${esc(m.id)}" aria-label="Abrir ${esc(m.titulo)}">
+      ${cov ? `<img src="${cov}" alt="" loading="lazy">` : `<span class="ph">${I.doc}</span>`}
+      <span class="tag">${esc(tipo)}</span><span class="num">${String(i + 1).padStart(2, '0')}</span>
+    </button>
+    <div class="mc__mbody">
+      ${m.categoria ? `<span class="mc__mcat">${esc(m.categoria)}</span>` : ''}
+      <h3>${esc(m.titulo)}</h3>
+      ${m.descripcion ? `<p>${esc(m.descripcion)}</p>` : '<p></p>'}
+      <div class="mc__mfol">${I.doc} Material del curso · ${esc(NOMBRES[SLUG] || 'Visión Pecuaria')}</div>
+      <div class="mc__mfoot"><span class="mc__mown">${I.check} Incluido</span>
+        <button type="button" class="mc__mopen" data-mat="${esc(m.id)}">Abrir</button></div>
+    </div>
+  </article>`;
 }
 function vistaMateriales() {
-  const mats = DATA.materiales.filter(m => m.disponible);
-  view.innerHTML = `<span class="mc__eyebrow">Recursos incluidos</span>
-    <div class="mc__sh" style="margin-top:4px"><h2>Material del curso</h2><b>${mats.length} ${mats.length === 1 ? 'recurso' : 'recursos'}</b></div>
-    <p class="mc__msnota">Abre cada archivo para verlo en pantalla o descargarlo. Los materiales adicionales se habilitan junto con las clases.</p>
-    ${mats.length ? `<div class="mc__ms">${mats.map(mat).join('')}</div>` : '<div class="mc__card mc__empty"><h2>Sin materiales por ahora</h2><p>Cuando se publiquen las guías y herramientas del curso, aparecerán aquí para descargar.</p></div>'}`;
+  const todos = DATA.materiales;
+  const mats = todos.filter(m => m.disponible);
+  const tipos = [...new Set(mats.map(m => (TIPO_MAT[m.tipo] || 'Documento').toLowerCase()))];
+  const resumen = tipos.length === 1 ? (tipos[0] === 'presentación' ? 'presentaciones' : tipos[0] + 's') : 'archivos';
+  view.innerHTML = `<section class="mc__mhero">
+      <h2>Materiales para aplicar desde hoy.</h2>
+      <p>Las presentaciones de cada módulo del curso, listas para descargar y conservar.</p>
+      <div class="chk">${I.check} Incluidos con tu curso, sin costo extra.</div>
+      <div class="box"><b>${mats.length}</b><div><small>Tu biblioteca</small><span>${mats.length === 1 ? 'recurso disponible' : resumen + ' disponibles'}</span></div></div>
+    </section>
+    <div class="mc__mhead"><h2>Elige un recurso práctico</h2><p>Ábrelos en pantalla o descárgalos para estudiar a tu ritmo.</p></div>
+    ${mats.length ? `<span class="mc__mcount">${mats.length} ${mats.length === 1 ? 'material' : 'materiales'}</span>
+      <div class="mc__mgrid">${mats.map(m => matCard(m, todos.indexOf(m))).join('')}</div>
+      <div class="mc__mnote">${I.escudo}<span>Cada archivo se entrega solo a tu cuenta con acceso al curso. Puedes abrirlo las veces que quieras.</span></div>`
+    : '<div class="mc__card mc__empty"><h2>Sin materiales por ahora</h2><p>Cuando se publiquen las guías y herramientas del curso, aparecerán aquí para descargar.</p></div>'}`;
   ligarVista();
 }
 
