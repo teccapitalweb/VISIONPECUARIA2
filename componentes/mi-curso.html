@@ -46,6 +46,32 @@
 .mc__mopen:hover{filter:brightness(1.06)}.mc__mopen:active{transform:scale(.97)}
 .mc__mnote{display:flex;gap:10px;margin-top:18px;padding:14px 16px;border:1px solid var(--line);border-radius:16px;background:var(--card);font-size:.78rem;line-height:1.5;color:var(--mute)}
 .mc__mnote svg{width:17px;height:17px;flex:none;color:var(--a);margin-top:1px}
+/* ── Visor de materiales (dentro del aula) ── */
+.mcrv{position:fixed;inset:0;z-index:2147483600;display:flex;flex-direction:column;background:#0a1a0e;color:#eef6ef;opacity:0;transition:opacity .2s ease;font-family:'Inter',system-ui,-apple-system,sans-serif}
+.mcrv.on{opacity:1}
+.mcrv__bar{display:flex;align-items:center;gap:12px;padding:10px 14px;padding-top:max(10px,env(safe-area-inset-top));background:#0f2614;border-bottom:1px solid rgba(255,255,255,.08);min-height:58px}
+.mcrv__ic{width:36px;height:36px;border-radius:10px;display:grid;place-items:center;background:rgba(240,180,41,.16);color:#f0b429;flex:none}
+.mcrv__ic svg{width:18px;height:18px;fill:none;stroke:currentColor;stroke-width:2;stroke-linecap:round;stroke-linejoin:round}
+.mcrv__id{min-width:0;flex:1}
+.mcrv__id strong{display:block;font:700 14.5px/1.25 'Archivo','Inter',sans-serif;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.mcrv__id small{display:block;font-size:11.5px;color:#a9c1ae;margin-top:2px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.mcrv__tools{display:flex;align-items:center;gap:6px;flex:none}
+.mcrv__b{height:36px;min-width:36px;padding:0 10px;border-radius:10px;border:1px solid rgba(255,255,255,.14);background:rgba(255,255,255,.05);color:#eef6ef;display:inline-flex;align-items:center;justify-content:center;gap:6px;font:600 12.5px 'Inter',sans-serif;cursor:pointer;text-decoration:none}
+.mcrv__b:hover{background:rgba(255,255,255,.12)}
+.mcrv__b svg{width:16px;height:16px;fill:none;stroke:currentColor;stroke-width:2;stroke-linecap:round;stroke-linejoin:round}
+.mcrv__b--x{background:#eef6ef;color:#0a1a0e;border-color:#eef6ef}
+.mcrv__b--x:hover{background:#fff}
+.mcrv__stage{flex:1;position:relative;overflow:hidden;background:#16261a}
+.mcrv__frame{width:100%;height:100%;border:0;display:block;background:#fff}
+.mcrv__st{position:absolute;inset:0;display:grid;place-items:center;text-align:center;padding:24px}
+.mcrv__st>div{max-width:420px}
+.mcrv__st h3{margin:14px 0 6px;font:700 18px 'Archivo','Inter',sans-serif;color:#fff}
+.mcrv__st p{margin:0;color:#b4c8b8;font-size:13.5px;line-height:1.55}
+.mcrv__st .mcrv__b{margin-top:16px;height:42px;padding:0 18px}
+.mcrv__spin{width:34px;height:34px;margin:0 auto;border-radius:50%;border:3px solid rgba(255,255,255,.15);border-top-color:#f0b429;animation:mcrvspin .8s linear infinite}
+@keyframes mcrvspin{to{transform:rotate(360deg)}}
+body.mcrv-lock{overflow:hidden}
+@media(max-width:700px){.mcrv__bar{flex-wrap:wrap;gap:8px}.mcrv__id{flex-basis:calc(100% - 60px)}.mcrv__tools{width:100%;justify-content:space-between}.mcrv__b span{display:none}}
 /* ── Topbar ── */
 .mc__top{flex:none;display:flex;align-items:center;gap:10px;padding:10px 18px;padding-top:calc(10px + env(safe-area-inset-top));background:var(--card);border-bottom:1px solid var(--line)}
 .mc__brand{display:flex;align-items:center;gap:10px;min-width:0;flex:1}
@@ -420,7 +446,7 @@ window.addEventListener('popstate', () => {
   const enCurso = location.hash.startsWith('#mi-curso');
   if (ABIERTO && !enCurso) cerrar(true); else if (!ABIERTO && enCurso) abrir(); else if (ABIERTO) render();
 });
-document.addEventListener('keydown', (e) => { if (e.key === 'Escape' && ABIERTO) cerrar(); });
+document.addEventListener('keydown', (e) => { if (e.key === 'Escape' && ABIERTO && !document.getElementById('mc-visor')) cerrar(); });
 
 onAuthStateChanged(auth, (u) => { USER = u; DATA = null; if (ABIERTO) render(); });
 if (location.hash.startsWith('#mi-curso') || /[?&]mi-curso\b/.test(location.search)) abrir();
@@ -645,15 +671,72 @@ function ligarCalifica() {
     } catch (e) { b.disabled = false; toast(e.message || 'No pudimos guardar tu valoración', true); }
   };
 }
+// ─── Visor de materiales dentro del aula (Office incrustado / PDF) ─────────
+const RV_OFFICE = 'https://view.officeapps.live.com/op/embed.aspx?src=';
+const RV_FORMATO = { pdf: 'PDF', docx: 'Documento de Word', doc: 'Documento de Word', xlsx: 'Libro de Excel', xls: 'Libro de Excel', pptx: 'Presentación', ppt: 'Presentación', zip: 'Paquete' };
+const RV_I = {
+  file: '<svg viewBox="0 0 24 24"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/><polyline points="14 2 14 8 20 8"/></svg>',
+  down: '<svg viewBox="0 0 24 24"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/><polyline points="7 10 12 15 17 10"/><line x1="12" y1="15" x2="12" y2="3"/></svg>',
+  full: '<svg viewBox="0 0 24 24"><path d="M8 3H5a2 2 0 0 0-2 2v3"/><path d="M21 8V5a2 2 0 0 0-2-2h-3"/><path d="M3 16v3a2 2 0 0 0 2 2h3"/><path d="M16 21h3a2 2 0 0 0 2-2v-3"/></svg>',
+  x: '<svg viewBox="0 0 24 24"><line x1="18" y1="6" x2="6" y2="18"/><line x1="6" y1="6" x2="18" y2="18"/></svg>'
+};
+let RV = null;
+function cerrarVisor() {
+  if (!RV) return; const c = RV; RV = null;
+  if (document.fullscreenElement && document.exitFullscreen) document.exitFullscreen().catch(() => {});
+  c.root.classList.remove('on'); document.body.classList.remove('mcrv-lock');
+  document.removeEventListener('keydown', c.onKey, true);
+  setTimeout(() => c.root.remove(), 200);
+}
+function abrirVisor(id) {
+  const m = (DATA?.materiales || []).find(x => x.id === id); if (!m) return;
+  if (RV) cerrarVisor();
+  const formato = RV_FORMATO[m.tipo] || 'Archivo';
+  const sub = ['Materiales del curso', m.categoria, formato].filter(Boolean).join(' · ');
+  const root = document.createElement('div');
+  root.className = 'mcrv'; root.id = 'mc-visor'; root.setAttribute('role', 'dialog'); root.setAttribute('aria-modal', 'true'); root.setAttribute('aria-label', m.titulo);
+  root.innerHTML = `<header class="mcrv__bar"><span class="mcrv__ic">${RV_I.file}</span>
+    <div class="mcrv__id"><strong>${esc(m.titulo)}</strong><small>${esc(sub)}</small></div>
+    <div class="mcrv__tools">
+      <a class="mcrv__b" id="mcrv-dl" hidden title="Descargar" aria-label="Descargar">${RV_I.down}<span>Descargar</span></a>
+      <button type="button" class="mcrv__b" id="mcrv-full" title="Pantalla completa" aria-label="Pantalla completa">${RV_I.full}</button>
+      <button type="button" class="mcrv__b mcrv__b--x" id="mcrv-x" aria-label="Cerrar">${RV_I.x}<span>Cerrar</span></button>
+    </div></header><div class="mcrv__stage"></div>`;
+  document.body.appendChild(root); document.body.classList.add('mcrv-lock');
+  requestAnimationFrame(() => root.classList.add('on'));
+  const ctx = { root, onKey: (e) => { if (e.key === 'Escape' && !document.fullscreenElement) { e.stopPropagation(); cerrarVisor(); } } };
+  document.addEventListener('keydown', ctx.onKey, true); RV = ctx;
+  const stage = root.querySelector('.mcrv__stage');
+  const estado = (html) => { stage.innerHTML = `<div class="mcrv__st"><div>${html}</div></div>`; };
+  root.querySelector('#mcrv-x').onclick = cerrarVisor;
+  root.querySelector('#mcrv-full').onclick = () => {
+    if (document.fullscreenElement) { document.exitFullscreen && document.exitFullscreen(); return; }
+    if (root.requestFullscreen) root.requestFullscreen().catch(() => {});
+    else if (ctx.viewerUrl) window.open(ctx.viewerUrl, '_blank', 'noopener');   // iPhone: Safari no da pantalla completa a páginas
+  };
+  estado('<div class="mcrv__spin"></div><h3>Preparando tu material…</h3><p>Un momento, estamos verificando tu acceso.</p>');
+  api('/alumno/curso/' + encodeURIComponent(SLUG) + '/material', { method: 'POST', body: { materialId: id } }).then(r => {
+    if (RV !== ctx) return;
+    const dl = root.querySelector('#mcrv-dl'); dl.href = r.url; dl.hidden = false; dl.setAttribute('download', ''); dl.target = '_blank'; dl.rel = 'noopener';
+    const office = /^(pptx?|docx?|xlsx?)$/.test(m.tipo);
+    if (!office && m.tipo !== 'pdf') { estado(`<h3>Listo para descargar</h3><p>Este tipo de archivo se abre mejor en tu equipo.</p><a class="mcrv__b" href="${esc(r.url)}" target="_blank" rel="noopener" download>${RV_I.down}<span style="display:inline">Descargar</span></a>`); return; }
+    ctx.viewerUrl = office ? RV_OFFICE + encodeURIComponent(r.url) : r.url;
+    stage.innerHTML = `<div class="mcrv__st" id="mcrv-wait"><div><div class="mcrv__spin"></div><h3>Abriendo el visor…</h3><p>${office ? 'Los archivos de Office tardan unos segundos en mostrarse.' : 'Cargando el documento.'}</p></div></div>
+      <iframe class="mcrv__frame" title="${esc(m.titulo)}" src="${esc(ctx.viewerUrl)}" allowfullscreen></iframe>`;
+    const frame = stage.querySelector('iframe'), wait = stage.querySelector('#mcrv-wait');
+    frame.style.visibility = 'hidden';
+    const listo = () => { frame.style.visibility = ''; if (wait.isConnected) wait.remove(); };
+    frame.addEventListener('load', listo); setTimeout(listo, 12000);
+  }).catch(e => {
+    if (RV !== ctx) return;
+    estado(`<h3>No pudimos abrirlo</h3><p>${esc(e.message || 'Intenta de nuevo en unos segundos.')}</p><button type="button" class="mcrv__b" id="mcrv-retry"><span style="display:inline">Intentar de nuevo</span></button>`);
+    const b = root.querySelector('#mcrv-retry'); if (b) b.onclick = () => abrirVisor(id);
+  });
+}
 function ligarVista() {
   view.querySelectorAll('[data-clase]').forEach(b => b.onclick = () => irClase(b.dataset.clase));
   view.querySelectorAll('[data-ir]').forEach(b => b.onclick = () => ir(b.dataset.ir));
-  view.querySelectorAll('[data-mat]').forEach(b => b.onclick = async () => {
-    const w = window.open('', '_blank');
-    try { const r = await api('/alumno/curso/' + encodeURIComponent(SLUG) + '/material', { method: 'POST', body: { materialId: b.dataset.mat } });
-      if (w) { w.opener = null; w.location.href = r.url; } else location.href = r.url; }
-    catch (e) { if (w) w.close(); toast(e.message || 'No pudimos abrir el material', true); }
-  });
+  view.querySelectorAll('[data-mat]').forEach(b => b.onclick = () => abrirVisor(b.dataset.mat));
   ligarCalifica();
 }
 
