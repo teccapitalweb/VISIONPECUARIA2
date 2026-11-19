@@ -31,11 +31,41 @@
 <!-- Stripe.js para el embedded checkout -->
 <script src="https://js.stripe.com/v3/"></script>
 
-<!--
-  === FACEBOOK PIXEL ===
-  Pega aquí el snippet del Pixel cuando Britney tenga el ID:
-  fbq('init','TU_PIXEL_ID'); fbq('track','PageView');
--->
+<!-- === META PIXEL (Visión Pecuaria) === -->
+<script>
+!function(f,b,e,v,n,t,s){if(f.fbq)return;n=f.fbq=function(){n.callMethod?
+n.callMethod.apply(n,arguments):n.queue.push(arguments)};if(!f._fbq)f._fbq=n;
+n.push=n;n.loaded=!0;n.version='2.0';n.queue=[];t=b.createElement(e);t.async=!0;
+t.src=v;s=b.getElementsByTagName(e)[0];s.parentNode.insertBefore(t,s)}
+(window,document,'script','https://connect.facebook.net/en_US/fbevents.js');
+fbq('init','2380050672518265');
+fbq('track','PageView');
+fbq('track','ViewContent',{content_name:'gallinas-de-postura',content_ids:['gallinas-de-postura'],content_type:'product'});
+
+/* Ayudantes del píxel. Van en try/catch: un fallo aquí nunca debe frenar el pago. */
+window.vpPx = {
+  _ic: false,
+  precio: function(){
+    var el = document.querySelector('[data-precio-actual]');
+    var n = el ? parseFloat(String(el.textContent).replace(/[^0-9.]/g,'')) : NaN;
+    return n > 0 ? n : 650;
+  },
+  /* Se llama cuando el formulario de Stripe ya quedó montado. */
+  checkoutMontado: function(slug){
+    try {
+      var valor = this.precio();
+      /* Marca de "esta pestaña inició un pago": curso-acceso.html la usa para
+         reportar la compra una sola vez, solo al volver de Stripe. */
+      sessionStorage.setItem('vp_px_checkout', JSON.stringify({slug: slug, value: valor, t: Date.now()}));
+      if (!this._ic) {
+        this._ic = true;
+        fbq('track','InitiateCheckout',{value: valor, currency:'MXN', content_name: slug, content_ids:[slug], content_type:'product'});
+      }
+    } catch(e) {}
+  }
+};
+</script>
+<!-- === /META PIXEL === -->
 
 <style>
   :root{
@@ -2358,6 +2388,7 @@
         cont.style.minHeight = '500px';
       }
       checkoutInstance.mount('#checkout-container');
+      if (window.vpPx) window.vpPx.checkoutMontado(COURSE_SLUG);   // Meta Pixel: InitiateCheckout
       console.log('[VP checkout] ✅ Stripe montado correctamente');
       opening = false;
       return;

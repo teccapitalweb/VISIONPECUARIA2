@@ -9,6 +9,41 @@
 
 <link rel="icon" type="image/x-icon" href="/assets/brand/favicon.ico">
 
+<!-- === META PIXEL (Visión Pecuaria) · solo reporta la compra === -->
+<script>
+!function(f,b,e,v,n,t,s){if(f.fbq)return;n=f.fbq=function(){n.callMethod?
+n.callMethod.apply(n,arguments):n.queue.push(arguments)};if(!f._fbq)f._fbq=n;
+n.push=n;n.loaded=!0;n.version='2.0';n.queue=[];t=b.createElement(e);t.async=!0;
+t.src=v;s=b.getElementsByTagName(e)[0];s.parentNode.insertBefore(t,s)}
+(window,document,'script','https://connect.facebook.net/en_US/fbevents.js');
+fbq('init','2380050672518265');
+
+/* Reporta Purchase UNA sola vez por pago:
+   · solo si esta pestaña viene de montar el checkout en la landing (marca vp_px_checkout),
+   · solo después de que el backend confirmó el pago,
+   · nunca al volver a entrar a ver clases ni al abrir el enlace en otro momento. */
+window.vpPxCompra = function(sessionId, slug){
+  try {
+    if (!sessionId) return;
+    var raw = sessionStorage.getItem('vp_px_checkout');
+    if (!raw) return;
+    var info = {};
+    try { info = JSON.parse(raw) || {}; } catch(_) {}
+    if (info.slug && slug && info.slug !== slug) return;
+    sessionStorage.removeItem('vp_px_checkout');
+    var clave = 'vp_px_compra_' + sessionId;
+    if (localStorage.getItem(clave)) return;
+    localStorage.setItem(clave, '1');
+    var s = slug || info.slug || '';
+    var datos = {content_name: s, content_ids: [s], content_type: 'product'};
+    var valor = Number(info.value);
+    if (valor > 0) { datos.value = valor; datos.currency = 'MXN'; }
+    fbq('track','Purchase', datos, {eventID: sessionId});
+  } catch(e) {}
+};
+</script>
+<!-- === /META PIXEL === -->
+
 <style>
 @import url('https://fonts.googleapis.com/css2?family=Instrument+Serif:ital@0;1&family=Geist:wght@400;500;600;700;800;900&display=swap');
 
@@ -925,6 +960,7 @@ async function verificarAcceso() {
 
     // 1) El backend confirmó el pago → acceso normal
     if (resultado.status === 'valido') {
+      if (sessionIdFromUrl && window.vpPxCompra) window.vpPxCompra(sessionIdFromUrl, SLUG);   // Meta Pixel: Purchase
       procesarInscripcion(resultado.data, sessionId, { verificado: true });
       return;
     }
