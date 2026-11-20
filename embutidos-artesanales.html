@@ -129,6 +129,15 @@
   #modal-checkout #checkout-container{width:100%!important;max-width:none!important;margin:0!important;padding:0!important}
 }
 </style>
+<style id="ahorro-claro">
+/* Etiqueta de ahorro: estrella + «Ahorras $X pesos» + pastilla «N% OFF», cada parte en una sola línea */
+.pricing-save,.cta-save-badge{gap:6px 10px!important;padding:8px 10px 8px 16px!important;max-width:100%;line-height:1.2;flex-wrap:wrap;justify-content:center;border-radius:22px!important;box-sizing:border-box}
+.pricing-save svg,.cta-save-badge svg{flex:none}
+.pricing-save .save-txt,.cta-save-badge .save-txt{white-space:nowrap;font-weight:600}
+.pricing-save .save-txt b,.cta-save-badge .save-txt b{font-weight:800}
+.pricing-save .save-off,.cta-save-badge .save-off{flex:none;white-space:nowrap;padding:5px 11px;border-radius:999px;background:#fff;color:#047857;font-weight:800;font-size:.86em;letter-spacing:.02em}
+@media (max-width:360px){.pricing-save,.cta-save-badge{font-size:.84rem!important;gap:8px!important;padding-left:12px!important}}
+</style>
 </head>
 
 <body data-slug="embutidos-artesanales">
@@ -193,7 +202,7 @@
         </div>
         <div class="pricing-save">
           <svg viewBox="0 0 24 24" fill="currentColor"><path d="M12 2l3 6 6 1-4.5 4.5 1 6-5.5-3-5.5 3 1-6L3 9l6-1z"/></svg>
-          Ahorras <b data-ahorro>$600 pesos</b> · <b data-descuento>57%</b> OFF
+          <span class="save-txt">Ahorras <b data-ahorro>$600 pesos</b></span><span class="save-off"><b data-descuento>57%</b> OFF</span>
         </div>
       </div>
 
@@ -215,12 +224,6 @@
             <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"/></svg>
           </span>
           Certificado IPCIL con QR
-        </li>
-        <li>
-          <span class="perk-check">
-            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"/></svg>
-          </span>
-          Grupo VIP de WhatsApp
         </li>
       </ul>
 
@@ -392,11 +395,6 @@
           <div class="incluye-ico"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="8" r="7"/><polyline points="8.21 13.89 7 23 12 20 17 23 15.79 13.88"/></svg></div>
           <h4>Certificado IPCIL</h4>
           <p>Reconocimiento oficial con QR verificable y folio único emitido por IPCIL.</p>
-        </div>
-        <div class="incluye-card">
-          <div class="incluye-ico"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 11.5a8.38 8.38 0 01-.9 3.8 8.5 8.5 0 01-7.6 4.7 8.38 8.38 0 01-3.8-.9L3 21l1.9-5.7a8.38 8.38 0 01-.9-3.8 8.5 8.5 0 014.7-7.6 8.38 8.38 0 013.8-.9h.5a8.48 8.48 0 018 8v.5z"/></svg></div>
-          <h4>Grupo VIP WhatsApp</h4>
-          <p>Networking directo con otros productores y respuesta a dudas técnicas.</p>
         </div>
         <div class="incluye-card">
           <div class="incluye-ico"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M22 11.08V12a10 10 0 11-5.93-9.14"/><polyline points="22 4 12 14.01 9 11.01"/></svg></div>
@@ -572,7 +570,7 @@
           <span>¿Qué material recibiré exactamente?</span>
           <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"><polyline points="6 9 12 15 18 9"/></svg>
         </summary>
-        <p>Recibes: 6 videoclases on-demand, recetario en PDF, calculadora Excel para costeo, acceso permanente al aula, certificado IPCIL con QR verificable y folio, y entrada al grupo VIP de WhatsApp.</p>
+        <p>Recibes: 6 videoclases on-demand, recetario en PDF, calculadora Excel para costeo, acceso permanente al aula, y certificado IPCIL con QR verificable y folio.</p>
       </details>
       <details class="faq-item">
         <summary>
@@ -609,7 +607,7 @@
       <div class="cta-price-now"><span data-precio-actual-full>$450</span> <small>MXN</small></div>
       <div class="cta-save-badge">
         <svg viewBox="0 0 24 24" fill="currentColor"><path d="M12 2l3 6 6 1-4.5 4.5 1 6-5.5-3-5.5 3 1-6L3 9l6-1z"/></svg>
-        Ahorras <b data-ahorro>$600 pesos</b> · <span data-descuento>57%</span> OFF
+        <span class="save-txt">Ahorras <b data-ahorro>$600 pesos</b></span><span class="save-off"><span data-descuento>57%</span> OFF</span>
       </div>
       <p class="cta-sub">Pago único · Acceso inmediato desde tu casa</p>
 
@@ -617,7 +615,6 @@
         <li><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"/></svg>6 videoclases on-demand para siempre</li>
         <li><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"/></svg>Recetario PDF + Excel de costeo</li>
         <li><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"/></svg>Certificado IPCIL con QR verificable</li>
-        <li><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"/></svg>Grupo VIP de WhatsApp</li>
       </ul>
 
       <div class="cta-guarantee-box">
