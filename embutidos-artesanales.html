@@ -2318,66 +2318,104 @@ document.addEventListener('visibilitychange', () => { if (document.hidden && SEG
 window.addEventListener('pagehide', () => { if (SEG && SEG.ses > SEG.env) guardar(false); });
 </script>
 <!-- MI-CURSO:FIN -->
-<!-- regalo:inicio · popup del curso de regalo (fuente: componentes/regalo.html) -->
+<!-- regalo:inicio · oferta del curso de regalo (fuente: componentes/regalo.html) -->
 <style id="vp-regalo-css">
-#vp-regalo{position:fixed;inset:0;z-index:2147483000;display:none;align-items:center;justify-content:center;padding:18px;background:rgba(6,18,9,.72);backdrop-filter:blur(4px);-webkit-backdrop-filter:blur(4px);font-family:inherit}
-#vp-regalo.on{display:flex;animation:vprg-f .25s ease}
-#vp-regalo .vprg{position:relative;width:100%;max-width:420px;max-height:calc(100dvh - 36px);overflow:auto;border-radius:22px;padding:30px 24px 22px;text-align:center;color:#fff;background:radial-gradient(120% 90% at 50% 0%,#2e7d32 0%,#12421a 55%,#0c2410 100%);border:1px solid rgba(240,180,41,.45);box-shadow:0 30px 70px -20px rgba(0,0,0,.7);animation:vprg-p .35s cubic-bezier(.2,.9,.3,1.2)}
-#vp-regalo .vprg__x{position:absolute;top:10px;right:10px;width:36px;height:36px;border:0;border-radius:50%;background:rgba(255,255,255,.12);color:#fff;font-size:20px;line-height:1;cursor:pointer}
-#vp-regalo .vprg__ico{width:74px;height:74px;margin:0 auto 12px;border-radius:50%;display:grid;place-items:center;background:linear-gradient(180deg,#f7c948,#d99a06);box-shadow:0 10px 26px -8px rgba(240,180,41,.7);animation:vprg-b 1.8s ease-in-out infinite}
-#vp-regalo .vprg__ico svg{width:38px;height:38px;stroke:#231a02;fill:none;stroke-width:1.9;stroke-linecap:round;stroke-linejoin:round}
-#vp-regalo .vprg__k{display:inline-block;padding:5px 12px;border-radius:999px;background:rgba(240,180,41,.18);color:#f7c948;font-size:11.5px;font-weight:800;letter-spacing:.12em;text-transform:uppercase}
-#vp-regalo h3{margin:12px 0 8px;font-size:clamp(22px,6.2vw,27px);line-height:1.15;font-weight:800;color:#fff}
-#vp-regalo h3 em{font-style:normal;color:#f7c948}
-#vp-regalo p{margin:0 auto;max-width:330px;font-size:14.5px;line-height:1.5;color:rgba(255,255,255,.86)}
-#vp-regalo .vprg__t{margin:16px auto 4px;display:inline-flex;align-items:baseline;gap:8px;padding:9px 18px;border-radius:14px;background:rgba(0,0,0,.28);border:1px solid rgba(255,255,255,.14)}
-#vp-regalo .vprg__t b{font-size:30px;font-weight:800;letter-spacing:.04em;font-variant-numeric:tabular-nums;color:#fff}
-#vp-regalo .vprg__t span{font-size:12px;color:rgba(255,255,255,.7)}
-#vp-regalo .vprg__cta{display:block;width:100%;margin-top:16px;padding:17px 16px;border:0;border-radius:14px;cursor:pointer;font:inherit;font-size:18px;font-weight:900;letter-spacing:.05em;text-transform:uppercase;color:#231a02;background:linear-gradient(180deg,#ffd95a,#f0b429 55%,#d99a06);box-shadow:0 14px 30px -10px rgba(240,180,41,.85),inset 0 1px 0 rgba(255,255,255,.6);animation:vprg-l 1.6s ease-in-out infinite}
-#vp-regalo .vprg__no{margin-top:12px;background:none;border:0;color:rgba(255,255,255,.6);font:inherit;font-size:13px;text-decoration:underline;cursor:pointer}
+#vp-regalo{position:fixed;inset:0;z-index:2147483000;display:none;align-items:center;justify-content:center;padding:16px;background:rgba(15,23,18,.62);font-family:'Inter',system-ui,-apple-system,'Segoe UI',sans-serif}
+#vp-regalo.on{display:flex;animation:vprg-f .2s ease}
+#vp-regalo .vprg{position:relative;width:100%;max-width:400px;max-height:calc(100dvh - 32px);overflow:auto;border-radius:18px;background:#fff;color:#16211a;text-align:left;box-shadow:0 24px 60px -18px rgba(0,0,0,.55);animation:vprg-p .28s ease}
+#vp-regalo .vprg__x{position:absolute;top:10px;right:10px;z-index:2;width:34px;height:34px;border:0;border-radius:50%;background:rgba(255,255,255,.92);color:#16211a;font-size:19px;line-height:1;cursor:pointer;box-shadow:0 2px 8px rgba(0,0,0,.18)}
+#vp-regalo .vprg__img{position:relative;height:168px;background:#1d3b25 center/cover no-repeat}
+#vp-regalo .vprg__img::after{content:"";position:absolute;inset:0;background:linear-gradient(180deg,rgba(0,0,0,0) 45%,rgba(0,0,0,.5) 100%)}
+#vp-regalo .vprg__tag{position:absolute;left:16px;bottom:14px;z-index:1;padding:5px 10px;border-radius:6px;background:#fff;color:#14532d;font-size:11px;font-weight:800;letter-spacing:.09em;text-transform:uppercase}
+#vp-regalo .vprg__b{padding:20px 22px 20px}
+#vp-regalo .vprg__k{margin:0 0 6px;font-size:11.5px;font-weight:700;letter-spacing:.1em;text-transform:uppercase;color:#b45309}
+#vp-regalo h3{margin:0 0 8px;font-family:'Archivo','Inter',system-ui,sans-serif;font-size:23px;line-height:1.15;font-weight:800;letter-spacing:-.01em;color:#16211a}
+#vp-regalo p.vprg__t{margin:0;font-size:14.5px;line-height:1.5;color:#4b5a50}
+#vp-regalo .vprg__r{display:flex;align-items:center;justify-content:space-between;gap:12px;margin:16px 0 0;padding:12px 14px;border-radius:12px;background:#f4f6f1;border:1px solid #e3e8df}
+#vp-regalo .vprg__r span{font-size:13px;line-height:1.3;color:#4b5a50}
+#vp-regalo .vprg__r b{font-family:'Archivo','Inter',system-ui,sans-serif;font-size:24px;font-weight:800;font-variant-numeric:tabular-nums;letter-spacing:.02em;color:#16211a;white-space:nowrap}
+#vp-regalo .vprg__cta{display:block;width:100%;margin-top:16px;padding:16px;border:0;border-radius:12px;cursor:pointer;font-family:'Archivo','Inter',system-ui,sans-serif;font-size:17px;font-weight:800;letter-spacing:.04em;text-transform:uppercase;color:#fff;background:#166534;box-shadow:0 10px 22px -10px rgba(22,101,52,.8);transition:background .15s,transform .15s}
+#vp-regalo .vprg__cta:hover{background:#14532d;transform:translateY(-1px)}
+#vp-regalo .vprg__no{display:block;margin:12px auto 0;background:none;border:0;color:#6b7a70;font:inherit;font-size:13px;cursor:pointer;text-decoration:underline;text-underline-offset:3px}
+/* Cinta «ganaste»: queda arriba mientras la persona sigue viendo la página */
+#vp-gano{position:fixed;top:0;left:0;right:0;z-index:2147482000;display:none;align-items:center;justify-content:center;gap:10px 16px;flex-wrap:wrap;padding:9px 14px;background:#14532d;color:#fff;font-family:'Inter',system-ui,-apple-system,'Segoe UI',sans-serif;font-size:13.5px;line-height:1.35;text-align:center;box-shadow:0 6px 18px -8px rgba(0,0,0,.5)}
+html.vp-gano #vp-gano{display:flex}
+html.vp-gano body{padding-top:var(--vp-gano-h,56px)}
+html.vp-gano .hdr{top:var(--vp-gano-h,56px)}
+#vp-gano b{font-weight:800}
+#vp-gano .vpg__r{font-variant-numeric:tabular-nums;font-weight:800;color:#fde68a;white-space:nowrap}
+#vp-gano .vpg__btn{flex:none;padding:8px 14px;border:0;border-radius:999px;background:#fff;color:#14532d;font:inherit;font-size:13px;font-weight:800;cursor:pointer;white-space:nowrap}
 @keyframes vprg-f{from{opacity:0}to{opacity:1}}
-@keyframes vprg-p{from{opacity:0;transform:translateY(18px) scale(.94)}to{opacity:1;transform:none}}
-@keyframes vprg-b{0%,100%{transform:translateY(0) rotate(0)}50%{transform:translateY(-5px) rotate(-4deg)}}
-@keyframes vprg-l{0%,100%{transform:scale(1)}50%{transform:scale(1.03)}}
-@media (prefers-reduced-motion:reduce){#vp-regalo *,#vp-regalo{animation:none!important}}
+@keyframes vprg-p{from{opacity:0;transform:translateY(12px)}to{opacity:1;transform:none}}
+@media (prefers-reduced-motion:reduce){#vp-regalo,#vp-regalo *{animation:none!important;transition:none!important}}
 </style>
+<div id="vp-gano" role="status" aria-live="polite">
+  <span><b>¡Felicidades! Ganaste el Curso de Sexaje Avícola.</b> Inscríbete en los próximos <span class="vpg__r" id="vpg-reloj">30:00</span> para recibirlo.</span>
+  <button type="button" class="vpg__btn" data-action="inscribir">Inscribirme</button>
+</div>
 <div id="vp-regalo" role="dialog" aria-modal="true" aria-labelledby="vprg-h" hidden>
   <div class="vprg">
     <button type="button" class="vprg__x" data-vprg-cerrar aria-label="Cerrar">&times;</button>
-    <div class="vprg__ico"><svg viewBox="0 0 24 24"><path d="M20 12v9H4v-9M2 7h20v5H2zM12 22V7M12 7H7.5a2.5 2.5 0 1 1 0-5C11 2 12 7 12 7zM12 7h4.5a2.5 2.5 0 1 0 0-5C13 2 12 7 12 7z"/></svg></div>
-    <span class="vprg__k">Regalo por tiempo limitado</span>
-    <h3 id="vprg-h">Llévate <em>GRATIS</em> el Curso de Sexaje Avícola</h3>
-    <p>Inscríbete ahora a <b id="vprg-curso">este curso</b> y te regalamos el <b>Curso de Sexaje Avícola</b>. Reclámalo antes de que se acabe el tiempo:</p>
-    <div class="vprg__t"><b id="vprg-reloj">30:00</b><span>minutos</span></div>
-    <button type="button" class="vprg__cta" id="vprg-cta" data-action="inscribir">¡Reclamar mi regalo!</button>
-    <button type="button" class="vprg__no" data-vprg-cerrar>Ahora no, gracias</button>
+    <div class="vprg__img" id="vprg-img"><span class="vprg__tag">Curso de regalo</span></div>
+    <div class="vprg__b">
+      <p class="vprg__k">Oferta por tiempo limitado</p>
+      <h3 id="vprg-h">Llévate gratis el Curso de Sexaje Avícola</h3>
+      <p class="vprg__t">Al inscribirte a <b id="vprg-curso">este curso</b> te lo regalamos. Aparta tu lugar y sigue revisando el temario con calma.</p>
+      <div class="vprg__r"><span>La oferta termina en</span><b id="vprg-reloj">30:00</b></div>
+      <button type="button" class="vprg__cta" id="vprg-cta">Quiero mi lugar</button>
+      <button type="button" class="vprg__no" data-vprg-cerrar>Ahora no</button>
+    </div>
   </div>
 </div>
 <script>
-/* Popup de regalo: al entrar a la página del curso ofrece el Curso de Sexaje Avícola gratis durante 30 minutos.
-   El botón usa el mismo data-action="inscribir" que el resto de la página: abre el pago de siempre, sin tocar su lógica. */
+/* Oferta del curso de regalo (30 minutos). «Quiero mi lugar» NO abre el pago: cierra el aviso, lanza confeti y deja
+   arriba una cinta de «ganaste» con el reloj, para que la persona siga viendo temario, ponente y lo que incluye.
+   El pago solo se abre cuando ella toca «Inscribirme» (mismo data-action de la página; su lógica no se toca). */
 (function(){
   var NOMBRES={'gallinas-de-postura':'Manejo de Gallinas de Postura','embutidos-artesanales':'Embutidos Artesanales'};
   var slug=(location.pathname.split('/').pop()||'').replace(/\.html$/,'');
-  var caja=document.getElementById('vp-regalo'); if(!caja||!NOMBRES[slug])return;
-  var CLAVE='vp_regalo_fin_'+slug, DURA=30*60*1000, fin=0, tic=null;
-  try{fin=parseInt(localStorage.getItem(CLAVE)||'0',10)||0}catch(e){}
+  var caja=document.getElementById('vp-regalo'),cinta=document.getElementById('vp-gano'),raiz=document.documentElement;
+  if(!caja||!cinta||!NOMBRES[slug])return;
+  var CLAVE='vp_regalo_fin_'+slug,GANO='vp_regalo_gano_'+slug,DURA=30*60*1000,fin=0,tic=null;
+  function lee(k){try{return localStorage.getItem(k)}catch(e){return null}}
+  function pon(k,v){try{localStorage.setItem(k,v)}catch(e){}}
+  fin=parseInt(lee(CLAVE)||'0',10)||0;
   function enAula(){var q=new URLSearchParams(location.search);if(q.get('pago')==='ok'||location.hash==='#mi-curso')return true;var a=document.getElementById('mi-curso');return !!(a&&!a.hidden)}
   function pagoAbierto(){var m=document.getElementById('modal-checkout');return !!(m&&(m.hasAttribute('data-open')||/(^| )(open|is-open|active|show)( |$)/.test(m.className)))}
-  function pinta(){var r=Math.max(0,fin-Date.now()),m=Math.floor(r/60000),s=Math.floor(r%60000/1000);document.getElementById('vprg-reloj').textContent=(m<10?'0':'')+m+':'+(s<10?'0':'')+s;if(r<=0)cerrar()}
-  function cerrar(){caja.classList.remove('on');caja.hidden=true;document.documentElement.style.overflow='';if(tic){clearInterval(tic);tic=null}}
+  function reloj(){var r=Math.max(0,fin-Date.now()),m=Math.floor(r/60000),s=Math.floor(r%60000/1000);return (m<10?'0':'')+m+':'+(s<10?'0':'')+s}
+  function alto(){raiz.style.setProperty('--vp-gano-h',cinta.offsetHeight+'px')}
+  function cinta_(on){raiz.classList.toggle('vp-gano',!!on);if(on){alto()}}
+  function pinta(){
+    var t=reloj();document.getElementById('vprg-reloj').textContent=t;document.getElementById('vpg-reloj').textContent=t;
+    if(fin<=Date.now()){cerrar();cinta_(false);if(tic){clearInterval(tic);tic=null}return}
+    if(raiz.classList.contains('vp-gano')&&enAula())cinta_(false);
+  }
+  function corre(){if(!tic){pinta();tic=setInterval(pinta,1000)}}
+  function cerrar(){caja.classList.remove('on');caja.hidden=true;raiz.style.overflow=''}
   function abrir(){
     if(enAula()||pagoAbierto())return;
-    if(!fin){fin=Date.now()+DURA;try{localStorage.setItem(CLAVE,String(fin))}catch(e){}}
-    if(fin<=Date.now())return;                      // el tiempo ya se acabó: no se vuelve a ofrecer
+    if(!fin){fin=Date.now()+DURA;pon(CLAVE,String(fin))}
+    if(fin<=Date.now())return;                       // el tiempo ya se acabó: no se vuelve a ofrecer
+    if(lee(GANO)==='1'){cinta_(true);corre();return} // ya lo reclamó: solo la cinta
     document.getElementById('vprg-curso').textContent=NOMBRES[slug];
-    caja.hidden=false;caja.classList.add('on');document.documentElement.style.overflow='hidden';pinta();tic=setInterval(pinta,1000);
+    document.getElementById('vprg-img').style.backgroundImage="url('https://cdn.jsdelivr.net/gh/teccapitalweb/VISIONPECUARIA2@main/portadas/gallinas-2.jpg')";
+    caja.hidden=false;caja.classList.add('on');raiz.style.overflow='hidden';corre();
   }
+  function confeti(){try{
+    if(matchMedia('(prefers-reduced-motion: reduce)').matches||document.getElementById('vp-confeti'))return;
+    var c=document.createElement('canvas');c.id='vp-confeti';c.style.cssText='position:fixed;inset:0;width:100%;height:100%;pointer-events:none;z-index:2147483646';document.body.appendChild(c);
+    var x=c.getContext('2d'),d=Math.min(window.devicePixelRatio||1,2);c.width=innerWidth*d;c.height=innerHeight*d;
+    var col=['#f0b429','#166534','#22a05a','#ffffff','#f97316','#fde68a'],P=[];
+    for(var i=0;i<150;i++)P.push({x:Math.random()*c.width,y:-Math.random()*c.height*.7,vx:(Math.random()-.5)*5*d,vy:(2+Math.random()*4)*d,w:(6+Math.random()*6)*d,h:(5+Math.random()*6)*d,r:Math.random()*6.28,vr:(Math.random()-.5)*.3,c:col[i%col.length]});
+    var t0=performance.now();(function f(t){var k=(t-t0)/4500;x.clearRect(0,0,c.width,c.height);x.globalAlpha=k>.75?Math.max(0,1-(k-.75)*4):1;
+      P.forEach(function(p){p.x+=p.vx;p.y+=p.vy;p.vy+=.03*d;p.r+=p.vr;x.save();x.translate(p.x,p.y);x.rotate(p.r);x.fillStyle=p.c;x.fillRect(-p.w/2,-p.h/2,p.w,p.h);x.restore()});
+      if(k<1)requestAnimationFrame(f);else c.remove()})(t0);
+  }catch(e){}}
   caja.addEventListener('click',function(e){if(e.target===caja||e.target.closest('[data-vprg-cerrar]'))cerrar()});
-  /* En window y en captura: el listener de pago de la página corta la propagación desde document */
-  window.addEventListener('click',function(e){if(e.target.closest&&e.target.closest('#vprg-cta')){try{sessionStorage.setItem('vp_regalo_reclamado',slug)}catch(_){}cerrar()}},true);
+  document.getElementById('vprg-cta').addEventListener('click',function(){pon(GANO,'1');cerrar();cinta_(true);corre();confeti();window.scrollTo({top:0,behavior:'smooth'})});
   document.addEventListener('keydown',function(e){if(e.key==='Escape'&&caja.classList.contains('on'))cerrar()});
-  window.addEventListener('hashchange',function(){if(location.hash==='#mi-curso')cerrar()});
+  window.addEventListener('hashchange',function(){if(location.hash==='#mi-curso'){cerrar();cinta_(false)}});
+  window.addEventListener('resize',function(){if(raiz.classList.contains('vp-gano'))alto()});
   setTimeout(abrir,1500);
 })();
 </script>
