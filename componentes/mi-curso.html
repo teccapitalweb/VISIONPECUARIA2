@@ -281,24 +281,137 @@ body.mcrv-lock{overflow:hidden}
 .mc__li small{display:block;color:var(--mute);font-size:.72rem;margin-top:2px}
 .mc__nav{display:flex;gap:10px;flex-wrap:wrap;margin-top:14px}.mc__nav .mc__btn{flex:1 1 auto;white-space:nowrap;letter-spacing:0;word-spacing:normal;padding:0 16px}
 /* ── Certificado ── */
-.mc__cf{display:grid;grid-template-columns:minmax(0,1fr) 296px;gap:24px;align-items:start}
-.mc__cfh{position:relative;overflow:hidden;padding:24px;border-radius:20px;background:linear-gradient(140deg,var(--dark),#1b5e20);color:#fff;display:flex;gap:16px;align-items:center;margin-bottom:16px}
-.mc__cfh:after{content:'';position:absolute;right:-50px;top:-60px;width:200px;height:200px;border-radius:50%;background:rgba(240,180,41,.15)}
-.mc__cfh i{width:52px;height:52px;flex:none;display:grid;place-items:center;border-radius:16px;background:rgba(240,180,41,.2);color:var(--gold);font-style:normal}
-.mc__cfh i svg{width:25px;height:25px}
-.mc__cfh h2{color:#fff;font-size:1.2rem}
-.mc__cfh p{color:rgba(255,255,255,.78);font-size:.84rem;line-height:1.5;margin-top:4px}
-.mc__form{padding:20px}
-.mc__grid2{display:grid;grid-template-columns:1fr 1fr;gap:0 12px}
-.mc__estado{padding:20px;display:grid;gap:12px}
-.mc__estado dl{display:grid;grid-template-columns:150px 1fr;gap:8px 14px;margin:0;font-size:.86rem}
-.mc__estado dt{color:var(--mute)}.mc__estado dd{margin:0;word-break:break-word}
-.mc__pasos{padding:18px;display:grid;gap:12px}
-.mc__paso{display:flex;gap:11px;align-items:flex-start;font-size:.82rem;color:var(--soft);line-height:1.45}
-.mc__paso b{width:26px;height:26px;flex:none;display:grid;place-items:center;border-radius:50%;background:#edf1ec;color:var(--soft);font-size:.72rem}
-.mc__paso.ok b{background:var(--a);color:#fff}
-.mc__rowstat{display:flex;align-items:center;justify-content:space-between;gap:10px;padding-top:11px;border-top:1px solid var(--line);font-size:.82rem;color:var(--soft)}
-.mc__rowstat b{color:var(--ink)}
+.mc__cert {
+  --cert-padding: clamp(14px, 2vw, 22px);
+  width: 100%;
+  max-width: 960px;
+  margin-inline: auto;
+}
+.mc__cert-titulo {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  flex-wrap: wrap;
+  gap: 8px;
+  margin-bottom: 12px;
+}
+.mc__cert-titulo h1 { font-size: clamp(1.42rem, 4.5vw, 1.9rem); }
+.mc__cert-titulo .mc__chip { max-width: 100%; }
+.mc__cf {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) minmax(220px, .47fr);
+  gap: clamp(12px, 2vw, 20px);
+  align-items: start;
+}
+.mc__cert-card { min-width: 0; }
+.mc__cfh {
+  display: flex;
+  align-items: center;
+  gap: 11px;
+  padding: 14px var(--cert-padding);
+  border-bottom: 1px solid var(--line);
+  border-radius: 17px 17px 0 0;
+  background: var(--tint);
+}
+.mc__cfh i {
+  display: grid;
+  place-items: center;
+  flex: none;
+  width: 36px;
+  height: 36px;
+  border: 1px solid var(--line2);
+  border-radius: 10px;
+  color: var(--a2);
+  background: var(--card);
+}
+.mc__cfh h2 { font-size: clamp(1.03rem, 4vw, 1.23rem); }
+.mc__cfh p { margin-top: 3px; color: var(--soft); font-size: .8125rem; line-height: 1.4; }
+
+.mc__form, .mc__estado { display: grid; gap: 11px; padding: var(--cert-padding); }
+.mc__form .mc__field { font-size: .8125rem; gap: 4px; margin: 0; }
+.mc__form .mc__field :is(input, select, textarea) {
+  font-size: 16px;
+  font-weight: 500;
+  padding-inline: 10px;
+  border-radius: 9px;
+}
+.mc__form .mc__field :is(input, select) { height: 44px; }
+.mc__form .mc__field textarea { min-height: 68px; padding-block: 8px; }
+.mc__grid2 { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 10px; }
+.mc__cert-correo {
+  display: flex;
+  align-items: baseline;
+  justify-content: space-between;
+  flex-wrap: wrap;
+  gap: 2px 12px;
+  padding: 8px 10px;
+  margin: 0;
+  border-radius: 8px;
+  background: var(--bg);
+  font-size: .8125rem;
+}
+.mc__cert-correo dt { color: var(--soft); }
+.mc__cert-correo dd { margin: 0; min-width: 0; font-weight: 650; overflow-wrap: anywhere; }
+.mc__cert-detalle { border: 1px solid var(--line); border-radius: 10px; }
+.mc__cert-detalle summary {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 10px;
+  min-height: 44px;
+  padding: 6px 10px;
+  cursor: pointer;
+  list-style: none;
+  color: var(--a2);
+  font-size: .8375rem;
+  font-weight: 700;
+}
+.mc__cert-detalle summary::-webkit-details-marker { display: none; }
+.mc__cert-detalle summary::after {
+  content: '';
+  width: 7px;
+  height: 7px;
+  flex: none;
+  border-right: 2px solid currentColor;
+  border-bottom: 2px solid currentColor;
+  transform: translateY(-2px) rotate(45deg);
+  margin-right: 3px;
+}
+.mc__cert-detalle[open] summary::after { transform: translateY(2px) rotate(225deg); }
+.mc__cert-detalle summary:focus-visible { outline: 2px solid var(--a); outline-offset: -2px; border-radius: 9px; }
+.mc__cert-detalle > div { display: grid; gap: 9px; padding: 0 10px 10px; }
+.mc__cert-acciones { display: flex; flex-wrap: wrap; gap: 8px; }
+.mc__cert-acciones > .mc__btn { flex: 1 1 auto; }
+.mc__form .mc__msg { margin: 0; }
+
+.mc__estado dl {
+  display: grid;
+  grid-template-columns: minmax(0, .8fr) minmax(0, 1.2fr);
+  gap: 8px 12px;
+  margin: 0;
+  font-size: .86rem;
+}
+.mc__estado dt { color: var(--mute); }
+.mc__estado dd { margin: 0; overflow-wrap: anywhere; }
+.mc__pasos { padding: 12px var(--cert-padding); display: grid; gap: 9px; }
+.mc__pasos .mc__cert-detalle { border-width: 1px 0 0; border-radius: 0; }
+.mc__pasos .mc__cert-detalle summary { padding-inline: 0; }
+.mc__pasos .mc__cert-detalle > div { padding-inline: 0; padding-bottom: 2px; }
+.mc__paso { display: flex; gap: 8px; align-items: flex-start; font-size: .8rem; color: var(--soft); line-height: 1.4; }
+.mc__paso b {
+  width: 22px;
+  height: 22px;
+  flex: none;
+  display: grid;
+  place-items: center;
+  border-radius: 50%;
+  background: var(--tint);
+  color: var(--a2);
+  font-size: .72rem;
+}
+.mc__paso.ok b { background: var(--a); color: #fff; }
+.mc__rowstat { display: flex; align-items: center; justify-content: space-between; gap: 8px; font-size: .82rem; color: var(--soft); }
+.mc__rowstat b { color: var(--ink); font-variant-numeric: tabular-nums; }
 /* ── Cuenta ── */
 .mc__cuenta{padding:20px;display:grid;gap:10px}
 .mc__cuenta dl{display:grid;grid-template-columns:140px 1fr;gap:9px 16px;font-size:.86rem;margin:0}
@@ -330,15 +443,18 @@ body.mcrv-lock{overflow:hidden}
   .mc__banner{aspect-ratio:16/9;border-radius:16px}
   .mc__stats b{font-size:.76rem}.mc__stats small{font-size:.56rem}
   .mc__ms{grid-template-columns:1fr}
-  .mc__grid2{grid-template-columns:1fr}
-  .mc__cuenta dl,.mc__estado dl{grid-template-columns:1fr;gap:2px}.mc__cuenta dd,.mc__estado dd{margin-bottom:8px}
+  .mc__cuenta dl{grid-template-columns:1fr;gap:2px}.mc__cuenta dd{margin-bottom:8px}
   .mc__auth{padding:22px 16px;margin:8px auto}
   .mc__player{border-radius:12px}
   .mc__l{padding:13px 12px;grid-template-columns:42px minmax(0,1fr) auto}
   .mc__la .mc__chip span{display:none}
   .mc__la .mc__chip{padding:0 9px}
   .mc__next img{width:104px}
-  .mc__cfh{padding:18px;border-radius:16px}
+}
+@media (max-width: 355px) {
+  .mc__grid2 { grid-template-columns: minmax(0, 1fr); gap: 8px; }
+  .mc__estado dl { grid-template-columns: minmax(0, 1fr); gap: 2px; }
+  .mc__estado dd:not(:last-child) { margin-bottom: 5px; }
 }
 @media (max-width:360px){.mc__tab{font-size:.58rem}.mc__tab svg{width:19px;height:19px}}
 @media (prefers-reduced-motion:reduce){.mc *{animation:none!important;transition:none!important}}
@@ -520,11 +636,9 @@ body.mcrv-lock{overflow:hidden}
 .mc__panel, .mc__wa { padding: 20px; }
 .mc__wa { background: var(--tint); }
 .mc__field :is(input, select, textarea):focus { box-shadow: 0 0 0 3px var(--halo); }
-.mc .mc__mhero, .mc .mc__cfh {
+.mc .mc__mhero {
   background: linear-gradient(135deg, var(--dark), var(--a2));
 }
-.mc__cfh > div { position: relative; z-index: 1; }
-.mc__cfh i { color: var(--highlight); }
 .mc .mc__mcov { background: linear-gradient(120deg, var(--tint), var(--halo)); }
 .mc__mcov .tag { font-family: inherit; letter-spacing: .07em; }
 .mc__mgrid { grid-template-columns: repeat(auto-fill, minmax(min(100%, 226px), 1fr)); }
@@ -1232,24 +1346,27 @@ function vistaMateriales() {
 // ─── Certificado ────────────────────────────────────────────────────────────
 const ESTADOS_MX = ['Aguascalientes','Baja California','Baja California Sur','Campeche','Chiapas','Chihuahua','Ciudad de México','Coahuila','Colima','Durango','Estado de México','Guanajuato','Guerrero','Hidalgo','Jalisco','Michoacán','Morelos','Nayarit','Nuevo León','Oaxaca','Puebla','Querétaro','Quintana Roo','San Luis Potosí','Sinaloa','Sonora','Tabasco','Tamaulipas','Tlaxcala','Veracruz','Yucatán','Zacatecas','Fuera de México'];
 let CERT_EDITAR = false;
-function vistaCertificado(msg) {
+function vistaCertificado() {
   const d = DATA, ce = d.certificado || {}, so = d.solicitudCertificado, p = d.progreso;
   const urlCert = (() => { const u = String(ce.url || '').trim(); if (!/^https?:\/\//i.test(u)) return '';
     try { const x = new URL(u); return (!x.pathname || x.pathname === '/' || /^\/index\.html?$/i.test(x.pathname)) ? '' : u; } catch (_) { return ''; } })();
   const emitido = (ce.estado === 'emitido' && (urlCert || so)) || so?.estado === 'emitido';
-  const pasos = `<div class="mc__card mc__pasos"><span class="mc__eyebrow mute">Cómo funciona</span>
+  const pasos = `<aside class="mc__card mc__pasos" aria-label="Avance y emisión del certificado">
+    <div class="mc__rowstat"><span>Avance del curso</span><b>${p.porcentaje}%</b></div>
+    <div class="mc__bar" role="progressbar" aria-label="Avance del curso" aria-valuenow="${p.porcentaje}"><i style="width:${p.porcentaje}%"></i></div>
+    <details class="mc__cert-detalle"><summary>Cómo funciona</summary><div>
     <div class="mc__paso ${so || emitido ? 'ok' : ''}"><b>${so || emitido ? '✓' : '1'}</b><span>Envías tus datos tal como deben aparecer en el certificado.</span></div>
     <div class="mc__paso ${so?.estado === 'en_proceso' || emitido ? 'ok' : ''}"><b>${so?.estado === 'en_proceso' || emitido ? '✓' : '2'}</b><span>Nuestro equipo revisa tu solicitud y emite el certificado con QR y folio.</span></div>
     <div class="mc__paso ${emitido ? 'ok' : ''}"><b>${emitido ? '✓' : '3'}</b><span>Te llega a tu correo y lo verás aquí.</span></div>
-    <div class="mc__rowstat"><span>Avance del curso</span><b>${p.porcentaje}%</b></div></div>`;
+    </div></details></aside>`;
   let cuerpo;
   if (emitido) {
     cuerpo = `<div class="mc__cfh"><i>${I.cert}</i><div><h2>Tu certificado está listo</h2><p>${ce.folio ? `Folio <b>${esc(ce.folio)}</b> · ` : ''}con QR verificable.</p></div></div>
-      ${urlCert ? `<a class="mc__btn mc__btn--g" style="width:100%" href="${esc(urlCert)}" target="_blank" rel="noopener">${I.cert} Ver mi certificado</a>` : `<div class="mc__card mc__estado"><p style="color:var(--soft)">Te enviamos tu certificado por correo. Si no lo encuentras, escríbenos por WhatsApp.</p></div>`}`;
+      <div class="mc__estado">${urlCert ? `<a class="mc__btn mc__btn--p" href="${esc(urlCert)}" target="_blank" rel="noopener">${I.cert} Ver mi certificado</a>` : '<p>Te enviamos tu certificado por correo. Si no lo encuentras, escríbenos por WhatsApp.</p>'}</div>`;
   } else if (so && !CERT_EDITAR) {
     const txt = ({ pendiente: 'Recibimos tu solicitud', en_proceso: 'Tu certificado está en proceso', rechazado: 'Necesitamos revisar tus datos' })[so.estado] || 'Recibimos tu solicitud';
     cuerpo = `<div class="mc__cfh"><i>${I.cert}</i><div><h2>${txt}</h2><p>${fecha(so.fechaSolicitud) ? 'Enviada el ' + esc(fecha(so.fechaSolicitud)) + '. ' : ''}Te avisaremos por correo y WhatsApp cuando esté emitido.</p></div></div>
-      <div class="mc__card mc__estado"><dl>
+      <div class="mc__estado"><dl>
         <dt>Nombre en el certificado</dt><dd><b>${esc(so.nombreCompleto)}</b></dd>
         <dt>WhatsApp</dt><dd>${esc(so.whatsapp || '—')}</dd>
         <dt>Ubicación</dt><dd>${esc([so.ciudad, so.estadoRep].filter(Boolean).join(', ') || '—')}</dd>
@@ -1258,25 +1375,30 @@ function vistaCertificado(msg) {
       ${so.estado !== 'en_proceso' ? '<button type="button" class="mc__btn mc__btn--l mc__btn--sm" id="mc-cert-editar">Corregir mis datos</button>' : ''}</div>`;
   } else {
     const v = so || {};
-    cuerpo = `<div class="mc__cfh"><i>${I.cert}</i><div><h2>Solicitar mi certificado</h2><p>Escribe tu nombre exactamente como quieres que aparezca. Se emite con QR verificable y folio único.</p></div></div>
-      <form class="mc__card mc__form" id="mc-cert-form" novalidate>
-        <label class="mc__field">Nombre completo para el certificado<input id="cf-nombre" autocomplete="name" maxlength="120" value="${esc(v.nombreCompleto || USER.displayName || '')}" placeholder="Ej. María González Ramírez" required><small>Revisa acentos y mayúsculas: así se imprimirá.</small></label>
+    cuerpo = `<div class="mc__cfh"><i aria-hidden="true">${I.cert}</i><div><h2>Solicitar mi certificado</h2><p>Escribe tu nombre tal como debe aparecer en el certificado.</p></div></div>
+      <form class="mc__form" id="mc-cert-form" novalidate>
+        <label class="mc__field">Nombre completo<input id="cf-nombre" autocomplete="name" maxlength="120" value="${esc(v.nombreCompleto || USER.displayName || '')}" placeholder="Nombre y apellidos" required></label>
         <div class="mc__grid2">
           <label class="mc__field">WhatsApp<input id="cf-wa" type="tel" inputmode="tel" autocomplete="tel" maxlength="20" value="${esc(v.whatsapp || '')}" placeholder="10 dígitos" required></label>
-          <label class="mc__field">Correo<input value="${esc(USER.email || '')}" disabled></label>
           <label class="mc__field">Estado<select id="cf-estado" required><option value="">Selecciona…</option>${ESTADOS_MX.map(e => `<option ${v.estadoRep === e ? 'selected' : ''}>${e}</option>`).join('')}</select></label>
-          <label class="mc__field">Ciudad o municipio <span class="mc__opt">(opcional)</span><input id="cf-ciudad" maxlength="80" value="${esc(v.ciudad || '')}" autocomplete="address-level2"></label>
         </div>
-        <label class="mc__field">Ocupación <span class="mc__opt">(opcional)</span><input id="cf-ocup" maxlength="80" placeholder="Ej. Productor, estudiante, MVZ"></label>
-        <label class="mc__field">Comentarios <span class="mc__opt">(opcional)</span><textarea id="cf-com" maxlength="400" placeholder="Algo que debamos saber para tu certificado"></textarea></label>
-        ${msg ? `<p class="mc__msg" role="alert">${esc(msg)}</p>` : ''}
-        <button class="mc__btn mc__btn--g" style="width:100%" type="submit" id="cf-enviar">${I.cert} Solicitar mi certificado</button>
-        ${CERT_EDITAR ? '<button type="button" class="mc__btn mc__btn--l" style="width:100%;margin-top:8px" id="cf-cancelar">Cancelar</button>' : ''}
+        <dl class="mc__cert-correo"><dt>Correo de entrega</dt><dd>${esc(USER.email || '—')}</dd></dl>
+        <details class="mc__cert-detalle" id="cf-opcionales"><summary>Datos opcionales</summary><div>
+          <label class="mc__field">Ciudad o municipio<input id="cf-ciudad" maxlength="80" value="${esc(v.ciudad || '')}" autocomplete="address-level2"></label>
+          <label class="mc__field">Ocupación<input id="cf-ocup" maxlength="80" value="${esc(v.ocupacion || '')}"></label>
+          <label class="mc__field">Comentarios<textarea id="cf-com" maxlength="400">${esc(v.comentario || v.comentarios || '')}</textarea></label>
+        </div></details>
+        <p class="mc__msg" id="cf-error" role="alert" tabindex="-1" hidden></p>
+        <div class="mc__cert-acciones">
+          <button class="mc__btn mc__btn--p" type="submit" id="cf-enviar">${I.cert} Solicitar mi certificado</button>
+          ${CERT_EDITAR ? '<button type="button" class="mc__btn mc__btn--l" id="cf-cancelar">Cancelar</button>' : ''}
+        </div>
       </form>`;
   }
-  view.innerHTML = `<span class="mc__eyebrow">${esc(d.curso.nombre)}</span>
-    <div class="mc__sh" style="margin-top:4px"><h2>Mi certificado</h2><b>${estadoCertTexto()}</b></div>
-    <div class="mc__cf"><div>${cuerpo}</div><aside class="mc__aside">${pasos}</aside></div>`;
+  view.innerHTML = `<section class="mc__cert" aria-labelledby="mc-cert-titulo">
+    <header class="mc__cert-titulo"><h1 id="mc-cert-titulo">Mi certificado</h1><span class="mc__chip${emitido ? ' mc__chip--ok' : ''}">${estadoCertTexto()}</span></header>
+    <div class="mc__cf"><div class="mc__card mc__cert-card">${cuerpo}</div>${pasos}</div>
+  </section>`;
   ligarVista();
   const ed = $('#mc-cert-editar'); if (ed) ed.onclick = () => { CERT_EDITAR = true; vistaCertificado(); };
   const ca = $('#cf-cancelar'); if (ca) ca.onclick = () => { CERT_EDITAR = false; vistaCertificado(); };
@@ -1287,6 +1409,7 @@ function vistaCertificado(msg) {
     if (nombre.split(/\s+/).filter(Boolean).length < 2) return certErr('Escribe tu nombre completo (nombre y apellidos).');
     if (wa.replace(/\D/g, '').length < 10) return certErr('Escribe un WhatsApp de 10 dígitos.');
     if (!est) return certErr('Selecciona tu estado.');
+    $('#cf-error').hidden = true;
     const b = $('#cf-enviar'); b.disabled = true; b.textContent = 'Enviando…';
     try {
       const r = await api('/alumno/curso/' + encodeURIComponent(SLUG) + '/certificado/solicitar', { method: 'POST', body: {
@@ -1297,9 +1420,10 @@ function vistaCertificado(msg) {
     } catch (e) { b.disabled = false; b.innerHTML = I.cert + ' Solicitar mi certificado'; certErr(e.message || 'No pudimos enviar tu solicitud'); }
   };
   function certErr(m) {
-    const vals = { n: $('#cf-nombre')?.value, w: $('#cf-wa')?.value, e: $('#cf-estado')?.value, c: $('#cf-ciudad')?.value, o: $('#cf-ocup')?.value, t: $('#cf-com')?.value };
-    vistaCertificado(m);
-    if (vals.n != null && $('#cf-nombre')) { $('#cf-nombre').value = vals.n; $('#cf-wa').value = vals.w; $('#cf-estado').value = vals.e; $('#cf-ciudad').value = vals.c; $('#cf-ocup').value = vals.o; $('#cf-com').value = vals.t; }
+    const aviso = $('#cf-error');
+    aviso.textContent = m;
+    aviso.hidden = false;
+    aviso.focus();
   }
 }
 
