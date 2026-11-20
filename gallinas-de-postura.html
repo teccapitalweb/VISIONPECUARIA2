@@ -2752,6 +2752,108 @@ actualizarPreciosDesdeFirestore();
   });
 })();
 </script>
+<!-- regalo:inicio · oferta del curso de regalo (fuente: componentes/regalo.html) -->
+<style id="vp-regalo-css">
+#vp-regalo{position:fixed;inset:0;z-index:2147483000;display:none;align-items:center;justify-content:center;padding:16px;background:rgba(15,23,18,.62);font-family:'Inter',system-ui,-apple-system,'Segoe UI',sans-serif}
+#vp-regalo.on{display:flex;animation:vprg-f .2s ease}
+#vp-regalo .vprg{position:relative;width:100%;max-width:400px;max-height:calc(100dvh - 32px);overflow:auto;border-radius:18px;background:#fff;color:#16211a;text-align:left;box-shadow:0 24px 60px -18px rgba(0,0,0,.55);animation:vprg-p .28s ease}
+#vp-regalo .vprg__x{position:absolute;top:10px;right:10px;z-index:2;width:34px;height:34px;border:0;border-radius:50%;background:rgba(255,255,255,.92);color:#16211a;font-size:19px;line-height:1;cursor:pointer;box-shadow:0 2px 8px rgba(0,0,0,.18)}
+#vp-regalo .vprg__img{position:relative;height:168px;background:#1d3b25 center/cover no-repeat}
+#vp-regalo .vprg__img::after{content:"";position:absolute;inset:0;background:linear-gradient(180deg,rgba(0,0,0,0) 45%,rgba(0,0,0,.5) 100%)}
+#vp-regalo .vprg__tag{position:absolute;left:16px;bottom:14px;z-index:1;padding:5px 10px;border-radius:6px;background:#fff;color:#14532d;font-size:11px;font-weight:800;letter-spacing:.09em;text-transform:uppercase}
+#vp-regalo .vprg__b{padding:20px 22px 20px}
+#vp-regalo .vprg__k{margin:0 0 6px;font-size:11.5px;font-weight:700;letter-spacing:.1em;text-transform:uppercase;color:#b45309}
+#vp-regalo h3{margin:0 0 8px;font-family:'Archivo','Inter',system-ui,sans-serif;font-size:23px;line-height:1.15;font-weight:800;letter-spacing:-.01em;color:#16211a}
+#vp-regalo p.vprg__t{margin:0;font-size:14.5px;line-height:1.5;color:#4b5a50}
+#vp-regalo .vprg__r{display:flex;align-items:center;justify-content:space-between;gap:12px;margin:16px 0 0;padding:12px 14px;border-radius:12px;background:#f4f6f1;border:1px solid #e3e8df}
+#vp-regalo .vprg__r span{font-size:13px;line-height:1.3;color:#4b5a50}
+#vp-regalo .vprg__r b{font-family:'Archivo','Inter',system-ui,sans-serif;font-size:24px;font-weight:800;font-variant-numeric:tabular-nums;letter-spacing:.02em;color:#16211a;white-space:nowrap}
+#vp-regalo .vprg__cta{display:block;width:100%;margin-top:16px;padding:16px;border:0;border-radius:12px;cursor:pointer;font-family:'Archivo','Inter',system-ui,sans-serif;font-size:17px;font-weight:800;letter-spacing:.04em;text-transform:uppercase;color:#fff;background:#166534;box-shadow:0 10px 22px -10px rgba(22,101,52,.8);transition:background .15s,transform .15s}
+#vp-regalo .vprg__cta:hover{background:#14532d;transform:translateY(-1px)}
+#vp-regalo .vprg__no{display:block;margin:12px auto 0;background:none;border:0;color:#6b7a70;font:inherit;font-size:13px;cursor:pointer;text-decoration:underline;text-underline-offset:3px}
+/* Cinta «ganaste»: queda arriba mientras la persona sigue viendo la página */
+#vp-gano{position:fixed;top:0;left:0;right:0;z-index:2147482000;display:none;align-items:center;justify-content:center;gap:10px 16px;flex-wrap:wrap;padding:9px 14px;background:#14532d;color:#fff;font-family:'Inter',system-ui,-apple-system,'Segoe UI',sans-serif;font-size:13.5px;line-height:1.35;text-align:center;box-shadow:0 6px 18px -8px rgba(0,0,0,.5)}
+html.vp-gano #vp-gano{display:flex}
+html.vp-gano body{padding-top:var(--vp-gano-h,56px)}
+html.vp-gano .hdr{top:var(--vp-gano-h,56px)}
+#vp-gano b{font-weight:800}
+#vp-gano .vpg__r{font-variant-numeric:tabular-nums;font-weight:800;color:#fde68a;white-space:nowrap}
+#vp-gano .vpg__btn{flex:none;padding:8px 14px;border:0;border-radius:999px;background:#fff;color:#14532d;font:inherit;font-size:13px;font-weight:800;cursor:pointer;white-space:nowrap}
+@keyframes vprg-f{from{opacity:0}to{opacity:1}}
+@keyframes vprg-p{from{opacity:0;transform:translateY(12px)}to{opacity:1;transform:none}}
+@media (prefers-reduced-motion:reduce){#vp-regalo,#vp-regalo *{animation:none!important;transition:none!important}}
+</style>
+<div id="vp-gano" role="status" aria-live="polite">
+  <span><b>¡Felicidades! Ganaste el Curso de Sexaje Avícola.</b> Inscríbete en los próximos <span class="vpg__r" id="vpg-reloj">30:00</span> para recibirlo.</span>
+  <button type="button" class="vpg__btn" data-action="inscribir">Inscribirme</button>
+</div>
+<div id="vp-regalo" role="dialog" aria-modal="true" aria-labelledby="vprg-h" hidden>
+  <div class="vprg">
+    <button type="button" class="vprg__x" data-vprg-cerrar aria-label="Cerrar">&times;</button>
+    <div class="vprg__img" id="vprg-img"><span class="vprg__tag">Curso de regalo</span></div>
+    <div class="vprg__b">
+      <p class="vprg__k">Oferta por tiempo limitado</p>
+      <h3 id="vprg-h">Llévate gratis el Curso de Sexaje Avícola</h3>
+      <p class="vprg__t">Al inscribirte a <b id="vprg-curso">este curso</b> te lo regalamos. Aparta tu lugar y sigue revisando el temario con calma.</p>
+      <div class="vprg__r"><span>La oferta termina en</span><b id="vprg-reloj">30:00</b></div>
+      <button type="button" class="vprg__cta" id="vprg-cta">Quiero mi lugar</button>
+      <button type="button" class="vprg__no" data-vprg-cerrar>Ahora no</button>
+    </div>
+  </div>
+</div>
+<script>
+/* Oferta del curso de regalo (30 minutos). «Quiero mi lugar» NO abre el pago: cierra el aviso, lanza confeti y deja
+   arriba una cinta de «ganaste» con el reloj, para que la persona siga viendo temario, ponente y lo que incluye.
+   El pago solo se abre cuando ella toca «Inscribirme» (mismo data-action de la página; su lógica no se toca). */
+(function(){
+  var NOMBRES={'gallinas-de-postura':'Manejo de Gallinas de Postura','embutidos-artesanales':'Embutidos Artesanales'};
+  var slug=(location.pathname.split('/').pop()||'').replace(/\.html$/,'');
+  var caja=document.getElementById('vp-regalo'),cinta=document.getElementById('vp-gano'),raiz=document.documentElement;
+  if(!caja||!cinta||!NOMBRES[slug])return;
+  var CLAVE='vp_regalo_fin_'+slug,GANO='vp_regalo_gano_'+slug,DURA=30*60*1000,fin=0,tic=null;
+  function lee(k){try{return localStorage.getItem(k)}catch(e){return null}}
+  function pon(k,v){try{localStorage.setItem(k,v)}catch(e){}}
+  fin=parseInt(lee(CLAVE)||'0',10)||0;
+  function enAula(){var q=new URLSearchParams(location.search);if(q.get('pago')==='ok'||location.hash==='#mi-curso')return true;var a=document.getElementById('mi-curso');return !!(a&&!a.hidden)}
+  function pagoAbierto(){var m=document.getElementById('modal-checkout');return !!(m&&(m.hasAttribute('data-open')||/(^| )(open|is-open|active|show)( |$)/.test(m.className)))}
+  function reloj(){var r=Math.max(0,fin-Date.now()),m=Math.floor(r/60000),s=Math.floor(r%60000/1000);return (m<10?'0':'')+m+':'+(s<10?'0':'')+s}
+  function alto(){raiz.style.setProperty('--vp-gano-h',cinta.offsetHeight+'px')}
+  function cinta_(on){raiz.classList.toggle('vp-gano',!!on);if(on){alto()}}
+  function pinta(){
+    var t=reloj();document.getElementById('vprg-reloj').textContent=t;document.getElementById('vpg-reloj').textContent=t;
+    if(fin<=Date.now()){cerrar();cinta_(false);if(tic){clearInterval(tic);tic=null}return}
+    if(raiz.classList.contains('vp-gano')&&enAula())cinta_(false);
+  }
+  function corre(){if(!tic){pinta();tic=setInterval(pinta,1000)}}
+  function cerrar(){caja.classList.remove('on');caja.hidden=true;raiz.style.overflow=''}
+  function abrir(){
+    if(enAula()||pagoAbierto())return;
+    if(!fin){fin=Date.now()+DURA;pon(CLAVE,String(fin))}
+    if(fin<=Date.now())return;                       // el tiempo ya se acabó: no se vuelve a ofrecer
+    if(lee(GANO)==='1'){cinta_(true);corre();return} // ya lo reclamó: solo la cinta
+    document.getElementById('vprg-curso').textContent=NOMBRES[slug];
+    document.getElementById('vprg-img').style.backgroundImage="url('https://cdn.jsdelivr.net/gh/teccapitalweb/VISIONPECUARIA2@main/portadas/gallinas-2.jpg')";
+    caja.hidden=false;caja.classList.add('on');raiz.style.overflow='hidden';corre();
+  }
+  function confeti(){try{
+    if(matchMedia('(prefers-reduced-motion: reduce)').matches||document.getElementById('vp-confeti'))return;
+    var c=document.createElement('canvas');c.id='vp-confeti';c.style.cssText='position:fixed;inset:0;width:100%;height:100%;pointer-events:none;z-index:2147483646';document.body.appendChild(c);
+    var x=c.getContext('2d'),d=Math.min(window.devicePixelRatio||1,2);c.width=innerWidth*d;c.height=innerHeight*d;
+    var col=['#f0b429','#166534','#22a05a','#ffffff','#f97316','#fde68a'],P=[];
+    for(var i=0;i<150;i++)P.push({x:Math.random()*c.width,y:-Math.random()*c.height*.7,vx:(Math.random()-.5)*5*d,vy:(2+Math.random()*4)*d,w:(6+Math.random()*6)*d,h:(5+Math.random()*6)*d,r:Math.random()*6.28,vr:(Math.random()-.5)*.3,c:col[i%col.length]});
+    var t0=performance.now();(function f(t){var k=(t-t0)/4500;x.clearRect(0,0,c.width,c.height);x.globalAlpha=k>.75?Math.max(0,1-(k-.75)*4):1;
+      P.forEach(function(p){p.x+=p.vx;p.y+=p.vy;p.vy+=.03*d;p.r+=p.vr;x.save();x.translate(p.x,p.y);x.rotate(p.r);x.fillStyle=p.c;x.fillRect(-p.w/2,-p.h/2,p.w,p.h);x.restore()});
+      if(k<1)requestAnimationFrame(f);else c.remove()})(t0);
+  }catch(e){}}
+  caja.addEventListener('click',function(e){if(e.target===caja||e.target.closest('[data-vprg-cerrar]'))cerrar()});
+  document.getElementById('vprg-cta').addEventListener('click',function(){pon(GANO,'1');cerrar();cinta_(true);corre();confeti();window.scrollTo({top:0,behavior:'smooth'})});
+  document.addEventListener('keydown',function(e){if(e.key==='Escape'&&caja.classList.contains('on'))cerrar()});
+  window.addEventListener('hashchange',function(){if(location.hash==='#mi-curso'){cerrar();cinta_(false)}});
+  window.addEventListener('resize',function(){if(raiz.classList.contains('vp-gano'))alto()});
+  setTimeout(abrir,1500);
+})();
+</script>
+<!-- regalo:fin -->
 <!-- MI-CURSO:INICIO · componente autocontenido (fuente: componentes/mi-curso.html · se inyecta con componentes/inyectar.py) -->
 <style id="mi-curso-css">
 .mc{--a:#2e7d32;--a2:#12421a;--dark:#0c2410;--gold:#f0b429;--gold2:#d99a06;--bg:#f5f6f2;--card:#fff;--ink:#131f16;--soft:#48604f;--mute:#7e9185;--line:rgba(19,31,22,.09);--line2:rgba(19,31,22,.14);--ok:#1e8e3e;
@@ -3096,11 +3198,282 @@ body.mcrv-lock{overflow:hidden}
 }
 @media (max-width:360px){.mc__tab{font-size:.58rem}.mc__tab svg{width:19px;height:19px}}
 @media (prefers-reduced-motion:reduce){.mc *{animation:none!important;transition:none!important}}
+
+/* Aula compartida · jerarquía, superficies y navegación */
+.mc {
+  --bg: #f6f7f4;
+  --ink: #18221c;
+  --soft: #4d5c52;
+  --mute: #5e6d63;
+  --line: #e1e7df;
+  --line2: #d1dbd2;
+  --tint: #edf4e9;
+  --highlight: #ffc93c;
+  --halo: #e0ebd9;
+  --shadow: 0 1px 2px rgb(19 31 22 / 3%), 0 8px 24px -20px rgb(19 31 22 / 30%);
+  line-height: 1.5;
+}
+
+.mc__top {
+  gap: 10px;
+  padding: calc(12px + env(safe-area-inset-top)) 24px 12px;
+}
+.mc__brand { gap: 12px; }
+.mc__brand small { font-size: .6875rem; line-height: 1.3; }
+.mc__brand b { font-family: Archivo, Inter, system-ui, sans-serif; font-size: .9375rem; }
+.mc .mc__me,
+.mc .mc__x { min-width: 44px; height: 44px; }
+.mc .mc__me {
+  width: 44px;
+  position: relative;
+  overflow: hidden;
+  background: var(--a2);
+  color: white;
+  box-shadow: none;
+  border-radius: 50%;
+  font-weight: 700;
+}
+.mc__me > img {
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  border-radius: inherit;
+  object-fit: cover;
+  background: var(--card);
+}
+.mc .mc__me:hover,
+.mc .mc__me.on { box-shadow: 0 0 0 3px var(--halo); }
+.mc .mc__x { border-radius: 12px; }
+
+.mc__side {
+  width: 228px;
+  gap: 4px;
+  padding: 22px 14px 16px;
+}
+.mc__glabel {
+  color: var(--mute);
+  font-size: .6875rem;
+  letter-spacing: .09em;
+  padding: 18px 12px 6px;
+}
+.mc__ni { min-height: 44px; font-size: .875rem; font-weight: 600; gap: 11px; }
+.mc__ni svg { width: 17px; height: 17px; }
+.mc__ni.on,
+.mc__tab.on {
+  background: var(--tint);
+  color: var(--a2);
+  box-shadow: none;
+}
+.mc__ni.on::before {
+  left: 0;
+  width: 2px;
+  top: 12px;
+  bottom: 12px;
+  border-radius: 2px;
+}
+.mc__side-foot { padding-top: 10px; }
+.mc :is(a, button):focus-visible {
+  outline: 2px solid var(--a);
+  outline-offset: 2px;
+}
+.mc__tem .mc__l:focus-visible,
+.mc__mcov:focus-visible { outline-offset: -3px; }
+
+.mc__wrap {
+  max-width: 1280px;
+  padding: clamp(24px, 3vw, 44px) clamp(16px, 3vw, 40px) calc(48px + env(safe-area-inset-bottom));
+}
+.mc__cols { gap: clamp(18px, 2.2vw, 30px); }
+.mc__cols > *,
+.mc__aside > * { min-width: 0; }
+.mc__card, .mc__mc, .mc__tem { box-shadow: var(--shadow); }
+.mc__eyebrow {
+  color: var(--a2);
+  font-size: .6875rem;
+  letter-spacing: .105em;
+  line-height: 1.4;
+}
+.mc__eyebrow.mute { color: var(--mute); }
+.mc__sec { margin-top: clamp(26px, 3.4vw, 42px); }
+
+.mc__hero {
+  display: grid;
+  grid-template-columns: minmax(0, 1.18fr) minmax(0, 1fr);
+  align-items: stretch;
+  border: 1px solid var(--line);
+  border-radius: 23px;
+  overflow: hidden;
+  background: linear-gradient(125deg, var(--card) 25%, var(--tint));
+  box-shadow: var(--shadow);
+  margin-bottom: 24px;
+}
+.mc__hero .mc__head {
+  align-self: center;
+  margin: 0;
+  padding: clamp(22px, 3vw, 40px);
+  min-width: 0;
+}
+.mc__hero .mc__eyebrow { display: flex; align-items: center; gap: 8px; }
+.mc__hero .mc__eyebrow svg { width: 16px; height: 16px; }
+.mc__hero h1 {
+  font-size: clamp(1.8rem, 3.3vw, 3.1rem);
+  font-weight: 800;
+  letter-spacing: -.04em;
+  line-height: 1.05;
+  margin-top: 10px;
+  overflow-wrap: anywhere;
+  text-wrap: balance;
+}
+.mc__hero .mc__desc { font-size: .9375rem; line-height: 1.6; margin-top: 12px; }
+.mc__meta span { white-space: normal; }
+.mc__ctafila { gap: 10px 14px; margin-top: 20px; }
+.mc__prog { max-width: 360px; }
+.mc__prog > span { color: var(--soft); font-size: .75rem; }
+.mc__hero .mc__banner {
+  display: grid;
+  place-items: center;
+  border-radius: 0;
+  aspect-ratio: auto;
+  min-height: 220px;
+  box-shadow: none;
+  color: var(--halo);
+  background: radial-gradient(ellipse at 100% 0, var(--a), transparent 68%), var(--dark);
+}
+.mc__hero .mc__banner::after {
+  background: linear-gradient(90deg, rgb(0 0 0 / 12%), transparent 46%);
+  pointer-events: none;
+}
+.mc__hero .mc__banner > svg:not(.sx-art) {
+  width: clamp(38px, 5vw, 72px);
+  height: auto;
+  stroke-width: 1.15;
+  opacity: .75;
+}
+
+.mc__btn--p, .mc__mopen {
+  background: var(--a);
+  color: #fff;
+  box-shadow: none;
+}
+.mc__btn--p:hover, .mc__mopen:hover { background: var(--a2); }
+.mc__btn--p:active, .mc__mopen:active { filter: none; }
+.mc__sh > b, .mc__ln, .mc__chip:not([class*="--"]) {
+  background: var(--tint);
+  color: var(--a2);
+}
+.mc__bar { background: var(--halo); }
+.mc__bar > i { background: var(--a); }
+.mc__ring { background: conic-gradient(var(--a) calc(var(--p)*1%), var(--halo) 0); }
+
+.mc__ring > div { display: block; align-content: center; }
+.mc .mc__imagen-vacia { display: grid; place-items: center; background: var(--tint); color: var(--a2); }
+.mc__mcov > img { position: relative; }
+.mc__stats { margin-top: 0; box-shadow: var(--shadow); }
+.mc__stats > div { min-width: 0; padding: 13px 6px; }
+.mc__stats small { letter-spacing: .03em; }
+.mc__stats b { font-variant-numeric: tabular-nums; }
+.mc__panel, .mc__wa { padding: 20px; }
+.mc__wa { background: var(--tint); }
+.mc__field :is(input, select, textarea):focus { box-shadow: 0 0 0 3px var(--halo); }
+.mc .mc__mhero, .mc .mc__cfh {
+  background: linear-gradient(135deg, var(--dark), var(--a2));
+}
+.mc__cfh > div { position: relative; z-index: 1; }
+.mc__cfh i { color: var(--highlight); }
+.mc .mc__mcov { background: linear-gradient(120deg, var(--tint), var(--halo)); }
+.mc__mcov .tag { font-family: inherit; letter-spacing: .07em; }
+.mc__mgrid { grid-template-columns: repeat(auto-fill, minmax(min(100%, 226px), 1fr)); }
+.mc__mgrid > * { min-width: 0; }
+.mc__mbody h3 { overflow-wrap: anywhere; }
+.mc__mopen { padding-inline: 18px; }
+.mc__l:not([disabled]):hover { background: var(--tint); }
+.mc__l.sig { background: var(--tint); }
+.mc__l.sig .mc__ln { border-color: var(--a); color: var(--a2); box-shadow: none; }
+.mc__l.sig .mc__lt em { color: var(--a2); }
+
+@media (max-width: 900px) {
+  .mc__wrap { padding-bottom: calc(104px + env(safe-area-inset-bottom)); }
+  .mc.solo .mc__wrap { padding-bottom: calc(28px + env(safe-area-inset-bottom)); }
+  .mc__tabs {
+    width: min(520px, calc(100% - 24px));
+    gap: 3px;
+    border: 1px solid var(--line2);
+    background: var(--card);
+    border-radius: 18px;
+    box-shadow: 0 6px 24px rgb(19 31 22 / 12%);
+  }
+  .mc__tab {
+    min-height: 48px;
+    border-radius: 12px;
+    font-size: clamp(.625rem, 2.2vw, .75rem);
+    color: var(--soft);
+  }
+  .mc__tab svg { width: 19px; height: 19px; }
+  .mc__tab.on svg { transform: none; }
+}
+@media (max-width: 620px) {
+  .mc__top {
+    gap: 8px;
+    padding: calc(8px + env(safe-area-inset-top)) 12px 8px;
+  }
+  .mc__brand { gap: 8px; }
+  .mc__brand img { max-width: 72px; max-height: 32px; }
+  .mc__brand b { font-size: .8125rem; }
+  .mc__brand small { font-size: .625rem; letter-spacing: .065em; }
+  .mc__wrap { padding-top: 14px; padding-inline: 12px; }
+  .mc__hero { grid-template-columns: minmax(0, 1fr); border-radius: 18px; margin-bottom: 16px; }
+  .mc__hero .mc__head { padding: 20px 16px; }
+  .mc__hero .mc__banner {
+    grid-row: 1;
+    min-height: clamp(104px, 31vw, 176px);
+    border-bottom: 1px solid var(--line);
+  }
+  .mc__hero h1 { font-size: clamp(1.7rem, 7.9vw, 2.35rem); }
+  .mc__ctafila { margin-top: 16px; }
+  .mc__stats > div { padding-inline: 4px; }
+  .mc__sh { align-items: center; gap: 8px; }
+  .mc__aside { grid-template-columns: repeat(auto-fit, minmax(min(100%, 250px), 1fr)); }
+}
+@media (max-width: 380px) {
+  .mc__l.conimg {
+    grid-template-columns: 26px 52px minmax(0, 1fr) auto;
+    padding: 12px 8px;
+  }
+  .mc__l.conimg :is(.mc__lth, .mc__lth.art) { width: 52px; }
+  .mc__l.conimg .mc__ln { width: 24px; height: 24px; }
+  .mc__tab { padding-inline: 1px; letter-spacing: 0; }
+}
+
+body[data-slug="gallinas-de-postura"] .mc {
+  --a: #2e7d32;
+  --a2: #1c5025;
+  --dark: #102e19;
+}
+body[data-slug="embutidos-artesanales"] .mc {
+  --a: #aa380b;
+  --a2: #802b10;
+  --dark: #241510;
+  --gold: #f4b486;
+  --gold2: #a64a21;
+  --highlight: #ffd1ab;
+  --bg: #f8f5f2;
+  --tint: #f8ece4;
+  --halo: #efdbce;
+  --line: #e9dfd8;
+  --line2: #dfd0c5;
+  --ink: #28201d;
+  --soft: #5e524c;
+  --mute: #6b5d55;
+}
 </style>
 
 <div class="mc solo" id="mi-curso" hidden role="dialog" aria-modal="true" aria-labelledby="mc-titulo">
   <header class="mc__top">
-    <div class="mc__brand"><img src="/assets/brand/logo-vp-300.png" alt="" onerror="this.style.display='none'"><b id="mc-titulo">Mi curso</b></div>
+    <div class="mc__brand">
+      <img src="/assets/brand/logo-vp-300.png" alt="" onerror="this.style.display='none'">
+      <div><small>Visión Pecuaria · Aula</small><b id="mc-titulo">Mi curso</b></div>
+    </div>
     <button type="button" class="mc__me" id="mc-me" aria-label="Mi cuenta" hidden></button>
     <button type="button" class="mc__x" id="mc-cerrar" aria-label="Volver a la página del curso"><svg viewBox="0 0 24 24"><path d="M6 6l12 12M18 6 6 18"/></svg><span>Volver</span></button>
   </header>
@@ -3288,18 +3661,40 @@ function rutaActual() {
 function ir(tab) { history.pushState({ mc: 1 }, '', tab === 'inicio' ? '#mi-curso' : '#mi-curso/' + tab); render(); }
 function irClase(id) { history.pushState({ mc: 1 }, '', '#mi-curso/clase/' + encodeURIComponent(id)); render(); }
 function certPendienteDeSolicitar() { return DATA && (DATA.certificado?.estado !== 'emitido') && !DATA.solicitudCertificado; }
+function pintarAvatar(elemento, usuario) {
+  const nombre = usuario.displayName?.trim() || usuario.email?.trim() || '?';
+  elemento.textContent = Array.from(nombre)[0].toLocaleUpperCase('es-MX');
+  const fotoGoogle = usuario.providerData?.find(p => p.providerId === 'google.com')?.photoURL;
+  const foto = fotoGoogle || usuario.photoURL;
+  if (!foto || !/^https:\/\//i.test(foto)) return;
+
+  const imagen = document.createElement('img');
+  imagen.alt = '';
+  imagen.hidden = true;
+  imagen.referrerPolicy = 'no-referrer';
+  imagen.addEventListener('load', () => { imagen.hidden = false; }, { once: true });
+  imagen.addEventListener('error', () => imagen.remove(), { once: true });
+  elemento.append(imagen);
+  imagen.src = foto;
+}
+
 function pintarNav(activa) {
   const pendCert = certPendienteDeSolicitar();
   $('#mc-side').innerHTML = `
-    <div class="mc__glabel">Mi curso</div>
-    ${TABS.map(t => `<button type="button" class="mc__ni ${t.id === activa ? 'on' : ''}" data-tab="${t.id}">${I[t.i]}${t.lado}</button>`).join('')}
-    <div class="mc__glabel">Mi cuenta</div>
-    <button type="button" class="mc__ni ${activa === 'cuenta' ? 'on' : ''}" data-tab="cuenta">${I.user}Mi cuenta</button>
+    <div class="mc__glabel">Aprendizaje</div>
+    ${TABS.map(t => `<button type="button" class="mc__ni ${t.id === activa ? 'on' : ''}" data-tab="${t.id}" ${t.id === activa ? 'aria-current="page"' : ''}>${I[t.i]}${t.lado}</button>`).join('')}
+    <div class="mc__glabel">Cuenta y soporte</div>
+    <button type="button" class="mc__ni ${activa === 'cuenta' ? 'on' : ''}" data-tab="cuenta" ${activa === 'cuenta' ? 'aria-current="page"' : ''}>${I.user}Mi cuenta</button>
     <a class="mc__ni" href="${WA}?text=${encodeURIComponent('Hola, soy alumno de ' + (NOMBRES[SLUG] || 'un curso') + ' y necesito ayuda')}" target="_blank" rel="noopener">${I.wa}Soporte WhatsApp</a>
     <div class="mc__side-foot"><button type="button" class="mc__ni" id="mc-salir">${I.salir}Cerrar sesión</button></div>`;
   $('#mc-tabs').innerHTML = TABS.map(t => `<button type="button" class="mc__tab ${t.id === activa ? 'on' : ''}" data-tab="${t.id}" ${t.id === activa ? 'aria-current="page"' : ''}>${I[t.i]}${t.t}${t.id === 'certificado' && pendCert && activa !== 'certificado' ? '<span class="dot"></span>' : ''}</button>`).join('');
   const me = $('#mc-me');
-  if (me && USER) { me.hidden = false; me.textContent = ((USER.displayName || USER.email || '?').trim()[0] || '?').toUpperCase(); me.classList.toggle('on', activa === 'cuenta'); me.onclick = () => ir('cuenta'); }
+  pintarAvatar(me, USER);
+  me.hidden = false;
+  me.classList.toggle('on', activa === 'cuenta');
+  if (activa === 'cuenta') me.setAttribute('aria-current', 'page');
+  else me.removeAttribute('aria-current');
+  me.onclick = () => ir('cuenta');
   root.querySelectorAll('[data-tab]').forEach(b => b.onclick = () => ir(b.dataset.tab));
   const s = $('#mc-salir'); if (s) s.onclick = async () => { await detener(); await signOut(auth); };
 }
@@ -3310,7 +3705,9 @@ function cargando() { view.innerHTML = '<div class="mc__spin mc__spin--d"></div>
 async function render() {
   await detener();
   $('#mc-body').scrollTop = 0;
-  $('#mc-me').hidden = true;
+  const me = $('#mc-me');
+  me.hidden = true;
+  if (!USER) me.replaceChildren();
   if (PAGO && !PAGO.listo) return vistaPago();
   if (!USER) { root.classList.add('solo'); $('#mc-titulo').textContent = 'Mi curso'; return PAGO && PAGO.pagado ? vistaAcceso('¡Pago confirmado! Entra con el correo con el que pagaste para ver tu curso.', true) : vistaAcceso(); }
   if (!DATA) {
@@ -3410,6 +3807,7 @@ function vistaSinCompra() {
 
 // ─── Utilidades ─────────────────────────────────────────────────────────────
 const fecha = (iso) => { try { const d = new Date(iso && iso.seconds ? iso.seconds * 1000 : iso); return isNaN(d) ? '' : d.toLocaleDateString('es-MX', { day: 'numeric', month: 'long', year: 'numeric' }); } catch (_) { return ''; } };
+const contar = (n, unidad) => n + ' ' + unidad + (n === 1 ? '' : 's');
 const fb = `onerror="this.onerror=null;this.src='${esc(PORTADA)}'"`;
 const siguiente = () => { const p = DATA.progreso; return p.ultimaClaseId && !(p.clases?.[p.ultimaClaseId]?.completada) ? p.ultimaClaseId : (DATA.clases.find(c => c.estado === 'publicada' && !p.clases?.[c.id]?.completada) || DATA.clases.find(c => c.estado === 'publicada') || {}).id; };
 const estrellas = (n) => { let h = ''; for (let i = 1; i <= 5; i++) h += i <= Math.round(n) ? '★' : '<i>★</i>'; return `<span class="mc__st" aria-label="${n} de 5">${h}</span>`; };
@@ -3441,6 +3839,7 @@ function bloqueTemario(d, sig) {
 }
 function panelAprendizaje(d) {
   const p = d.progreso;
+  const recursos = d.materiales.filter(m => m.disponible).length;
   return `<div class="mc__card mc__panel"><span class="mc__eyebrow mute">Tu aprendizaje</span>
     <div style="display:flex;gap:16px;align-items:center">
       <div class="mc__ring" style="--p:${p.porcentaje}"><div>${p.porcentaje}%<small>avance</small></div></div>
@@ -3451,7 +3850,7 @@ function panelAprendizaje(d) {
     <div class="mc__pstat"><span>● Completadas ${p.completadas}</span><span>${Math.max(p.total - p.completadas, 0)} pendientes</span></div>
     <div class="mc__bene">
       <span>${I.escudo} Certificado verificable al concluir</span>
-      <span>${I.doc} ${d.materiales.filter(m => m.disponible).length} materiales dentro del curso</span>
+      <span>${I.doc} ${contar(recursos, 'recurso')} de apoyo</span>
       <span>${I.reloj} Avanza a tu propio ritmo</span>
     </div></div>
   <div class="mc__card mc__wa"><b>¿Dudas con tu curso?</b><p>Escríbenos y te ayudamos en minutos.</p>
@@ -3559,7 +3958,27 @@ function abrirVisor(id) {
     const b = root.querySelector('#mcrv-retry'); if (b) b.onclick = () => abrirVisor(id);
   });
 }
+function prepararPortadas(contenedor) {
+  contenedor.querySelectorAll('.mc__banner img, .mc__mcov img, img.mc__lth, img.mc__mth').forEach(imagen => {
+    const sinPortada = () => {
+      if (imagen.matches('.mc__banner img, .mc__mcov img')) {
+        imagen.remove();
+        return;
+      }
+      const respaldo = document.createElement('span');
+      respaldo.className = imagen.className + ' mc__imagen-vacia';
+      respaldo.setAttribute('aria-hidden', 'true');
+      respaldo.innerHTML = imagen.classList.contains('mc__lth') ? I.play : I.doc;
+      imagen.replaceWith(respaldo);
+    };
+    if (imagen.complete && !imagen.naturalWidth) sinPortada();
+    else imagen.addEventListener('error', sinPortada, { once: true });
+  });
+}
+
+
 function ligarVista() {
+  prepararPortadas(view);
   view.querySelectorAll('[data-clase]').forEach(b => b.onclick = () => irClase(b.dataset.clase));
   view.querySelectorAll('[data-ir]').forEach(b => b.onclick = () => ir(b.dataset.ir));
   view.querySelectorAll('[data-mat]').forEach(b => b.onclick = () => abrirVisor(b.dataset.mat));
@@ -3569,45 +3988,43 @@ function ligarVista() {
 // ─── Inicio · detalle del curso ─────────────────────────────────────────────
 function vistaInicio() {
   const d = DATA, c = d.curso, p = d.progreso, sig = siguiente();
-  const cal = d.calificaciones || { promedio: 0, total: 0, mia: null };
   const recursos = d.materiales.filter(m => m.disponible).length;
   const minTot = d.clases.reduce((a, x) => a + (x.duracionMin || 0), 0);
   const dur = c.duracionHoras ? c.duracionHoras + ' horas' : minTot ? (Math.round(minTot / 6) / 10) + ' horas' : '—';
   const estadoCurso = p.porcentaje >= 100 ? 'Completado' : p.completadas ? 'En progreso' : 'Por empezar';
-  view.innerHTML = `<div class="mc__cols"><div>
-    <div class="mc__banner"><img src="${esc(c.portada || PORTADA)}" alt="" ${fb}>
-      <div class="mc__pills"><span class="gold">${I.check} Curso adquirido</span>${c.modalidad ? `<span>${esc(c.modalidad)}</span>` : ''}</div>
-    </div>
+  const portada = c.portada || PORTADA;
+  view.innerHTML = `<section class="mc__hero" aria-labelledby="mc-curso-nombre">
     <div class="mc__head">
-      <h1>${esc(c.nombre)}</h1>
+      <span class="mc__eyebrow">${I.escudo} Aula del curso</span>
+      <h1 id="mc-curso-nombre">${esc(c.nombre)}</h1>
       ${c.subtitulo || c.descripcion ? `<p class="mc__desc">${esc(c.subtitulo || c.descripcion)}</p>` : ''}
-      <div class="mc__meta">
+      ${c.instructorNombre || c.modalidad ? `<div class="mc__meta">
         ${c.instructorNombre ? `<span>${I.user} ${esc(c.instructorNombre)}</span>` : ''}
-        <span>${I.reloj} ${esc(dur)}</span>
-        <span>${I.clases} ${d.clases.length} clases</span>
-        <span>${I.doc} ${recursos} recursos</span>
-      </div>
-      <div class="mc__rate">${estrellas(cal.promedio)}<b>${cal.total ? cal.promedio.toFixed(1) : '—'}</b><span>(${cal.total} ${cal.total === 1 ? 'valoración' : 'valoraciones'})</span>${cal.mia ? `<span class="sep">·</span><span>Tu valoración: <b>${cal.mia.estrellas}/5</b></span>` : ''}</div>
-      <div class="mc__prog"><div class="mc__bar"><i style="width:${p.porcentaje}%"></i></div><b>${p.porcentaje}%</b></div>
+        ${c.modalidad ? `<span>${I.clases} ${esc(c.modalidad)}</span>` : ''}
+      </div>` : ''}
       <div class="mc__ctafila">
+        ${sig ? `<button class="mc__btn mc__btn--p" data-clase="${esc(sig)}">${p.ultimaClaseId ? 'Continuar curso' : 'Comenzar curso'} ${I.flecha}</button>` : ''}
         <span class="mc__chip ${p.completadas ? 'mc__chip--ok' : ''}">${p.completadas ? I.play : I.reloj} ${estadoCurso}</span>
-        ${sig ? `<button class="mc__btn mc__btn--g" data-clase="${esc(sig)}">${p.ultimaClaseId ? 'Continuar curso' : 'Comenzar curso'} ${I.flecha}</button>` : ''}
       </div>
+      <div class="mc__prog"><span>Tu avance</span><div class="mc__bar" role="progressbar" aria-label="Tu avance" aria-valuenow="${p.porcentaje}"><i style="width:${p.porcentaje}%"></i></div><b>${p.porcentaje}%</b></div>
     </div>
+    <div class="mc__banner">${I.clases}${portada ? `<img src="${esc(portada)}" alt="">` : ''}</div>
+  </section>
+  <div class="mc__cols"><div>
     <div class="mc__stats">
       <div>${I.reloj}<small>Duración</small><b>${esc(dur)}</b></div>
-      <div>${I.clases}<small>Contenido</small><b>${d.clases.length} clases</b></div>
-      <div>${I.doc}<small>Material de apoyo</small><b>${recursos} recursos</b></div>
+      <div>${I.clases}<small>Contenido</small><b>${contar(d.clases.length, 'clase')}</b></div>
+      <div>${I.doc}<small>Material de apoyo</small><b>${contar(recursos, 'recurso')}</b></div>
     </div>
     ${c.claseEnVivo ? `<div class="mc__sec mc__card mc__fila"><div><b>${I.vivo} Sesión en vivo</b><p>${esc(c.claseEnVivo.fecha || 'Enlace de la sesión en vivo de tu curso')}</p></div><a class="mc__btn mc__btn--p mc__btn--sm" href="${esc(c.claseEnVivo.url)}" target="_blank" rel="noopener">Entrar a la sesión</a></div>` : ''}
     <div class="mc__sec">
       <span class="mc__eyebrow">Ruta de aprendizaje</span>
-      <div class="mc__sh" style="margin-top:4px"><h2>Temario del curso</h2><b>${d.clases.length} clases</b></div>
+      <div class="mc__sh" style="margin-top:4px"><h2>Temario del curso</h2><b>${contar(d.clases.length, 'clase')}</b></div>
       ${d.clases.length ? bloqueTemario(d, sig) : '<div class="mc__card mc__empty"><h2>Las grabaciones aún no están publicadas</h2><p>Aparecerán aquí en cuanto se publiquen. Tu acceso ya está activo.</p></div>'}
     </div>
     ${recursos ? `<div class="mc__sec">
       <span class="mc__eyebrow">Recursos incluidos</span>
-      <div class="mc__sh" style="margin-top:4px"><h2>Material del curso</h2><b>${recursos} recursos</b></div>
+      <div class="mc__sh" style="margin-top:4px"><h2>Material del curso</h2><b>${contar(recursos, 'recurso')}</b></div>
       <p class="mc__msnota">Abre cada archivo para verlo en pantalla o descargarlo.</p>
       <div class="mc__mgrid">${d.materiales.filter(m => m.disponible).map(m => matCard(m, d.materiales.indexOf(m))).join('')}</div>
     </div>` : ''}
@@ -3622,7 +4039,7 @@ function vistaClases() {
   const d = DATA, sig = siguiente();
   view.innerHTML = `<div class="mc__cols"><div>
     <span class="mc__eyebrow">Ruta de aprendizaje</span>
-    <div class="mc__sh" style="margin-top:4px"><h2>Temario del curso</h2><b>${d.clases.length} clases</b></div>
+    <div class="mc__sh" style="margin-top:4px"><h2>Temario del curso</h2><b>${contar(d.clases.length, 'clase')}</b></div>
     ${d.clases.length ? bloqueTemario(d, sig) : '<div class="mc__card mc__empty"><h2>Las grabaciones aún no están publicadas</h2><p>Aparecerán aquí en cuanto se publiquen.</p></div>'}
   </div>
   <aside class="mc__aside">${panelAprendizaje(d)}</aside></div>`;
@@ -3639,7 +4056,7 @@ function matCard(m, i) {
   const tipo = TIPO_MAT[m.tipo] || 'Documento';
   return `<article class="mc__mc">
     <button type="button" class="mc__mcov" data-mat="${esc(m.id)}" aria-label="Abrir ${esc(m.titulo)}">
-      ${cov ? `<img src="${cov}" alt="" loading="lazy">` : `<span class="ph">${I.doc}</span>`}
+      <span class="ph">${I.doc}</span>${cov ? `<img src="${cov}" alt="" loading="lazy">` : ''}
       <span class="tag">${esc(tipo)}</span><span class="num">${String(i + 1).padStart(2, '0')}</span>
     </button>
     <div class="mc__mbody">
@@ -3658,14 +4075,11 @@ function vistaMateriales() {
   const tipos = [...new Set(mats.map(m => (TIPO_MAT[m.tipo] || 'Documento').toLowerCase()))];
   const resumen = tipos.length === 1 ? (tipos[0] === 'presentación' ? 'presentaciones' : tipos[0] + 's') : 'archivos';
   view.innerHTML = `<section class="mc__mhero">
-      <h2>Materiales para aplicar desde hoy.</h2>
-      <p>Las presentaciones de cada módulo del curso, listas para descargar y conservar.</p>
-      <div class="chk">${I.check} Incluidos con tu curso, sin costo extra.</div>
-      <div class="box"><b>${mats.length}</b><div><small>Tu biblioteca</small><span>${mats.length === 1 ? 'recurso disponible' : resumen + ' disponibles'}</span></div></div>
+      <h2>Materiales del curso</h2>
+      <p>Abre las presentaciones y los archivos de apoyo o descárgalos para estudiar.</p>
+      <div class="box"><b>${mats.length}</b><div><span>${mats.length === 1 ? 'recurso disponible' : resumen + ' disponibles'}</span></div></div>
     </section>
-    <div class="mc__mhead"><h2>Elige un recurso práctico</h2><p>Ábrelos en pantalla o descárgalos para estudiar a tu ritmo.</p></div>
-    ${mats.length ? `<span class="mc__mcount">${mats.length} ${mats.length === 1 ? 'material' : 'materiales'}</span>
-      <div class="mc__mgrid">${mats.map(m => matCard(m, todos.indexOf(m))).join('')}</div>
+    ${mats.length ? `<div class="mc__mgrid mc__sec">${mats.map(m => matCard(m, todos.indexOf(m))).join('')}</div>
       <div class="mc__mnote">${I.escudo}<span>Cada archivo se entrega solo a tu cuenta con acceso al curso. Puedes abrirlo las veces que quieras.</span></div>`
     : '<div class="mc__card mc__empty"><h2>Sin materiales por ahora</h2><p>Cuando se publiquen las guías y herramientas del curso, aparecerán aquí para descargar.</p></div>'}`;
   ligarVista();
@@ -3850,107 +4264,5 @@ document.addEventListener('visibilitychange', () => { if (document.hidden && SEG
 window.addEventListener('pagehide', () => { if (SEG && SEG.ses > SEG.env) guardar(false); });
 </script>
 <!-- MI-CURSO:FIN -->
-<!-- regalo:inicio · oferta del curso de regalo (fuente: componentes/regalo.html) -->
-<style id="vp-regalo-css">
-#vp-regalo{position:fixed;inset:0;z-index:2147483000;display:none;align-items:center;justify-content:center;padding:16px;background:rgba(15,23,18,.62);font-family:'Inter',system-ui,-apple-system,'Segoe UI',sans-serif}
-#vp-regalo.on{display:flex;animation:vprg-f .2s ease}
-#vp-regalo .vprg{position:relative;width:100%;max-width:400px;max-height:calc(100dvh - 32px);overflow:auto;border-radius:18px;background:#fff;color:#16211a;text-align:left;box-shadow:0 24px 60px -18px rgba(0,0,0,.55);animation:vprg-p .28s ease}
-#vp-regalo .vprg__x{position:absolute;top:10px;right:10px;z-index:2;width:34px;height:34px;border:0;border-radius:50%;background:rgba(255,255,255,.92);color:#16211a;font-size:19px;line-height:1;cursor:pointer;box-shadow:0 2px 8px rgba(0,0,0,.18)}
-#vp-regalo .vprg__img{position:relative;height:168px;background:#1d3b25 center/cover no-repeat}
-#vp-regalo .vprg__img::after{content:"";position:absolute;inset:0;background:linear-gradient(180deg,rgba(0,0,0,0) 45%,rgba(0,0,0,.5) 100%)}
-#vp-regalo .vprg__tag{position:absolute;left:16px;bottom:14px;z-index:1;padding:5px 10px;border-radius:6px;background:#fff;color:#14532d;font-size:11px;font-weight:800;letter-spacing:.09em;text-transform:uppercase}
-#vp-regalo .vprg__b{padding:20px 22px 20px}
-#vp-regalo .vprg__k{margin:0 0 6px;font-size:11.5px;font-weight:700;letter-spacing:.1em;text-transform:uppercase;color:#b45309}
-#vp-regalo h3{margin:0 0 8px;font-family:'Archivo','Inter',system-ui,sans-serif;font-size:23px;line-height:1.15;font-weight:800;letter-spacing:-.01em;color:#16211a}
-#vp-regalo p.vprg__t{margin:0;font-size:14.5px;line-height:1.5;color:#4b5a50}
-#vp-regalo .vprg__r{display:flex;align-items:center;justify-content:space-between;gap:12px;margin:16px 0 0;padding:12px 14px;border-radius:12px;background:#f4f6f1;border:1px solid #e3e8df}
-#vp-regalo .vprg__r span{font-size:13px;line-height:1.3;color:#4b5a50}
-#vp-regalo .vprg__r b{font-family:'Archivo','Inter',system-ui,sans-serif;font-size:24px;font-weight:800;font-variant-numeric:tabular-nums;letter-spacing:.02em;color:#16211a;white-space:nowrap}
-#vp-regalo .vprg__cta{display:block;width:100%;margin-top:16px;padding:16px;border:0;border-radius:12px;cursor:pointer;font-family:'Archivo','Inter',system-ui,sans-serif;font-size:17px;font-weight:800;letter-spacing:.04em;text-transform:uppercase;color:#fff;background:#166534;box-shadow:0 10px 22px -10px rgba(22,101,52,.8);transition:background .15s,transform .15s}
-#vp-regalo .vprg__cta:hover{background:#14532d;transform:translateY(-1px)}
-#vp-regalo .vprg__no{display:block;margin:12px auto 0;background:none;border:0;color:#6b7a70;font:inherit;font-size:13px;cursor:pointer;text-decoration:underline;text-underline-offset:3px}
-/* Cinta «ganaste»: queda arriba mientras la persona sigue viendo la página */
-#vp-gano{position:fixed;top:0;left:0;right:0;z-index:2147482000;display:none;align-items:center;justify-content:center;gap:10px 16px;flex-wrap:wrap;padding:9px 14px;background:#14532d;color:#fff;font-family:'Inter',system-ui,-apple-system,'Segoe UI',sans-serif;font-size:13.5px;line-height:1.35;text-align:center;box-shadow:0 6px 18px -8px rgba(0,0,0,.5)}
-html.vp-gano #vp-gano{display:flex}
-html.vp-gano body{padding-top:var(--vp-gano-h,56px)}
-html.vp-gano .hdr{top:var(--vp-gano-h,56px)}
-#vp-gano b{font-weight:800}
-#vp-gano .vpg__r{font-variant-numeric:tabular-nums;font-weight:800;color:#fde68a;white-space:nowrap}
-#vp-gano .vpg__btn{flex:none;padding:8px 14px;border:0;border-radius:999px;background:#fff;color:#14532d;font:inherit;font-size:13px;font-weight:800;cursor:pointer;white-space:nowrap}
-@keyframes vprg-f{from{opacity:0}to{opacity:1}}
-@keyframes vprg-p{from{opacity:0;transform:translateY(12px)}to{opacity:1;transform:none}}
-@media (prefers-reduced-motion:reduce){#vp-regalo,#vp-regalo *{animation:none!important;transition:none!important}}
-</style>
-<div id="vp-gano" role="status" aria-live="polite">
-  <span><b>¡Felicidades! Ganaste el Curso de Sexaje Avícola.</b> Inscríbete en los próximos <span class="vpg__r" id="vpg-reloj">30:00</span> para recibirlo.</span>
-  <button type="button" class="vpg__btn" data-action="inscribir">Inscribirme</button>
-</div>
-<div id="vp-regalo" role="dialog" aria-modal="true" aria-labelledby="vprg-h" hidden>
-  <div class="vprg">
-    <button type="button" class="vprg__x" data-vprg-cerrar aria-label="Cerrar">&times;</button>
-    <div class="vprg__img" id="vprg-img"><span class="vprg__tag">Curso de regalo</span></div>
-    <div class="vprg__b">
-      <p class="vprg__k">Oferta por tiempo limitado</p>
-      <h3 id="vprg-h">Llévate gratis el Curso de Sexaje Avícola</h3>
-      <p class="vprg__t">Al inscribirte a <b id="vprg-curso">este curso</b> te lo regalamos. Aparta tu lugar y sigue revisando el temario con calma.</p>
-      <div class="vprg__r"><span>La oferta termina en</span><b id="vprg-reloj">30:00</b></div>
-      <button type="button" class="vprg__cta" id="vprg-cta">Quiero mi lugar</button>
-      <button type="button" class="vprg__no" data-vprg-cerrar>Ahora no</button>
-    </div>
-  </div>
-</div>
-<script>
-/* Oferta del curso de regalo (30 minutos). «Quiero mi lugar» NO abre el pago: cierra el aviso, lanza confeti y deja
-   arriba una cinta de «ganaste» con el reloj, para que la persona siga viendo temario, ponente y lo que incluye.
-   El pago solo se abre cuando ella toca «Inscribirme» (mismo data-action de la página; su lógica no se toca). */
-(function(){
-  var NOMBRES={'gallinas-de-postura':'Manejo de Gallinas de Postura','embutidos-artesanales':'Embutidos Artesanales'};
-  var slug=(location.pathname.split('/').pop()||'').replace(/\.html$/,'');
-  var caja=document.getElementById('vp-regalo'),cinta=document.getElementById('vp-gano'),raiz=document.documentElement;
-  if(!caja||!cinta||!NOMBRES[slug])return;
-  var CLAVE='vp_regalo_fin_'+slug,GANO='vp_regalo_gano_'+slug,DURA=30*60*1000,fin=0,tic=null;
-  function lee(k){try{return localStorage.getItem(k)}catch(e){return null}}
-  function pon(k,v){try{localStorage.setItem(k,v)}catch(e){}}
-  fin=parseInt(lee(CLAVE)||'0',10)||0;
-  function enAula(){var q=new URLSearchParams(location.search);if(q.get('pago')==='ok'||location.hash==='#mi-curso')return true;var a=document.getElementById('mi-curso');return !!(a&&!a.hidden)}
-  function pagoAbierto(){var m=document.getElementById('modal-checkout');return !!(m&&(m.hasAttribute('data-open')||/(^| )(open|is-open|active|show)( |$)/.test(m.className)))}
-  function reloj(){var r=Math.max(0,fin-Date.now()),m=Math.floor(r/60000),s=Math.floor(r%60000/1000);return (m<10?'0':'')+m+':'+(s<10?'0':'')+s}
-  function alto(){raiz.style.setProperty('--vp-gano-h',cinta.offsetHeight+'px')}
-  function cinta_(on){raiz.classList.toggle('vp-gano',!!on);if(on){alto()}}
-  function pinta(){
-    var t=reloj();document.getElementById('vprg-reloj').textContent=t;document.getElementById('vpg-reloj').textContent=t;
-    if(fin<=Date.now()){cerrar();cinta_(false);if(tic){clearInterval(tic);tic=null}return}
-    if(raiz.classList.contains('vp-gano')&&enAula())cinta_(false);
-  }
-  function corre(){if(!tic){pinta();tic=setInterval(pinta,1000)}}
-  function cerrar(){caja.classList.remove('on');caja.hidden=true;raiz.style.overflow=''}
-  function abrir(){
-    if(enAula()||pagoAbierto())return;
-    if(!fin){fin=Date.now()+DURA;pon(CLAVE,String(fin))}
-    if(fin<=Date.now())return;                       // el tiempo ya se acabó: no se vuelve a ofrecer
-    if(lee(GANO)==='1'){cinta_(true);corre();return} // ya lo reclamó: solo la cinta
-    document.getElementById('vprg-curso').textContent=NOMBRES[slug];
-    document.getElementById('vprg-img').style.backgroundImage="url('https://cdn.jsdelivr.net/gh/teccapitalweb/VISIONPECUARIA2@main/portadas/gallinas-2.jpg')";
-    caja.hidden=false;caja.classList.add('on');raiz.style.overflow='hidden';corre();
-  }
-  function confeti(){try{
-    if(matchMedia('(prefers-reduced-motion: reduce)').matches||document.getElementById('vp-confeti'))return;
-    var c=document.createElement('canvas');c.id='vp-confeti';c.style.cssText='position:fixed;inset:0;width:100%;height:100%;pointer-events:none;z-index:2147483646';document.body.appendChild(c);
-    var x=c.getContext('2d'),d=Math.min(window.devicePixelRatio||1,2);c.width=innerWidth*d;c.height=innerHeight*d;
-    var col=['#f0b429','#166534','#22a05a','#ffffff','#f97316','#fde68a'],P=[];
-    for(var i=0;i<150;i++)P.push({x:Math.random()*c.width,y:-Math.random()*c.height*.7,vx:(Math.random()-.5)*5*d,vy:(2+Math.random()*4)*d,w:(6+Math.random()*6)*d,h:(5+Math.random()*6)*d,r:Math.random()*6.28,vr:(Math.random()-.5)*.3,c:col[i%col.length]});
-    var t0=performance.now();(function f(t){var k=(t-t0)/4500;x.clearRect(0,0,c.width,c.height);x.globalAlpha=k>.75?Math.max(0,1-(k-.75)*4):1;
-      P.forEach(function(p){p.x+=p.vx;p.y+=p.vy;p.vy+=.03*d;p.r+=p.vr;x.save();x.translate(p.x,p.y);x.rotate(p.r);x.fillStyle=p.c;x.fillRect(-p.w/2,-p.h/2,p.w,p.h);x.restore()});
-      if(k<1)requestAnimationFrame(f);else c.remove()})(t0);
-  }catch(e){}}
-  caja.addEventListener('click',function(e){if(e.target===caja||e.target.closest('[data-vprg-cerrar]'))cerrar()});
-  document.getElementById('vprg-cta').addEventListener('click',function(){pon(GANO,'1');cerrar();cinta_(true);corre();confeti();window.scrollTo({top:0,behavior:'smooth'})});
-  document.addEventListener('keydown',function(e){if(e.key==='Escape'&&caja.classList.contains('on'))cerrar()});
-  window.addEventListener('hashchange',function(){if(location.hash==='#mi-curso'){cerrar();cinta_(false)}});
-  window.addEventListener('resize',function(){if(raiz.classList.contains('vp-gano'))alto()});
-  setTimeout(abrir,1500);
-})();
-</script>
-<!-- regalo:fin -->
 </body>
 </html>
