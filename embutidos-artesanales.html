@@ -119,6 +119,16 @@
   .hero__lead{font-size:16px!important;line-height:1.55!important;margin-bottom:16px!important}
 }
 </style>
+<style id="pago-pantalla-completa">
+/* Formulario de pago a pantalla completa en teléfono (sin márgenes a los lados) */
+@media (max-width:640px){
+  #modal-checkout{padding:0!important;align-items:stretch!important;justify-content:stretch!important}
+  #modal-checkout .pay-modal,#modal-checkout .modal__card{width:100%!important;max-width:100%!important;height:100vh!important;height:100dvh!important;max-height:100vh!important;max-height:100dvh!important;border-radius:0!important;margin:0!important;display:flex!important;flex-direction:column!important;transform:none!important;animation:none!important}
+  #modal-checkout .pay-head,#modal-checkout .modal__head{flex:none;padding-top:max(14px,env(safe-area-inset-top))!important}
+  #modal-checkout .pay-body,#modal-checkout .modal__body{flex:1 1 auto!important;min-height:0!important;max-height:none!important;overflow-y:auto!important;-webkit-overflow-scrolling:touch;padding-left:0!important;padding-right:0!important;padding-bottom:env(safe-area-inset-bottom)!important}
+  #modal-checkout #checkout-container{width:100%!important;max-width:none!important;margin:0!important;padding:0!important}
+}
+</style>
 </head>
 
 <body data-slug="embutidos-artesanales">
@@ -1586,7 +1596,7 @@ body.mcrv-lock{overflow:hidden}
 import { initializeApp, getApps } from "https://www.gstatic.com/firebasejs/10.11.0/firebase-app.js";
 import { getAuth, onAuthStateChanged, signInWithPopup, signInWithRedirect, getRedirectResult, GoogleAuthProvider,
   signInWithEmailAndPassword, createUserWithEmailAndPassword, sendPasswordResetEmail, sendEmailVerification,
-  signOut, setPersistence, browserLocalPersistence } from "https://www.gstatic.com/firebasejs/10.11.0/firebase-auth.js";
+  signOut, setPersistence, browserLocalPersistence, signInWithCustomToken } from "https://www.gstatic.com/firebasejs/10.11.0/firebase-auth.js";
 
 const API = 'https://visionpecuaria-webhook-production.up.railway.app';
 const SLUG = document.body.dataset.slug;
@@ -1640,6 +1650,71 @@ async function api(path, opt = {}, otra = true) {
 }
 
 // ─── Abrir / cerrar / ir al pago ─────────────────────────────────────────────
+// ─── Regreso de Stripe: pago confirmado → confeti y entrada directa al aula ───
+// La landing vuelve con ?pago=ok&session_id=…  El servidor confirma el pago y, si el correo no tenía cuenta,
+// entrega un token de un solo uso; si ya la tenía, la persona entra con su acceso de siempre.
+let PAGO = null;
+(() => {
+  const q = new URLSearchParams(location.search), sid = q.get('session_id') || '';
+  if (q.get('pago') !== 'ok' || !/^cs_[A-Za-z0-9_]+$/.test(sid)) return;
+  PAGO = { sessionId: sid, intentos: 0, listo: false, pagado: false, reintentar: 0 };
+  history.replaceState({ mc: 1 }, '', location.pathname + '#mi-curso');
+})();
+const espera = (ms) => new Promise((r) => setTimeout(r, ms));
+function confeti() {
+  try {
+    if (matchMedia('(prefers-reduced-motion: reduce)').matches || document.getElementById('mc-confeti')) return;
+    const c = document.createElement('canvas'); c.id = 'mc-confeti';
+    c.style.cssText = 'position:fixed;inset:0;width:100%;height:100%;pointer-events:none;z-index:2147483647';
+    document.body.appendChild(c);
+    const x = c.getContext('2d'), dpr = Math.min(window.devicePixelRatio || 1, 2);
+    c.width = innerWidth * dpr; c.height = innerHeight * dpr;
+    const col = ['#f0b429', '#2e7d32', '#66bb6a', '#ffffff', '#ff7043', '#42a5f5'];
+    const P = Array.from({ length: 160 }, (_, i) => ({ x: Math.random() * c.width, y: -Math.random() * c.height * 0.7, vx: (Math.random() - 0.5) * 5 * dpr, vy: (2 + Math.random() * 4) * dpr, w: (6 + Math.random() * 6) * dpr, h: (5 + Math.random() * 6) * dpr, r: Math.random() * 6.28, vr: (Math.random() - 0.5) * 0.3, c: col[i % col.length] }));
+    const t0 = performance.now();
+    (function cuadro(t) {
+      const k = (t - t0) / 5000;
+      x.clearRect(0, 0, c.width, c.height); x.globalAlpha = k > 0.75 ? Math.max(0, 1 - (k - 0.75) * 4) : 1;
+      P.forEach((p) => { p.x += p.vx; p.y += p.vy; p.vy += 0.03 * dpr; p.r += p.vr; x.save(); x.translate(p.x, p.y); x.rotate(p.r); x.fillStyle = p.c; x.fillRect(-p.w / 2, -p.h / 2, p.w, p.h); x.restore(); });
+      if (k < 1) requestAnimationFrame(cuadro); else c.remove();
+    })(t0);
+  } catch (_) {}
+}
+// Meta Pixel: Purchase una sola vez por pago, solo en la pestaña que montó el checkout y ya con el pago confirmado
+function pixelCompra(sessionId, slug) {
+  try {
+    const raw = sessionStorage.getItem('vp_px_checkout'); if (!raw || typeof window.fbq !== 'function') return;
+    let info = {}; try { info = JSON.parse(raw) || {}; } catch (_) {}
+    if (info.slug && slug && info.slug !== slug) return;
+    sessionStorage.removeItem('vp_px_checkout');
+    const clave = 'vp_px_compra_' + sessionId; if (localStorage.getItem(clave)) return; localStorage.setItem(clave, '1');
+    const sl = slug || info.slug || '', datos = { content_name: sl, content_ids: [sl], content_type: 'product' };
+    if (Number(info.value) > 0) { datos.value = Number(info.value); datos.currency = 'MXN'; }
+    window.fbq('track', 'Purchase', datos, { eventID: sessionId });
+  } catch (_) {}
+}
+function vistaPago() {
+  root.classList.add('solo'); $('#mc-titulo').textContent = NOMBRES[SLUG] || 'Mi curso';
+  view.innerHTML = `<div class="mc__card mc__auth" id="mc-pago" style="text-align:center">
+    <div class="mc__spin mc__spin--d" style="margin:6px auto 16px"></div>
+    <h2>¡Pago confirmado!</h2>
+    <p class="mc__sub">Estamos abriendo tu curso. No cierres esta ventana…</p></div>`;
+  if (PAGO.enCurso) return; PAGO.enCurso = true;
+  confeti(); procesarPago();
+}
+async function procesarPago() {
+  try {
+    const r = await fetch(API + '/alumno/entrar-por-pago', { method: 'POST', headers: { 'Content-Type': 'application/json' }, body: JSON.stringify({ sessionId: PAGO.sessionId }) });
+    const d = await r.json().catch(() => ({}));
+    if (r.status === 409 && d.pendiente && PAGO.intentos++ < 8) { await espera(2000); return procesarPago(); }
+    if (!r.ok) throw new Error(d.error || 'Error ' + r.status);
+    PAGO.pagado = true; PAGO.reintentar = 6;
+    pixelCompra(PAGO.sessionId, d.slug);
+    if (d.entrada === 'token' && d.token) { PAGO.listo = true; await signInWithCustomToken(auth, d.token); return; }   // onAuthStateChanged vuelve a pintar
+  } catch (_) { /* si algo falla, queda el acceso normal */ }
+  PAGO.listo = true; render();
+}
+
 function abrir() {
   ABIERTO = true; root.hidden = false; document.documentElement.style.overflow = 'hidden';
   if (!location.hash.startsWith('#mi-curso')) history.pushState({ mc: 1 }, '', '#mi-curso');
@@ -1665,7 +1740,7 @@ window.addEventListener('popstate', () => {
 document.addEventListener('keydown', (e) => { if (e.key === 'Escape' && ABIERTO && !document.getElementById('mc-visor')) cerrar(); });
 
 onAuthStateChanged(auth, (u) => { USER = u; DATA = null; if (ABIERTO) render(); });
-if (location.hash.startsWith('#mi-curso') || /[?&]mi-curso\b/.test(location.search)) abrir();
+if (PAGO || location.hash.startsWith('#mi-curso') || /[?&]mi-curso\b/.test(location.search)) abrir();
 
 // ─── Navegación ──────────────────────────────────────────────────────────────
 const TABS = [
@@ -1707,11 +1782,16 @@ async function render() {
   await detener();
   $('#mc-body').scrollTop = 0;
   $('#mc-me').hidden = true;
-  if (!USER) { root.classList.add('solo'); $('#mc-titulo').textContent = 'Mi curso'; return vistaAcceso(); }
+  if (PAGO && !PAGO.listo) return vistaPago();
+  if (!USER) { root.classList.add('solo'); $('#mc-titulo').textContent = 'Mi curso'; return PAGO && PAGO.pagado ? vistaAcceso('¡Pago confirmado! Entra con el correo con el que pagaste para ver tu curso.', true) : vistaAcceso(); }
   if (!DATA) {
     root.classList.add('solo'); cargando();
     try { DATA = await api('/alumno/curso/' + encodeURIComponent(SLUG)); }
     catch (e) {
+      if (e.status === 403 && PAGO && PAGO.reintentar > 0) {   // el pago ya está confirmado; la compra termina de registrarse
+        PAGO.reintentar--; view.innerHTML = '<div class="mc__card mc__auth" style="text-align:center"><div class="mc__spin mc__spin--d" style="margin:6px auto 16px"></div><h2>Activando tu acceso…</h2><p class="mc__sub">Tu pago está confirmado. Un momento.</p></div>';
+        await espera(1800); return render();
+      }
       if (e.status === 403) return vistaSinCompra();
       view.innerHTML = `<div class="mc__card mc__empty"><h2>No pudimos cargar tu curso</h2><p>${esc(e.message)}. Revisa tu conexión e intenta de nuevo.</p><div class="mc__acts"><button class="mc__btn mc__btn--p" id="mc-reint">Reintentar</button></div></div>`;
       $('#mc-reint').onclick = render; return;
@@ -1719,6 +1799,7 @@ async function render() {
   }
   root.classList.remove('solo');
   $('#mc-titulo').textContent = DATA.curso.nombre;
+  if (PAGO && PAGO.pagado && !PAGO.celebrado) { PAGO.celebrado = true; PAGO.reintentar = 0; confeti(); setTimeout(() => toast('¡Bienvenido! Tu curso ya está activo'), 400); }
   const r = rutaActual();
   pintarNav(r.tab);
   if (r.clase) return vistaClase(r.clase);
