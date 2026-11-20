@@ -1760,13 +1760,13 @@ window.vpPx = {
       </details>
       <details class="faq-item">
         <summary>
-          <span>¿Cuándo puedo empezar? ¿Y si no puedo conectarme en vivo?</span>
+          <span>¿Cuándo puedo empezar? ¿El curso tiene horario?</span>
           <svg class="faq-chevron" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
             <polyline points="6 9 12 15 18 9"/>
           </svg>
         </summary>
         <div class="faq-answer">
-          <p>Las clases son en vivo a las <b>18:00 hrs</b> por Google Meet. Si no puedes conectarte en vivo, cada sesión queda grabada y disponible en tu panel para verla después. El acceso a las grabaciones no tiene fecha de caducidad.</p>
+          <p>El curso es <b>pregrabado</b>: empiezas en cuanto te inscribes y no hay horario fijo. Ves las clases desde tu panel cuando quieras, las veces que necesites. El acceso no tiene fecha de caducidad.</p>
         </div>
       </details>
       <details class="faq-item">
@@ -1799,7 +1799,7 @@ window.vpPx = {
           </svg>
         </summary>
         <div class="faq-answer">
-          <p>Recibes: <b>Manual de Manejo Avícola en PDF</b>, <b>Corrida Financiera Avícola en Excel</b>, formatos técnicos descargables (Word), acceso permanente a las grabaciones de las 5 sesiones en vivo, constancia digital con QR y folio, acceso al grupo VIP de WhatsApp con otros productores, y como bonus el <b>Curso de Sexaje Avícola gratis</b>.</p>
+          <p>Recibes: <b>Manual de Manejo Avícola en PDF</b>, <b>Corrida Financiera Avícola en Excel</b>, formatos técnicos descargables (Word), acceso permanente a las 5 clases pregrabadas, constancia digital con QR y folio, acceso al grupo VIP de WhatsApp con otros productores, y como bonus el <b>Curso de Sexaje Avícola gratis</b>.</p>
         </div>
       </details>
       <details class="faq-item">
@@ -3849,5 +3849,69 @@ document.addEventListener('visibilitychange', () => { if (document.hidden && SEG
 window.addEventListener('pagehide', () => { if (SEG && SEG.ses > SEG.env) guardar(false); });
 </script>
 <!-- MI-CURSO:FIN -->
+<!-- regalo:inicio · popup del curso de regalo (fuente: componentes/regalo.html) -->
+<style id="vp-regalo-css">
+#vp-regalo{position:fixed;inset:0;z-index:2147483000;display:none;align-items:center;justify-content:center;padding:18px;background:rgba(6,18,9,.72);backdrop-filter:blur(4px);-webkit-backdrop-filter:blur(4px);font-family:inherit}
+#vp-regalo.on{display:flex;animation:vprg-f .25s ease}
+#vp-regalo .vprg{position:relative;width:100%;max-width:420px;max-height:calc(100dvh - 36px);overflow:auto;border-radius:22px;padding:30px 24px 22px;text-align:center;color:#fff;background:radial-gradient(120% 90% at 50% 0%,#2e7d32 0%,#12421a 55%,#0c2410 100%);border:1px solid rgba(240,180,41,.45);box-shadow:0 30px 70px -20px rgba(0,0,0,.7);animation:vprg-p .35s cubic-bezier(.2,.9,.3,1.2)}
+#vp-regalo .vprg__x{position:absolute;top:10px;right:10px;width:36px;height:36px;border:0;border-radius:50%;background:rgba(255,255,255,.12);color:#fff;font-size:20px;line-height:1;cursor:pointer}
+#vp-regalo .vprg__ico{width:74px;height:74px;margin:0 auto 12px;border-radius:50%;display:grid;place-items:center;background:linear-gradient(180deg,#f7c948,#d99a06);box-shadow:0 10px 26px -8px rgba(240,180,41,.7);animation:vprg-b 1.8s ease-in-out infinite}
+#vp-regalo .vprg__ico svg{width:38px;height:38px;stroke:#231a02;fill:none;stroke-width:1.9;stroke-linecap:round;stroke-linejoin:round}
+#vp-regalo .vprg__k{display:inline-block;padding:5px 12px;border-radius:999px;background:rgba(240,180,41,.18);color:#f7c948;font-size:11.5px;font-weight:800;letter-spacing:.12em;text-transform:uppercase}
+#vp-regalo h3{margin:12px 0 8px;font-size:clamp(22px,6.2vw,27px);line-height:1.15;font-weight:800;color:#fff}
+#vp-regalo h3 em{font-style:normal;color:#f7c948}
+#vp-regalo p{margin:0 auto;max-width:330px;font-size:14.5px;line-height:1.5;color:rgba(255,255,255,.86)}
+#vp-regalo .vprg__t{margin:16px auto 4px;display:inline-flex;align-items:baseline;gap:8px;padding:9px 18px;border-radius:14px;background:rgba(0,0,0,.28);border:1px solid rgba(255,255,255,.14)}
+#vp-regalo .vprg__t b{font-size:30px;font-weight:800;letter-spacing:.04em;font-variant-numeric:tabular-nums;color:#fff}
+#vp-regalo .vprg__t span{font-size:12px;color:rgba(255,255,255,.7)}
+#vp-regalo .vprg__cta{display:block;width:100%;margin-top:16px;padding:17px 16px;border:0;border-radius:14px;cursor:pointer;font:inherit;font-size:18px;font-weight:900;letter-spacing:.05em;text-transform:uppercase;color:#231a02;background:linear-gradient(180deg,#ffd95a,#f0b429 55%,#d99a06);box-shadow:0 14px 30px -10px rgba(240,180,41,.85),inset 0 1px 0 rgba(255,255,255,.6);animation:vprg-l 1.6s ease-in-out infinite}
+#vp-regalo .vprg__no{margin-top:12px;background:none;border:0;color:rgba(255,255,255,.6);font:inherit;font-size:13px;text-decoration:underline;cursor:pointer}
+@keyframes vprg-f{from{opacity:0}to{opacity:1}}
+@keyframes vprg-p{from{opacity:0;transform:translateY(18px) scale(.94)}to{opacity:1;transform:none}}
+@keyframes vprg-b{0%,100%{transform:translateY(0) rotate(0)}50%{transform:translateY(-5px) rotate(-4deg)}}
+@keyframes vprg-l{0%,100%{transform:scale(1)}50%{transform:scale(1.03)}}
+@media (prefers-reduced-motion:reduce){#vp-regalo *,#vp-regalo{animation:none!important}}
+</style>
+<div id="vp-regalo" role="dialog" aria-modal="true" aria-labelledby="vprg-h" hidden>
+  <div class="vprg">
+    <button type="button" class="vprg__x" data-vprg-cerrar aria-label="Cerrar">&times;</button>
+    <div class="vprg__ico"><svg viewBox="0 0 24 24"><path d="M20 12v9H4v-9M2 7h20v5H2zM12 22V7M12 7H7.5a2.5 2.5 0 1 1 0-5C11 2 12 7 12 7zM12 7h4.5a2.5 2.5 0 1 0 0-5C13 2 12 7 12 7z"/></svg></div>
+    <span class="vprg__k">Regalo por tiempo limitado</span>
+    <h3 id="vprg-h">Llévate <em>GRATIS</em> el Curso de Sexaje Avícola</h3>
+    <p>Inscríbete ahora a <b id="vprg-curso">este curso</b> y te regalamos el <b>Curso de Sexaje Avícola</b>. Reclámalo antes de que se acabe el tiempo:</p>
+    <div class="vprg__t"><b id="vprg-reloj">30:00</b><span>minutos</span></div>
+    <button type="button" class="vprg__cta" id="vprg-cta" data-action="inscribir">¡Reclamar mi regalo!</button>
+    <button type="button" class="vprg__no" data-vprg-cerrar>Ahora no, gracias</button>
+  </div>
+</div>
+<script>
+/* Popup de regalo: al entrar a la página del curso ofrece el Curso de Sexaje Avícola gratis durante 30 minutos.
+   El botón usa el mismo data-action="inscribir" que el resto de la página: abre el pago de siempre, sin tocar su lógica. */
+(function(){
+  var NOMBRES={'gallinas-de-postura':'Manejo de Gallinas de Postura','embutidos-artesanales':'Embutidos Artesanales'};
+  var slug=(location.pathname.split('/').pop()||'').replace(/\.html$/,'');
+  var caja=document.getElementById('vp-regalo'); if(!caja||!NOMBRES[slug])return;
+  var CLAVE='vp_regalo_fin_'+slug, DURA=30*60*1000, fin=0, tic=null;
+  try{fin=parseInt(localStorage.getItem(CLAVE)||'0',10)||0}catch(e){}
+  function enAula(){var q=new URLSearchParams(location.search);if(q.get('pago')==='ok'||location.hash==='#mi-curso')return true;var a=document.getElementById('mi-curso');return !!(a&&!a.hidden)}
+  function pagoAbierto(){var m=document.getElementById('modal-checkout');return !!(m&&(m.hasAttribute('data-open')||/(^| )(open|is-open|active|show)( |$)/.test(m.className)))}
+  function pinta(){var r=Math.max(0,fin-Date.now()),m=Math.floor(r/60000),s=Math.floor(r%60000/1000);document.getElementById('vprg-reloj').textContent=(m<10?'0':'')+m+':'+(s<10?'0':'')+s;if(r<=0)cerrar()}
+  function cerrar(){caja.classList.remove('on');caja.hidden=true;document.documentElement.style.overflow='';if(tic){clearInterval(tic);tic=null}}
+  function abrir(){
+    if(enAula()||pagoAbierto())return;
+    if(!fin){fin=Date.now()+DURA;try{localStorage.setItem(CLAVE,String(fin))}catch(e){}}
+    if(fin<=Date.now())return;                      // el tiempo ya se acabó: no se vuelve a ofrecer
+    document.getElementById('vprg-curso').textContent=NOMBRES[slug];
+    caja.hidden=false;caja.classList.add('on');document.documentElement.style.overflow='hidden';pinta();tic=setInterval(pinta,1000);
+  }
+  caja.addEventListener('click',function(e){if(e.target===caja||e.target.closest('[data-vprg-cerrar]'))cerrar()});
+  /* En window y en captura: el listener de pago de la página corta la propagación desde document */
+  window.addEventListener('click',function(e){if(e.target.closest&&e.target.closest('#vprg-cta')){try{sessionStorage.setItem('vp_regalo_reclamado',slug)}catch(_){}cerrar()}},true);
+  document.addEventListener('keydown',function(e){if(e.key==='Escape'&&caja.classList.contains('on'))cerrar()});
+  window.addEventListener('hashchange',function(){if(location.hash==='#mi-curso')cerrar()});
+  setTimeout(abrir,1500);
+})();
+</script>
+<!-- regalo:fin -->
 </body>
 </html>
