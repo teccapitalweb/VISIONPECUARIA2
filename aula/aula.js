@@ -13,7 +13,8 @@ const WA = 'https://wa.me/522361049715';
 const RANCHO = '/VisionPecuaria/rancho.html';
 const PORTADAS = {
   'gallinas-de-postura': '/assets/curso-gallinas-postura/instructor-gomez-800.jpg',
-  'embutidos-artesanales': '/assets/curso-chorizo/hero-chef-1024.jpg'
+  'embutidos-artesanales': '/assets/curso-chorizo/hero-chef-1024.jpg',
+  'sexaje-avicola': 'https://visionpecuariamateriales.b-cdn.net/a68ef1fc-12fc-437c-acbb-c36199e8723b.png'
 };
 const PORTADA_DEFAULT = '/assets/brand/banner.jpg';
 
@@ -340,7 +341,7 @@ async function vistaInicio(v) {
 function tarjetaCurso(c) {
   const p = c.progreso || {};
   return `<a class="card curso-card" href="#/curso/${esc(c.slug)}">
-    <div class="curso-card__cover"><img src="${esc(portada(c))}" alt="" loading="lazy" ${imgFallback(c.slug)}><span class="chip">Curso adquirido</span></div>
+    <div class="curso-card__cover"><img src="${esc(portada(c))}" alt="" loading="lazy" ${imgFallback(c.slug)}><span class="chip ${c.origen === 'regalo' ? 'chip--gift' : ''}">${c.origen === 'regalo' ? 'Regalo incluido' : 'Curso adquirido'}</span></div>
     <div class="curso-card__body">
       <h3>${esc(c.nombre)}</h3>
       ${c.instructorNombre ? `<div class="curso-card__meta">${esc(c.instructorNombre)}</div>` : ''}
@@ -380,7 +381,7 @@ async function vistaCurso(v, slug) {
   let html = selectorCurso(slug, '#/curso/');
   html += `<section class="curso-hero"><img src="${esc(portada(c))}" alt="" ${imgFallback(slug)}>
     <div class="curso-hero__body"><div>
-      <span class="chip chip--gold">${ico('libro')} Curso adquirido</span>
+      <span class="chip chip--gold">${ico('libro')} ${d.acceso?.origen === 'regalo' ? 'Regalo incluido' : 'Curso adquirido'}</span>
       <h1 style="margin-top:10px">${esc(c.nombre)}</h1>
       <p>${c.instructorNombre ? esc(c.instructorNombre) + ' · ' : ''}${d.clases.length} ${d.clases.length === 1 ? 'clase' : 'clases'}${d.acceso?.fechaCompra ? ' · adquirido el ' + esc(fecha(d.acceso.fechaCompra)) : ''}</p>
       ${continuarId ? `<a class="btn btn--gold" style="margin-top:16px" href="#/clase/${esc(slug)}/${esc(continuarId)}">${ico('play')} ${p.ultimaClaseId ? 'Continuar' : 'Empezar'}</a>` : ''}
