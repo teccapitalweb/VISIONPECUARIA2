@@ -264,6 +264,27 @@ a { color: inherit; }
 .mat b { display: block; font-size: .92rem; }
 .mat small { color: var(--ink-mute); font-size: .78rem; }
 .mat__go { margin-left: auto; color: var(--ink-mute); }
+body.material-open { overflow: hidden; }
+.material-viewer { position: fixed; inset: 0; z-index: 100; display: flex; flex-direction: column; background: #0a1a0e; color: #eef6ef; }
+.material-viewer__bar { display: flex; align-items: center; gap: 18px; padding: 10px 16px; padding-top: max(10px, env(safe-area-inset-top)); background: #0f2614; border-bottom: 1px solid #ffffff20; }
+.material-viewer__title { flex: 1; min-width: 0; }
+.material-viewer__title b, .material-viewer__title small { display: block; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
+.material-viewer__title b { font-size: .92rem; }
+.material-viewer__title small { color: #b4c8b8; font-size: .75rem; margin-top: 3px; }
+.material-viewer__actions { display: flex; gap: 8px; }
+.material-viewer__action { display: inline-flex; justify-content: center; align-items: center; min-height: 38px; padding: 0 12px; border: 1px solid #ffffff35; border-radius: 9px; background: #ffffff10; color: #fff; text-decoration: none; font-size: .8rem; font-weight: 700; white-space: nowrap; }
+.material-viewer__action[hidden] { display: none; }
+.material-viewer__action:hover { background: #ffffff22; }
+.material-viewer__close { background: #eef6ef; color: #0a1a0e; }
+.material-viewer__stage { position: relative; flex: 1; min-height: 0; background: #17291c; }
+.material-viewer__stage iframe { width: 100%; height: 100%; border: 0; background: #fff; }
+.material-viewer__status { position: absolute; inset: 0; display: grid; place-content: center; text-align: center; padding: 24px; color: #e5f0e7; }
+.material-viewer__status small { display: block; margin-top: 8px; color: #b4c8b8; }
+@media (max-width: 700px) {
+  .material-viewer__bar { flex-wrap: wrap; gap: 9px; }
+  .material-viewer__title { flex-basis: 100%; }
+  .material-viewer__actions { width: 100%; justify-content: space-between; }
+}
 .cert { padding: 20px; display: grid; gap: 12px; }
 .cert__top { display: flex; justify-content: space-between; align-items: flex-start; gap: 12px; }
 .cert h3 { font-size: 1rem; }
