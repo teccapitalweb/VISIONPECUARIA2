@@ -439,7 +439,7 @@ function tarjetaClase(slug, cl, i, p, curso) {
 function tarjetaMaterial(slug, m) {
   const x = m.tipo === 'xlsx' || m.tipo === 'excel';
   return `<button class="card mat" type="button" data-mat="${esc(slug)}|${esc(m.id)}" ${m.disponible ? '' : 'disabled'}>
-    <span class="mat__ico ${x ? 'mat__ico--xlsx' : ''}">${ico('materiales')}</span>
+    ${m.miniatura ? `<img class="mat__cover" src="${esc(m.miniatura)}" alt="" loading="lazy">` : `<span class="mat__ico ${x ? 'mat__ico--xlsx' : ''}">${ico('materiales')}</span>`}
     <span><b>${esc(m.titulo)}</b><small>${esc(m.descripcion || (x ? 'Excel' : 'PDF'))}</small></span>
     <span class="mat__go">${ico('descarga')}</span></button>`;
 }

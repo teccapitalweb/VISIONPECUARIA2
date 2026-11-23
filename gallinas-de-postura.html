@@ -3621,7 +3621,7 @@ const CFG = { apiKey: "AIzaSyDQXkIo-BWPIeLZzHeTMN986WMDn0TrTJU", authDomain: "vi
 const PORTADAS_BASE = 'https://cdn.jsdelivr.net/gh/teccapitalweb/VISIONPECUARIA2@main/portadas/';
 const PORTADAS = { 'gallinas-de-postura': 'gallinas-', 'embutidos-artesanales': 'embutidos-' };
 const portadaDe = (i) => (PORTADAS[SLUG] && i >= 0 && i < 5) ? PORTADAS_BASE + PORTADAS[SLUG] + (i + 1) + '.jpg' : '';
-const portadaMat = (i) => (PORTADAS[SLUG] && i >= 0 && i < 5) ? PORTADAS_BASE + 'mat-' + PORTADAS[SLUG] + (i + 1) + '.jpg' : '';
+const portadaMat = (i, m) => m?.miniatura || ((PORTADAS[SLUG] && i >= 0 && i < 5) ? PORTADAS_BASE + 'mat-' + PORTADAS[SLUG] + (i + 1) + '.jpg' : '');
 const TIPO_MAT = { pptx: 'Presentación', ppt: 'Presentación', pdf: 'Documento', docx: 'Documento', doc: 'Documento', xlsx: 'Excel', xls: 'Excel', zip: 'Paquete' };
 const NOMBRES = { 'gallinas-de-postura': 'Gallinas de Postura', 'embutidos-artesanales': 'Embutidos Artesanales' };
 const PORTADA = document.querySelector('video[poster]')?.getAttribute('poster') || document.querySelector('meta[property="og:image"]')?.content || '';
@@ -4171,14 +4171,15 @@ function vistaClases() {
 // ─── Materiales ─────────────────────────────────────────────────────────────
 function mat(m) {
   const x = m.tipo === 'xlsx' || m.tipo === 'excel';
-  return `<button class="mc__m" type="button" data-mat="${esc(m.id)}">${portadaMat(DATA.materiales.indexOf(m)) ? `<img class="mc__mth" src="${portadaMat(DATA.materiales.indexOf(m))}" alt="" loading="lazy">` : `<i class="${x ? 'x' : ''}">${I.doc}</i>`}<span><b>${esc(m.titulo)}</b><small>${esc(m.categoria ? (TIPO_MAT[m.tipo] || 'Documento') + ' · ' + m.categoria : (TIPO_MAT[m.tipo] || (x ? 'Hoja de Excel' : 'Documento PDF')))}</small></span>${I.descarga}</button>`;
+  const cov = portadaMat(DATA.materiales.indexOf(m), m);
+  return `<button class="mc__m" type="button" data-mat="${esc(m.id)}">${cov ? `<img class="mc__mth" src="${esc(cov)}" alt="" loading="lazy">` : `<i class="${x ? 'x' : ''}">${I.doc}</i>`}<span><b>${esc(m.titulo)}</b><small>${esc(m.categoria ? (TIPO_MAT[m.tipo] || 'Documento') + ' · ' + m.categoria : (TIPO_MAT[m.tipo] || (x ? 'Hoja de Excel' : 'Documento PDF')))}</small></span>${I.descarga}</button>`;
 }
 function matCard(m, i) {
-  const cov = portadaMat(i);
+  const cov = portadaMat(i, m);
   const tipo = TIPO_MAT[m.tipo] || 'Documento';
   return `<article class="mc__mc">
     <button type="button" class="mc__mcov" data-mat="${esc(m.id)}" aria-label="Abrir ${esc(m.titulo)}">
-      <span class="ph">${I.doc}</span>${cov ? `<img src="${cov}" alt="" loading="lazy">` : ''}
+      <span class="ph">${I.doc}</span>${cov ? `<img src="${esc(cov)}" alt="" loading="lazy">` : ''}
       <span class="tag">${esc(tipo)}</span><span class="num">${String(i + 1).padStart(2, '0')}</span>
     </button>
     <div class="mc__mbody">

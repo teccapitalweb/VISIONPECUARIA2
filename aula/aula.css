@@ -257,6 +257,7 @@ a { color: inherit; }
 .mat__ico { width: 46px; height: 46px; border-radius: 12px; display: grid; place-items: center; flex: none; background: #fdecea; color: #b3261e; }
 .mat__ico--xlsx { background: #e3f3e4; color: #1b5e20; }
 .mat__ico .ico { width: 22px; height: 22px; }
+.mat__cover { width: 96px; aspect-ratio: 4 / 3; border-radius: 12px; object-fit: cover; flex: none; background: var(--surface-2); }
 .mat b { display: block; font-size: .92rem; }
 .mat small { color: var(--ink-mute); font-size: .78rem; }
 .mat__go { margin-left: auto; color: var(--ink-mute); }
