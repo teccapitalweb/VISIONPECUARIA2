@@ -1144,21 +1144,6 @@ input, textarea { font-family: inherit; }
 }
 .cta-list svg { width: 20px; height: 20px; color: var(--success); flex-shrink: 0; stroke-width: 3; }
 
-.cta-guarantee-box {
-  display: flex;
-  gap: 14px;
-  align-items: flex-start;
-  padding: 20px 22px;
-  background: var(--paper-soft);
-  border: 1px solid var(--line);
-  border-radius: var(--r);
-  text-align: left;
-  margin-bottom: 28px;
-}
-.cta-guarantee-box > svg { width: 32px; height: 32px; color: var(--brand); flex-shrink: 0; }
-.cta-guarantee-box b { display: block; color: var(--ink); margin-bottom: 4px; font-weight: 800; }
-.cta-guarantee-box span { display: block; color: var(--ink-mute); font-size: .87rem; line-height: 1.5; }
-
 .cta-fine {
   margin-top: 22px;
   font-size: .78rem;
