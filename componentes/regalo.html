@@ -17,7 +17,8 @@
 #vp-regalo .vprg__cta{display:block;width:100%;margin-top:16px;padding:16px;border:0;border-radius:12px;cursor:pointer;font-family:'Archivo','Inter',system-ui,sans-serif;font-size:17px;font-weight:800;letter-spacing:.04em;text-transform:uppercase;color:#fff;background:#166534;box-shadow:0 10px 22px -10px rgba(22,101,52,.8);transition:background .15s,transform .15s}
 #vp-regalo .vprg__cta:hover{background:#14532d;transform:translateY(-1px)}
 #vp-regalo .vprg__no{display:block;margin:12px auto 0;background:none;border:0;color:#6b7a70;font:inherit;font-size:13px;cursor:pointer;text-decoration:underline;text-underline-offset:3px}
-/* Cinta «ganaste»: queda arriba mientras la persona sigue viendo la página */
+[data-vp-regalo-promesa][hidden]{display:none!important}
+/* Cinta de la oferta activada. */
 #vp-gano{position:fixed;top:0;left:0;right:0;z-index:2147482000;display:none;align-items:center;justify-content:center;gap:10px 16px;flex-wrap:wrap;padding:9px 14px;background:#14532d;color:#fff;font-family:'Inter',system-ui,-apple-system,'Segoe UI',sans-serif;font-size:13.5px;line-height:1.35;text-align:center;box-shadow:0 6px 18px -8px rgba(0,0,0,.5)}
 html.vp-gano #vp-gano{display:flex}
 html.vp-gano body{padding-top:var(--vp-gano-h,56px)}
@@ -29,8 +30,8 @@ html.vp-gano .hdr{top:var(--vp-gano-h,56px)}
 @keyframes vprg-p{from{opacity:0;transform:translateY(12px)}to{opacity:1;transform:none}}
 @media (prefers-reduced-motion:reduce){#vp-regalo,#vp-regalo *{animation:none!important;transition:none!important}}
 </style>
-<div id="vp-gano" role="status" aria-live="polite">
-  <span><b>¡Felicidades! Ganaste el Curso de Sexaje Avícola.</b> Inscríbete en los próximos <span class="vpg__r" id="vpg-reloj">60:00</span> para recibirlo.</span>
+<div id="vp-gano">
+  <span><b>¡Sexaje Avícola apartado!</b> Tu pago debe confirmarse en <span class="vpg__r" id="vpg-reloj" role="timer"></span> para recibir el regalo.</span>
   <button type="button" class="vpg__btn" data-action="inscribir">Inscribirme</button>
 </div>
 <div id="vp-regalo" role="dialog" aria-modal="true" aria-labelledby="vprg-h" hidden>
@@ -40,46 +41,157 @@ html.vp-gano .hdr{top:var(--vp-gano-h,56px)}
     <div class="vprg__b">
       <p class="vprg__k">Oferta por tiempo limitado</p>
       <h3 id="vprg-h">Llévate gratis el Curso de Sexaje Avícola</h3>
-      <p class="vprg__t">Al inscribirte a <b id="vprg-curso">este curso</b> te lo regalamos. Aparta tu lugar y sigue revisando el temario con calma.</p>
-      <div class="vprg__r"><span>La oferta termina en</span><b id="vprg-reloj">60:00</b></div>
+      <p class="vprg__t">Activa tu regalo y paga <b id="vprg-curso">este curso</b> en este navegador. Tu pago debe confirmarse antes de que termine el plazo.</p>
+      <div class="vprg__r"><span>Tiempo restante</span><b id="vprg-reloj" role="timer"></b></div>
       <button type="button" class="vprg__cta" id="vprg-cta">Quiero mi lugar</button>
       <button type="button" class="vprg__no" data-vprg-cerrar>Ahora no</button>
     </div>
   </div>
 </div>
 <script>
-/* Oferta del curso de regalo (60 minutos). «Quiero mi lugar» NO abre el pago: cierra el aviso, lanza confeti y deja
-   arriba una cinta de «ganaste» con el reloj, para que la persona siga viendo temario, ponente y lo que incluye.
-   El pago solo se abre cuando ella toca «Inscribirme» (mismo data-action de la página; su lógica no se toca). */
-(function(){
-  var NOMBRES={'gallinas-de-postura':'Manejo de Gallinas de Postura','embutidos-artesanales':'Embutidos Artesanales'};
-  var slug=(location.pathname.split('/').pop()||'').replace(/\.html$/,'');
-  var caja=document.getElementById('vp-regalo'),cinta=document.getElementById('vp-gano'),raiz=document.documentElement;
-  if(!caja||!cinta||!NOMBRES[slug])return;
-  var CLAVE='vp_regalo_fin_'+slug,GANO='vp_regalo_gano_'+slug,DURA=60*60*1000,fin=0,tic=null;
-  function lee(k){try{return localStorage.getItem(k)}catch(e){return null}}
-  function pon(k,v){try{localStorage.setItem(k,v)}catch(e){}}
-  fin=parseInt(lee(CLAVE)||'0',10)||0;
-  function enAula(){var q=new URLSearchParams(location.search);if(q.get('pago')==='ok'||location.hash==='#mi-curso')return true;var a=document.getElementById('mi-curso');return !!(a&&!a.hidden)}
-  function pagoAbierto(){var m=document.getElementById('modal-checkout');return !!(m&&(m.hasAttribute('data-open')||/(^| )(open|is-open|active|show)( |$)/.test(m.className)))}
-  function reloj(){var r=Math.max(0,fin-Date.now()),m=Math.floor(r/60000),s=Math.floor(r%60000/1000);return (m<10?'0':'')+m+':'+(s<10?'0':'')+s}
-  function alto(){raiz.style.setProperty('--vp-gano-h',cinta.offsetHeight+'px')}
-  function cinta_(on){raiz.classList.toggle('vp-gano',!!on);if(on){alto()}}
-  function pinta(){
-    var t=reloj();document.getElementById('vprg-reloj').textContent=t;document.getElementById('vpg-reloj').textContent=t;
-    if(fin<=Date.now()){cerrar();cinta_(false);if(tic){clearInterval(tic);tic=null}return}
-    if(raiz.classList.contains('vp-gano')&&enAula())cinta_(false);
+(() => {
+  const API = 'https://visionpecuaria-webhook-production.up.railway.app';
+  const nombres = { 'gallinas-de-postura': 'Manejo de Gallinas de Postura', 'embutidos-artesanales': 'Embutidos Artesanales' };
+  const slug = document.body.dataset.slug || (location.pathname.split('/').filter(Boolean).pop() || '').replace(/\.html$/, '');
+  const caja = document.getElementById('vp-regalo');
+  const cinta = document.getElementById('vp-gano');
+  const cta = document.getElementById('vprg-cta');
+  if (!nombres[slug] || !caja || !cinta || !cta) return;
+
+  const raiz = document.documentElement;
+  const promesas = document.querySelectorAll('[data-vp-regalo-promesa]');
+  const relojes = [document.getElementById('vprg-reloj'), document.getElementById('vpg-reloj')];
+  const claveNavegador = 'vp_regalo_navegador_v1';
+  const claveReclamo = 'vp_regalo_reclamo_v1_' + slug;
+  const uuid = /^[0-9a-f]{8}-[0-9a-f]{4}-4[0-9a-f]{3}-[89ab][0-9a-f]{3}-[0-9a-f]{12}$/i;
+  let navegadorId, reserva = null, rechazo = false, reclamo = leerReclamo();
+  let listo = false, intentoHecho = false, popupMostrado = false, tic = null, desborde = '', focoAnterior = null;
+
+  function leer(clave) { try { return localStorage.getItem(clave); } catch (_) { return null; } }
+  function escribir(clave, valor) { try { localStorage.setItem(clave, valor); } catch (_) {} }
+
+  function leerReclamo() {
+    try {
+      const dato = JSON.parse(leer(claveReclamo));
+      return dato && uuid.test(dato.navegadorId) && typeof dato.token === 'string' && dato.token &&
+        Number.isFinite(dato.venceEn) && Number.isFinite(dato.desfase) ? dato : null;
+    } catch (_) { return null; }
   }
-  function corre(){if(!tic){pinta();tic=setInterval(pinta,1000)}}
-  function cerrar(){caja.classList.remove('on');caja.hidden=true;raiz.style.overflow=''}
-  function abrir(){
-    if(enAula()||pagoAbierto())return;
-    if(!fin){fin=Date.now()+DURA;pon(CLAVE,String(fin))}
-    if(fin<=Date.now())return;                       // el tiempo ya se acabó: no se vuelve a ofrecer
-    if(lee(GANO)==='1'){cinta_(true);corre();return} // ya lo reclamó: solo la cinta
-    document.getElementById('vprg-curso').textContent=NOMBRES[slug];
-    document.getElementById('vprg-img').style.backgroundImage="url('https://cdn.jsdelivr.net/gh/teccapitalweb/VISIONPECUARIA2@main/portadas/gallinas-2.jpg')";
-    caja.hidden=false;caja.classList.add('on');raiz.style.overflow='hidden';corre();
+
+  function idNavegador() {
+    if (navegadorId) return navegadorId;
+    const guardado = leer(claveNavegador);
+    navegadorId = reclamo?.navegadorId || (uuid.test(guardado) ? guardado : window.crypto?.randomUUID?.());
+    if (navegadorId) escribir(claveNavegador, navegadorId);
+    return navegadorId;
+  }
+
+  function enLanding() {
+    if (new URLSearchParams(location.search).get('pago') === 'ok' || location.hash.startsWith('#mi-curso')) return false;
+    const aula = document.getElementById('mi-curso');
+    const pago = document.getElementById('modal-checkout');
+    return !(aula && !aula.hidden) && !(pago && (pago.hasAttribute('data-open') ||
+      /(^| )(open|is-open|active|show)( |$)/.test(pago.className)));
+  }
+
+  function restante(dato) {
+    if (!dato) return 0;
+    const porReloj = dato.venceEn - Date.now() - dato.desfase;
+    const porTiempo = dato.limiteMonotono === undefined ? porReloj : dato.limiteMonotono - performance.now();
+    return Math.max(0, Math.min(porReloj, porTiempo));
+  }
+
+  async function apartar(id) {
+    const controlador = new AbortController();
+    const limite = setTimeout(() => controlador.abort(), 4500);
+    const desde = performance.now();
+    try {
+      const resp = await fetch(API + '/publico/cursos/regalo/apartar', {
+        method: 'POST', headers: { 'Content-Type': 'application/json' }, cache: 'no-store',
+        body: JSON.stringify({ cursoSlug: slug, navegadorId: id }), signal: controlador.signal
+      });
+      if (id !== navegadorId) return null;
+      if (!resp.ok) {
+        rechazo = resp.status >= 400 && resp.status < 500 && resp.status !== 408 && resp.status !== 429;
+        return null;
+      }
+      const dato = await resp.json();
+      const venceEn = Date.parse(dato.venceEn);
+      const ahora = Date.parse(dato.ahora);
+      if (dato.cursoRegaloSlug !== 'sexaje-avicola' || typeof dato.token !== 'string' || !dato.token ||
+          !Number.isFinite(venceEn) || !Number.isFinite(ahora) || id !== navegadorId) return null;
+      rechazo = false;
+      return {
+        token: dato.token, navegadorId: id, venceEn,
+        desfase: ahora + performance.now() - desde - Date.now(),
+        limiteMonotono: desde + venceEn - ahora
+      };
+    } catch (_) {
+      return null;
+    } finally {
+      clearTimeout(limite);
+    }
+  }
+
+  function guardarReclamo() {
+    const { token, navegadorId, venceEn, desfase } = reserva;
+    reclamo = { token, navegadorId, venceEn, desfase };
+    escribir(claveReclamo, JSON.stringify(reclamo));
+  }
+
+  function ajustarAltura() {
+    raiz.style.setProperty('--vp-gano-h', cinta.offsetHeight + 'px');
+  }
+
+  function cerrar() {
+    if (caja.hidden) return;
+    caja.classList.remove('on');
+    caja.hidden = true;
+    if (raiz.style.overflow === 'hidden') raiz.style.overflow = desborde;
+    if (enLanding()) focoAnterior?.focus({ preventScroll: true });
+  }
+
+  function pintar() {
+    const ms = restante(reserva);
+    const reclamado = ms > 0 && reclamo?.navegadorId === reserva.navegadorId;
+    const viendoLanding = enLanding();
+    const mostrar = reclamado && viendoLanding;
+    const cambioCinta = raiz.classList.contains('vp-gano') !== mostrar;
+    raiz.classList.toggle('vp-gano', mostrar);
+    for (const promesa of promesas) promesa.hidden = !mostrar;
+    if (!ms || !viendoLanding || reclamado) cerrar();
+    clearTimeout(tic);
+    tic = null;
+    if (!ms) return;
+    const total = Math.ceil(ms / 1000);
+    const reloj = String(Math.floor(total / 60)).padStart(2, '0') + ':' + String(total % 60).padStart(2, '0');
+    for (const nodo of relojes) nodo.textContent = reloj;
+    if (mostrar && cambioCinta) ajustarAltura();
+    tic = setTimeout(pintar, Math.min(1000, ms));
+  }
+
+  async function presentar() {
+    if (!listo || !enLanding() || document.visibilityState === 'hidden') return;
+    if (!intentoHecho) {
+      const id = idNavegador();
+      if (!id) return;
+      intentoHecho = true;
+      const nueva = await apartar(id);
+      if (id !== navegadorId) return;
+      reserva = nueva;
+      if (reserva && reclamo?.navegadorId === navegadorId) guardarReclamo();
+      pintar();
+    }
+    if (popupMostrado || !restante(reserva) || reclamo || !enLanding() || document.visibilityState === 'hidden') return;
+    popupMostrado = true;
+    document.getElementById('vprg-curso').textContent = nombres[slug];
+    document.getElementById('vprg-img').style.backgroundImage = "url('https://cdn.jsdelivr.net/gh/teccapitalweb/VISIONPECUARIA2@main/portadas/gallinas-2.jpg')";
+    focoAnterior = document.activeElement;
+    desborde = raiz.style.overflow;
+    caja.hidden = false;
+    caja.classList.add('on');
+    raiz.style.overflow = 'hidden';
+    cta.focus({ preventScroll: true });
   }
   function confeti(){try{
     if(matchMedia('(prefers-reduced-motion: reduce)').matches||document.getElementById('vp-confeti'))return;
@@ -91,12 +203,51 @@ html.vp-gano .hdr{top:var(--vp-gano-h,56px)}
       P.forEach(function(p){p.x+=p.vx;p.y+=p.vy;p.vy+=.03*d;p.r+=p.vr;x.save();x.translate(p.x,p.y);x.rotate(p.r);x.fillStyle=p.c;x.fillRect(-p.w/2,-p.h/2,p.w,p.h);x.restore()});
       if(k<1)requestAnimationFrame(f);else c.remove()})(t0);
   }catch(e){}}
-  caja.addEventListener('click',function(e){if(e.target===caja||e.target.closest('[data-vprg-cerrar]'))cerrar()});
-  document.getElementById('vprg-cta').addEventListener('click',function(){pon(GANO,'1');cerrar();cinta_(true);corre();confeti();window.scrollTo({top:0,behavior:'smooth'})});
-  document.addEventListener('keydown',function(e){if(e.key==='Escape'&&caja.classList.contains('on'))cerrar()});
-  window.addEventListener('hashchange',function(){if(location.hash==='#mi-curso'){cerrar();cinta_(false)}});
-  window.addEventListener('resize',function(){if(raiz.classList.contains('vp-gano'))alto()});
-  setTimeout(abrir,1500);
+  function sincronizar() {
+    pintar();
+    presentar();
+  }
+
+  caja.addEventListener('click', e => {
+    if (e.target === caja || e.target.closest('[data-vprg-cerrar]')) cerrar();
+  });
+  cta.addEventListener('click', () => {
+    if (caja.hidden || !restante(reserva) || !enLanding()) return pintar();
+    guardarReclamo();
+    pintar();
+    confeti();
+    if (!matchMedia('(prefers-reduced-motion: reduce)').matches) window.scrollTo({ top: 0, behavior: 'smooth' });
+  });
+  document.addEventListener('keydown', e => { if (e.key === 'Escape') cerrar(); });
+  document.addEventListener('visibilitychange', sincronizar);
+  window.addEventListener('hashchange', sincronizar);
+  window.addEventListener('pageshow', sincronizar);
+  window.addEventListener('online', () => {
+    if (!reserva && !rechazo) intentoHecho = false;
+    sincronizar();
+  });
+  window.addEventListener('storage', e => {
+    if (e.key !== claveReclamo) return;
+    reclamo = leerReclamo();
+    if (reclamo && reclamo.navegadorId !== navegadorId) {
+      navegadorId = reclamo.navegadorId;
+      reserva = null;
+      intentoHecho = false;
+    }
+    sincronizar();
+  });
+  window.addEventListener('resize', () => { if (raiz.classList.contains('vp-gano')) ajustarAltura(); });
+
+  window.vpRegalo = {
+    sincronizar,
+    datosCheckout(cursoSlug = slug) {
+      if (cursoSlug !== slug || !reclamo || rechazo) return {};
+      // La pantalla exige confirmación. El servidor valida un token anterior si se inicia el pago antes de revalidar.
+      const dato = reserva || reclamo;
+      return restante(dato) > 0 ? { reservaRegalo: dato.token, navegadorId: dato.navegadorId } : {};
+    }
+  };
+  setTimeout(() => { listo = true; presentar(); }, 1500);
 })();
 </script>
 <!-- regalo:fin -->

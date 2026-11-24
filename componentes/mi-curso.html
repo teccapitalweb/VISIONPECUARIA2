@@ -728,17 +728,25 @@ body[data-slug="embutidos-artesanales"] .mc {
 .mc__recommend { display: grid; gap: 8px; min-width: 0; }
 .mc__asistir { display: grid; gap: 14px; align-content: start; }
 .mc__recommend h2 { color: var(--ink); font-size: .85rem; line-height: 1.35; }
-.mc__recommend-card { display: grid; grid-template-columns: 76px minmax(0, 1fr) auto; align-items: center; gap: 12px; padding: 10px; border: 1px solid var(--line2); border-radius: 14px; color: var(--ink); background: var(--card); text-decoration: none; }
+.mc__recommend-card { display: grid; grid-template-columns: 76px minmax(0, 1fr) auto; align-items: center; gap: 10px; padding: 12px; border: 1px solid var(--line2); border-radius: 14px; color: var(--ink); background: var(--card); text-decoration: none; }
 .mc__recommend-card:hover { border-color: var(--a); }
 .mc__recommend-card:focus-visible { outline: 3px solid var(--a); outline-offset: 3px; }
 .mc__recommend-card img { width: 76px; height: 58px; border-radius: 8px; object-fit: cover; background: var(--tint); }
 .mc__recommend-card strong { display: block; font-size: .88rem; line-height: 1.25; }
 .mc__recommend-card small { color: var(--soft); font-size: .75rem; }
-.mc__recom-precio { display: grid; gap: 2px; margin-top: 4px; }
-.mc__recom-montos { display: flex; flex-wrap: wrap; align-items: baseline; gap: 2px 8px; }
-.mc__recom-montos b { color: var(--a2); font-size: .96rem; }
-.mc__recom-montos s { color: var(--soft); font-size: .77rem; }
+.mc__recom-meta { display: flex; flex-wrap: wrap; align-items: center; gap: 5px 8px; margin-top: 5px; }
+.mc__recom-precio { display: contents; }
+.mc__recom-precio[hidden] { display: none; }
+.mc__recom-etiqueta { padding: 3px 6px; border-radius: 6px; background: var(--tint); color: var(--a2); font-size: .72rem; font-weight: 700; line-height: 1.25; white-space: nowrap; }
+.mc__recom-montos { display: inline-flex; align-items: baseline; gap: 6px; white-space: nowrap; }
+.mc__recom-montos b { color: var(--a2); font-size: .84rem; }
+.mc__recom-montos .mc__recom-antes { color: var(--soft); font-size: .72rem; }
 .mc__recommend-card svg { width: 17px; height: 17px; color: var(--a2); }
+@media (max-width: 420px) {
+  .mc__recommend-card { grid-template-columns: 62px minmax(0, 1fr) 14px; gap: 8px; padding: 10px; }
+  .mc__recommend-card img { width: 62px; height: 58px; }
+  .mc__recommend-card svg { width: 14px; height: 14px; }
+}
 .vp-oferta-alumno { display: grid; gap: 4px; max-width: 32rem; margin: 0 0 12px; border: 1px solid #f1d99e; background: #fff6da; color: #5b3d0d; border-radius: 10px; padding: 10px 12px; font-size: .9rem; line-height: 1.35; text-align: left; }
 .vp-oferta-alumno strong { font-size: 1rem; }
 .vp-oferta-alumno:empty { display: none; }
@@ -1424,7 +1432,7 @@ function tarjetasRecomendadas() {
     <h2 id="mc-recom-title">Porque adquiriste este curso, te podría interesar</h2>
     ${cursos.map(curso => `<a class="mc__recommend-card" href="${esc(enlaceRecomendado(curso))}">
       <img src="${esc(curso.portada)}" alt="" loading="lazy" width="76" height="58">
-      <span><strong>${esc(curso.nombre)}</strong><span class="mc__recom-precio" data-recom-precio="${esc(curso.slug)}"><small>Ver curso</small></span></span>
+      <span><strong>${esc(curso.nombre)}</strong><span class="mc__recom-meta"><small data-recom-accion>Ver curso</small><span class="mc__recom-precio" data-recom-precio="${esc(curso.slug)}" hidden></span></span></span>
       ${I.flecha}
     </a>`).join('')}
   </section>`;
@@ -1456,9 +1464,14 @@ function cargarPreciosRecomendados() {
     const p = await consulta.precio;
     if (!p && cotizacionesRecomendadas.get(slug) === consulta) cotizacionesRecomendadas.delete(slug);
     if (!p || USER?.uid !== uid || !nodo.isConnected) return;
-    nodo.innerHTML = p.yaComprado ? '<small>Ya tienes acceso</small>' :
-      `<span class="mc__recom-montos"><s><span class="mc__sr">Precio regular </span>${esc(mxn(p.precioBaseCentavos))}</s>
-        <b><span class="mc__sr">Precio de alumno </span>${esc(mxn(p.montoCentavos))}</b></span><small>Ahorras ${esc(mxn(p.descuentoCentavos))} como alumno</small>`;
+    if (p.yaComprado) {
+      nodo.parentElement.querySelector('[data-recom-accion]').textContent = 'Ya tienes acceso';
+      return;
+    }
+    const antes = mxn(p.precioBaseCentavos).replace(/ MXN$/, '');
+    nodo.innerHTML = `<span class="mc__recom-etiqueta">Descuento para ti</span>
+      <span class="mc__recom-montos"><span class="mc__recom-antes">Antes <s>${esc(antes)}</s></span><b>${esc(mxn(p.montoCentavos))}</b></span>`;
+    nodo.hidden = false;
   });
 }
 
