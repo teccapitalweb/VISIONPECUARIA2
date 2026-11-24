@@ -756,6 +756,7 @@ body[data-slug="embutidos-artesanales"] .mc {
 .mc__gallo-fuentes, .mc__gallo-reaccion { padding: 0 6px; font-size: .75rem; color: var(--soft); }
 .mc__gallo-fuentes summary { cursor: pointer; color: var(--a2); font-weight: 700; }
 .mc__gallo-fuentes ul { margin: 4px 0 6px; padding-left: 18px; }
+.mc__gallo-fuentes a { color: var(--a2); text-decoration: underline; overflow-wrap: anywhere; }
 .mc__gallo-reaccion { display: flex; gap: 7px 10px; flex-wrap: wrap; align-items: center; }
 .mc__gallo-reaccion button { min-height: 30px; padding: 4px 8px; border: 1px solid var(--line2); border-radius: 8px; color: var(--a2); font-weight: 700; }
 .mc__gallo-reaccion button[aria-pressed="true"] { background: var(--tint); border-color: var(--a); }
@@ -859,7 +860,7 @@ const RECOMENDADOS = {
     slug: 'gallinas-de-postura',
     nombre: 'Gallinas de Postura',
     url: '/gallinas-de-postura.html',
-    portada: '/assets/curso-gallinas-postura/preview-poster.jpg'
+    portada: PORTADAS_BASE + 'gallinas-1.jpg'
   }]
 };
 const mxn = (centavos) => new Intl.NumberFormat('es-MX', {

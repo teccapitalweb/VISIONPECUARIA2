@@ -3621,6 +3621,7 @@ body[data-slug="embutidos-artesanales"] .mc {
 .mc__gallo-fuentes, .mc__gallo-reaccion { padding: 0 6px; font-size: .75rem; color: var(--soft); }
 .mc__gallo-fuentes summary { cursor: pointer; color: var(--a2); font-weight: 700; }
 .mc__gallo-fuentes ul { margin: 4px 0 6px; padding-left: 18px; }
+.mc__gallo-fuentes a { color: var(--a2); text-decoration: underline; overflow-wrap: anywhere; }
 .mc__gallo-reaccion { display: flex; gap: 7px 10px; flex-wrap: wrap; align-items: center; }
 .mc__gallo-reaccion button { min-height: 30px; padding: 4px 8px; border: 1px solid var(--line2); border-radius: 8px; color: var(--a2); font-weight: 700; }
 .mc__gallo-reaccion button[aria-pressed="true"] { background: var(--tint); border-color: var(--a); }
@@ -3724,7 +3725,7 @@ const RECOMENDADOS = {
     slug: 'gallinas-de-postura',
     nombre: 'Gallinas de Postura',
     url: '/gallinas-de-postura.html',
-    portada: '/assets/curso-gallinas-postura/preview-poster.jpg'
+    portada: PORTADAS_BASE + 'gallinas-1.jpg'
   }]
 };
 const mxn = (centavos) => new Intl.NumberFormat('es-MX', {
@@ -4287,7 +4288,7 @@ function tarjetasRecomendadas() {
   </section>`;
 }
 
-const GALLO_SALUDO = '¡Hola! Soy Mi Gallo IA. Cuéntame qué estás observando, qué especie manejas o en qué parte del curso necesitas ayuda.';
+const GALLO_SALUDO = '¡Hola! Soy tu Gallo IA.\nPuedo orientarte sobre avicultura, tus clases, materiales y certificados.';
 const PREGUNTAS_GALLO = [
   '¿Qué clases incluye mi curso?',
   '¿Qué datos registro si baja la postura?',
@@ -4311,11 +4312,11 @@ function urlFuenteGallo(valor) {
 }
 
 function fuentesGallo(lista) {
-  const fuentes = Array.isArray(lista) ? lista.slice(0, 6) : [];
+  const fuentes = Array.isArray(lista) ? lista.filter(f => typeof f?.titulo === 'string' && f.titulo.trim()).slice(0, 6) : [];
   if (!fuentes.length) return '';
   return `<details class="mc__gallo-fuentes"><summary>Fuentes consultadas (${fuentes.length})</summary><ul>
     ${fuentes.map(f => {
-      const titulo = esc(f.titulo || 'Fuente técnica');
+      const titulo = esc(f.titulo.trim());
       const href = urlFuenteGallo(f.url);
       const detalle = [f.autor, f.fecha, f.version ? 'versión ' + f.version : ''].filter(Boolean).map(esc).join(' · ');
       return `<li>${href ? `<a href="${esc(href)}" target="_blank" rel="noopener noreferrer">${titulo}</a>` : titulo}${detalle ? ' · ' + detalle : ''}</li>`;

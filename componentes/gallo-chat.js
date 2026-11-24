@@ -1,4 +1,4 @@
-const GALLO_SALUDO = '¡Hola! Soy Mi Gallo IA. Cuéntame qué estás observando, qué especie manejas o en qué parte del curso necesitas ayuda.';
+const GALLO_SALUDO = '¡Hola! Soy tu Gallo IA.\nPuedo orientarte sobre avicultura, tus clases, materiales y certificados.';
 const PREGUNTAS_GALLO = [
   '¿Qué clases incluye mi curso?',
   '¿Qué datos registro si baja la postura?',
@@ -22,11 +22,11 @@ function urlFuenteGallo(valor) {
 }
 
 function fuentesGallo(lista) {
-  const fuentes = Array.isArray(lista) ? lista.slice(0, 6) : [];
+  const fuentes = Array.isArray(lista) ? lista.filter(f => typeof f?.titulo === 'string' && f.titulo.trim()).slice(0, 6) : [];
   if (!fuentes.length) return '';
   return `<details class="mc__gallo-fuentes"><summary>Fuentes consultadas (${fuentes.length})</summary><ul>
     ${fuentes.map(f => {
-      const titulo = esc(f.titulo || 'Fuente técnica');
+      const titulo = esc(f.titulo.trim());
       const href = urlFuenteGallo(f.url);
       const detalle = [f.autor, f.fecha, f.version ? 'versión ' + f.version : ''].filter(Boolean).map(esc).join(' · ');
       return `<li>${href ? `<a href="${esc(href)}" target="_blank" rel="noopener noreferrer">${titulo}</a>` : titulo}${detalle ? ' · ' + detalle : ''}</li>`;
