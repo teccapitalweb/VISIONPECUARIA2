@@ -3,6 +3,8 @@ Uso: python3 componentes/inyectar.py (idempotente)."""
 import re, pathlib
 raiz = pathlib.Path(__file__).resolve().parent.parent
 comp = (raiz / 'componentes/mi-curso.html').read_text(encoding='utf-8').strip()
+actividad = (raiz / 'componentes/actividad-cursos.js').read_text(encoding='utf-8').strip()
+comp = comp.replace('/* INYECTAR ACTIVIDAD DE CURSOS */', actividad)
 regalo = (raiz / 'componentes/regalo.html').read_text(encoding='utf-8').strip()
 for nombre in ('gallinas-de-postura.html', 'embutidos-artesanales.html'):
     p = raiz / nombre
