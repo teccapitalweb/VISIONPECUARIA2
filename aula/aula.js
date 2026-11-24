@@ -602,16 +602,28 @@ function iniciarSeguimiento() {
 async function guardarProgreso({ completada = false }, avisar = false) {
   if (!SEG) return;
   const s = SEG;
+  const uid = S.user?.uid;
   s.enviado = s.sesion;
   if (completada) s.completada = true;
   const body = { claseId: s.clase.id, segundos: s.base + s.sesion, completada: s.completada, posicion: s.posicion, clientTs: Date.now() };
   try {
     const r = await api(`/alumno/curso/${encodeURIComponent(s.slug)}/progreso`, { method: 'POST', body, keepalive: true });
+    if (!uid || S.user?.uid !== uid) return;
     const d = S.detalle[s.slug];
     if (d && r.progreso) {
+      const anterior = d.progreso;
       d.progreso = r.progreso;
       const c = S.estado?.cursos?.find(x => x.slug === s.slug);
       if (c) c.progreso = { completadas: r.progreso.completadas, total: r.progreso.total, porcentaje: r.progreso.porcentaje, ultimaClaseId: r.progreso.ultimaClaseId };
+      if (SEG === s && !document.hidden && anterior && anterior.completadas < anterior.total &&
+          !anterior.clases?.[s.clase.id]?.completada &&
+          r.progreso.total > 0 && r.progreso.completadas === r.progreso.total) {
+        import('/aula/curso-completado.js?v=1').then(({ mostrarSiguienteCurso }) => {
+          if (SEG !== s || document.hidden || S.user?.uid !== uid) return;
+          mostrarSiguienteCurso({ slug: s.slug, uid, cursos: S.estado?.cursos || [], clases: d.clases,
+            progreso: r.progreso, claseId: s.clase.id });
+        }).catch(() => {});
+      }
     }
     if (completada && SEG === s) {
       const b = $('#btn-vista'); if (b) { b.disabled = true; b.className = 'btn btn--ghost'; b.innerHTML = ico('check') + ' Clase vista'; }
