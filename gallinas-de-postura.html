@@ -4008,7 +4008,9 @@ window.addEventListener('popstate', () => {
   const enCurso = location.hash.startsWith('#mi-curso');
   if (ABIERTO && !enCurso) cerrar(true); else if (!ABIERTO && enCurso) abrir(); else if (ABIERTO) render();
 });
-document.addEventListener('keydown', (e) => { if (e.key === 'Escape' && ABIERTO && !document.getElementById('mc-visor')) cerrar(); });
+document.addEventListener('keydown', (e) => {
+  if (e.key === 'Escape' && ABIERTO && !document.querySelector('#mc-visor, [data-vp-oferta-completado][open]')) cerrar();
+});
 
 onAuthStateChanged(auth, (u) => {
   if (USER?.uid !== u?.uid) {
@@ -4821,9 +4823,24 @@ async function vistaClase(id) {
 
 async function guardar(comp, avisar) {
   if (!SEG) return; const s = SEG; s.env = s.ses; if (comp) s.comp = true;
+  const uid = USER?.uid;
+  const d = DATA;
   try {
     const r = await api('/alumno/curso/' + encodeURIComponent(SLUG) + '/progreso', { method: 'POST', keepalive: true, body: { claseId: s.id, segundos: s.base + s.ses, completada: s.comp, posicion: s.pos, clientTs: Date.now() } });
-    if (DATA && r.progreso) DATA.progreso = r.progreso;
+    if (!uid || USER?.uid !== uid || DATA !== d) return;
+    if (d && r.progreso) {
+      const anterior = d.progreso;
+      d.progreso = r.progreso;
+      if (ABIERTO && SEG === s && !document.hidden && anterior && anterior.completadas < anterior.total &&
+          !anterior.clases?.[s.id]?.completada &&
+          r.progreso.total > 0 && r.progreso.completadas === r.progreso.total) {
+        import('/aula/curso-completado.js?v=1').then(({ mostrarSiguienteCurso }) => {
+          if (!ABIERTO || SEG !== s || document.hidden || USER?.uid !== uid) return;
+          mostrarSiguienteCurso({ slug: SLUG, uid, cursos: ESTADO?.cursos || [], clases: d.clases,
+            progreso: r.progreso, claseId: s.id });
+        }).catch(() => {});
+      }
+    }
     if (comp && SEG === s) { const b = $('#mc-vista'); if (b) { b.disabled = true; b.className = 'mc__btn mc__btn--l'; b.innerHTML = I.check + ' Clase vista'; }
       const ch = $('#mc-chip'); if (ch) { ch.className = 'mc__chip mc__chip--ok'; ch.innerHTML = I.check + ' Ya vista · continúa'; } if (avisar) toast('Clase marcada como vista'); }
   } catch (_) { if (avisar) toast('No pudimos guardar tu progreso', true); }
