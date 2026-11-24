@@ -1,0 +1,193 @@
+// Este archivo se integra en el módulo de las dos landings mediante inyectar.py.
+function crearActividadCursos() {
+  const origen = new URL(location.href).searchParams.get('vp_desde');
+  const permitido = { 'gallinas-de-postura': 'embutidos-artesanales', 'embutidos-artesanales': 'gallinas-de-postura' };
+  const atribucionOrigen = permitido[SLUG] === origen ? origen : null;
+  const visitaId = crypto.randomUUID();
+  const relojes = new Set();
+  const cotizacion = { valor: null };
+  let enlace = null, yaPague = null, stripe = null, pagoAbierto = false;
+  const esperaSesion = Promise.race([auth.authStateReady?.() || Promise.resolve(), espera(1500)]);
+
+  async function contexto() {
+    await esperaSesion.catch(() => {});
+    const alumno = auth.currentUser;
+    const token = alumno?.emailVerified ? await alumno.getIdToken().catch(() => null) : null;
+    return {
+      headers: { 'Content-Type': 'application/json', ...(token ? { Authorization: 'Bearer ' + token } : {}) },
+      datos: { visitaId, ...(atribucionOrigen ? { origenSlug: atribucionOrigen } : {}) }
+    };
+  }
+
+  async function evento(ctx, tipo, eventoId, datos = {}) {
+    const { headers, datos: visita } = await ctx;
+    const body = JSON.stringify({ ...visita, destinoSlug: SLUG, tipo, eventoId, ...datos });
+    for (let i = 0; i < 2; i++) {
+      try {
+        const r = await fetch(API + '/publico/cursos/actividad', { method: 'POST', headers, body, keepalive: true });
+        if (r.ok) return true;
+        if (r.status < 500 && r.status !== 429) return false;
+      } catch (_) { /* Un reintento, siempre con el mismo eventoId. */ }
+    }
+    return false;
+  }
+
+  function medir(ctx, inicio, tiempo, eventoId, datos = {}) {
+    let acumulado = 0, desde = null, enviado = 0, cerrado = false;
+    const registrado = evento(ctx, inicio, eventoId, datos);
+    const reloj = {
+      cambiar(activo) {
+        if (cerrado) return;
+        const ahora = performance.now();
+        if (desde !== null) acumulado += ahora - desde;
+        desde = activo && document.visibilityState !== 'hidden' ? ahora : null;
+      },
+      actualizar() {
+        const ms = acumulado + (desde === null ? 0 : performance.now() - desde);
+        const duracionSeg = Math.min(3600, Math.floor(ms / 1000));
+        if (duracionSeg <= enviado) return;
+        enviado = duracionSeg;
+        registrado.then(ok => {
+          if (ok) return evento(ctx, tiempo, eventoId, { duracionSeg, ...(datos.sessionId ? { sessionId: datos.sessionId } : {}) });
+        });
+      },
+      cerrar() {
+        if (cerrado) return;
+        reloj.cambiar(false);
+        reloj.actualizar();
+        cerrado = true;
+        relojes.delete(reloj);
+      }
+    };
+    relojes.add(reloj);
+    return reloj;
+  }
+
+  function observarVideo(video) {
+    if (!video) return () => {};
+    let visible = false, reproduciendo = false, reloj = null, manual = !video.autoplay;
+    const sincronizar = () => {
+      const activo = visible && reproduciendo && !ABIERTO && !pagoAbierto && document.visibilityState !== 'hidden';
+      if (activo && !reloj) {
+        reloj = medir(contexto(), 'video_reproducido', 'video_tiempo', crypto.randomUUID(), {
+          modo: manual ? 'manual' : 'automatico'
+        });
+      }
+      reloj?.cambiar(activo);
+      if (!activo) reloj?.actualizar();
+    };
+    const observer = new IntersectionObserver(([entrada]) => {
+      visible = entrada.intersectionRatio >= .35;
+      sincronizar();
+    }, { threshold: [.35] });
+    observer.observe(video);
+    const cerrar = () => {
+      reloj?.cerrar();
+      reloj = null;
+      reproduciendo = false;
+    };
+    video.addEventListener('play', () => { if (!video.autoplay || !video.muted) manual = true; });
+    video.addEventListener('playing', () => { reproduciendo = true; sincronizar(); });
+    video.addEventListener('waiting', () => { reproduciendo = false; sincronizar(); });
+    video.addEventListener('pause', cerrar);
+    video.addEventListener('ended', cerrar);
+    if (!video.paused && video.readyState >= 3) reproduciendo = true;
+    return sincronizar;
+  }
+
+  const video = document.getElementById(SLUG === 'gallinas-de-postura' ? 'hero-video' : 'preview-video');
+  const sincronizarVideo = observarVideo(video);
+  function sincronizar() {
+    sincronizarVideo();
+    enlace?.cambiar(!ABIERTO && !pagoAbierto);
+    yaPague?.cambiar(ABIERTO);
+    stripe?.cambiar(pagoAbierto);
+    relojes.forEach(r => r.actualizar());
+  }
+  document.addEventListener('visibilitychange', sincronizar);
+  window.addEventListener('pagehide', () => {
+    relojes.forEach(r => { r.cambiar(false); r.actualizar(); });
+  });
+  window.addEventListener('pageshow', sincronizar);
+  const tick = setInterval(() => relojes.forEach(r => r.actualizar()), 15000);
+  window.addEventListener('pagehide', e => { if (!e.persisted) clearInterval(tick); });
+
+  if (atribucionOrigen) {
+    enlace = medir(contexto(), 'enlace_abierto', 'enlace_tiempo', crypto.randomUUID());
+    enlace.cambiar(!ABIERTO);
+  }
+
+  async function precioAlumno() {
+    if (atribucionOrigen !== 'gallinas-de-postura' || SLUG !== 'embutidos-artesanales') return null;
+    if (cotizacion.valor?.uid === auth.currentUser?.uid && cotizacion.valor) return cotizacion.valor.precio;
+    if (!auth.currentUser?.emailVerified) return null;
+    const uid = auth.currentUser.uid;
+    const query = new URLSearchParams({ origenSlug: atribucionOrigen, destinoSlug: SLUG });
+    try {
+      const precio = await api('/alumno/promociones/cotizacion?' + query);
+      if (auth.currentUser?.uid === uid) cotizacion.valor = { uid, precio };
+      return auth.currentUser?.uid === uid ? precio : null;
+    } catch (err) {
+      if (err.codigo === 'curso_adquirido') return { yaComprado: true };
+      return null;
+    }
+  }
+
+  async function mostrarOfertaAlumno() {
+    document.getElementById('vp-oferta-alumno')?.remove();
+    await esperaSesion.catch(() => {});
+    const precio = await precioAlumno();
+    if (!precio?.montoCentavos) return;
+    const ancla = document.querySelector('[data-action="inscribir"]:not(.hdr__cta):not(.sticky-bar__cta)');
+    if (!ancla) return;
+    document.getElementById('vp-oferta-alumno')?.remove();
+    const tarjeta = document.createElement('p');
+    tarjeta.id = 'vp-oferta-alumno';
+    tarjeta.className = 'vp-oferta-alumno';
+    tarjeta.textContent = 'Por haber tomado ' + precio.origenNombre + ', pagas ' + mxn(precio.montoCentavos) + ' con esta cuenta.';
+    ancla.before(tarjeta);
+  }
+
+  return {
+    sincronizar,
+    mostrarOfertaAlumno,
+    abrirYaPague() {
+      yaPague?.cerrar();
+      yaPague = medir(contexto(), 'ya_pague', 'ya_pague_tiempo', crypto.randomUUID());
+      yaPague.cambiar(true);
+    },
+    cerrarYaPague() {
+      yaPague?.cerrar();
+      yaPague = null;
+      sincronizar();
+    },
+    async prepararPago() {
+      const ctx = await contexto();
+      const precio = ctx.headers.Authorization ? await precioAlumno() : null;
+      return {
+        headers: ctx.headers,
+        body: { slug: SLUG, visitaId, ...(atribucionOrigen ? { atribucionOrigen } : {}),
+          ...(precio?.montoCentavos ? { origenSlug: atribucionOrigen } : {}) },
+        contexto: ctx,
+        yaComprado: Boolean(precio?.yaComprado)
+      };
+    },
+    abrirPago() {
+      pagoAbierto = true;
+      sincronizar();
+    },
+    abrirStripe(sessionId, ctx) {
+      if (!sessionId || !ctx) return;
+      stripe?.cerrar();
+      stripe = medir(ctx, 'checkout_montado', 'checkout_tiempo', sessionId, { sessionId });
+      stripe.cambiar(true);
+      sincronizarVideo();
+    },
+    cerrarStripe() {
+      pagoAbierto = false;
+      stripe?.cerrar();
+      stripe = null;
+      sincronizar();
+    }
+  };
+}

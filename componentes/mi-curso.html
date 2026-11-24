@@ -724,39 +724,37 @@ body[data-slug="embutidos-artesanales"] .mc {
   --soft: #5e524c;
   --mute: #6b5d55;
 }
-.mc__recommend { margin-top: 28px; }
-.mc__recommend-grid { display: grid; grid-template-columns: repeat(auto-fill,minmax(min(100%, 280px), 1fr)); gap: 14px; }
-.mc__recommend-card { display: flex; flex-direction: column; overflow: hidden; border: 1px solid var(--line2); border-radius: 16px; color: var(--ink); background: var(--card); text-decoration: none; }
+.mc__recommend { display: grid; gap: 8px; min-width: 0; }
+.mc__asistir { display: grid; gap: 14px; align-content: start; }
+.mc__recommend h2 { color: var(--ink); font-size: .85rem; line-height: 1.35; }
+.mc__recommend-card { display: grid; grid-template-columns: 76px minmax(0, 1fr) auto; align-items: center; gap: 12px; padding: 10px; border: 1px solid var(--line2); border-radius: 14px; color: var(--ink); background: var(--card); text-decoration: none; }
 .mc__recommend-card:hover { border-color: var(--a); }
-.mc__recommend-card:focus-visible, .mc__offer-back:focus-visible { outline: 3px solid var(--a); outline-offset: 3px; }
-.mc__recommend-card img { width: 100%; height: auto; aspect-ratio: 2 / 1; object-fit: cover; display: block; }
-.mc__recommend-info { padding: 15px; display: grid; gap: 8px; }
-.mc__recommend-info strong { font-size: 1.04rem; line-height: 1.3; }
-.mc__recommend-info span { color: var(--a2); font-size: .85rem; font-weight: 700; }
-.mc__recommend-info svg, .mc__offer-back svg { width: 17px; height: 17px; vertical-align: middle; }
-.mc__offer { max-width: 830px; margin-inline: auto; min-width: 0; }
-.mc__offer-back { display: inline-flex; gap: 7px; align-items: center; margin-bottom: 14px; color: var(--a2); font-size: .88rem; font-weight: 700; }
-.mc__offer-card { padding: clamp(16px, 3vw, 27px); display: grid; grid-template-columns: minmax(0, 1.1fr) minmax(0, 1fr); gap: clamp(16px, 3vw, 24px); align-items: center; }
-.mc__offer-card video { width: 100%; aspect-ratio: 16 / 9; border-radius: 13px; background: #181710; object-fit: contain; }
-.mc__offer-copy { min-width: 0; }
-.mc__offer-copy h2, .mc__gallo h2 { color: var(--ink); font-size: clamp(1.3rem, 4vw, 1.8rem); line-height: 1.16; }
-.mc__offer-copy p, .mc__gallo p { color: var(--soft); margin: 9px 0; font-size: .91rem; line-height: 1.5; }
-.mc__offer-price { display: flex; gap: 10px; align-items: baseline; flex-wrap: wrap; margin: 12px 0; }
-.mc__offer-price s { color: var(--soft); }
-.mc__offer-price strong { color: var(--a2); font-size: 1.42rem; }
-.mc__offer-actions { display: flex; align-items: center; flex-wrap: wrap; gap: 12px; }
-.mc__offer-checkout { margin-top: 16px; min-width: 0; }
-.mc__offer-status { color: var(--soft); font-size: .88rem; line-height: 1.5; margin: 10px 0; }
-.mc__gallo { max-width: 750px; margin-inline: auto; display: grid; grid-template-columns: minmax(0, 1fr) minmax(0, 225px); padding: clamp(18px, 4vw, 30px); gap: 16px; align-items: center; overflow: hidden; background: linear-gradient(135deg, var(--card), var(--tint)); }
-.mc__gallo > img { width: 100%; max-height: 242px; object-fit: contain; }
-.mc__gallo-actions { display: flex; flex-wrap: wrap; gap: 8px; margin-top: 16px; }
+.mc__recommend-card:focus-visible { outline: 3px solid var(--a); outline-offset: 3px; }
+.mc__recommend-card img { width: 76px; height: 58px; border-radius: 8px; object-fit: cover; background: var(--tint); }
+.mc__recommend-card strong { display: block; font-size: .88rem; line-height: 1.25; }
+.mc__recommend-card small { color: var(--soft); font-size: .75rem; }
+.mc__recommend-card svg { width: 17px; height: 17px; color: var(--a2); }
+.vp-oferta-alumno { width: fit-content; margin: 0 0 12px; border: 1px solid #f1d99e; background: #fff6da; color: #5b3d0d; border-radius: 10px; padding: 8px 11px; font-weight: 700; font-size: .86rem; }
+.mc__gallo { width: min(100%, 740px); margin-inline: auto; display: grid; overflow: hidden; }
+.mc__gallo-header { display: flex; align-items: center; gap: 12px; padding: 13px 16px; background: var(--tint); border-bottom: 1px solid var(--line2); }
+.mc__gallo-header img { width: 44px; height: 48px; object-fit: contain; flex: none; }
+.mc__gallo-header h2 { font-size: 1.25rem; margin: 0; color: var(--ink); }
+.mc__gallo-header p { font-size: .78rem; margin: 3px 0 0; color: var(--soft); }
+.mc__gallo-log { min-height: 180px; height: clamp(180px, 37vh, 400px); height: clamp(180px, 37dvh, 400px); overflow-y: auto; overscroll-behavior: contain; padding: 16px; display: flex; flex-direction: column; gap: 12px; }
+.mc__gallo-mensaje { max-width: min(92%, 520px); width: fit-content; border-radius: 14px 14px 14px 4px; padding: 10px 13px; background: var(--tint); color: var(--ink); white-space: pre-wrap; overflow-wrap: anywhere; line-height: 1.48; font-size: .89rem; }
+.mc__gallo-mensaje--usuario { align-self: flex-end; background: var(--a2); color: white; border-radius: 14px 14px 4px 14px; }
+.mc__sr { position: absolute; width: 1px; height: 1px; padding: 0; overflow: hidden; clip-path: inset(50%); white-space: nowrap; }
+.mc__gallo-pistas { display: flex; gap: 6px; flex-wrap: wrap; padding: 0 14px 10px; }
+.mc__gallo-pistas button { border: 1px solid var(--line2); border-radius: 12px; padding: 7px 9px; background: var(--card); color: var(--a2); font-size: .75rem; font-weight: 700; text-align: left; }
+.mc__gallo-form { display: grid; grid-template-columns: minmax(0, 1fr) auto; gap: 8px; padding: 10px 14px; border-top: 1px solid var(--line2); align-items: end; }
+.mc .mc__gallo-form textarea { width: 100%; min-height: 46px; max-height: 130px; resize: vertical; font: inherit; font-size: 16px; padding: 10px; border-radius: 12px; border: 1px solid var(--line2); color: var(--ink); background: var(--card); }
+.mc__gallo-status { min-height: 1.2em; color: var(--soft); padding: 0 14px 10px; font-size: .75rem; }
+.mc__gallo-ayuda { margin-left: auto; color: var(--a2); font-size: .76rem; font-weight: 700; }
 .mc__tab { white-space: nowrap; }
 .mc__ni .mc__cert-dot { width: 7px; height: 7px; border-radius: 50%; background: #c63535; margin-left: auto; }
 @media (max-width: 620px) {
-  .mc__offer-card { grid-template-columns: minmax(0, 1fr); }
-  .mc__offer-actions .mc__btn--p { width: 100%; }
-  .mc__gallo { grid-template-columns: minmax(0, 1fr) minmax(75px, 29%); align-items: start; }
-  .mc__gallo > img { align-self: center; }
+  .mc__gallo-form .mc__btn { padding-inline: 12px; }
+  .mc__gallo-log { padding: 12px; }
   .mc__tabs { gap: 2px; padding-inline: 3px; }
   .mc__tab { font-size: clamp(.56rem, 2vw, .70rem); padding-inline: 2px; }
 }
@@ -841,15 +839,19 @@ const RECOMENDADOS = {
     slug: 'embutidos-artesanales',
     nombre: 'Embutidos artesanales y chorizos',
     url: '/embutidos-artesanales.html',
-    portada: '/assets/curso-chorizo/hero-chef-640.webp',
-    poster: '/assets/curso-chorizo/promo-poster.jpg',
-    video: '/assets/curso-chorizo/promo-embutidos.mp4'
+    portada: '/assets/curso-chorizo/hero-chef-640.webp'
+  }],
+  'embutidos-artesanales': [{
+    slug: 'gallinas-de-postura',
+    nombre: 'Gallinas de Postura',
+    url: '/gallinas-de-postura.html',
+    portada: '/assets/curso-gallinas-postura/preview-poster.jpg'
   }]
 };
 const mxn = (centavos) => new Intl.NumberFormat('es-MX', {
   style: 'currency', currency: 'MXN', maximumFractionDigits: centavos % 100 ? 2 : 0
 }).format(centavos / 100) + ' MXN';
-let OFERTA_ABIERTA = null, CHECKOUT_OFERTA = null;
+let GALLO_CHAT = { mensajes: [], enviando: false, error: '', borrador: '' };
 
 function toast(m, err) { const t = $('#mc-toast'); t.textContent = m; t.className = 'mc__toast on' + (err ? ' err' : ''); clearTimeout(t._t); t._t = setTimeout(() => t.className = 'mc__toast', 3500); }
 async function api(path, opt = {}, otra = true) {
@@ -857,7 +859,7 @@ async function api(path, opt = {}, otra = true) {
   const r = await fetch(API + path, { method: opt.method || 'GET', keepalive: !!opt.keepalive, headers: { 'Content-Type': 'application/json', Authorization: 'Bearer ' + tok }, body: opt.body ? JSON.stringify(opt.body) : undefined });
   let d = null; try { d = await r.json(); } catch (_) {}
   if (r.status === 401 && otra) { await auth.currentUser?.getIdToken(true); return api(path, opt, false); }
-  if (!r.ok) throw Object.assign(new Error((d && d.error) || 'Error ' + r.status), { status: r.status });
+  if (!r.ok) throw Object.assign(new Error((d && d.error) || 'Error ' + r.status), { status: r.status, codigo: d?.codigo });
   return d;
 }
 
@@ -935,10 +937,8 @@ function abrir() {
 }
 async function cerrar(sinHistorial) {
   await detener();
-  destruirCheckoutOferta();
-  OFERTA_ABIERTA = null;
-  view.querySelector('.mc__offer video')?.pause();
   ABIERTO = false; root.hidden = true; document.documentElement.style.overflow = '';
+  window.vpActividadCursos?.cerrarYaPague();
   if (!sinHistorial && location.hash.startsWith('#mi-curso')) history.replaceState(null, '', location.pathname + location.search);
 }
 function irAlPago() {
@@ -947,7 +947,12 @@ function irAlPago() {
 }
 document.addEventListener('click', (e) => {
   const a = e.target.closest('a.ya-compre, [data-mi-curso]');
-  if (a) { e.preventDefault(); e.stopPropagation(); abrir(); }
+  if (a) {
+    e.preventDefault();
+    e.stopPropagation();
+    abrir();
+    window.vpActividadCursos?.abrirYaPague();
+  }
 }, true);
 $('#mc-cerrar').addEventListener('click', () => cerrar());
 window.addEventListener('popstate', () => {
@@ -956,7 +961,13 @@ window.addEventListener('popstate', () => {
 });
 document.addEventListener('keydown', (e) => { if (e.key === 'Escape' && ABIERTO && !document.getElementById('mc-visor')) cerrar(); });
 
-onAuthStateChanged(auth, (u) => { USER = u; DATA = null; if (ABIERTO) render(); });
+onAuthStateChanged(auth, (u) => {
+  if (USER?.uid !== u?.uid) GALLO_CHAT = { mensajes: [], enviando: false, error: '', borrador: '' };
+  USER = u;
+  DATA = null;
+  window.vpActividadCursos?.mostrarOfertaAlumno();
+  if (ABIERTO) render();
+});
 if (PAGO || location.hash.startsWith('#mi-curso') || /[?&]mi-curso\b/.test(location.search)) abrir();
 
 // ─── Navegación ──────────────────────────────────────────────────────────────
@@ -1022,9 +1033,8 @@ function cargando() { view.innerHTML = '<div class="mc__spin mc__spin--d"></div>
 
 async function render() {
   await detener();
-  destruirCheckoutOferta();
+  window.vpActividadCursos?.sincronizar();
   const r = rutaActual();
-  if (!r.oferta || !USER) OFERTA_ABIERTA = null;
   $('#mc-body').scrollTop = 0;
   const me = $('#mc-me');
   me.hidden = true;
@@ -1053,7 +1063,7 @@ async function render() {
   $('#mc-titulo').textContent = DATA.curso.nombre;
   if (PAGO && PAGO.pagado && !PAGO.celebrado) { PAGO.celebrado = true; PAGO.reintentar = 0; confeti(); setTimeout(() => toast(PAGO.regalo === 'sexaje-avicola' ? '¡Bienvenido! También ganaste el Curso de Sexaje Avícola' : '¡Bienvenido! Tu curso ya está activo'), 400); }
   pintarNav(r.tab);
-  if (r.oferta) return vistaOferta(r.oferta);
+  if (r.oferta) return location.replace(enlaceRecomendado(r.oferta));
   if (r.clase) return vistaClase(r.clase);
   if (r.tab === 'clases') return vistaClases();
   if (r.tab === 'materiales') return vistaMateriales();
@@ -1164,7 +1174,7 @@ function filaClase(cl, i, d, sig) {
 function bloqueTemario(d, sig) {
   return `<div class="mc__tem">${d.clases.map((cl, i) => filaClase(cl, i, d, sig)).join('')}</div>`;
 }
-function panelAprendizaje(d) {
+function panelAprendizaje(d, conRecomendacion = false) {
   const p = d.progreso;
   const recursos = d.materiales.filter(m => m.disponible).length;
   return `<div class="mc__card mc__panel"><span class="mc__eyebrow mute">Tu aprendizaje</span>
@@ -1180,8 +1190,11 @@ function panelAprendizaje(d) {
       <span>${I.doc} ${contar(recursos, 'recurso')} de apoyo</span>
       <span>${I.reloj} Avanza a tu propio ritmo</span>
     </div></div>
-  <div class="mc__card mc__wa"><b>¿Dudas con tu curso?</b><p>Escríbenos y te ayudamos en minutos.</p>
-    <a class="mc__btn mc__btn--p mc__btn--sm" href="${WA}?text=${encodeURIComponent('Hola, soy alumno de ' + (NOMBRES[SLUG] || 'un curso') + ' y tengo una duda')}" target="_blank" rel="noopener">${I.wa} WhatsApp directo</a></div>`;
+  <div class="mc__asistir">
+    <div class="mc__card mc__wa"><b>¿Dudas con tu curso?</b><p>Escríbenos y te ayudamos en minutos.</p>
+      <a class="mc__btn mc__btn--p mc__btn--sm" href="${WA}?text=${encodeURIComponent('Hola, soy alumno de ' + (NOMBRES[SLUG] || 'un curso') + ' y tengo una duda')}" target="_blank" rel="noopener">${I.wa} WhatsApp directo</a></div>
+    ${conRecomendacion ? tarjetasRecomendadas() : ''}
+  </div>`;
 }
 function bloqueCalifica() {
   const c = DATA.calificaciones || { promedio: 0, total: 0, mia: null };
@@ -1370,152 +1383,115 @@ function vistaClases() {
     <span class="mc__eyebrow">Ruta de aprendizaje</span>
     <div class="mc__sh" style="margin-top:4px"><h2>Temario del curso</h2><b>${contar(d.clases.length, 'clase')}</b></div>
     ${d.clases.length ? bloqueTemario(d, sig) : '<div class="mc__card mc__empty"><h2>Las grabaciones aún no están publicadas</h2><p>Aparecerán aquí en cuanto se publiquen.</p></div>'}
-    <div id="mc-recomendados"></div>
   </div>
-  <aside class="mc__aside">${panelAprendizaje(d)}</aside></div>`;
+  <aside class="mc__aside">${panelAprendizaje(d, true)}</aside></div>`;
   ligarVista();
-  cargarRecomendados($('#mc-recomendados'));
 }
 
-const enlaceOferta = (slug) => '#mi-curso/oferta/' + encodeURIComponent(slug);
-function cotizarOferta(destinoSlug) {
-  const params = new URLSearchParams({ origenSlug: SLUG, destinoSlug });
-  return api('/alumno/promociones/cotizacion?' + params);
+function enlaceRecomendado(curso) {
+  return curso.url + '?' + new URLSearchParams({ vp_desde: SLUG });
 }
-async function cargarRecomendados(contenedor) {
+
+function tarjetasRecomendadas() {
   const cursos = RECOMENDADOS[SLUG] || [];
-  if (!cursos.length) return;
-  const ofertas = await Promise.all(cursos.map(async curso => {
-    try { return { curso, precio: await cotizarOferta(curso.slug) }; }
-    catch (_) { return null; }
-  }));
-  const disponibles = ofertas.filter(Boolean);
-  if (!contenedor.isConnected || !disponibles.length) return;
-  contenedor.innerHTML = `<section class="mc__recommend" aria-labelledby="mc-recom-title">
-    <div class="mc__sh"><h2 id="mc-recom-title">Porque adquiriste este curso, te podría interesar</h2></div>
-    <div class="mc__recommend-grid">${disponibles.map(({ curso, precio }) =>
-      `<a class="mc__recommend-card" href="${enlaceOferta(curso.slug)}">
-        <img src="${esc(curso.portada)}" alt="" loading="lazy" width="640" height="320">
-        <div class="mc__recommend-info"><strong>${esc(curso.nombre)}</strong>
-          <span>Ver oferta de ${esc(mxn(precio.montoCentavos))} ${I.flecha}</span>
-        </div>
-      </a>`).join('')}</div>
+  if (!cursos.length) return '';
+  return `<section class="mc__recommend" aria-labelledby="mc-recom-title">
+    <h2 id="mc-recom-title">Porque adquiriste este curso, te podría interesar</h2>
+    ${cursos.map(curso => `<a class="mc__recommend-card" href="${esc(enlaceRecomendado(curso))}">
+      <img src="${esc(curso.portada)}" alt="" loading="lazy" width="76" height="58">
+      <span><strong>${esc(curso.nombre)}</strong><small>Ver curso</small></span>
+      ${I.flecha}
+    </a>`).join('')}
   </section>`;
 }
 
-function registrarOferta(destinoSlug, tipo, eventoId = crypto.randomUUID()) {
-  const alumno = auth.currentUser;
-  if (!alumno) return;
-  const body = { origenSlug: SLUG, destinoSlug, tipo, eventoId };
-  const enviar = () => api('/alumno/promociones/eventos', { method: 'POST', body, keepalive: true });
-  enviar().catch(err => {
-    if (auth.currentUser !== alumno || (err.status && err.status < 500)) return;
-    return enviar().catch(() => {});
-  });
+const PREGUNTAS_GALLO = [
+  '¿Dónde veo mis clases?',
+  '¿Cómo descargo un material?',
+  '¿Cómo solicito mi certificado?'
+];
+
+function actualizarGallo() {
+  const registro = view.querySelector('[data-gallo-historial]');
+  if (!registro) return;
+  if (registro.dataset.cantidad !== String(GALLO_CHAT.mensajes.length)) {
+    registro.innerHTML = GALLO_CHAT.mensajes.map(m =>
+      `<div class="mc__gallo-mensaje mc__gallo-mensaje--${m.rol}"><span class="mc__sr">${m.rol === 'usuario' ? 'Tú' : 'Mi Gallo IA'}: </span>${esc(m.texto)}</div>`
+    ).join('');
+    registro.dataset.cantidad = String(GALLO_CHAT.mensajes.length);
+    registro.scrollTop = registro.scrollHeight;
+  }
+  view.querySelector('[data-gallo-enviar]').disabled = GALLO_CHAT.enviando;
+  view.querySelector('[data-gallo-estado]').textContent = GALLO_CHAT.enviando ? 'Mi Gallo IA está preparando una respuesta…' : GALLO_CHAT.error;
+  view.querySelector('.mc__gallo-pistas').hidden = GALLO_CHAT.mensajes.length > 1;
 }
-function destruirCheckoutOferta() {
-  const checkout = CHECKOUT_OFERTA;
-  CHECKOUT_OFERTA = null;
-  try { checkout?.destroy(); } catch (err) { console.warn('No se pudo cerrar el formulario de Stripe', err); }
-}
-function precioOferta(q) {
-  return `<s>${esc(mxn(q.precioBaseCentavos))}</s><strong>${esc(mxn(q.montoCentavos))}</strong>`;
-}
-async function vistaOferta(curso) {
-  view.innerHTML = `<section class="mc__offer">
-    <a class="mc__offer-back" href="#mi-curso/clases">${I.atras} Volver a clases</a>
-    <div class="mc__card mc__offer-card" data-oferta>
-      <video controls playsinline preload="none" src="${esc(curso.video)}" poster="${esc(curso.poster || curso.portada)}" aria-label="Video de ${esc(curso.nombre)}"></video>
-      <div class="mc__offer-copy"><h2>${esc(curso.nombre)}</h2>
-        <p data-oferta-estado role="status">Verificando tu precio de alumno…</p>
-        <div class="mc__offer-price" data-oferta-precio></div>
-        <div class="mc__offer-actions">
-          <button class="mc__btn mc__btn--p" type="button" data-oferta-pagar hidden>Inscribirme con descuento</button>
-          <a class="mc__offer-back" style="margin-bottom:0" href="${esc(curso.url)}" target="_blank" rel="noopener">Ver el programa ${I.flecha}</a>
-        </div>
-      </div>
-    </div>
-    <div class="mc__offer-checkout" id="mc-oferta-checkout" hidden>
-      <p class="mc__offer-status" data-oferta-pago-estado role="status"></p>
-      <div data-oferta-stripe></div>
-    </div>
-  </section>`;
-  const oferta = view.querySelector('[data-oferta]');
-  const estado = oferta.querySelector('[data-oferta-estado]');
-  const boton = oferta.querySelector('[data-oferta-pagar]');
-  const vigente = () => ABIERTO && oferta.isConnected && location.hash === enlaceOferta(curso.slug);
+
+async function preguntarGallo(texto) {
+  const mensaje = texto.trim().slice(0, 650);
+  const chat = GALLO_CHAT;
+  if (!mensaje || chat.enviando) return;
+  const historial = chat.mensajes.slice(1).slice(-8);
+  chat.mensajes.push({ rol: 'usuario', texto: mensaje });
+  chat.enviando = true;
+  chat.error = '';
+  chat.borrador = '';
+  actualizarGallo();
   try {
-    const q = await cotizarOferta(curso.slug);
-    if (!vigente()) return;
-    const origenNombre = q.origenNombre || DATA.curso.nombre;
-    const precio = oferta.querySelector('[data-oferta-precio]');
-    estado.textContent = `Por haber tomado el curso de ${origenNombre}, pagas solo ${mxn(q.montoCentavos)} con esta cuenta.`;
-    precio.innerHTML = precioOferta(q);
-    boton.hidden = false;
-    const visita = auth.currentUser?.uid + ':' + curso.slug;
-    if (OFERTA_ABIERTA !== visita) {
-      OFERTA_ABIERTA = visita;
-      registrarOferta(curso.slug, 'enlace_abierto');
-    }
-    const video = oferta.querySelector('video');
-    let reproduciendo = false;
-    const registrarVideo = () => {
-      if (reproduciendo || !vigente()) return;
-      reproduciendo = true;
-      registrarOferta(curso.slug, 'video_reproducido');
-    };
-    video.addEventListener('playing', registrarVideo);
-    video.addEventListener('pause', () => { reproduciendo = false; });
-    video.addEventListener('ended', () => { reproduciendo = false; });
-    if (!video.paused && video.readyState >= 3) registrarVideo();
-    boton.onclick = async () => {
-      boton.disabled = true;
-      const checkout = $('#mc-oferta-checkout');
-      const status = checkout.querySelector('[data-oferta-pago-estado]');
-      checkout.hidden = false;
-      status.textContent = 'Abriendo el formulario de Stripe…';
-      try {
-        const key = document.querySelector('meta[name="stripe-pk"]')?.content;
-        if (!window.Stripe || !key) throw new Error('El formulario de pago no está disponible. Intenta de nuevo.');
-        const datos = await api('/crear-checkout-curso', {
-          method: 'POST',
-          body: { slug: curso.slug, origenSlug: SLUG }
-        });
-        if (!vigente()) return;
-        if (!datos.oferta || !datos.clientSecret || !datos.sessionId) throw new Error('No pudimos confirmar el descuento.');
-        precio.innerHTML = precioOferta(datos.oferta);
-        estado.textContent = `Por haber tomado el curso de ${origenNombre}, pagas solo ${mxn(datos.oferta.montoCentavos)} con esta cuenta.`;
-        const stripeCheckout = await window.Stripe(key).initEmbeddedCheckout({ clientSecret: datos.clientSecret });
-        if (!vigente()) { stripeCheckout.destroy(); return; }
-        CHECKOUT_OFERTA = stripeCheckout;
-        stripeCheckout.mount(checkout.querySelector('[data-oferta-stripe]'));
-        status.textContent = '';
-        checkout.scrollIntoView({ block: 'start', behavior: 'smooth' });
-        registrarOferta(curso.slug, 'checkout_montado', datos.sessionId);
-      } catch (err) {
-        if (!vigente()) return;
-        destruirCheckoutOferta();
-        status.textContent = err.message || 'No pudimos abrir el pago. Intenta de nuevo.';
-        boton.disabled = false;
-      }
-    };
+    const d = await api('/alumno/gallo-ia', { method: 'POST', body: { cursoSlug: SLUG, mensaje, historial } });
+    if (GALLO_CHAT !== chat) return;
+    if (typeof d?.respuesta !== 'string' || !d.respuesta.trim()) throw new Error('No recibimos una respuesta.');
+    chat.mensajes.push({ rol: 'asistente', texto: d.respuesta });
   } catch (err) {
-    if (vigente()) estado.textContent = err.message || 'No pudimos consultar la oferta.';
+    if (GALLO_CHAT !== chat) return;
+    chat.mensajes.pop();
+    chat.borrador = mensaje;
+    chat.error = err.status === 429 ? 'Has enviado varias preguntas. Intenta en unos minutos.' : 'No pudimos responder. Intenta de nuevo o escríbenos por WhatsApp.';
+    const entrada = view.querySelector('[data-gallo-pregunta]');
+    if (entrada && !entrada.value) entrada.value = mensaje;
+  } finally {
+    if (GALLO_CHAT === chat) {
+      chat.enviando = false;
+      actualizarGallo();
+    }
   }
 }
 
 function vistaGallo() {
-  view.innerHTML = `<section class="mc__card mc__gallo">
-    <div><h2>Mi Gallo IA</h2><p>Usa estos accesos para navegar tu curso o pedir ayuda a Visión Pecuaria.</p>
-      <div class="mc__gallo-actions">
-        <button type="button" class="mc__btn mc__btn--p mc__btn--sm" data-ir="clases">${I.clases} Ver clases</button>
-        <button type="button" class="mc__btn mc__btn--l mc__btn--sm" data-ir="materiales">${I.doc} Materiales</button>
-        <a class="mc__btn mc__btn--l mc__btn--sm" href="${WA}?text=${encodeURIComponent('Hola, soy alumno de ' + DATA.curso.nombre + ' y tengo una duda.')}" target="_blank" rel="noopener">${I.wa} Pedir ayuda</a>
-      </div>
-    </div>
-    <img src="${GALLO_IMAGEN}" alt="" width="225" height="244">
+  if (!GALLO_CHAT.mensajes.length) {
+    GALLO_CHAT.mensajes.push({
+      rol: 'asistente',
+      texto: '¡Hola! Soy Mi Gallo IA. Pregúntame sobre las clases, tus materiales, el certificado o cómo usar tu cuenta. ¿En qué te ayudo?'
+    });
+  }
+  view.innerHTML = `<section class="mc__card mc__gallo" aria-labelledby="mc-gallo-title">
+    <header class="mc__gallo-header">
+      <img src="${GALLO_IMAGEN}" alt="" width="44" height="48">
+      <div><h2 id="mc-gallo-title">Mi Gallo IA</h2><p>Chat de ayuda de Visión Pecuaria</p></div>
+      <a class="mc__gallo-ayuda" href="${WA}?text=${encodeURIComponent('Hola, soy alumno de ' + DATA.curso.nombre + ' y tengo una duda.')}" target="_blank" rel="noopener">Soporte humano</a>
+    </header>
+    <div class="mc__gallo-log" data-gallo-historial role="log" aria-label="Conversación" aria-live="polite" tabindex="0"></div>
+    <div class="mc__gallo-pistas">${PREGUNTAS_GALLO.map(p => `<button type="button" data-gallo-sugerencia>${esc(p)}</button>`).join('')}</div>
+    <form class="mc__gallo-form">
+      <textarea rows="1" maxlength="650" data-gallo-pregunta aria-label="Tu pregunta" placeholder="Escribe tu pregunta…"></textarea>
+      <button class="mc__btn mc__btn--p" type="submit" data-gallo-enviar>Enviar</button>
+    </form>
+    <p class="mc__gallo-status" role="status" data-gallo-estado></p>
   </section>`;
-  ligarVista();
+  const form = view.querySelector('.mc__gallo-form');
+  const entrada = form.querySelector('[data-gallo-pregunta]');
+  entrada.value = GALLO_CHAT.borrador;
+  entrada.addEventListener('input', () => { GALLO_CHAT.borrador = entrada.value; });
+  form.onsubmit = e => {
+    e.preventDefault();
+    if (!entrada.value.trim() || GALLO_CHAT.enviando) return;
+    const texto = entrada.value;
+    entrada.value = '';
+    preguntarGallo(texto);
+  };
+  view.querySelectorAll('[data-gallo-sugerencia]').forEach(b => {
+    b.onclick = () => preguntarGallo(b.textContent);
+  });
+  actualizarGallo();
 }
 
 // ─── Materiales ─────────────────────────────────────────────────────────────
@@ -1745,5 +1721,9 @@ async function detener() {
 }
 document.addEventListener('visibilitychange', () => { if (document.hidden && SEG && SEG.ses > SEG.env) guardar(false); });
 window.addEventListener('pagehide', () => { if (SEG && SEG.ses > SEG.env) guardar(false); });
+
+/* INYECTAR ACTIVIDAD DE CURSOS */
+window.vpActividadCursos = crearActividadCursos();
+window.vpActividadCursos.mostrarOfertaAlumno();
 </script>
 <!-- MI-CURSO:FIN -->
