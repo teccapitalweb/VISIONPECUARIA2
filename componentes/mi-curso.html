@@ -743,11 +743,6 @@ body[data-slug="embutidos-artesanales"] .mc {
 .mc__gallo-log { min-height: 180px; height: clamp(180px, 37vh, 400px); height: clamp(180px, 37dvh, 400px); overflow-y: auto; overscroll-behavior: contain; padding: 16px; display: flex; flex-direction: column; gap: 12px; }
 .mc__gallo-mensaje { max-width: min(92%, 520px); width: fit-content; border-radius: 14px 14px 14px 4px; padding: 10px 13px; background: var(--tint); color: var(--ink); white-space: pre-wrap; overflow-wrap: anywhere; line-height: 1.48; font-size: .89rem; }
 .mc__gallo-mensaje--usuario { align-self: flex-end; background: var(--a2); color: white; border-radius: 14px 14px 4px 14px; }
-.mc__gallo-bloque { display: grid; gap: 5px; }
-.mc__gallo-fuentes { padding: 0 6px; font-size: .75rem; color: var(--soft); overflow-wrap: anywhere; }
-.mc__gallo-fuentes summary { cursor: pointer; color: var(--a2); font-weight: 700; }
-.mc__gallo-fuentes ul { margin: 4px 0 6px; padding-left: 18px; }
-.mc__gallo-fuentes a { color: var(--a2); text-decoration: underline; }
 .mc__sr { position: absolute; width: 1px; height: 1px; padding: 0; overflow: hidden; clip-path: inset(50%); white-space: nowrap; }
 .mc__gallo-pistas { display: flex; gap: 6px; flex-wrap: wrap; padding: 0 14px 10px; }
 .mc__gallo-pistas button { border: 1px solid var(--line2); border-radius: 12px; padding: 7px 9px; background: var(--card); color: var(--a2); font-size: .75rem; font-weight: 700; text-align: left; }
@@ -755,6 +750,21 @@ body[data-slug="embutidos-artesanales"] .mc {
 .mc .mc__gallo-form textarea { width: 100%; min-height: 46px; max-height: 130px; resize: vertical; font: inherit; font-size: 16px; padding: 10px; border-radius: 12px; border: 1px solid var(--line2); color: var(--ink); background: var(--card); }
 .mc__gallo-status { min-height: 1.2em; color: var(--soft); padding: 0 14px 10px; font-size: .75rem; }
 .mc__gallo-ayuda { margin-left: auto; color: var(--a2); font-size: .76rem; font-weight: 700; }
+.mc__gallo-bloque { display: grid; gap: 5px; }
+.mc__gallo-turnos { display: grid; gap: 12px; }
+.mc__gallo-bloque.usuario { justify-items: end; }
+.mc__gallo-fuentes, .mc__gallo-reaccion { padding: 0 6px; font-size: .75rem; color: var(--soft); }
+.mc__gallo-fuentes summary { cursor: pointer; color: var(--a2); font-weight: 700; }
+.mc__gallo-fuentes ul { margin: 4px 0 6px; padding-left: 18px; }
+.mc__gallo-fuentes a { color: var(--a2); text-decoration: underline; overflow-wrap: anywhere; }
+.mc__gallo-reaccion { display: flex; gap: 7px 10px; flex-wrap: wrap; align-items: center; }
+.mc__gallo-reaccion button { min-height: 30px; padding: 4px 8px; border: 1px solid var(--line2); border-radius: 8px; color: var(--a2); font-weight: 700; }
+.mc__gallo-reaccion button[aria-pressed="true"] { background: var(--tint); border-color: var(--a); }
+.mc__gallo-opciones { padding: 0 14px 12px; color: var(--soft); font-size: .77rem; line-height: 1.5; }
+.mc__gallo-opciones summary { color: var(--a2); cursor: pointer; font-weight: 700; width: fit-content; }
+.mc__gallo-opciones label { display: flex; align-items: baseline; gap: 8px; margin-top: 8px; }
+.mc__gallo-opciones p { margin: 5px 0 8px; }
+.mc__gallo-opciones button { color: var(--a2); font-weight: 700; text-decoration: underline; min-height: 32px; }
 .mc__tab { white-space: nowrap; }
 .mc__ni .mc__cert-dot { width: 7px; height: 7px; border-radius: 50%; background: #c63535; margin-left: auto; }
 @media (max-width: 620px) {
@@ -856,7 +866,7 @@ const RECOMENDADOS = {
 const mxn = (centavos) => new Intl.NumberFormat('es-MX', {
   style: 'currency', currency: 'MXN', maximumFractionDigits: centavos % 100 ? 2 : 0
 }).format(centavos / 100) + ' MXN';
-let GALLO_CHAT = { mensajes: [], enviando: false, error: '', borrador: '' };
+let GALLO_CHAT = crearEstadoGallo();
 
 function toast(m, err) { const t = $('#mc-toast'); t.textContent = m; t.className = 'mc__toast on' + (err ? ' err' : ''); clearTimeout(t._t); t._t = setTimeout(() => t.className = 'mc__toast', 3500); }
 async function api(path, opt = {}, otra = true) {
@@ -967,7 +977,10 @@ window.addEventListener('popstate', () => {
 document.addEventListener('keydown', (e) => { if (e.key === 'Escape' && ABIERTO && !document.getElementById('mc-visor')) cerrar(); });
 
 onAuthStateChanged(auth, (u) => {
-  if (USER?.uid !== u?.uid) GALLO_CHAT = { mensajes: [], enviando: false, error: '', borrador: '' };
+  if (USER?.uid !== u?.uid) {
+    GALLO_CHAT.abort?.abort();
+    GALLO_CHAT = crearEstadoGallo();
+  }
   USER = u;
   DATA = null;
   window.vpActividadCursos?.mostrarOfertaAlumno();
@@ -1410,111 +1423,7 @@ function tarjetasRecomendadas() {
   </section>`;
 }
 
-const PREGUNTAS_GALLO = [
-  '¿Dónde veo mis clases?',
-  '¿Cómo descargo un material?',
-  '¿Cómo solicito mi certificado?'
-];
-
-function fuentesGallo(lista) {
-  if (!Array.isArray(lista)) return '';
-  const fuentes = lista.filter(f => typeof f?.titulo === 'string' && f.titulo.trim()).slice(0, 6);
-  if (!fuentes.length) return '';
-  const items = fuentes.map(({ titulo, url }) => {
-    let enlace;
-    try { enlace = new URL(url); } catch (_) {}
-    const texto = esc(titulo.trim());
-    if (enlace?.protocol !== 'https:' || enlace.username || enlace.password) return `<li>${texto}</li>`;
-    return `<li><a href="${esc(enlace.href)}" target="_blank" rel="noopener noreferrer">${texto}</a></li>`;
-  }).join('');
-  return `<details class="mc__gallo-fuentes"><summary>Fuentes consultadas (${fuentes.length})</summary><ul>${items}</ul></details>`;
-}
-
-function actualizarGallo() {
-  const registro = view.querySelector('[data-gallo-historial]');
-  if (!registro) return;
-  if (registro.dataset.cantidad !== String(GALLO_CHAT.mensajes.length)) {
-    registro.innerHTML = GALLO_CHAT.mensajes.map(m => {
-      const usuario = m.rol === 'usuario';
-      const mensaje = `<div class="mc__gallo-mensaje mc__gallo-mensaje--${usuario ? 'usuario' : 'asistente'}"><span class="mc__sr">${usuario ? 'Tú' : 'Mi Gallo IA'}: </span>${esc(m.texto)}</div>`;
-      const fuentes = usuario ? '' : fuentesGallo(m.fuentes);
-      return fuentes ? `<div class="mc__gallo-bloque">${mensaje}${fuentes}</div>` : mensaje;
-    }).join('');
-    registro.dataset.cantidad = String(GALLO_CHAT.mensajes.length);
-    registro.scrollTop = registro.scrollHeight;
-  }
-  view.querySelector('[data-gallo-enviar]').disabled = GALLO_CHAT.enviando;
-  view.querySelector('[data-gallo-estado]').textContent = GALLO_CHAT.enviando ? 'Mi Gallo IA está preparando una respuesta…' : GALLO_CHAT.error;
-  view.querySelector('.mc__gallo-pistas').hidden = GALLO_CHAT.mensajes.length > 1;
-}
-
-async function preguntarGallo(texto) {
-  const mensaje = texto.trim().slice(0, 650);
-  const chat = GALLO_CHAT;
-  if (!mensaje || chat.enviando) return;
-  const historial = chat.mensajes.slice(1).slice(-8).map(({ rol, texto }) => ({ rol, texto }));
-  chat.mensajes.push({ rol: 'usuario', texto: mensaje });
-  chat.enviando = true;
-  chat.error = '';
-  chat.borrador = '';
-  actualizarGallo();
-  try {
-    const d = await api('/alumno/gallo-ia', { method: 'POST', body: { cursoSlug: SLUG, mensaje, historial } });
-    if (GALLO_CHAT !== chat) return;
-    if (typeof d?.respuesta !== 'string' || !d.respuesta.trim()) throw new Error('No recibimos una respuesta.');
-    chat.mensajes.push({ rol: 'asistente', texto: d.respuesta, fuentes: d.fuentes });
-  } catch (err) {
-    if (GALLO_CHAT !== chat) return;
-    chat.mensajes.pop();
-    chat.borrador = mensaje;
-    chat.error = err.status === 429 ? 'Has enviado varias preguntas. Intenta en unos minutos.' : 'No pudimos responder. Intenta de nuevo o escríbenos por WhatsApp.';
-    const entrada = view.querySelector('[data-gallo-pregunta]');
-    if (entrada && !entrada.value) entrada.value = mensaje;
-  } finally {
-    if (GALLO_CHAT === chat) {
-      chat.enviando = false;
-      actualizarGallo();
-    }
-  }
-}
-
-function vistaGallo() {
-  if (!GALLO_CHAT.mensajes.length) {
-    GALLO_CHAT.mensajes.push({
-      rol: 'asistente',
-      texto: '¡Hola! Soy tu Gallo IA.\nPuedo orientarte sobre avicultura, tus clases, materiales y certificados.'
-    });
-  }
-  view.innerHTML = `<section class="mc__card mc__gallo" aria-labelledby="mc-gallo-title">
-    <header class="mc__gallo-header">
-      <img src="${GALLO_IMAGEN}" alt="" width="44" height="48">
-      <div><h2 id="mc-gallo-title">Mi Gallo IA</h2><p>Chat de ayuda de Visión Pecuaria</p></div>
-      <a class="mc__gallo-ayuda" href="${WA}?text=${encodeURIComponent('Hola, soy alumno de ' + DATA.curso.nombre + ' y tengo una duda.')}" target="_blank" rel="noopener">Soporte humano</a>
-    </header>
-    <div class="mc__gallo-log" data-gallo-historial role="log" aria-label="Conversación" aria-live="polite" tabindex="0"></div>
-    <div class="mc__gallo-pistas">${PREGUNTAS_GALLO.map(p => `<button type="button" data-gallo-sugerencia>${esc(p)}</button>`).join('')}</div>
-    <form class="mc__gallo-form">
-      <textarea rows="1" maxlength="650" data-gallo-pregunta aria-label="Tu pregunta" placeholder="Escribe tu pregunta…"></textarea>
-      <button class="mc__btn mc__btn--p" type="submit" data-gallo-enviar>Enviar</button>
-    </form>
-    <p class="mc__gallo-status" role="status" data-gallo-estado></p>
-  </section>`;
-  const form = view.querySelector('.mc__gallo-form');
-  const entrada = form.querySelector('[data-gallo-pregunta]');
-  entrada.value = GALLO_CHAT.borrador;
-  entrada.addEventListener('input', () => { GALLO_CHAT.borrador = entrada.value; });
-  form.onsubmit = e => {
-    e.preventDefault();
-    if (!entrada.value.trim() || GALLO_CHAT.enviando) return;
-    const texto = entrada.value;
-    entrada.value = '';
-    preguntarGallo(texto);
-  };
-  view.querySelectorAll('[data-gallo-sugerencia]').forEach(b => {
-    b.onclick = () => preguntarGallo(b.textContent);
-  });
-  actualizarGallo();
-}
+/* INYECTAR CHAT DE MI GALLO IA */
 
 // ─── Materiales ─────────────────────────────────────────────────────────────
 function mat(m) {
