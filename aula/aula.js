@@ -618,7 +618,7 @@ async function guardarProgreso({ completada = false }, avisar = false) {
       if (SEG === s && !document.hidden && anterior && anterior.completadas < anterior.total &&
           !anterior.clases?.[s.clase.id]?.completada &&
           r.progreso.total > 0 && r.progreso.completadas === r.progreso.total) {
-        import('/aula/curso-completado.js?v=1').then(({ mostrarSiguienteCurso }) => {
+        import('https://cdn.jsdelivr.net/gh/teccapitalweb/VISIONPECUARIA2@942ab5f6f6a824eeb936a0f99d031ea9bd92a3f5/aula/curso-completado.js').then(({ mostrarSiguienteCurso }) => {
           if (SEG !== s || document.hidden || S.user?.uid !== uid) return;
           mostrarSiguienteCurso({ slug: s.slug, uid, cursos: S.estado?.cursos || [], clases: d.clases,
             progreso: r.progreso, claseId: s.clase.id });
