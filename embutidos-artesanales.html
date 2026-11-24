@@ -3089,11 +3089,24 @@ document.addEventListener('visibilitychange', () => { if (document.hidden && SEG
 window.addEventListener('pagehide', () => { if (SEG && SEG.ses > SEG.env) guardar(false); });
 
 // Este archivo se integra en el módulo de las dos landings mediante inyectar.py.
+function clasificarDispositivoCurso(navegador) {
+  const ua = navegador.userAgent || '';
+  const plataforma = navegador.userAgentData?.platform || '';
+  const android = /Android/i.test(ua) || /^Android$/i.test(plataforma);
+  const movil = /Mobile/i.test(ua) || navegador.userAgentData?.mobile === true;
+  const ipadEscritorio = /Macintosh/i.test(ua) && navegador.maxTouchPoints > 1;
+  if (ipadEscritorio || /iPad|Tablet|PlayBook|Silk/i.test(ua) || android && !movil) return 'tableta';
+  if (movil || /iPhone|iPod|Windows Phone|IEMobile/i.test(ua)) return 'telefono';
+  if (/Windows NT|Macintosh|X11|CrOS/i.test(ua) || /^(?:Windows|macOS|Linux|Chrome OS)$/i.test(plataforma)) return 'computadora';
+  return 'desconocido';
+}
+
 function crearActividadCursos() {
   const origen = new URL(location.href).searchParams.get('vp_desde');
   const permitido = { 'gallinas-de-postura': 'embutidos-artesanales', 'embutidos-artesanales': 'gallinas-de-postura' };
   const atribucionOrigen = permitido[SLUG] === origen ? origen : null;
   const visitaId = crypto.randomUUID();
+  const dispositivo = clasificarDispositivoCurso(navigator);
   const relojes = new Set();
   const cotizacion = { valor: null };
   let enlace = null, yaPague = null, stripe = null, pagoAbierto = false;
@@ -3105,7 +3118,7 @@ function crearActividadCursos() {
     const token = alumno?.emailVerified ? await alumno.getIdToken().catch(() => null) : null;
     return {
       headers: { 'Content-Type': 'application/json', ...(token ? { Authorization: 'Bearer ' + token } : {}) },
-      datos: { visitaId, ...(atribucionOrigen ? { origenSlug: atribucionOrigen } : {}) }
+      datos: { visitaId, dispositivo, ...(atribucionOrigen ? { origenSlug: atribucionOrigen } : {}) }
     };
   }
 
@@ -3153,14 +3166,18 @@ function crearActividadCursos() {
     return reloj;
   }
 
-  function observarVideo(video) {
+  function observarVideo(video, botonSonido) {
     if (!video) return () => {};
-    let visible = false, reproduciendo = false, reloj = null, manual = !video.autoplay;
+    let visible = false, reproduciendo = false, reloj = null, modoInicio = 'automatico';
+    let intencionManualEn = null;
+    const marcarManual = evento => {
+      if (evento.isTrusted && video.paused) intencionManualEn = performance.now();
+    };
     const sincronizar = () => {
       const activo = visible && reproduciendo && !ABIERTO && !pagoAbierto && document.visibilityState !== 'hidden';
       if (activo && !reloj) {
         reloj = medir(contexto(), 'video_reproducido', 'video_tiempo', crypto.randomUUID(), {
-          modo: manual ? 'manual' : 'automatico'
+          modo: modoInicio
         });
       }
       reloj?.cambiar(activo);
@@ -3175,21 +3192,37 @@ function crearActividadCursos() {
       reloj?.cerrar();
       reloj = null;
       reproduciendo = false;
+      intencionManualEn = null;
     };
-    video.addEventListener('play', () => { if (!video.autoplay || !video.muted) manual = true; });
+    // La propiedad autoplay y el sonido no indican quién inició la reproducción.
+    video.addEventListener('pointerdown', marcarManual, { capture: true });
+    video.addEventListener('keydown', evento => {
+      if (evento.key === 'Enter' || evento.key === ' ') marcarManual(evento);
+    }, { capture: true });
+    botonSonido?.addEventListener('click', marcarManual, { capture: true });
+    video.addEventListener('play', () => {
+      modoInicio = intencionManualEn !== null && performance.now() - intencionManualEn <= 1800 ? 'manual' : 'automatico';
+      intencionManualEn = null;
+    });
     video.addEventListener('playing', () => { reproduciendo = true; sincronizar(); });
     video.addEventListener('waiting', () => { reproduciendo = false; sincronizar(); });
     video.addEventListener('pause', cerrar);
     video.addEventListener('ended', cerrar);
+    video.addEventListener('emptied', cerrar);
     if (!video.paused && video.readyState >= 3) reproduciendo = true;
     return sincronizar;
   }
 
-  const video = document.getElementById(SLUG === 'gallinas-de-postura' ? 'hero-video' : 'preview-video');
-  const sincronizarVideo = observarVideo(video);
+  const esGallinas = SLUG === 'gallinas-de-postura';
+  const video = document.getElementById(esGallinas ? 'hero-video' : 'preview-video');
+  const botonSonido = document.getElementById(esGallinas ? 'btn-activar-sonido' : 'btn-sound');
+  const sincronizarVideo = observarVideo(video, botonSonido);
+  const pagina = medir(contexto(), 'pagina_visitada', 'pagina_tiempo', visitaId);
   function sincronizar() {
     sincronizarVideo();
-    enlace?.cambiar(!ABIERTO && !pagoAbierto);
+    const viendoLanding = !ABIERTO && !pagoAbierto;
+    pagina.cambiar(viendoLanding);
+    enlace?.cambiar(viendoLanding);
     yaPague?.cambiar(ABIERTO);
     stripe?.cambiar(pagoAbierto);
     relojes.forEach(r => r.actualizar());
@@ -3204,8 +3237,8 @@ function crearActividadCursos() {
 
   if (atribucionOrigen) {
     enlace = medir(contexto(), 'enlace_abierto', 'enlace_tiempo', crypto.randomUUID());
-    enlace.cambiar(!ABIERTO);
   }
+  sincronizar();
 
   async function precioAlumno() {
     if (atribucionOrigen !== 'gallinas-de-postura' || SLUG !== 'embutidos-artesanales') return null;
@@ -3256,7 +3289,7 @@ function crearActividadCursos() {
       const precio = ctx.headers.Authorization ? await precioAlumno() : null;
       return {
         headers: ctx.headers,
-        body: { slug: SLUG, visitaId, ...(atribucionOrigen ? { atribucionOrigen } : {}),
+        body: { slug: SLUG, visitaId, dispositivo, ...(atribucionOrigen ? { atribucionOrigen } : {}),
           ...(precio?.montoCentavos ? { origenSlug: atribucionOrigen } : {}) },
         contexto: ctx,
         yaComprado: Boolean(precio?.yaComprado)
