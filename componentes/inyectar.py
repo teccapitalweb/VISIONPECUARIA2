@@ -5,6 +5,8 @@ raiz = pathlib.Path(__file__).resolve().parent.parent
 comp = (raiz / 'componentes/mi-curso.html').read_text(encoding='utf-8').strip()
 actividad = (raiz / 'componentes/actividad-cursos.js').read_text(encoding='utf-8').strip()
 comp = comp.replace('/* INYECTAR ACTIVIDAD DE CURSOS */', actividad)
+gallo = (raiz / 'componentes/gallo-chat.js').read_text(encoding='utf-8').strip()
+comp = comp.replace('/* INYECTAR CHAT DE MI GALLO IA */', gallo)
 regalo = (raiz / 'componentes/regalo.html').read_text(encoding='utf-8').strip()
 for nombre in ('gallinas-de-postura.html', 'embutidos-artesanales.html'):
     p = raiz / nombre
