@@ -2123,6 +2123,7 @@ const SLUG = document.body.dataset.slug;
 const CFG = { apiKey: "AIzaSyDQXkIo-BWPIeLZzHeTMN986WMDn0TrTJU", authDomain: "visionpecuaria-vip.firebaseapp.com", projectId: "visionpecuaria-vip",
   storageBucket: "visionpecuaria-vip.firebasestorage.app", messagingSenderId: "978318807782", appId: "1:978318807782:web:626e67bb30795c15b02127" };
 const PORTADAS_BASE = 'https://cdn.jsdelivr.net/gh/teccapitalweb/VISIONPECUARIA2@main/portadas/';
+const GALLO_IMAGEN = 'https://cdn.jsdelivr.net/gh/teccapitalweb/VISIONPECUARIA2@ecc78826b559e84d6739deafc4eec00c77294cce/assets/brand/mi-gallo-ia.png';
 const PORTADAS = { 'gallinas-de-postura': 'gallinas-', 'embutidos-artesanales': 'embutidos-' };
 const portadaDe = (i) => (PORTADAS[SLUG] && i >= 0 && i < 5) ? PORTADAS_BASE + PORTADAS[SLUG] + (i + 1) + '.jpg' : '';
 const portadaMat = (i, m) => m?.miniatura || ((PORTADAS[SLUG] && i >= 0 && i < 5) ? PORTADAS_BASE + 'mat-' + PORTADAS[SLUG] + (i + 1) + '.jpg' : '');
@@ -2836,7 +2837,7 @@ function vistaGallo() {
         <a class="mc__btn mc__btn--l mc__btn--sm" href="${WA}?text=${encodeURIComponent('Hola, soy alumno de ' + DATA.curso.nombre + ' y tengo una duda.')}" target="_blank" rel="noopener">${I.wa} Pedir ayuda</a>
       </div>
     </div>
-    <img src="/assets/brand/mi-gallo-ia.png" alt="" width="225" height="244">
+    <img src="${GALLO_IMAGEN}" alt="" width="225" height="244">
   </section>`;
   ligarVista();
 }
