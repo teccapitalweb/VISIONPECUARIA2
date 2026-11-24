@@ -15,10 +15,11 @@ function crearActividadCursos() {
   const origen = new URL(location.href).searchParams.get('vp_desde');
   const permitido = { 'gallinas-de-postura': 'embutidos-artesanales', 'embutidos-artesanales': 'gallinas-de-postura' };
   const atribucionOrigen = permitido[SLUG] === origen ? origen : null;
+  const nombreOrigen = { 'gallinas-de-postura': 'Gallinas de Postura', 'embutidos-artesanales': 'Embutidos Artesanales y Chorizos' };
   const visitaId = crypto.randomUUID();
   const dispositivo = clasificarDispositivoCurso(navigator);
   const relojes = new Set();
-  const cotizacion = { valor: null };
+  let cotizacion = null, revisionOferta = 0;
   let enlace = null, yaPague = null, stripe = null, pagoAbierto = false;
   const esperaSesion = Promise.race([auth.authStateReady?.() || Promise.resolve(), espera(1500)]);
 
@@ -28,7 +29,8 @@ function crearActividadCursos() {
     const token = alumno?.emailVerified ? await alumno.getIdToken().catch(() => null) : null;
     return {
       headers: { 'Content-Type': 'application/json', ...(token ? { Authorization: 'Bearer ' + token } : {}) },
-      datos: { visitaId, dispositivo, ...(atribucionOrigen ? { origenSlug: atribucionOrigen } : {}) }
+      datos: { visitaId, dispositivo, ...(atribucionOrigen ? { origenSlug: atribucionOrigen } : {}) },
+      uid: token ? alumno.uid : null
     };
   }
 
@@ -151,33 +153,47 @@ function crearActividadCursos() {
   sincronizar();
 
   async function precioAlumno() {
-    if (atribucionOrigen !== 'gallinas-de-postura' || SLUG !== 'embutidos-artesanales') return null;
-    if (cotizacion.valor?.uid === auth.currentUser?.uid && cotizacion.valor) return cotizacion.valor.precio;
-    if (!auth.currentUser?.emailVerified) return null;
+    if (!atribucionOrigen || !auth.currentUser?.emailVerified) return null;
     const uid = auth.currentUser.uid;
+    if (cotizacion?.uid === uid && Date.now() - cotizacion.en < 60000) return cotizacion.precio;
     const query = new URLSearchParams({ origenSlug: atribucionOrigen, destinoSlug: SLUG });
     try {
       const precio = await api('/alumno/promociones/cotizacion?' + query);
-      if (auth.currentUser?.uid === uid) cotizacion.valor = { uid, precio };
-      return auth.currentUser?.uid === uid ? precio : null;
+      if (auth.currentUser?.uid !== uid || auth.currentUser.emailVerified !== true ||
+          precio?.origenSlug !== atribucionOrigen || precio.destinoSlug !== SLUG ||
+          ![precio.precioBaseCentavos, precio.descuentoCentavos, precio.montoCentavos].every(n => Number.isSafeInteger(n) && n > 0)) return null;
+      cotizacion = { uid, precio, en: Date.now() };
+      return precio;
     } catch (err) {
-      if (err.codigo === 'curso_adquirido') return { yaComprado: true };
+      if (auth.currentUser?.uid === uid && err.codigo === 'curso_adquirido') return { yaComprado: true };
       return null;
     }
   }
 
   async function mostrarOfertaAlumno() {
     document.getElementById('vp-oferta-alumno')?.remove();
+    const revision = ++revisionOferta;
+    if (!atribucionOrigen) return;
     await esperaSesion.catch(() => {});
+    const verificado = auth.currentUser?.emailVerified === true;
     const precio = await precioAlumno();
-    if (!precio?.montoCentavos) return;
+    if (revision !== revisionOferta || verificado && !precio?.montoCentavos) return;
     const ancla = document.querySelector('[data-action="inscribir"]:not(.hdr__cta):not(.sticky-bar__cta)');
     if (!ancla) return;
-    document.getElementById('vp-oferta-alumno')?.remove();
-    const tarjeta = document.createElement('p');
+    const tarjeta = document.createElement('div');
     tarjeta.id = 'vp-oferta-alumno';
     tarjeta.className = 'vp-oferta-alumno';
-    tarjeta.textContent = 'Por haber tomado ' + precio.origenNombre + ', pagas ' + mxn(precio.montoCentavos) + ' con esta cuenta.';
+    const titulo = document.createElement('strong');
+    const detalle = document.createElement('span');
+    if (precio?.montoCentavos) {
+      titulo.textContent = 'Precio de alumno: ' + mxn(precio.montoCentavos);
+      detalle.textContent = 'Precio regular ' + mxn(precio.precioBaseCentavos) + ' · Ahorras ' + mxn(precio.descuentoCentavos) +
+        ' por haber comprado ' + (precio.origenNombre || nombreOrigen[atribucionOrigen]) + '.';
+    } else {
+      titulo.textContent = 'Precio especial para alumnos de ' + nombreOrigen[atribucionOrigen];
+      detalle.textContent = 'Usa el mismo correo con el que compraste ese curso para confirmar tu descuento.';
+    }
+    tarjeta.append(titulo, detalle);
     ancla.before(tarjeta);
   }
 
@@ -196,11 +212,12 @@ function crearActividadCursos() {
     },
     async prepararPago() {
       const ctx = await contexto();
-      const precio = ctx.headers.Authorization ? await precioAlumno() : null;
+      const precio = ctx.uid && ctx.uid === auth.currentUser?.uid ? await precioAlumno() : null;
+      const usarOferta = precio?.montoCentavos && cotizacion?.uid === ctx.uid && ctx.uid === auth.currentUser?.uid;
       return {
         headers: ctx.headers,
         body: { slug: SLUG, visitaId, dispositivo, ...(atribucionOrigen ? { atribucionOrigen } : {}),
-          ...(precio?.montoCentavos ? { origenSlug: atribucionOrigen } : {}) },
+          ...(usarOferta ? { origenSlug: atribucionOrigen } : {}) },
         contexto: ctx,
         yaComprado: Boolean(precio?.yaComprado)
       };

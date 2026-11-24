@@ -2031,6 +2031,7 @@ body.mcrv-lock{overflow:hidden}
     min-height: clamp(104px, 31vw, 176px);
     border-bottom: 1px solid var(--line);
   }
+  .mc__hero .mc__banner:has(img) { aspect-ratio: 16 / 9; min-height: 0; }
   .mc__hero h1 { font-size: clamp(1.7rem, 7.9vw, 2.35rem); }
   .mc__ctafila { margin-top: 16px; }
   .mc__stats > div { padding-inline: 4px; }
@@ -2077,8 +2078,14 @@ body[data-slug="embutidos-artesanales"] .mc {
 .mc__recommend-card img { width: 76px; height: 58px; border-radius: 8px; object-fit: cover; background: var(--tint); }
 .mc__recommend-card strong { display: block; font-size: .88rem; line-height: 1.25; }
 .mc__recommend-card small { color: var(--soft); font-size: .75rem; }
+.mc__recom-precio { display: grid; gap: 2px; margin-top: 4px; }
+.mc__recom-montos { display: flex; flex-wrap: wrap; align-items: baseline; gap: 2px 8px; }
+.mc__recom-montos b { color: var(--a2); font-size: .96rem; }
+.mc__recom-montos s { color: var(--soft); font-size: .77rem; }
 .mc__recommend-card svg { width: 17px; height: 17px; color: var(--a2); }
-.vp-oferta-alumno { width: fit-content; margin: 0 0 12px; border: 1px solid #f1d99e; background: #fff6da; color: #5b3d0d; border-radius: 10px; padding: 8px 11px; font-weight: 700; font-size: .86rem; }
+.vp-oferta-alumno { display: grid; gap: 4px; max-width: 32rem; margin: 0 0 12px; border: 1px solid #f1d99e; background: #fff6da; color: #5b3d0d; border-radius: 10px; padding: 10px 12px; font-size: .9rem; line-height: 1.35; text-align: left; }
+.vp-oferta-alumno strong { font-size: 1rem; }
+.vp-oferta-alumno:empty { display: none; }
 .mc__gallo { width: min(100%, 740px); margin-inline: auto; display: grid; overflow: hidden; }
 .mc__gallo-header { display: flex; align-items: center; gap: 12px; padding: 13px 16px; background: var(--tint); border-bottom: 1px solid var(--line2); }
 .mc__gallo-header img { width: 44px; height: 48px; object-fit: contain; flex: none; }
@@ -2200,6 +2207,7 @@ const RECOMENDADOS = {
 const mxn = (centavos) => new Intl.NumberFormat('es-MX', {
   style: 'currency', currency: 'MXN', maximumFractionDigits: centavos % 100 ? 2 : 0
 }).format(centavos / 100) + ' MXN';
+const cotizacionesRecomendadas = new Map();
 let GALLO_CHAT = { mensajes: [], enviando: false, error: '', borrador: '' };
 
 function toast(m, err) { const t = $('#mc-toast'); t.textContent = m; t.className = 'mc__toast on' + (err ? ' err' : ''); clearTimeout(t._t); t._t = setTimeout(() => t.className = 'mc__toast', 3500); }
@@ -2311,7 +2319,10 @@ window.addEventListener('popstate', () => {
 document.addEventListener('keydown', (e) => { if (e.key === 'Escape' && ABIERTO && !document.getElementById('mc-visor')) cerrar(); });
 
 onAuthStateChanged(auth, (u) => {
-  if (USER?.uid !== u?.uid) GALLO_CHAT = { mensajes: [], enviando: false, error: '', borrador: '' };
+  if (USER?.uid !== u?.uid) {
+    GALLO_CHAT = { mensajes: [], enviando: false, error: '', borrador: '' };
+    cotizacionesRecomendadas.clear();
+  }
   USER = u;
   DATA = null;
   window.vpActividadCursos?.mostrarOfertaAlumno();
@@ -2650,6 +2661,13 @@ function abrirVisor(id) {
 function prepararPortadas(contenedor) {
   contenedor.querySelectorAll('.mc__banner img, .mc__mcov img, img.mc__lth, img.mc__mth').forEach(imagen => {
     const sinPortada = () => {
+      if (imagen.dataset.portadaRespaldo) {
+        const url = imagen.dataset.portadaRespaldo;
+        delete imagen.dataset.portadaRespaldo;
+        imagen.addEventListener('error', sinPortada, { once: true });
+        imagen.src = url;
+        return;
+      }
       if (imagen.matches('.mc__banner img, .mc__mcov img')) {
         imagen.remove();
         return;
@@ -2682,7 +2700,8 @@ function vistaInicio() {
   const minTot = d.clases.reduce((a, x) => a + (x.duracionMin || 0), 0);
   const dur = c.duracionHoras ? c.duracionHoras + ' horas' : minTot ? (Math.round(minTot / 6) / 10) + ' horas' : '—';
   const estadoCurso = p.porcentaje >= 100 ? 'Completado' : p.completadas ? 'En progreso' : 'Por empezar';
-  const portada = c.portada || PORTADA;
+  const portada = portadaDe(0) || c.portada || PORTADA;
+  const portadaRespaldo = [PORTADA, c.portada].find(url => url && url !== portada);
   view.innerHTML = `<section class="mc__hero" aria-labelledby="mc-curso-nombre">
     <div class="mc__head">
       <span class="mc__eyebrow">${I.escudo} Aula del curso</span>
@@ -2698,7 +2717,7 @@ function vistaInicio() {
       </div>
       <div class="mc__prog"><span>Tu avance</span><div class="mc__bar" role="progressbar" aria-label="Tu avance" aria-valuenow="${p.porcentaje}"><i style="width:${p.porcentaje}%"></i></div><b>${p.porcentaje}%</b></div>
     </div>
-    <div class="mc__banner">${I.clases}${portada ? `<img src="${esc(portada)}" alt="">` : ''}</div>
+    <div class="mc__banner" aria-hidden="true">${I.clases}${portada ? `<img src="${esc(portada)}" alt=""${portadaRespaldo ? ` data-portada-respaldo="${esc(portadaRespaldo)}"` : ''}>` : ''}</div>
   </section>
   <div class="mc__cols"><div>
     <div class="mc__stats">
@@ -2735,6 +2754,7 @@ function vistaClases() {
   </div>
   <aside class="mc__aside">${panelAprendizaje(d, true)}</aside></div>`;
   ligarVista();
+  cargarPreciosRecomendados();
 }
 
 function enlaceRecomendado(curso) {
@@ -2748,16 +2768,48 @@ function tarjetasRecomendadas() {
     <h2 id="mc-recom-title">Porque adquiriste este curso, te podría interesar</h2>
     ${cursos.map(curso => `<a class="mc__recommend-card" href="${esc(enlaceRecomendado(curso))}">
       <img src="${esc(curso.portada)}" alt="" loading="lazy" width="76" height="58">
-      <span><strong>${esc(curso.nombre)}</strong><small>Ver curso</small></span>
+      <span><strong>${esc(curso.nombre)}</strong><span class="mc__recom-precio" data-recom-precio="${esc(curso.slug)}"><small>Ver curso</small></span></span>
       ${I.flecha}
     </a>`).join('')}
   </section>`;
 }
 
+async function cotizarRecomendado(destinoSlug) {
+  const uid = USER?.uid;
+  if (!uid) return null;
+  const query = new URLSearchParams({ origenSlug: SLUG, destinoSlug });
+  try {
+    const precio = await api('/alumno/promociones/cotizacion?' + query);
+    if (USER?.uid !== uid || precio?.origenSlug !== SLUG || precio.destinoSlug !== destinoSlug ||
+        ![precio.precioBaseCentavos, precio.descuentoCentavos, precio.montoCentavos].every(n => Number.isSafeInteger(n) && n > 0)) return null;
+    return precio;
+  } catch (err) {
+    return USER?.uid === uid && err.codigo === 'curso_adquirido' ? { yaComprado: true } : null;
+  }
+}
+
+function cargarPreciosRecomendados() {
+  const uid = USER?.uid;
+  view.querySelectorAll('[data-recom-precio]').forEach(async nodo => {
+    const slug = nodo.dataset.recomPrecio;
+    let consulta = cotizacionesRecomendadas.get(slug);
+    if (!consulta || Date.now() - consulta.en > 60000) {
+      consulta = { en: Date.now(), precio: cotizarRecomendado(slug) };
+      cotizacionesRecomendadas.set(slug, consulta);
+    }
+    const p = await consulta.precio;
+    if (!p && cotizacionesRecomendadas.get(slug) === consulta) cotizacionesRecomendadas.delete(slug);
+    if (!p || USER?.uid !== uid || !nodo.isConnected) return;
+    nodo.innerHTML = p.yaComprado ? '<small>Ya tienes acceso</small>' :
+      `<span class="mc__recom-montos"><s><span class="mc__sr">Precio regular </span>${esc(mxn(p.precioBaseCentavos))}</s>
+        <b><span class="mc__sr">Precio de alumno </span>${esc(mxn(p.montoCentavos))}</b></span><small>Ahorras ${esc(mxn(p.descuentoCentavos))} como alumno</small>`;
+  });
+}
+
 const PREGUNTAS_GALLO = [
-  '¿Dónde veo mis clases?',
-  '¿Cómo descargo un material?',
-  '¿Cómo solicito mi certificado?'
+  '¿Cómo preparo la cama de mis pollitos?',
+  '¿Por qué baja la postura?',
+  '¿Qué observo si mis aves tienen manchas?'
 ];
 
 function fuentesGallo(lista) {
@@ -3105,10 +3157,11 @@ function crearActividadCursos() {
   const origen = new URL(location.href).searchParams.get('vp_desde');
   const permitido = { 'gallinas-de-postura': 'embutidos-artesanales', 'embutidos-artesanales': 'gallinas-de-postura' };
   const atribucionOrigen = permitido[SLUG] === origen ? origen : null;
+  const nombreOrigen = { 'gallinas-de-postura': 'Gallinas de Postura', 'embutidos-artesanales': 'Embutidos Artesanales y Chorizos' };
   const visitaId = crypto.randomUUID();
   const dispositivo = clasificarDispositivoCurso(navigator);
   const relojes = new Set();
-  const cotizacion = { valor: null };
+  let cotizacion = null, revisionOferta = 0;
   let enlace = null, yaPague = null, stripe = null, pagoAbierto = false;
   const esperaSesion = Promise.race([auth.authStateReady?.() || Promise.resolve(), espera(1500)]);
 
@@ -3118,7 +3171,8 @@ function crearActividadCursos() {
     const token = alumno?.emailVerified ? await alumno.getIdToken().catch(() => null) : null;
     return {
       headers: { 'Content-Type': 'application/json', ...(token ? { Authorization: 'Bearer ' + token } : {}) },
-      datos: { visitaId, dispositivo, ...(atribucionOrigen ? { origenSlug: atribucionOrigen } : {}) }
+      datos: { visitaId, dispositivo, ...(atribucionOrigen ? { origenSlug: atribucionOrigen } : {}) },
+      uid: token ? alumno.uid : null
     };
   }
 
@@ -3241,33 +3295,47 @@ function crearActividadCursos() {
   sincronizar();
 
   async function precioAlumno() {
-    if (atribucionOrigen !== 'gallinas-de-postura' || SLUG !== 'embutidos-artesanales') return null;
-    if (cotizacion.valor?.uid === auth.currentUser?.uid && cotizacion.valor) return cotizacion.valor.precio;
-    if (!auth.currentUser?.emailVerified) return null;
+    if (!atribucionOrigen || !auth.currentUser?.emailVerified) return null;
     const uid = auth.currentUser.uid;
+    if (cotizacion?.uid === uid && Date.now() - cotizacion.en < 60000) return cotizacion.precio;
     const query = new URLSearchParams({ origenSlug: atribucionOrigen, destinoSlug: SLUG });
     try {
       const precio = await api('/alumno/promociones/cotizacion?' + query);
-      if (auth.currentUser?.uid === uid) cotizacion.valor = { uid, precio };
-      return auth.currentUser?.uid === uid ? precio : null;
+      if (auth.currentUser?.uid !== uid || auth.currentUser.emailVerified !== true ||
+          precio?.origenSlug !== atribucionOrigen || precio.destinoSlug !== SLUG ||
+          ![precio.precioBaseCentavos, precio.descuentoCentavos, precio.montoCentavos].every(n => Number.isSafeInteger(n) && n > 0)) return null;
+      cotizacion = { uid, precio, en: Date.now() };
+      return precio;
     } catch (err) {
-      if (err.codigo === 'curso_adquirido') return { yaComprado: true };
+      if (auth.currentUser?.uid === uid && err.codigo === 'curso_adquirido') return { yaComprado: true };
       return null;
     }
   }
 
   async function mostrarOfertaAlumno() {
     document.getElementById('vp-oferta-alumno')?.remove();
+    const revision = ++revisionOferta;
+    if (!atribucionOrigen) return;
     await esperaSesion.catch(() => {});
+    const verificado = auth.currentUser?.emailVerified === true;
     const precio = await precioAlumno();
-    if (!precio?.montoCentavos) return;
+    if (revision !== revisionOferta || verificado && !precio?.montoCentavos) return;
     const ancla = document.querySelector('[data-action="inscribir"]:not(.hdr__cta):not(.sticky-bar__cta)');
     if (!ancla) return;
-    document.getElementById('vp-oferta-alumno')?.remove();
-    const tarjeta = document.createElement('p');
+    const tarjeta = document.createElement('div');
     tarjeta.id = 'vp-oferta-alumno';
     tarjeta.className = 'vp-oferta-alumno';
-    tarjeta.textContent = 'Por haber tomado ' + precio.origenNombre + ', pagas ' + mxn(precio.montoCentavos) + ' con esta cuenta.';
+    const titulo = document.createElement('strong');
+    const detalle = document.createElement('span');
+    if (precio?.montoCentavos) {
+      titulo.textContent = 'Precio de alumno: ' + mxn(precio.montoCentavos);
+      detalle.textContent = 'Precio regular ' + mxn(precio.precioBaseCentavos) + ' · Ahorras ' + mxn(precio.descuentoCentavos) +
+        ' por haber comprado ' + (precio.origenNombre || nombreOrigen[atribucionOrigen]) + '.';
+    } else {
+      titulo.textContent = 'Precio especial para alumnos de ' + nombreOrigen[atribucionOrigen];
+      detalle.textContent = 'Usa el mismo correo con el que compraste ese curso para confirmar tu descuento.';
+    }
+    tarjeta.append(titulo, detalle);
     ancla.before(tarjeta);
   }
 
@@ -3286,11 +3354,12 @@ function crearActividadCursos() {
     },
     async prepararPago() {
       const ctx = await contexto();
-      const precio = ctx.headers.Authorization ? await precioAlumno() : null;
+      const precio = ctx.uid && ctx.uid === auth.currentUser?.uid ? await precioAlumno() : null;
+      const usarOferta = precio?.montoCentavos && cotizacion?.uid === ctx.uid && ctx.uid === auth.currentUser?.uid;
       return {
         headers: ctx.headers,
         body: { slug: SLUG, visitaId, dispositivo, ...(atribucionOrigen ? { atribucionOrigen } : {}),
-          ...(precio?.montoCentavos ? { origenSlug: atribucionOrigen } : {}) },
+          ...(usarOferta ? { origenSlug: atribucionOrigen } : {}) },
         contexto: ctx,
         yaComprado: Boolean(precio?.yaComprado)
       };
