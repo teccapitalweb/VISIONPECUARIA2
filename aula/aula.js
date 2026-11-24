@@ -13,7 +13,8 @@ const WA = 'https://wa.me/522361049715';
 const RANCHO = '/VisionPecuaria/rancho.html';
 const PORTADAS = {
   'gallinas-de-postura': '/assets/curso-gallinas-postura/instructor-gomez-800.jpg',
-  'embutidos-artesanales': '/assets/curso-chorizo/hero-chef-1024.jpg'
+  'embutidos-artesanales': '/assets/curso-chorizo/hero-chef-1024.jpg',
+  'sexaje-avicola': 'https://visionpecuariamateriales.b-cdn.net/a68ef1fc-12fc-437c-acbb-c36199e8723b.png'
 };
 const PORTADA_DEFAULT = '/assets/brand/banner.jpg';
 
@@ -340,7 +341,7 @@ async function vistaInicio(v) {
 function tarjetaCurso(c) {
   const p = c.progreso || {};
   return `<a class="card curso-card" href="#/curso/${esc(c.slug)}">
-    <div class="curso-card__cover"><img src="${esc(portada(c))}" alt="" loading="lazy" ${imgFallback(c.slug)}><span class="chip">Curso adquirido</span></div>
+    <div class="curso-card__cover"><img src="${esc(portada(c))}" alt="" loading="lazy" ${imgFallback(c.slug)}><span class="chip ${c.origen === 'regalo' ? 'chip--gift' : ''}">${c.origen === 'regalo' ? 'Regalo incluido' : 'Curso adquirido'}</span></div>
     <div class="curso-card__body">
       <h3>${esc(c.nombre)}</h3>
       ${c.instructorNombre ? `<div class="curso-card__meta">${esc(c.instructorNombre)}</div>` : ''}
@@ -380,7 +381,7 @@ async function vistaCurso(v, slug) {
   let html = selectorCurso(slug, '#/curso/');
   html += `<section class="curso-hero"><img src="${esc(portada(c))}" alt="" ${imgFallback(slug)}>
     <div class="curso-hero__body"><div>
-      <span class="chip chip--gold">${ico('libro')} Curso adquirido</span>
+      <span class="chip chip--gold">${ico('libro')} ${d.acceso?.origen === 'regalo' ? 'Regalo incluido' : 'Curso adquirido'}</span>
       <h1 style="margin-top:10px">${esc(c.nombre)}</h1>
       <p>${c.instructorNombre ? esc(c.instructorNombre) + ' · ' : ''}${d.clases.length} ${d.clases.length === 1 ? 'clase' : 'clases'}${d.acceso?.fechaCompra ? ' · adquirido el ' + esc(fecha(d.acceso.fechaCompra)) : ''}</p>
       ${continuarId ? `<a class="btn btn--gold" style="margin-top:16px" href="#/clase/${esc(slug)}/${esc(continuarId)}">${ico('play')} ${p.ultimaClaseId ? 'Continuar' : 'Empezar'}</a>` : ''}
@@ -439,23 +440,77 @@ function tarjetaClase(slug, cl, i, p, curso) {
 function tarjetaMaterial(slug, m) {
   const x = m.tipo === 'xlsx' || m.tipo === 'excel';
   return `<button class="card mat" type="button" data-mat="${esc(slug)}|${esc(m.id)}" ${m.disponible ? '' : 'disabled'}>
-    <span class="mat__ico ${x ? 'mat__ico--xlsx' : ''}">${ico('materiales')}</span>
+    ${m.miniatura ? `<img class="mat__cover" src="${esc(m.miniatura)}" alt="" loading="lazy">` : `<span class="mat__ico ${x ? 'mat__ico--xlsx' : ''}">${ico('materiales')}</span>`}
     <span><b>${esc(m.titulo)}</b><small>${esc(m.descripcion || (x ? 'Excel' : 'PDF'))}</small></span>
     <span class="mat__go">${ico('descarga')}</span></button>`;
 }
 
-document.addEventListener('click', async (e) => {
+let VISOR_MATERIAL = null;
+function cerrarMaterial() {
+  const visor = VISOR_MATERIAL;
+  if (!visor) return;
+  VISOR_MATERIAL = null;
+  if (document.fullscreenElement === visor.root && document.exitFullscreen) document.exitFullscreen().catch(() => {});
+  document.removeEventListener('keydown', visor.onKey);
+  document.body.classList.remove('material-open');
+  visor.root.remove();
+}
+
+async function abrirMaterial(slug, id) {
+  const m = S.detalle[slug]?.materiales?.find(x => x.id === id);
+  if (!m) { toast('No encontramos este material', true); return; }
+  cerrarMaterial();
+  const root = document.createElement('div');
+  root.className = 'material-viewer';
+  root.setAttribute('role', 'dialog');
+  root.setAttribute('aria-modal', 'true');
+  root.setAttribute('aria-label', m.titulo);
+  root.innerHTML = `<header class="material-viewer__bar">
+    <div class="material-viewer__title"><b>${esc(m.titulo)}</b><small>${esc(m.tipo?.toUpperCase() || 'Material')} · ${esc(S.detalle[slug]?.curso?.nombre || '')}</small></div>
+    <div class="material-viewer__actions">
+      <a class="material-viewer__action" data-download hidden target="_blank" rel="noopener">Descargar</a>
+      <button class="material-viewer__action" type="button" data-full>Ampliar</button>
+      <button class="material-viewer__action material-viewer__close" type="button" data-close aria-label="Cerrar material">Cerrar ✕</button>
+    </div></header>
+    <div class="material-viewer__stage"><div class="material-viewer__status">Preparando tu material…</div></div>`;
+  document.body.appendChild(root);
+  document.body.classList.add('material-open');
+  const onKey = e => { if (e.key === 'Escape') cerrarMaterial(); };
+  document.addEventListener('keydown', onKey);
+  const ctx = { root, onKey };
+  VISOR_MATERIAL = ctx;
+  root.querySelector('[data-close]').onclick = cerrarMaterial;
+  root.querySelector('[data-full]').onclick = () => {
+    if (document.fullscreenElement === root) document.exitFullscreen?.();
+    else root.requestFullscreen?.().catch(() => {});
+  };
+  root.querySelector('[data-close]').focus();
+  const stage = root.querySelector('.material-viewer__stage');
+  try {
+    const r = await api(`/alumno/curso/${encodeURIComponent(slug)}/material`, { method: 'POST', body: { materialId: id } });
+    if (VISOR_MATERIAL !== ctx) return;
+    const download = root.querySelector('[data-download]');
+    download.href = r.url;
+    download.hidden = false;
+    const tipo = String(m.tipo || '').toLowerCase();
+    if (!/^(pdf|pptx?|docx?|xlsx?)$/.test(tipo)) {
+      stage.innerHTML = '<div class="material-viewer__status">Este archivo está listo para descargar.</div>';
+      return;
+    }
+    const src = tipo === 'pdf' ? r.url : 'https://view.officeapps.live.com/op/embed.aspx?src=' + encodeURIComponent(r.url);
+    stage.innerHTML = `<div class="material-viewer__status">Abriendo el documento…<small>Si la vista tarda, usa Descargar.</small></div><iframe title="${esc(m.titulo)}" src="${esc(src)}" allowfullscreen></iframe>`;
+    const frame = stage.querySelector('iframe');
+    frame.addEventListener('load', () => { if (VISOR_MATERIAL === ctx) stage.querySelector('.material-viewer__status')?.remove(); });
+  } catch (err) {
+    if (VISOR_MATERIAL === ctx) stage.innerHTML = `<div class="material-viewer__status">${esc(err.message || 'No pudimos abrir el material')}<small>Cierra el visor e inténtalo de nuevo.</small></div>`;
+  }
+}
+
+document.addEventListener('click', (e) => {
   const b = e.target.closest('[data-mat]');
   if (!b) return;
   const [slug, id] = b.dataset.mat.split('|');
-  const w = window.open('', '_blank');   // abrir en el gesto del usuario (evita bloqueo de popups)
-  try {
-    const r = await api(`/alumno/curso/${encodeURIComponent(slug)}/material`, { method: 'POST', body: { materialId: id } });
-    if (w) { w.opener = null; w.location.href = r.url; } else location.href = r.url;
-  } catch (err) {
-    if (w) w.close();
-    toast(err.message || 'No pudimos abrir el material', true);
-  }
+  abrirMaterial(slug, id);
 });
 
 // ─── Reproductor ────────────────────────────────────────────────────────────

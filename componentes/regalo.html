@@ -30,7 +30,7 @@ html.vp-gano .hdr{top:var(--vp-gano-h,56px)}
 @media (prefers-reduced-motion:reduce){#vp-regalo,#vp-regalo *{animation:none!important;transition:none!important}}
 </style>
 <div id="vp-gano" role="status" aria-live="polite">
-  <span><b>¡Felicidades! Ganaste el Curso de Sexaje Avícola.</b> Inscríbete en los próximos <span class="vpg__r" id="vpg-reloj">30:00</span> para recibirlo.</span>
+  <span><b>¡Felicidades! Ganaste el Curso de Sexaje Avícola.</b> Inscríbete en los próximos <span class="vpg__r" id="vpg-reloj">60:00</span> para recibirlo.</span>
   <button type="button" class="vpg__btn" data-action="inscribir">Inscribirme</button>
 </div>
 <div id="vp-regalo" role="dialog" aria-modal="true" aria-labelledby="vprg-h" hidden>
@@ -41,14 +41,14 @@ html.vp-gano .hdr{top:var(--vp-gano-h,56px)}
       <p class="vprg__k">Oferta por tiempo limitado</p>
       <h3 id="vprg-h">Llévate gratis el Curso de Sexaje Avícola</h3>
       <p class="vprg__t">Al inscribirte a <b id="vprg-curso">este curso</b> te lo regalamos. Aparta tu lugar y sigue revisando el temario con calma.</p>
-      <div class="vprg__r"><span>La oferta termina en</span><b id="vprg-reloj">30:00</b></div>
+      <div class="vprg__r"><span>La oferta termina en</span><b id="vprg-reloj">60:00</b></div>
       <button type="button" class="vprg__cta" id="vprg-cta">Quiero mi lugar</button>
       <button type="button" class="vprg__no" data-vprg-cerrar>Ahora no</button>
     </div>
   </div>
 </div>
 <script>
-/* Oferta del curso de regalo (30 minutos). «Quiero mi lugar» NO abre el pago: cierra el aviso, lanza confeti y deja
+/* Oferta del curso de regalo (60 minutos). «Quiero mi lugar» NO abre el pago: cierra el aviso, lanza confeti y deja
    arriba una cinta de «ganaste» con el reloj, para que la persona siga viendo temario, ponente y lo que incluye.
    El pago solo se abre cuando ella toca «Inscribirme» (mismo data-action de la página; su lógica no se toca). */
 (function(){
@@ -56,7 +56,7 @@ html.vp-gano .hdr{top:var(--vp-gano-h,56px)}
   var slug=(location.pathname.split('/').pop()||'').replace(/\.html$/,'');
   var caja=document.getElementById('vp-regalo'),cinta=document.getElementById('vp-gano'),raiz=document.documentElement;
   if(!caja||!cinta||!NOMBRES[slug])return;
-  var CLAVE='vp_regalo_fin_'+slug,GANO='vp_regalo_gano_'+slug,DURA=30*60*1000,fin=0,tic=null;
+  var CLAVE='vp_regalo_fin_'+slug,GANO='vp_regalo_gano_'+slug,DURA=60*60*1000,fin=0,tic=null;
   function lee(k){try{return localStorage.getItem(k)}catch(e){return null}}
   function pon(k,v){try{localStorage.setItem(k,v)}catch(e){}}
   fin=parseInt(lee(CLAVE)||'0',10)||0;
