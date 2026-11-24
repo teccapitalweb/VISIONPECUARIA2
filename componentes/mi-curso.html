@@ -743,6 +743,11 @@ body[data-slug="embutidos-artesanales"] .mc {
 .mc__gallo-log { min-height: 180px; height: clamp(180px, 37vh, 400px); height: clamp(180px, 37dvh, 400px); overflow-y: auto; overscroll-behavior: contain; padding: 16px; display: flex; flex-direction: column; gap: 12px; }
 .mc__gallo-mensaje { max-width: min(92%, 520px); width: fit-content; border-radius: 14px 14px 14px 4px; padding: 10px 13px; background: var(--tint); color: var(--ink); white-space: pre-wrap; overflow-wrap: anywhere; line-height: 1.48; font-size: .89rem; }
 .mc__gallo-mensaje--usuario { align-self: flex-end; background: var(--a2); color: white; border-radius: 14px 14px 4px 14px; }
+.mc__gallo-bloque { display: grid; gap: 5px; }
+.mc__gallo-fuentes { padding: 0 6px; font-size: .75rem; color: var(--soft); overflow-wrap: anywhere; }
+.mc__gallo-fuentes summary { cursor: pointer; color: var(--a2); font-weight: 700; }
+.mc__gallo-fuentes ul { margin: 4px 0 6px; padding-left: 18px; }
+.mc__gallo-fuentes a { color: var(--a2); text-decoration: underline; }
 .mc__sr { position: absolute; width: 1px; height: 1px; padding: 0; overflow: hidden; clip-path: inset(50%); white-space: nowrap; }
 .mc__gallo-pistas { display: flex; gap: 6px; flex-wrap: wrap; padding: 0 14px 10px; }
 .mc__gallo-pistas button { border: 1px solid var(--line2); border-radius: 12px; padding: 7px 9px; background: var(--card); color: var(--a2); font-size: .75rem; font-weight: 700; text-align: left; }
@@ -845,7 +850,7 @@ const RECOMENDADOS = {
     slug: 'gallinas-de-postura',
     nombre: 'Gallinas de Postura',
     url: '/gallinas-de-postura.html',
-    portada: '/assets/curso-gallinas-postura/preview-poster.jpg'
+    portada: '/portadas/gallinas-1.jpg'
   }]
 };
 const mxn = (centavos) => new Intl.NumberFormat('es-MX', {
@@ -1411,13 +1416,30 @@ const PREGUNTAS_GALLO = [
   '¿Cómo solicito mi certificado?'
 ];
 
+function fuentesGallo(lista) {
+  if (!Array.isArray(lista)) return '';
+  const fuentes = lista.filter(f => typeof f?.titulo === 'string' && f.titulo.trim()).slice(0, 6);
+  if (!fuentes.length) return '';
+  const items = fuentes.map(({ titulo, url }) => {
+    let enlace;
+    try { enlace = new URL(url); } catch (_) {}
+    const texto = esc(titulo.trim());
+    if (enlace?.protocol !== 'https:' || enlace.username || enlace.password) return `<li>${texto}</li>`;
+    return `<li><a href="${esc(enlace.href)}" target="_blank" rel="noopener noreferrer">${texto}</a></li>`;
+  }).join('');
+  return `<details class="mc__gallo-fuentes"><summary>Fuentes consultadas (${fuentes.length})</summary><ul>${items}</ul></details>`;
+}
+
 function actualizarGallo() {
   const registro = view.querySelector('[data-gallo-historial]');
   if (!registro) return;
   if (registro.dataset.cantidad !== String(GALLO_CHAT.mensajes.length)) {
-    registro.innerHTML = GALLO_CHAT.mensajes.map(m =>
-      `<div class="mc__gallo-mensaje mc__gallo-mensaje--${m.rol}"><span class="mc__sr">${m.rol === 'usuario' ? 'Tú' : 'Mi Gallo IA'}: </span>${esc(m.texto)}</div>`
-    ).join('');
+    registro.innerHTML = GALLO_CHAT.mensajes.map(m => {
+      const usuario = m.rol === 'usuario';
+      const mensaje = `<div class="mc__gallo-mensaje mc__gallo-mensaje--${usuario ? 'usuario' : 'asistente'}"><span class="mc__sr">${usuario ? 'Tú' : 'Mi Gallo IA'}: </span>${esc(m.texto)}</div>`;
+      const fuentes = usuario ? '' : fuentesGallo(m.fuentes);
+      return fuentes ? `<div class="mc__gallo-bloque">${mensaje}${fuentes}</div>` : mensaje;
+    }).join('');
     registro.dataset.cantidad = String(GALLO_CHAT.mensajes.length);
     registro.scrollTop = registro.scrollHeight;
   }
@@ -1430,7 +1452,7 @@ async function preguntarGallo(texto) {
   const mensaje = texto.trim().slice(0, 650);
   const chat = GALLO_CHAT;
   if (!mensaje || chat.enviando) return;
-  const historial = chat.mensajes.slice(1).slice(-8);
+  const historial = chat.mensajes.slice(1).slice(-8).map(({ rol, texto }) => ({ rol, texto }));
   chat.mensajes.push({ rol: 'usuario', texto: mensaje });
   chat.enviando = true;
   chat.error = '';
@@ -1440,7 +1462,7 @@ async function preguntarGallo(texto) {
     const d = await api('/alumno/gallo-ia', { method: 'POST', body: { cursoSlug: SLUG, mensaje, historial } });
     if (GALLO_CHAT !== chat) return;
     if (typeof d?.respuesta !== 'string' || !d.respuesta.trim()) throw new Error('No recibimos una respuesta.');
-    chat.mensajes.push({ rol: 'asistente', texto: d.respuesta });
+    chat.mensajes.push({ rol: 'asistente', texto: d.respuesta, fuentes: d.fuentes });
   } catch (err) {
     if (GALLO_CHAT !== chat) return;
     chat.mensajes.pop();
@@ -1460,7 +1482,7 @@ function vistaGallo() {
   if (!GALLO_CHAT.mensajes.length) {
     GALLO_CHAT.mensajes.push({
       rol: 'asistente',
-      texto: '¡Hola! Soy Mi Gallo IA. Pregúntame sobre las clases, tus materiales, el certificado o cómo usar tu cuenta. ¿En qué te ayudo?'
+      texto: '¡Hola! Soy tu Gallo IA.\nPuedo orientarte sobre avicultura, tus clases, materiales y certificados.'
     });
   }
   view.innerHTML = `<section class="mc__card mc__gallo" aria-labelledby="mc-gallo-title">
