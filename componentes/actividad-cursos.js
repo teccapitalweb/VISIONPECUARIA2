@@ -131,6 +131,7 @@ function crearActividadCursos() {
   const sincronizarVideo = observarVideo(video, botonSonido);
   const pagina = medir(contexto(), 'pagina_visitada', 'pagina_tiempo', visitaId);
   function sincronizar() {
+    window.vpRegalo?.sincronizar();
     sincronizarVideo();
     const viendoLanding = !ABIERTO && !pagoAbierto;
     pagina.cambiar(viendoLanding);
@@ -216,7 +217,8 @@ function crearActividadCursos() {
       const usarOferta = precio?.montoCentavos && cotizacion?.uid === ctx.uid && ctx.uid === auth.currentUser?.uid;
       return {
         headers: ctx.headers,
-        body: { slug: SLUG, visitaId, dispositivo, ...(atribucionOrigen ? { atribucionOrigen } : {}),
+        body: { slug: SLUG, visitaId, dispositivo, ...window.vpRegalo?.datosCheckout(SLUG),
+          ...(atribucionOrigen ? { atribucionOrigen } : {}),
           ...(usarOferta ? { origenSlug: atribucionOrigen } : {}) },
         contexto: ctx,
         yaComprado: Boolean(precio?.yaComprado)
