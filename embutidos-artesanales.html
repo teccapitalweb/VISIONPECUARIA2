@@ -241,7 +241,8 @@
 
     <div class="hero__video">
       <div class="video-frame">
-        <video id="preview-video" muted autoplay loop playsinline poster="/assets/curso-chorizo/promo-poster.jpg">
+        <video id="preview-video" muted autoplay loop playsinline poster="https://vz-158cdd56-161.b-cdn.net/f841cf16-af3c-4803-9206-f50ec7fec389/thumbnail.jpg">
+          <source src="https://vz-158cdd56-161.b-cdn.net/f841cf16-af3c-4803-9206-f50ec7fec389/play_720p.mp4" type="video/mp4">
           <source src="/assets/curso-chorizo/promo-embutidos.mp4" type="video/mp4">
         </video>
         <button class="video-sound" id="btn-sound" aria-label="Activar sonido">
@@ -2316,7 +2317,7 @@ const portadaDe = (i) => (PORTADAS[SLUG] && i >= 0 && i < 5) ? PORTADAS_BASE + P
 const portadaMat = (i, m) => m?.miniatura || ((PORTADAS[SLUG] && i >= 0 && i < 5) ? PORTADAS_BASE + 'mat-' + PORTADAS[SLUG] + (i + 1) + '.jpg' : '');
 const TIPO_MAT = { pptx: 'Presentación', ppt: 'Presentación', pdf: 'Documento', docx: 'Documento', doc: 'Documento', xlsx: 'Excel', xls: 'Excel', zip: 'Paquete' };
 const NOMBRES = { 'gallinas-de-postura': 'Gallinas de Postura', 'embutidos-artesanales': 'Embutidos Artesanales' };
-const PORTADA = document.querySelector('video[poster]')?.getAttribute('poster') || document.querySelector('meta[property="og:image"]')?.content || '';
+const PORTADA = '/assets/curso-chorizo/promo-poster.jpg';
 const WA = 'https://wa.me/522361049715';
 
 const app = getApps().length ? getApps()[0] : initializeApp(CFG);
