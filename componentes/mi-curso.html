@@ -418,6 +418,9 @@ body.mcrv-lock{overflow:hidden}
 .mc__cuenta dt{color:var(--mute)}.mc__cuenta dd{margin:0;word-break:break-all}
 .mc__fila{padding:17px 20px;display:flex;gap:14px;align-items:center;justify-content:space-between;flex-wrap:wrap}
 .mc__fila p{color:var(--soft);font-size:.84rem;line-height:1.5;margin-top:4px;max-width:600px}
+.mc__regalo{margin-bottom:18px}
+.mc__regalo .mc__eyebrow{display:block;margin-bottom:4px}
+.mc__regalo h2{font-size:1.05rem}
 /* ── Toast / modo solo ── */
 .mc__toast{position:fixed;left:50%;bottom:calc(22px + env(safe-area-inset-bottom));transform:translate(-50%,20px);background:var(--dark);color:#fff;padding:12px 18px;border-radius:12px;font-size:.86rem;opacity:0;pointer-events:none;transition:.3s;z-index:2147483001;max-width:calc(100vw - 32px)}
 .mc__toast.on{opacity:1;transform:translate(-50%,0)}.mc__toast.err{background:#8a1c13}
@@ -959,6 +962,7 @@ async function procesarPago() {
 }
 
 function abrir() {
+  if (!ABIERTO) { DATA = null; ESTADO = null; }
   ABIERTO = true; root.hidden = false; document.documentElement.style.overflow = 'hidden';
   if (!location.hash.startsWith('#mi-curso')) history.pushState({ mc: 1 }, '', '#mi-curso');
   render();
@@ -1355,10 +1359,17 @@ function ligarVista() {
   ligarCalifica();
 }
 
+function tarjetaSexaje() {
+  if (!(ESTADO?.cursos || []).some(curso => curso.slug === 'sexaje-avicola')) return '';
+  return `<section class="mc__card mc__fila mc__regalo" aria-label="Tu curso de regalo">
+    <div><span class="mc__eyebrow">Tu curso de regalo</span><h2>Curso de Sexaje Avícola</h2></div>
+    <a class="mc__btn mc__btn--p mc__btn--sm" href="/aula/#/curso/sexaje-avicola">Abrir Sexaje ${I.flecha}</a>
+  </section>`;
+}
+
 // ─── Inicio · detalle del curso ─────────────────────────────────────────────
 function vistaInicio() {
   const d = DATA, c = d.curso, p = d.progreso, sig = siguiente();
-  const tieneSexaje = (ESTADO?.cursos || []).some(x => x.slug === 'sexaje-avicola');
   const recursos = d.materiales.filter(m => m.disponible).length;
   const minTot = d.clases.reduce((a, x) => a + (x.duracionMin || 0), 0);
   const dur = c.duracionHoras ? c.duracionHoras + ' horas' : minTot ? (Math.round(minTot / 6) / 10) + ' horas' : '—';
@@ -1383,13 +1394,13 @@ function vistaInicio() {
     <div class="mc__banner" aria-hidden="true">${I.clases}${portada ? `<img src="${esc(portada)}" alt=""${portadaRespaldo ? ` data-portada-respaldo="${esc(portadaRespaldo)}"` : ''}>` : ''}</div>
   </section>
   <div class="mc__cols"><div>
+    ${tarjetaSexaje()}
     <div class="mc__stats">
       <div>${I.reloj}<small>Duración</small><b>${esc(dur)}</b></div>
       <div>${I.clases}<small>Contenido</small><b>${contar(d.clases.length, 'clase')}</b></div>
       <div>${I.doc}<small>Material de apoyo</small><b>${contar(recursos, 'recurso')}</b></div>
     </div>
     ${c.claseEnVivo ? `<div class="mc__sec mc__card mc__fila"><div><b>${I.vivo} Sesión en vivo</b><p>${esc(c.claseEnVivo.fecha || 'Enlace de la sesión en vivo de tu curso')}</p></div><a class="mc__btn mc__btn--p mc__btn--sm" href="${esc(c.claseEnVivo.url)}" target="_blank" rel="noopener">Entrar a la sesión</a></div>` : ''}
-    ${tieneSexaje && SLUG !== 'sexaje-avicola' ? `<div class="mc__sec mc__card mc__fila"><div><span class="mc__eyebrow">Tu bonus</span><b>Curso de Sexaje Avícola</b><p>Ya está incluido en tu cuenta y tiene avance independiente.</p></div><a class="mc__btn mc__btn--p mc__btn--sm" href="/aula/#/curso/sexaje-avicola">Abrir</a></div>` : ''}
     <div class="mc__sec">
       <span class="mc__eyebrow">Ruta de aprendizaje</span>
       <div class="mc__sh" style="margin-top:4px"><h2>Temario del curso</h2><b>${contar(d.clases.length, 'clase')}</b></div>
@@ -1411,6 +1422,7 @@ function vistaInicio() {
 function vistaClases() {
   const d = DATA, sig = siguiente();
   view.innerHTML = `<div class="mc__cols"><div>
+    ${tarjetaSexaje()}
     <span class="mc__eyebrow">Ruta de aprendizaje</span>
     <div class="mc__sh" style="margin-top:4px"><h2>Temario del curso</h2><b>${contar(d.clases.length, 'clase')}</b></div>
     ${d.clases.length ? bloqueTemario(d, sig) : '<div class="mc__card mc__empty"><h2>Las grabaciones aún no están publicadas</h2><p>Aparecerán aquí en cuanto se publiquen.</p></div>'}

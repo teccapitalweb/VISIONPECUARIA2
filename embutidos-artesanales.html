@@ -1347,7 +1347,7 @@ html.vp-gano .hdr{top:var(--vp-gano-h,56px)}
 @media (prefers-reduced-motion:reduce){#vp-regalo,#vp-regalo *{animation:none!important;transition:none!important}}
 </style>
 <div id="vp-gano">
-  <span><b>¡Sexaje Avícola apartado!</b> Tu pago debe confirmarse en <span class="vpg__r" id="vpg-reloj" role="timer"></span> para recibir el regalo.</span>
+  <span><b>Sexaje Avícola de regalo.</b> Completa tu pago en <span class="vpg__r" id="vpg-reloj" role="timer"></span>.</span>
   <button type="button" class="vpg__btn" data-action="inscribir">Inscribirme</button>
 </div>
 <div id="vp-regalo" role="dialog" aria-modal="true" aria-labelledby="vprg-h" hidden>
@@ -1357,7 +1357,7 @@ html.vp-gano .hdr{top:var(--vp-gano-h,56px)}
     <div class="vprg__b">
       <p class="vprg__k">Oferta por tiempo limitado</p>
       <h3 id="vprg-h">Llévate gratis el Curso de Sexaje Avícola</h3>
-      <p class="vprg__t">Activa tu regalo y paga <b id="vprg-curso">este curso</b> en este navegador. Tu pago debe confirmarse antes de que termine el plazo.</p>
+      <p class="vprg__t">Paga <b id="vprg-curso">este curso</b> antes de que termine el contador. Sexaje Avícola aparecerá en tu aula.</p>
       <div class="vprg__r"><span>Tiempo restante</span><b id="vprg-reloj" role="timer"></b></div>
       <button type="button" class="vprg__cta" id="vprg-cta">Quiero mi lugar</button>
       <button type="button" class="vprg__no" data-vprg-cerrar>Ahora no</button>
@@ -1381,7 +1381,7 @@ html.vp-gano .hdr{top:var(--vp-gano-h,56px)}
   const claveReclamo = 'vp_regalo_reclamo_v1_' + slug;
   const uuid = /^[0-9a-f]{8}-[0-9a-f]{4}-4[0-9a-f]{3}-[89ab][0-9a-f]{3}-[0-9a-f]{12}$/i;
   let navegadorId, reserva = null, rechazo = false, reclamo = leerReclamo();
-  let confirmarReclamo = null;
+  let consultandoReserva = null;
   let listo = false, intentoHecho = false, popupMostrado = false, tic = null, desborde = '', focoAnterior = null;
 
   function leer(clave) { try { return localStorage.getItem(clave); } catch (_) { return null; } }
@@ -1472,7 +1472,7 @@ html.vp-gano .hdr{top:var(--vp-gano-h,56px)}
     const ms = restante(reserva);
     const reclamado = ms > 0 && reclamo?.navegadorId === reserva.navegadorId;
     const viendoLanding = enLanding();
-    const mostrar = reclamado && viendoLanding;
+    const mostrar = ms > 0 && viendoLanding && (reclamado || (popupMostrado && caja.hidden));
     const cambioCinta = raiz.classList.contains('vp-gano') !== mostrar;
     raiz.classList.toggle('vp-gano', mostrar);
     for (const promesa of promesas) promesa.hidden = !mostrar;
@@ -1493,7 +1493,8 @@ html.vp-gano .hdr{top:var(--vp-gano-h,56px)}
       const id = idNavegador();
       if (!id) return;
       intentoHecho = true;
-      const nueva = await apartar(id);
+      consultandoReserva = apartar(id);
+      const nueva = await consultandoReserva;
       if (id !== navegadorId) return;
       reserva = nueva;
       if (reserva && (reserva.reclamada || reclamo?.navegadorId === navegadorId)) guardarReclamo();
@@ -1526,17 +1527,25 @@ html.vp-gano .hdr{top:var(--vp-gano-h,56px)}
   }
 
   caja.addEventListener('click', e => {
-    if (e.target === caja || e.target.closest('[data-vprg-cerrar]')) cerrar();
+    if (e.target === caja || e.target.closest('[data-vprg-cerrar]')) {
+      cerrar();
+      pintar();
+    }
   });
   cta.addEventListener('click', () => {
     if (caja.hidden || !restante(reserva) || !enLanding()) return pintar();
     guardarReclamo();
-    confirmarReclamo = apartar(reclamo.navegadorId, true);
+    apartar(reclamo.navegadorId, true);
     pintar();
     confeti();
     if (!matchMedia('(prefers-reduced-motion: reduce)').matches) window.scrollTo({ top: 0, behavior: 'smooth' });
   });
-  document.addEventListener('keydown', e => { if (e.key === 'Escape') cerrar(); });
+  document.addEventListener('keydown', e => {
+    if (e.key === 'Escape' && !caja.hidden) {
+      cerrar();
+      pintar();
+    }
+  });
   document.addEventListener('visibilitychange', sincronizar);
   window.addEventListener('hashchange', sincronizar);
   window.addEventListener('pageshow', sincronizar);
@@ -1550,6 +1559,7 @@ html.vp-gano .hdr{top:var(--vp-gano-h,56px)}
     if (reclamo && reclamo.navegadorId !== navegadorId) {
       navegadorId = reclamo.navegadorId;
       reserva = null;
+      consultandoReserva = null;
       intentoHecho = false;
     }
     sincronizar();
@@ -1561,11 +1571,9 @@ html.vp-gano .hdr{top:var(--vp-gano-h,56px)}
     async datosCheckout(cursoSlug = slug) {
       if (cursoSlug !== slug) return {};
       const id = idNavegador();
-      if (!reclamo) return id ? { navegadorId: id } : {};
-      const reclamoVigente = reclamo;
-      const confirmado = await confirmarReclamo;
-      const dato = confirmado?.navegadorId === reclamoVigente.navegadorId ? confirmado : reclamoVigente;
-      return { reservaRegalo: dato.token, navegadorId: dato.navegadorId };
+      if (!id) return {};
+      const dato = reserva || await consultandoReserva || reclamo;
+      return { navegadorId: id, ...(dato?.navegadorId === id && restante(dato) > 0 ? { reservaRegalo: dato.token } : {}) };
     }
   };
   setTimeout(() => { listo = true; presentar(); }, 1500);
@@ -1992,6 +2000,9 @@ body.mcrv-lock{overflow:hidden}
 .mc__cuenta dt{color:var(--mute)}.mc__cuenta dd{margin:0;word-break:break-all}
 .mc__fila{padding:17px 20px;display:flex;gap:14px;align-items:center;justify-content:space-between;flex-wrap:wrap}
 .mc__fila p{color:var(--soft);font-size:.84rem;line-height:1.5;margin-top:4px;max-width:600px}
+.mc__regalo{margin-bottom:18px}
+.mc__regalo .mc__eyebrow{display:block;margin-bottom:4px}
+.mc__regalo h2{font-size:1.05rem}
 /* ── Toast / modo solo ── */
 .mc__toast{position:fixed;left:50%;bottom:calc(22px + env(safe-area-inset-bottom));transform:translate(-50%,20px);background:var(--dark);color:#fff;padding:12px 18px;border-radius:12px;font-size:.86rem;opacity:0;pointer-events:none;transition:.3s;z-index:2147483001;max-width:calc(100vw - 32px)}
 .mc__toast.on{opacity:1;transform:translate(-50%,0)}.mc__toast.err{background:#8a1c13}
@@ -2533,6 +2544,7 @@ async function procesarPago() {
 }
 
 function abrir() {
+  if (!ABIERTO) { DATA = null; ESTADO = null; }
   ABIERTO = true; root.hidden = false; document.documentElement.style.overflow = 'hidden';
   if (!location.hash.startsWith('#mi-curso')) history.pushState({ mc: 1 }, '', '#mi-curso');
   render();
@@ -2929,10 +2941,17 @@ function ligarVista() {
   ligarCalifica();
 }
 
+function tarjetaSexaje() {
+  if (!(ESTADO?.cursos || []).some(curso => curso.slug === 'sexaje-avicola')) return '';
+  return `<section class="mc__card mc__fila mc__regalo" aria-label="Tu curso de regalo">
+    <div><span class="mc__eyebrow">Tu curso de regalo</span><h2>Curso de Sexaje Avícola</h2></div>
+    <a class="mc__btn mc__btn--p mc__btn--sm" href="/aula/#/curso/sexaje-avicola">Abrir Sexaje ${I.flecha}</a>
+  </section>`;
+}
+
 // ─── Inicio · detalle del curso ─────────────────────────────────────────────
 function vistaInicio() {
   const d = DATA, c = d.curso, p = d.progreso, sig = siguiente();
-  const tieneSexaje = (ESTADO?.cursos || []).some(x => x.slug === 'sexaje-avicola');
   const recursos = d.materiales.filter(m => m.disponible).length;
   const minTot = d.clases.reduce((a, x) => a + (x.duracionMin || 0), 0);
   const dur = c.duracionHoras ? c.duracionHoras + ' horas' : minTot ? (Math.round(minTot / 6) / 10) + ' horas' : '—';
@@ -2957,13 +2976,13 @@ function vistaInicio() {
     <div class="mc__banner" aria-hidden="true">${I.clases}${portada ? `<img src="${esc(portada)}" alt=""${portadaRespaldo ? ` data-portada-respaldo="${esc(portadaRespaldo)}"` : ''}>` : ''}</div>
   </section>
   <div class="mc__cols"><div>
+    ${tarjetaSexaje()}
     <div class="mc__stats">
       <div>${I.reloj}<small>Duración</small><b>${esc(dur)}</b></div>
       <div>${I.clases}<small>Contenido</small><b>${contar(d.clases.length, 'clase')}</b></div>
       <div>${I.doc}<small>Material de apoyo</small><b>${contar(recursos, 'recurso')}</b></div>
     </div>
     ${c.claseEnVivo ? `<div class="mc__sec mc__card mc__fila"><div><b>${I.vivo} Sesión en vivo</b><p>${esc(c.claseEnVivo.fecha || 'Enlace de la sesión en vivo de tu curso')}</p></div><a class="mc__btn mc__btn--p mc__btn--sm" href="${esc(c.claseEnVivo.url)}" target="_blank" rel="noopener">Entrar a la sesión</a></div>` : ''}
-    ${tieneSexaje && SLUG !== 'sexaje-avicola' ? `<div class="mc__sec mc__card mc__fila"><div><span class="mc__eyebrow">Tu bonus</span><b>Curso de Sexaje Avícola</b><p>Ya está incluido en tu cuenta y tiene avance independiente.</p></div><a class="mc__btn mc__btn--p mc__btn--sm" href="/aula/#/curso/sexaje-avicola">Abrir</a></div>` : ''}
     <div class="mc__sec">
       <span class="mc__eyebrow">Ruta de aprendizaje</span>
       <div class="mc__sh" style="margin-top:4px"><h2>Temario del curso</h2><b>${contar(d.clases.length, 'clase')}</b></div>
@@ -2985,6 +3004,7 @@ function vistaInicio() {
 function vistaClases() {
   const d = DATA, sig = siguiente();
   view.innerHTML = `<div class="mc__cols"><div>
+    ${tarjetaSexaje()}
     <span class="mc__eyebrow">Ruta de aprendizaje</span>
     <div class="mc__sh" style="margin-top:4px"><h2>Temario del curso</h2><b>${contar(d.clases.length, 'clase')}</b></div>
     ${d.clases.length ? bloqueTemario(d, sig) : '<div class="mc__card mc__empty"><h2>Las grabaciones aún no están publicadas</h2><p>Aparecerán aquí en cuanto se publiquen.</p></div>'}

@@ -31,7 +31,7 @@ html.vp-gano .hdr{top:var(--vp-gano-h,56px)}
 @media (prefers-reduced-motion:reduce){#vp-regalo,#vp-regalo *{animation:none!important;transition:none!important}}
 </style>
 <div id="vp-gano">
-  <span><b>¡Sexaje Avícola apartado!</b> Tu pago debe confirmarse en <span class="vpg__r" id="vpg-reloj" role="timer"></span> para recibir el regalo.</span>
+  <span><b>Sexaje Avícola de regalo.</b> Completa tu pago en <span class="vpg__r" id="vpg-reloj" role="timer"></span>.</span>
   <button type="button" class="vpg__btn" data-action="inscribir">Inscribirme</button>
 </div>
 <div id="vp-regalo" role="dialog" aria-modal="true" aria-labelledby="vprg-h" hidden>
@@ -41,7 +41,7 @@ html.vp-gano .hdr{top:var(--vp-gano-h,56px)}
     <div class="vprg__b">
       <p class="vprg__k">Oferta por tiempo limitado</p>
       <h3 id="vprg-h">Llévate gratis el Curso de Sexaje Avícola</h3>
-      <p class="vprg__t">Activa tu regalo y paga <b id="vprg-curso">este curso</b> en este navegador. Tu pago debe confirmarse antes de que termine el plazo.</p>
+      <p class="vprg__t">Paga <b id="vprg-curso">este curso</b> antes de que termine el contador. Sexaje Avícola aparecerá en tu aula.</p>
       <div class="vprg__r"><span>Tiempo restante</span><b id="vprg-reloj" role="timer"></b></div>
       <button type="button" class="vprg__cta" id="vprg-cta">Quiero mi lugar</button>
       <button type="button" class="vprg__no" data-vprg-cerrar>Ahora no</button>
@@ -65,7 +65,7 @@ html.vp-gano .hdr{top:var(--vp-gano-h,56px)}
   const claveReclamo = 'vp_regalo_reclamo_v1_' + slug;
   const uuid = /^[0-9a-f]{8}-[0-9a-f]{4}-4[0-9a-f]{3}-[89ab][0-9a-f]{3}-[0-9a-f]{12}$/i;
   let navegadorId, reserva = null, rechazo = false, reclamo = leerReclamo();
-  let confirmarReclamo = null;
+  let consultandoReserva = null;
   let listo = false, intentoHecho = false, popupMostrado = false, tic = null, desborde = '', focoAnterior = null;
 
   function leer(clave) { try { return localStorage.getItem(clave); } catch (_) { return null; } }
@@ -156,7 +156,7 @@ html.vp-gano .hdr{top:var(--vp-gano-h,56px)}
     const ms = restante(reserva);
     const reclamado = ms > 0 && reclamo?.navegadorId === reserva.navegadorId;
     const viendoLanding = enLanding();
-    const mostrar = reclamado && viendoLanding;
+    const mostrar = ms > 0 && viendoLanding && (reclamado || (popupMostrado && caja.hidden));
     const cambioCinta = raiz.classList.contains('vp-gano') !== mostrar;
     raiz.classList.toggle('vp-gano', mostrar);
     for (const promesa of promesas) promesa.hidden = !mostrar;
@@ -177,7 +177,8 @@ html.vp-gano .hdr{top:var(--vp-gano-h,56px)}
       const id = idNavegador();
       if (!id) return;
       intentoHecho = true;
-      const nueva = await apartar(id);
+      consultandoReserva = apartar(id);
+      const nueva = await consultandoReserva;
       if (id !== navegadorId) return;
       reserva = nueva;
       if (reserva && (reserva.reclamada || reclamo?.navegadorId === navegadorId)) guardarReclamo();
@@ -210,17 +211,25 @@ html.vp-gano .hdr{top:var(--vp-gano-h,56px)}
   }
 
   caja.addEventListener('click', e => {
-    if (e.target === caja || e.target.closest('[data-vprg-cerrar]')) cerrar();
+    if (e.target === caja || e.target.closest('[data-vprg-cerrar]')) {
+      cerrar();
+      pintar();
+    }
   });
   cta.addEventListener('click', () => {
     if (caja.hidden || !restante(reserva) || !enLanding()) return pintar();
     guardarReclamo();
-    confirmarReclamo = apartar(reclamo.navegadorId, true);
+    apartar(reclamo.navegadorId, true);
     pintar();
     confeti();
     if (!matchMedia('(prefers-reduced-motion: reduce)').matches) window.scrollTo({ top: 0, behavior: 'smooth' });
   });
-  document.addEventListener('keydown', e => { if (e.key === 'Escape') cerrar(); });
+  document.addEventListener('keydown', e => {
+    if (e.key === 'Escape' && !caja.hidden) {
+      cerrar();
+      pintar();
+    }
+  });
   document.addEventListener('visibilitychange', sincronizar);
   window.addEventListener('hashchange', sincronizar);
   window.addEventListener('pageshow', sincronizar);
@@ -234,6 +243,7 @@ html.vp-gano .hdr{top:var(--vp-gano-h,56px)}
     if (reclamo && reclamo.navegadorId !== navegadorId) {
       navegadorId = reclamo.navegadorId;
       reserva = null;
+      consultandoReserva = null;
       intentoHecho = false;
     }
     sincronizar();
@@ -245,11 +255,9 @@ html.vp-gano .hdr{top:var(--vp-gano-h,56px)}
     async datosCheckout(cursoSlug = slug) {
       if (cursoSlug !== slug) return {};
       const id = idNavegador();
-      if (!reclamo) return id ? { navegadorId: id } : {};
-      const reclamoVigente = reclamo;
-      const confirmado = await confirmarReclamo;
-      const dato = confirmado?.navegadorId === reclamoVigente.navegadorId ? confirmado : reclamoVigente;
-      return { reservaRegalo: dato.token, navegadorId: dato.navegadorId };
+      if (!id) return {};
+      const dato = reserva || await consultandoReserva || reclamo;
+      return { navegadorId: id, ...(dato?.navegadorId === id && restante(dato) > 0 ? { reservaRegalo: dato.token } : {}) };
     }
   };
   setTimeout(() => { listo = true; presentar(); }, 1500);
