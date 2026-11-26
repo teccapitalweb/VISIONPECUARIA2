@@ -6,11 +6,14 @@ comp = (raiz / 'componentes/mi-curso.html').read_text(encoding='utf-8').strip()
 actividad = (raiz / 'componentes/actividad-cursos.js').read_text(encoding='utf-8').strip()
 comp = comp.replace('/* INYECTAR ACTIVIDAD DE CURSOS */', actividad)
 regalo = (raiz / 'componentes/regalo.html').read_text(encoding='utf-8').strip()
+pixel = (raiz / 'componentes/pixel-cursos.js').read_text(encoding='utf-8').strip()
 for nombre in ('gallinas-de-postura.html', 'embutidos-artesanales.html'):
     p = raiz / nombre
     s = p.read_text(encoding='utf-8')
     s = re.sub(r'<!-- MI-CURSO:INICIO.*?<!-- MI-CURSO:FIN -->\n?', '', s, flags=re.S)
     s = re.sub(r'<!-- regalo:inicio.*?<!-- regalo:fin -->\n?', '', s, flags=re.S)
+    s = re.sub(r'<!-- pixel-cursos:inicio -->.*?<!-- pixel-cursos:fin -->',
+               lambda _: '<!-- pixel-cursos:inicio -->\n<script>\n' + pixel + '\n</script>\n<!-- pixel-cursos:fin -->', s, flags=re.S)
     # «Ya compré» abre el aula del curso dentro de la misma landing
     s = re.sub(r'href="/aula/\?curso=[a-z\-]+"', 'href="#mi-curso"', s)
     # Sin botón «Detener movimiento» en el carrusel
