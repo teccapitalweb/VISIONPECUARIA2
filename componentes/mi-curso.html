@@ -809,7 +809,7 @@ body[data-slug="embutidos-artesanales"] .mc {
 // ═══════════════════════════════════════════════════════════════════════════
 import { initializeApp, getApps } from "https://www.gstatic.com/firebasejs/10.11.0/firebase-app.js";
 import { getAuth, onAuthStateChanged, signInWithPopup, signInWithRedirect, getRedirectResult, GoogleAuthProvider,
-  signInWithEmailAndPassword, createUserWithEmailAndPassword, sendPasswordResetEmail, sendEmailVerification,
+  sendEmailVerification,
   signOut, setPersistence, browserLocalPersistence, signInWithCustomToken } from "https://www.gstatic.com/firebasejs/10.11.0/firebase-auth.js";
 
 const API = 'https://visionpecuaria-webhook-production.up.railway.app';
@@ -853,7 +853,7 @@ const I = {
 };
 const G = '<svg viewBox="0 0 24 24" style="stroke:none"><path fill="#EA4335" d="M12 10.2v3.9h5.4c-.2 1.3-1.6 3.8-5.4 3.8-3.2 0-5.9-2.7-5.9-6s2.7-6 5.9-6c1.9 0 3.1.8 3.8 1.5l2.6-2.5C16.8 3.4 14.6 2.4 12 2.4 6.7 2.4 2.4 6.7 2.4 12s4.3 9.6 9.6 9.6c5.5 0 9.2-3.9 9.2-9.4 0-.6-.1-1.1-.2-1.6H12z"/></svg>';
 
-let USER = null, DATA = null, ESTADO = null, ABIERTO = false, MODO = 'entrar', SEG = null, CAL = { sel: 0 };
+let USER = null, DATA = null, ESTADO = null, ABIERTO = false, authLista = false, SEG = null, CAL = { sel: 0 };
 const RECOMENDADOS = {
   'gallinas-de-postura': [{
     slug: 'embutidos-artesanales',
@@ -886,14 +886,15 @@ async function api(path, opt = {}, otra = true) {
 
 // ─── Abrir / cerrar / ir al pago ─────────────────────────────────────────────
 // ─── Regreso de Stripe: pago confirmado → confeti y entrada directa al aula ───
-// La landing vuelve con ?pago=ok&session_id=…  El servidor confirma el pago y, si el correo no tenía cuenta,
-// entrega un token de un solo uso; si ya la tenía, la persona entra con su acceso de siempre.
+// Stripe devuelve la sesión. Tras verificar el pago, el servidor decide cómo abrir el aula.
 let PAGO = null;
 (() => {
-  const q = new URLSearchParams(location.search), sid = q.get('session_id') || '';
+  const q = new URLSearchParams(location.search);
+  const sid = q.get('session_id') || '';
   if (q.get('pago') !== 'ok' || !/^cs_[A-Za-z0-9_]+$/.test(sid)) return;
   PAGO = { sessionId: sid, intentos: 0, listo: false, pagado: false, reintentar: 0 };
   history.replaceState({ mc: 1 }, '', location.pathname + '#mi-curso');
+  window.vpPx?.iniciar();
 })();
 const espera = (ms) => new Promise((r) => setTimeout(r, ms));
 function confeti() {
@@ -915,40 +916,46 @@ function confeti() {
     })(t0);
   } catch (_) {}
 }
-// Meta Pixel: Purchase una sola vez por pago, solo en la pestaña que montó el checkout y ya con el pago confirmado
-function pixelCompra(sessionId, slug) {
-  try {
-    const raw = sessionStorage.getItem('vp_px_checkout'); if (!raw || typeof window.fbq !== 'function') return;
-    let info = {}; try { info = JSON.parse(raw) || {}; } catch (_) {}
-    if (info.slug && slug && info.slug !== slug) return;
-    sessionStorage.removeItem('vp_px_checkout');
-    const clave = 'vp_px_compra_' + sessionId; if (localStorage.getItem(clave)) return; localStorage.setItem(clave, '1');
-    const sl = slug || info.slug || '', datos = { content_name: sl, content_ids: [sl], content_type: 'product' };
-    if (Number(info.value) > 0) { datos.value = Number(info.value); datos.currency = 'MXN'; }
-    window.fbq('track', 'Purchase', datos, { eventID: sessionId });
-  } catch (_) {}
-}
 function vistaPago() {
   root.classList.add('solo'); $('#mc-titulo').textContent = NOMBRES[SLUG] || 'Mi curso';
+  if (PAGO.enCurso) return;
   view.innerHTML = `<div class="mc__card mc__auth" id="mc-pago" style="text-align:center">
     <div class="mc__spin mc__spin--d" style="margin:6px auto 16px"></div>
-    <h2>¡Pago confirmado!</h2>
-    <p class="mc__sub">Estamos abriendo tu curso. No cierres esta ventana…</p></div>`;
-  if (PAGO.enCurso) return; PAGO.enCurso = true;
-  confeti(); procesarPago();
+    <h2>Verificando tu pago</h2>
+    <p class="mc__sub">Abriremos tu curso en cuanto Stripe confirme el pago.</p></div>`;
+  PAGO.enCurso = true;
+  procesarPago();
 }
 async function procesarPago() {
   try {
-    const r = await fetch(API + '/alumno/entrar-por-pago', { method: 'POST', headers: { 'Content-Type': 'application/json' }, body: JSON.stringify({ sessionId: PAGO.sessionId }) });
+    const { sessionId } = PAGO;
+    const clave = 'vp_clave_entrada_' + sessionId;
+    let claveEntrada;
+    try { claveEntrada = sessionStorage.getItem(clave); } catch (_) {}
+    const token = await USER?.getIdToken().catch(() => null);
+    const headers = { 'Content-Type': 'application/json', ...(token ? { Authorization: 'Bearer ' + token } : {}) };
+    const r = await fetch(API + '/alumno/entrar-por-pago', {
+      method: 'POST', headers, body: JSON.stringify({ sessionId, claveEntrada, cursoSlug: SLUG })
+    });
     const d = await r.json().catch(() => ({}));
-    if (r.status === 409 && d.pendiente && PAGO.intentos++ < 8) { await espera(2000); return procesarPago(); }
-    if (!r.ok) throw new Error(d.error || 'Error ' + r.status);
-    PAGO.pagado = true; PAGO.reintentar = 6;
+    if (r.status === 409 && d.pendiente) {
+      if (PAGO.intentos++ < 8) { await espera(2000); return procesarPago(); }
+      PAGO.pendiente = true;
+    }
+    if (!r.ok || d.pagado !== true || d.slug !== SLUG) throw new Error('Pago no confirmado');
+    PAGO.pagado = true;
+    PAGO.reintentar = 6;
     PAGO.regalo = d.regalo || null;
-    pixelCompra(PAGO.sessionId, d.slug);
-    if (d.entrada === 'token' && d.token) { PAGO.listo = true; await signInWithCustomToken(auth, d.token); return; }   // onAuthStateChanged vuelve a pintar
-  } catch (_) { /* si algo falla, queda el acceso normal */ }
-  PAGO.listo = true; render();
+    window.vpPx?.compraConfirmada(d);
+    if (d.entrada === 'token' && d.token) {
+      const { user } = await signInWithCustomToken(auth, d.token);
+      USER = user;
+      try { sessionStorage.removeItem(clave); } catch (_) {}
+    }
+  } catch (_) {}
+  PAGO.listo = true;
+  PAGO.enCurso = false;
+  render();
 }
 
 function abrir() {
@@ -985,6 +992,7 @@ document.addEventListener('keydown', (e) => {
 });
 
 onAuthStateChanged(auth, (u) => {
+  authLista = true;
   if (USER?.uid !== u?.uid) {
     GALLO_CHAT = { mensajes: [], enviando: false, error: '', borrador: '' };
     cotizacionesRecomendadas.clear();
@@ -1065,8 +1073,23 @@ async function render() {
   const me = $('#mc-me');
   me.hidden = true;
   if (!USER) me.replaceChildren();
+  if (!authLista) return cargando();
   if (PAGO && !PAGO.listo) return vistaPago();
-  if (!USER) { root.classList.add('solo'); $('#mc-titulo').textContent = 'Mi curso'; return PAGO && PAGO.pagado ? vistaAcceso('¡Pago confirmado! Entra con el correo con el que pagaste para ver tu curso.', true) : vistaAcceso(); }
+  if (PAGO && !PAGO.pagado) {
+    view.innerHTML = `<div class="mc__card mc__auth"><h2>${PAGO.pendiente ? 'Tu pago está pendiente' : 'No pudimos confirmar tu pago'}</h2>
+      <p class="mc__sub">Consulta el estado de tu pago para abrir el curso.</p>
+      <button type="button" class="mc__btn mc__btn--p" id="mc-verificar-pago">Volver a comprobar</button></div>`;
+    $('#mc-verificar-pago').onclick = () => {
+      Object.assign(PAGO, { listo: false, intentos: 0, pendiente: false });
+      render();
+    };
+    return;
+  }
+  if (!USER) {
+    root.classList.add('solo');
+    $('#mc-titulo').textContent = NOMBRES[SLUG] || 'Mi curso';
+    return vistaAcceso();
+  }
   if (!DATA) {
     root.classList.add('solo'); cargando();
     try {
@@ -1100,51 +1123,25 @@ async function render() {
 }
 
 // ─── Acceso / sin compra (pantalla sola) ────────────────────────────────────
-function vistaAcceso(msg, ok) {
-  const crear = MODO === 'crear';
+function vistaAcceso(error = '') {
   view.innerHTML = `<div class="mc__card mc__auth">
-    <h2>${crear ? 'Crea tu contraseña' : 'Entra a tu curso'}</h2>
-    <p class="mc__sub">Usa el <b>mismo correo con el que pagaste</b> ${esc(NOMBRES[SLUG] || 'tu curso')}. Si ya pagaste, verás tus clases grabadas y materiales.</p>
+    <h2>${PAGO?.pagado ? '¡Pago confirmado!' : 'Abre tu aula'}</h2>
+    <p class="mc__sub">Continúa con la cuenta de Google que usa el <b>correo con el que pagaste</b>.</p>
     <button type="button" class="mc__btn mc__btn--google" id="mc-google">${G} Continuar con Google</button>
-    <div class="mc__sep">o con correo y contraseña</div>
-    <form id="mc-form" novalidate>
-      <label class="mc__field">Correo<input type="email" id="mc-email" autocomplete="email" inputmode="email" required></label>
-      <label class="mc__field">Contraseña<input type="password" id="mc-pass" autocomplete="${crear ? 'new-password' : 'current-password'}" minlength="6" required></label>
-      ${msg ? `<p class="mc__msg ${ok ? 'ok' : ''}" role="alert">${esc(msg)}</p>` : ''}
-      <button class="mc__btn mc__btn--p" style="width:100%" type="submit" id="mc-enviar">${crear ? 'Crear cuenta' : 'Entrar'}</button>
-    </form>
-    <div class="mc__links"><button type="button" class="mc__link" id="mc-modo">${crear ? 'Ya tengo cuenta · Entrar' : '¿Primera vez? Crear mi contraseña'}</button><button type="button" class="mc__link" id="mc-reset">Olvidé mi contraseña</button></div>
-    <p class="mc__help">¿Todavía no compras el curso? <button type="button" class="mc__link" id="mc-comprar">Inscríbete aquí</button></p>
+    ${error ? `<p class="mc__msg" role="alert">${esc(error)}</p>` : ''}
+    <p class="mc__help"><a class="mc__link" href="${WA}?text=${encodeURIComponent('Hola, necesito ayuda para entrar a mi curso de ' + NOMBRES[SLUG])}" target="_blank" rel="noopener">Necesito ayuda para entrar</a></p>
   </div>`;
   $('#mc-google').onclick = async () => {
-    try { const p = new GoogleAuthProvider(); p.setCustomParameters({ prompt: 'select_account' }); await signInWithPopup(auth, p); }
+    const proveedor = new GoogleAuthProvider();
+    proveedor.setCustomParameters({ prompt: 'select_account' });
+    try { await signInWithPopup(auth, proveedor); }
     catch (e) {
-      if (e && (e.code === 'auth/popup-blocked' || e.code === 'auth/operation-not-supported-in-this-environment')) return signInWithRedirect(auth, new GoogleAuthProvider());
+      if (e && (e.code === 'auth/popup-blocked' || e.code === 'auth/operation-not-supported-in-this-environment')) {
+        try { await signInWithRedirect(auth, proveedor); return; } catch (_) {}
+      }
       if (e && e.code !== 'auth/popup-closed-by-user' && e.code !== 'auth/cancelled-popup-request') vistaAcceso('No pudimos iniciar sesión con Google. Intenta de nuevo.');
     }
   };
-  $('#mc-form').onsubmit = async (ev) => {
-    ev.preventDefault();
-    const email = $('#mc-email').value.trim(), pass = $('#mc-pass').value;
-    if (!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email)) return vistaAcceso('Escribe un correo válido.');
-    if (pass.length < 6) return vistaAcceso('La contraseña debe tener al menos 6 caracteres.');
-    $('#mc-enviar').disabled = true;
-    try {
-      if (crear) { const c = await createUserWithEmailAndPassword(auth, email, pass); await sendEmailVerification(c.user).catch(() => {}); }
-      else await signInWithEmailAndPassword(auth, email, pass);
-    } catch (e) {
-      const c = e && e.code || '';
-      vistaAcceso(c === 'auth/too-many-requests' ? 'Demasiados intentos. Espera unos minutos.' : c === 'auth/email-already-in-use' ? 'No pudimos crear la cuenta. Si ya tienes una, entra o restablece tu contraseña.' : 'No pudimos iniciar sesión. Revisa tus datos o restablece tu contraseña.');
-    }
-  };
-  $('#mc-modo').onclick = () => { MODO = crear ? 'entrar' : 'crear'; vistaAcceso(); };
-  $('#mc-reset').onclick = async () => {
-    const email = $('#mc-email').value.trim();
-    if (!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email)) return vistaAcceso('Escribe tu correo y vuelve a tocar «Olvidé mi contraseña».');
-    try { await sendPasswordResetEmail(auth, email); } catch (_) {}
-    vistaAcceso('Si ese correo tiene una cuenta, te enviamos un enlace para crear una nueva contraseña.', true);
-  };
-  $('#mc-comprar').onclick = irAlPago;
 }
 
 function vistaSinCompra() {
@@ -1650,7 +1647,7 @@ function vistaCertificado() {
         <dt>Nombre en el certificado</dt><dd><b>${esc(so.nombreCompleto)}</b></dd>
         <dt>WhatsApp</dt><dd>${esc(so.whatsapp || '—')}</dd>
         <dt>Ubicación</dt><dd>${esc([so.ciudad, so.estadoRep].filter(Boolean).join(', ') || '—')}</dd>
-        <dt>Correo</dt><dd>${esc(USER.email || '—')}</dd>
+        <dt>Correo</dt><dd>${esc(DATA.correoEntrega || USER.email || '—')}</dd>
       </dl>
       ${so.estado !== 'en_proceso' ? '<button type="button" class="mc__btn mc__btn--l mc__btn--sm" id="mc-cert-editar">Corregir mis datos</button>' : ''}</div>`;
   } else {
@@ -1662,7 +1659,7 @@ function vistaCertificado() {
           <label class="mc__field">WhatsApp<input id="cf-wa" type="tel" inputmode="tel" autocomplete="tel" maxlength="20" value="${esc(v.whatsapp || '')}" placeholder="10 dígitos" required></label>
           <label class="mc__field">Estado<select id="cf-estado" required><option value="">Selecciona…</option>${ESTADOS_MX.map(e => `<option ${v.estadoRep === e ? 'selected' : ''}>${e}</option>`).join('')}</select></label>
         </div>
-        <dl class="mc__cert-correo"><dt>Correo de entrega</dt><dd>${esc(USER.email || '—')}</dd></dl>
+        <dl class="mc__cert-correo"><dt>Correo de entrega</dt><dd>${esc(DATA.correoEntrega || USER.email || '—')}</dd></dl>
         <details class="mc__cert-detalle" id="cf-opcionales"><summary>Datos opcionales</summary><div>
           <label class="mc__field">Ciudad o municipio<input id="cf-ciudad" maxlength="80" value="${esc(v.ciudad || '')}" autocomplete="address-level2"></label>
           <label class="mc__field">Ocupación<input id="cf-ocup" maxlength="80" value="${esc(v.ocupacion || '')}"></label>

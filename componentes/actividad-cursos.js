@@ -217,7 +217,7 @@ function crearActividadCursos() {
       const usarOferta = precio?.montoCentavos && cotizacion?.uid === ctx.uid && ctx.uid === auth.currentUser?.uid;
       return {
         headers: ctx.headers,
-        body: { slug: SLUG, visitaId, dispositivo, ...window.vpRegalo?.datosCheckout(SLUG),
+        body: { slug: SLUG, visitaId, dispositivo,
           ...(atribucionOrigen ? { atribucionOrigen } : {}),
           ...(usarOferta ? { origenSlug: atribucionOrigen } : {}) },
         contexto: ctx,

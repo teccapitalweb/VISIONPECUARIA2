@@ -216,7 +216,7 @@ function pintarShell() {
   } else el.hidden = true;
 
   const v = $('#verif');
-  if (S.user && !S.user.verificado) {
+  if (S.user?.email && !S.user.verificado) {
     v.innerHTML = `${ico('correo')}<p><b>Verifica tu correo</b> para ver los cursos que pagaste con <b>${esc(em)}</b>. Abre el enlace que te enviamos y luego toca «Ya lo verifiqué».</p>
       <button class="btn btn--sm btn--ghost" id="btn-reenviar">Reenviar enlace</button>
       <button class="btn btn--sm btn--primary" id="btn-ya">Ya lo verifiqué</button>`;
@@ -293,7 +293,7 @@ const fecha = (iso) => { try { return new Date(iso).toLocaleDateString('es-MX', 
 
 function sinCursos() {
   const pedido = S.cursoPedido;
-  const verif = S.user && !S.user.verificado;
+  const verif = S.user?.email && !S.user.verificado;
   return `<div class="card empty">${ico('cursos')}
     <h3>${verif ? 'Verifica tu correo para ver tus cursos' : 'No encontramos cursos en esta cuenta'}</h3>
     <p>${verif

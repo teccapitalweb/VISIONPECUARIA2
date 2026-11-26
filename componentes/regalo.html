@@ -65,6 +65,7 @@ html.vp-gano .hdr{top:var(--vp-gano-h,56px)}
   const claveReclamo = 'vp_regalo_reclamo_v1_' + slug;
   const uuid = /^[0-9a-f]{8}-[0-9a-f]{4}-4[0-9a-f]{3}-[89ab][0-9a-f]{3}-[0-9a-f]{12}$/i;
   let navegadorId, reserva = null, rechazo = false, reclamo = leerReclamo();
+  let confirmarReclamo = null;
   let listo = false, intentoHecho = false, popupMostrado = false, tic = null, desborde = '', focoAnterior = null;
 
   function leer(clave) { try { return localStorage.getItem(clave); } catch (_) { return null; } }
@@ -101,14 +102,14 @@ html.vp-gano .hdr{top:var(--vp-gano-h,56px)}
     return Math.max(0, Math.min(porReloj, porTiempo));
   }
 
-  async function apartar(id) {
+  async function apartar(id, reclamar = false) {
     const controlador = new AbortController();
     const limite = setTimeout(() => controlador.abort(), 4500);
     const desde = performance.now();
     try {
       const resp = await fetch(API + '/publico/cursos/regalo/apartar', {
         method: 'POST', headers: { 'Content-Type': 'application/json' }, cache: 'no-store',
-        body: JSON.stringify({ cursoSlug: slug, navegadorId: id }), signal: controlador.signal
+        body: JSON.stringify({ cursoSlug: slug, navegadorId: id, ...(reclamar ? { reclamar } : {}) }), signal: controlador.signal
       });
       if (id !== navegadorId) return null;
       if (!resp.ok) {
@@ -122,7 +123,7 @@ html.vp-gano .hdr{top:var(--vp-gano-h,56px)}
           !Number.isFinite(venceEn) || !Number.isFinite(ahora) || id !== navegadorId) return null;
       rechazo = false;
       return {
-        token: dato.token, navegadorId: id, venceEn,
+        token: dato.token, navegadorId: id, venceEn, reclamada: dato.reclamada === true,
         desfase: ahora + performance.now() - desde - Date.now(),
         limiteMonotono: desde + venceEn - ahora
       };
@@ -179,7 +180,7 @@ html.vp-gano .hdr{top:var(--vp-gano-h,56px)}
       const nueva = await apartar(id);
       if (id !== navegadorId) return;
       reserva = nueva;
-      if (reserva && reclamo?.navegadorId === navegadorId) guardarReclamo();
+      if (reserva && (reserva.reclamada || reclamo?.navegadorId === navegadorId)) guardarReclamo();
       pintar();
     }
     if (popupMostrado || !restante(reserva) || reclamo || !enLanding() || document.visibilityState === 'hidden') return;
@@ -214,6 +215,7 @@ html.vp-gano .hdr{top:var(--vp-gano-h,56px)}
   cta.addEventListener('click', () => {
     if (caja.hidden || !restante(reserva) || !enLanding()) return pintar();
     guardarReclamo();
+    confirmarReclamo = apartar(reclamo.navegadorId, true);
     pintar();
     confeti();
     if (!matchMedia('(prefers-reduced-motion: reduce)').matches) window.scrollTo({ top: 0, behavior: 'smooth' });
@@ -240,11 +242,14 @@ html.vp-gano .hdr{top:var(--vp-gano-h,56px)}
 
   window.vpRegalo = {
     sincronizar,
-    datosCheckout(cursoSlug = slug) {
-      if (cursoSlug !== slug || !reclamo || rechazo) return {};
-      // La pantalla exige confirmación. El servidor valida un token anterior si se inicia el pago antes de revalidar.
-      const dato = reserva || reclamo;
-      return restante(dato) > 0 ? { reservaRegalo: dato.token, navegadorId: dato.navegadorId } : {};
+    async datosCheckout(cursoSlug = slug) {
+      if (cursoSlug !== slug) return {};
+      const id = idNavegador();
+      if (!reclamo) return id ? { navegadorId: id } : {};
+      const reclamoVigente = reclamo;
+      const confirmado = await confirmarReclamo;
+      const dato = confirmado?.navegadorId === reclamoVigente.navegadorId ? confirmado : reclamoVigente;
+      return { reservaRegalo: dato.token, navegadorId: dato.navegadorId };
     }
   };
   setTimeout(() => { listo = true; presentar(); }, 1500);
