@@ -17,6 +17,7 @@ const PORTADAS = {
   'sexaje-avicola': 'https://visionpecuariamateriales.b-cdn.net/a68ef1fc-12fc-437c-acbb-c36199e8723b.png'
 };
 const PORTADA_DEFAULT = '/assets/brand/banner.jpg';
+const PORTADAS_MATERIALES = 'https://cdn.jsdelivr.net/gh/teccapitalweb/VISIONPECUARIA2@d7a4bb1ebbc72998e366d720f5cddc1c117807b3/portadas/';
 
 // ─── Iconos (trazo fino) ───────────────────────────────────────────────────
 const P = {
@@ -439,8 +440,10 @@ function tarjetaClase(slug, cl, i, p, curso) {
 
 function tarjetaMaterial(slug, m) {
   const x = m.tipo === 'xlsx' || m.tipo === 'excel';
+  const modulo = slug === 'embutidos-artesanales' ? /^mat-([1-5])$/.exec(m.id)?.[1] : null;
+  const miniatura = m.miniatura || (modulo ? PORTADAS_MATERIALES + 'mat-embutidos-' + modulo + '.jpg' : '');
   return `<button class="card mat" type="button" data-mat="${esc(slug)}|${esc(m.id)}" ${m.disponible ? '' : 'disabled'}>
-    ${m.miniatura ? `<img class="mat__cover" src="${esc(m.miniatura)}" alt="" loading="lazy">` : `<span class="mat__ico ${x ? 'mat__ico--xlsx' : ''}">${ico('materiales')}</span>`}
+    ${miniatura ? `<img class="mat__cover" src="${esc(miniatura)}" alt="" loading="lazy">` : `<span class="mat__ico ${x ? 'mat__ico--xlsx' : ''}">${ico('materiales')}</span>`}
     <span><b>${esc(m.titulo)}</b><small>${esc(m.descripcion || (x ? 'Excel' : 'PDF'))}</small></span>
     <span class="mat__go">${ico('descarga')}</span></button>`;
 }
