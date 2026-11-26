@@ -23,6 +23,62 @@
 
 <script src="https://js.stripe.com/v3/"></script>
 
+<!-- Meta Pixel de Visión Pecuaria -->
+<script>
+(() => {
+  const pixelId = '2380050672518265';
+  const slug = 'embutidos-artesanales';
+  const datosCurso = { content_name: slug, content_ids: [slug], content_type: 'product' };
+  const claveCheckout = 'vp_px_checkout_embutidos';
+  let iniciado = false;
+  let checkoutMedido = false;
+
+  function iniciar() {
+    // En el regreso de Stripe espera a que el aula quite session_id de la URL.
+    if (iniciado || new URLSearchParams(location.search).has('session_id')) return;
+    !function(f,b,e,v,n,t,s){if(f.fbq)return;n=f.fbq=function(){n.callMethod?
+    n.callMethod.apply(n,arguments):n.queue.push(arguments)};if(!f._fbq)f._fbq=n;
+    n.push=n;n.loaded=!0;n.version='2.0';n.queue=[];t=b.createElement(e);t.async=!0;
+    t.src=v;s=b.getElementsByTagName(e)[0];s.parentNode.insertBefore(t,s)}
+    (window,document,'script','https://connect.facebook.net/en_US/fbevents.js');
+    window.fbq('init', pixelId);
+    window.fbq('track', 'PageView');
+    window.fbq('track', 'ViewContent', datosCurso);
+    iniciado = true;
+  }
+
+  function checkoutMontado({ sessionId, oferta }) {
+    if (!iniciado || !sessionId) return;
+    try {
+      sessionStorage.setItem(claveCheckout, JSON.stringify({ sessionId, eventId: crypto.randomUUID() }));
+    } catch (_) { /* El pago funciona aunque el navegador bloquee el almacenamiento. */ }
+    if (checkoutMedido) return;
+    try {
+      const precioVisible = document.querySelector('[data-precio-actual]')?.textContent;
+      const valor = oferta?.montoCentavos > 0 ? oferta.montoCentavos / 100 : Number(precioVisible?.replace(/[^\d.]/g, ''));
+      const moneda = oferta?.moneda?.toUpperCase() || 'MXN';
+      window.fbq('track', 'InitiateCheckout', {
+        ...datosCurso, ...(valor > 0 ? { value: valor, currency: moneda } : {})
+      });
+      checkoutMedido = true;
+    } catch (_) {}
+  }
+
+  function compraConfirmada(sessionId, pago) {
+    if (!iniciado || pago.pagado !== true || pago.slug !== slug || !Number.isFinite(pago.monto) || pago.monto < 0) return;
+    try {
+      const checkout = JSON.parse(sessionStorage.getItem(claveCheckout) || 'null');
+      if (checkout?.sessionId !== sessionId || !checkout.eventId) return;
+      window.fbq('track', 'Purchase', { ...datosCurso, value: pago.monto, currency: 'MXN' }, { eventID: checkout.eventId });
+      sessionStorage.removeItem(claveCheckout);
+    } catch (_) {}
+  }
+
+  window.vpPx = { iniciar() { try { iniciar(); } catch (_) {} }, checkoutMontado, compraConfirmada };
+  window.vpPx.iniciar();
+})();
+</script>
+
 <link rel="stylesheet" href="/assets/css/embutidos-landing.css">
 <style id="estilos-ya-compre-y-testimonios">
 /* Acceso discreto para alumnos que ya pagaron (landings de cursos) */
@@ -821,6 +877,7 @@ async function iniciarPagoDirecto(){
     }
     if (cont) { cont.innerHTML = ''; cont.style.minHeight = '500px'; }
     window.__vpCheckout.mount('#checkout-container');
+    window.vpPx?.checkoutMontado(data);
     window.vpActividadCursos?.abrirStripe(data.sessionId, actividad?.contexto);
   } catch (err) {
     console.error('[VP checkout]', err);
@@ -2388,6 +2445,7 @@ let PAGO = null;
   if (q.get('pago') !== 'ok' || !/^cs_[A-Za-z0-9_]+$/.test(sid)) return;
   PAGO = { sessionId: sid, intentos: 0, listo: false, pagado: false, reintentar: 0 };
   history.replaceState({ mc: 1 }, '', location.pathname + '#mi-curso');
+  window.vpPx?.iniciar();
 })();
 const espera = (ms) => new Promise((r) => setTimeout(r, ms));
 function confeti() {
@@ -2409,19 +2467,6 @@ function confeti() {
     })(t0);
   } catch (_) {}
 }
-// Meta Pixel: Purchase una sola vez por pago, solo en la pestaña que montó el checkout y ya con el pago confirmado
-function pixelCompra(sessionId, slug) {
-  try {
-    const raw = sessionStorage.getItem('vp_px_checkout'); if (!raw || typeof window.fbq !== 'function') return;
-    let info = {}; try { info = JSON.parse(raw) || {}; } catch (_) {}
-    if (info.slug && slug && info.slug !== slug) return;
-    sessionStorage.removeItem('vp_px_checkout');
-    const clave = 'vp_px_compra_' + sessionId; if (localStorage.getItem(clave)) return; localStorage.setItem(clave, '1');
-    const sl = slug || info.slug || '', datos = { content_name: sl, content_ids: [sl], content_type: 'product' };
-    if (Number(info.value) > 0) { datos.value = Number(info.value); datos.currency = 'MXN'; }
-    window.fbq('track', 'Purchase', datos, { eventID: sessionId });
-  } catch (_) {}
-}
 function vistaPago() {
   root.classList.add('solo'); $('#mc-titulo').textContent = NOMBRES[SLUG] || 'Mi curso';
   view.innerHTML = `<div class="mc__card mc__auth" id="mc-pago" style="text-align:center">
@@ -2439,7 +2484,7 @@ async function procesarPago() {
     if (!r.ok) throw new Error(d.error || 'Error ' + r.status);
     PAGO.pagado = true; PAGO.reintentar = 6;
     PAGO.regalo = d.regalo || null;
-    pixelCompra(PAGO.sessionId, d.slug);
+    window.vpPx?.compraConfirmada(PAGO.sessionId, d);
     if (d.entrada === 'token' && d.token) { PAGO.listo = true; await signInWithCustomToken(auth, d.token); return; }   // onAuthStateChanged vuelve a pintar
   } catch (_) { /* si algo falla, queda el acceso normal */ }
   PAGO.listo = true; render();
