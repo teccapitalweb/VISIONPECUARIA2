@@ -5,11 +5,11 @@
 <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
 <meta name="theme-color" content="#EA580C">
 <title>Curso: Elaboración de Chorizo y Embutidos Artesanales | Visión Pecuaria</title>
-<meta name="description" content="Curso 100% online. Aprende a elaborar chorizo rojo, chorizo verde, longaniza y carne enchilada como maestro artesano. Antes $1,050 MXN, ahora $450. Ahorras $600 (57% OFF).">
+<meta name="description" content="Curso 100% online. Aprende a elaborar chorizo rojo, chorizo verde, longaniza y carne enchilada como maestro artesano.">
 <meta name="robots" content="index,follow">
 
 <meta property="og:title" content="Curso: Elaboración de Chorizo y Embutidos Artesanales">
-<meta property="og:description" content="On-demand · Acceso inmediato · Antes $1,050 → $450 MXN · Certificado IPCIL">
+<meta property="og:description" content="On-demand · Acceso inmediato · Certificado IPCIL">
 <meta property="og:type" content="website">
 <meta property="og:url" content="https://visionpecuariamx.com/embutidos-artesanales.html">
 <meta property="og:image" content="https://visionpecuariamx.com/assets/curso-chorizo/og-image.jpg">
@@ -197,6 +197,11 @@
 }
 </style>
 <style id="ahorro-claro">
+.precio-tarjeta { display: grid; align-items: center; }
+.precio-tarjeta > * { grid-area: 1 / 1; }
+[data-precio-visible][hidden], [data-precio-comparacion][hidden] { display: none; }
+.precio-cifras[data-precio-visible][hidden] { display: block; visibility: hidden; }
+.precio-consulta { color: var(--ink-mute); font-size: .95rem; font-weight: 600; }
 /* Etiqueta de ahorro: estrella + «Ahorras $X pesos» + pastilla «N% OFF», cada parte en una sola línea */
 .pricing-save,.cta-save-badge{gap:6px 10px!important;padding:8px 10px 8px 16px!important;max-width:100%;line-height:1.2;flex-wrap:wrap;justify-content:center;border-radius:22px!important;box-sizing:border-box}
 .pricing-save svg,.cta-save-badge svg{flex:none}
@@ -257,20 +262,23 @@
       </p>
 
       <!-- ═══ PRICING BLOCK — GANCHO VISUAL ═══ -->
-      <div class="pricing-block">
-        <div class="pricing-antes">
-          <span class="pricing-antes__label">Antes</span>
-          <span class="pricing-antes__amount" data-precio-antes>$1,050 MXN</span>
+      <div class="pricing-block precio-tarjeta">
+        <div class="precio-cifras" data-precio-visible hidden>
+          <div class="pricing-antes" data-precio-comparacion>
+            <span class="pricing-antes__label">Antes</span>
+            <span class="pricing-antes__amount" data-precio-antes>&nbsp;</span>
+          </div>
+          <div class="pricing-now">
+            <span class="pricing-now__currency">$</span>
+            <span class="pricing-now__amount" data-precio-actual>&nbsp;</span>
+            <span class="pricing-now__unit">MXN</span>
+          </div>
+          <div class="pricing-save" data-precio-comparacion>
+            <svg viewBox="0 0 24 24" fill="currentColor"><path d="M12 2l3 6 6 1-4.5 4.5 1 6-5.5-3-5.5 3 1-6L3 9l6-1z"/></svg>
+            <span class="save-txt">Ahorras <b data-ahorro></b></span><span class="save-off"><b data-descuento></b> OFF</span>
+          </div>
         </div>
-        <div class="pricing-now">
-          <span class="pricing-now__currency">$</span>
-          <span class="pricing-now__amount" data-precio-actual>450</span>
-          <span class="pricing-now__unit">MXN</span>
-        </div>
-        <div class="pricing-save">
-          <svg viewBox="0 0 24 24" fill="currentColor"><path d="M12 2l3 6 6 1-4.5 4.5 1 6-5.5-3-5.5 3 1-6L3 9l6-1z"/></svg>
-          <span class="save-txt">Ahorras <b data-ahorro>$600 pesos</b></span><span class="save-off"><b data-descuento>57%</b> OFF</span>
-        </div>
+        <p class="precio-consulta" data-precio-estado>Consulta el precio al inscribirte.</p>
       </div>
 
       <ul class="hero__perks">
@@ -295,7 +303,7 @@
       </ul>
 
       <button class="btn-inscribirme" data-action="inscribir">
-        <span>INSCRIBIRME AHORA POR <b data-precio-btn>$450</b></span>
+        <span>INSCRIBIRME AHORA<span data-precio-visible hidden> POR <b data-precio-btn></b></span></span>
         <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.6" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12h14M13 5l7 7-7 7"/></svg>
       </button>
 
@@ -671,11 +679,16 @@
   <div class="container">
     <div class="cta-card">
       <div class="cta-badge">🔥 Inscripciones abiertas</div>
-      <div class="cta-price-before">Antes <s data-precio-antes>$1,050 MXN</s></div>
-      <div class="cta-price-now"><span data-precio-actual-full>$450</span> <small>MXN</small></div>
-      <div class="cta-save-badge">
-        <svg viewBox="0 0 24 24" fill="currentColor"><path d="M12 2l3 6 6 1-4.5 4.5 1 6-5.5-3-5.5 3 1-6L3 9l6-1z"/></svg>
-        <span class="save-txt">Ahorras <b data-ahorro>$600 pesos</b></span><span class="save-off"><span data-descuento>57%</span> OFF</span>
+      <div class="precio-tarjeta">
+        <div class="precio-cifras" data-precio-visible hidden>
+          <div class="cta-price-before" data-precio-comparacion>Antes <s data-precio-antes></s></div>
+          <div class="cta-price-now"><span data-precio-corto>&nbsp;</span> <small>MXN</small></div>
+          <div class="cta-save-badge" data-precio-comparacion>
+            <svg viewBox="0 0 24 24" fill="currentColor"><path d="M12 2l3 6 6 1-4.5 4.5 1 6-5.5-3-5.5 3 1-6L3 9l6-1z"/></svg>
+            <span class="save-txt">Ahorras <b data-ahorro></b></span><span class="save-off"><span data-descuento></span> OFF</span>
+          </div>
+        </div>
+        <p class="precio-consulta" data-precio-estado>Consulta el precio al inscribirte.</p>
       </div>
       <p class="cta-sub">Pago único · Acceso inmediato desde tu casa</p>
 
@@ -725,7 +738,7 @@
 <!-- ═══════ STICKY BAR (móvil) ═══════ -->
 <div class="sticky-bar">
   <div class="sticky-bar__price">
-    <b data-precio-actual-full>$450 MXN</b>
+    <b data-precio-actual-full data-precio-visible hidden></b>
     <small>Acceso inmediato</small>
   </div>
   <button class="sticky-bar__cta" data-action="inscribir">
@@ -953,44 +966,17 @@ const db = getFirestore(app);
 
 const SLUG = document.body.dataset.slug || 'embutidos-artesanales';
 
-// Formato $ 1,050 MXN
-const fmtMxn = (centavos) => '$' + Math.floor(centavos / 100).toLocaleString('es-MX') + ' MXN';
-const fmtMxnCorto = (centavos) => '$' + Math.floor(centavos / 100).toLocaleString('es-MX');
-const fmtNum = (centavos) => Math.floor(centavos / 100).toLocaleString('es-MX');
+const fmtNum = centavos => (centavos / 100).toLocaleString('es-MX', {
+  minimumFractionDigits: centavos % 100 ? 2 : 0,
+  maximumFractionDigits: 2
+});
 
 async function actualizarPreciosDesdeFirestore() {
   try {
     const snap = await getDoc(doc(db, 'cursosVenta', SLUG));
-    if (!snap.exists()) {
-      console.warn('[VP] Curso no encontrado en Firestore, se usan precios hardcoded');
-      return;
-    }
+    if (!snap.exists()) return;
     const data = snap.data();
-
-    const precioNormalC = data.precioNormalCentavos || 105000;
-    const precioActualC = data.precioLanzamientoCentavos || 45000;
-    const ahorroC = Math.max(0, precioNormalC - precioActualC);
-    const descuento = precioNormalC > 0 ? Math.round((ahorroC / precioNormalC) * 100) : 0;
-
-    // Actualizar todos los elementos con data-attrs
-    document.querySelectorAll('[data-precio-antes]').forEach(el => {
-      el.textContent = fmtMxn(precioNormalC);
-    });
-    document.querySelectorAll('[data-precio-actual]').forEach(el => {
-      el.textContent = fmtNum(precioActualC);
-    });
-    document.querySelectorAll('[data-precio-actual-full]').forEach(el => {
-      el.textContent = fmtMxn(precioActualC);
-    });
-    document.querySelectorAll('[data-precio-btn]').forEach(el => {
-      el.textContent = fmtMxnCorto(precioActualC);
-    });
-    document.querySelectorAll('[data-ahorro]').forEach(el => {
-      el.textContent = fmtMxnCorto(ahorroC) + ' pesos';
-    });
-    document.querySelectorAll('[data-descuento]').forEach(el => {
-      el.textContent = descuento + '%';
-    });
+    if (!snap.metadata?.fromCache && data.activo !== false) mostrarPrecios(data);
 
     // Cupos restantes
     if (typeof data.cupoLanzamientoMax === 'number') {
@@ -1005,6 +991,35 @@ async function actualizarPreciosDesdeFirestore() {
   } catch (err) {
     console.warn('[VP] Error leyendo precios de Firestore:', err);
   }
+}
+
+function mostrarPrecios(data) {
+  const precioNormal = Number(data.precioNormalCentavos) || Math.round(data.precioNormal * 100);
+  // Misma prioridad que el checkout, incluyendo los importes antiguos en pesos.
+  const precioActual = Number((data.precioLanzamientoCentavos ?? data.precioNormalCentavos)
+    || Math.round(data.precioLanzamiento * 100) || Math.round(data.precioNormal * 100));
+  if (!Number.isSafeInteger(precioActual) || precioActual <= 0) return;
+
+  const monto = fmtNum(precioActual);
+  const hayAhorro = Number.isSafeInteger(precioNormal) && precioNormal > precioActual;
+  const cifras = {
+    'precio-actual': monto,
+    'precio-actual-full': '$' + monto + ' MXN',
+    'precio-corto': '$' + monto,
+    'precio-btn': '$' + monto
+  };
+  if (hayAhorro) {
+    const ahorro = precioNormal - precioActual;
+    cifras['precio-antes'] = '$' + fmtNum(precioNormal) + ' MXN';
+    cifras.ahorro = '$' + fmtNum(ahorro) + ' pesos';
+    cifras.descuento = Math.round(ahorro / precioNormal * 100) + '%';
+  }
+  for (const [dato, texto] of Object.entries(cifras)) {
+    document.querySelectorAll('[data-' + dato + ']').forEach(el => { el.textContent = texto; });
+  }
+  document.querySelectorAll('[data-precio-comparacion]').forEach(el => { el.hidden = !hayAhorro; });
+  document.querySelectorAll('[data-precio-estado]').forEach(el => { el.hidden = true; });
+  document.querySelectorAll('[data-precio-visible]').forEach(el => { el.hidden = false; });
 }
 
 async function cargarInstructor(cursoData) {
