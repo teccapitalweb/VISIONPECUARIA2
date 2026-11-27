@@ -197,11 +197,6 @@
 }
 </style>
 <style id="ahorro-claro">
-.precio-tarjeta { display: grid; align-items: center; }
-.precio-tarjeta > * { grid-area: 1 / 1; }
-[data-precio-visible][hidden], [data-precio-comparacion][hidden] { display: none; }
-.precio-cifras[data-precio-visible][hidden] { display: block; visibility: hidden; }
-.precio-consulta { color: var(--ink-mute); font-size: .95rem; font-weight: 600; }
 /* Etiqueta de ahorro: estrella + «Ahorras $X pesos» + pastilla «N% OFF», cada parte en una sola línea */
 .pricing-save,.cta-save-badge{gap:6px 10px!important;padding:8px 10px 8px 16px!important;max-width:100%;line-height:1.2;flex-wrap:wrap;justify-content:center;border-radius:22px!important;box-sizing:border-box}
 .pricing-save svg,.cta-save-badge svg{flex:none}
@@ -261,24 +256,21 @@
         Aprende con el <b>M.V.Z. José Antonio Castillo García</b> a elaborar chorizo rojo, chorizo verde estilo Toluca, longaniza y carne enchilada.
       </p>
 
-      <!-- ═══ PRICING BLOCK — GANCHO VISUAL ═══ -->
-      <div class="pricing-block precio-tarjeta">
-        <div class="precio-cifras" data-precio-visible hidden>
-          <div class="pricing-antes" data-precio-comparacion>
-            <span class="pricing-antes__label">Antes</span>
-            <span class="pricing-antes__amount" data-precio-antes>&nbsp;</span>
-          </div>
-          <div class="pricing-now">
-            <span class="pricing-now__currency">$</span>
-            <span class="pricing-now__amount" data-precio-actual>&nbsp;</span>
-            <span class="pricing-now__unit">MXN</span>
-          </div>
-          <div class="pricing-save" data-precio-comparacion>
-            <svg viewBox="0 0 24 24" fill="currentColor"><path d="M12 2l3 6 6 1-4.5 4.5 1 6-5.5-3-5.5 3 1-6L3 9l6-1z"/></svg>
-            <span class="save-txt">Ahorras <b data-ahorro></b></span><span class="save-off"><b data-descuento></b> OFF</span>
-          </div>
+      <!-- Cloudflare inserta el precio de Firestore antes de entregar el HTML. -->
+      <div class="pricing-block" data-precio-visible>
+        <div class="pricing-antes" data-precio-comparacion>
+          <span class="pricing-antes__label">Antes</span>
+          <span class="pricing-antes__amount" data-precio-antes>$1,050 MXN</span>
         </div>
-        <p class="precio-consulta" data-precio-estado>Consulta el precio al inscribirte.</p>
+        <div class="pricing-now">
+          <span class="pricing-now__currency">$</span>
+          <span class="pricing-now__amount" data-precio-actual>550</span>
+          <span class="pricing-now__unit">MXN</span>
+        </div>
+        <div class="pricing-save" data-precio-comparacion>
+          <svg viewBox="0 0 24 24" fill="currentColor"><path d="M12 2l3 6 6 1-4.5 4.5 1 6-5.5-3-5.5 3 1-6L3 9l6-1z"/></svg>
+          <span class="save-txt">Ahorras <b data-ahorro>$500 pesos</b></span><span class="save-off"><b data-descuento>48%</b> OFF</span>
+        </div>
       </div>
 
       <ul class="hero__perks">
@@ -303,7 +295,7 @@
       </ul>
 
       <button class="btn-inscribirme" data-action="inscribir">
-        <span>INSCRIBIRME AHORA<span data-precio-visible hidden> POR <b data-precio-btn></b></span></span>
+        <span>INSCRIBIRME AHORA<span data-precio-visible> POR <b data-precio-btn>$550</b></span></span>
         <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.6" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12h14M13 5l7 7-7 7"/></svg>
       </button>
 
@@ -679,16 +671,13 @@
   <div class="container">
     <div class="cta-card">
       <div class="cta-badge">🔥 Inscripciones abiertas</div>
-      <div class="precio-tarjeta">
-        <div class="precio-cifras" data-precio-visible hidden>
-          <div class="cta-price-before" data-precio-comparacion>Antes <s data-precio-antes></s></div>
-          <div class="cta-price-now"><span data-precio-corto>&nbsp;</span> <small>MXN</small></div>
-          <div class="cta-save-badge" data-precio-comparacion>
-            <svg viewBox="0 0 24 24" fill="currentColor"><path d="M12 2l3 6 6 1-4.5 4.5 1 6-5.5-3-5.5 3 1-6L3 9l6-1z"/></svg>
-            <span class="save-txt">Ahorras <b data-ahorro></b></span><span class="save-off"><span data-descuento></span> OFF</span>
-          </div>
+      <div data-precio-visible>
+        <div class="cta-price-before" data-precio-comparacion>Antes <s data-precio-antes>$1,050 MXN</s></div>
+        <div class="cta-price-now"><span data-precio-corto>$550</span> <small>MXN</small></div>
+        <div class="cta-save-badge" data-precio-comparacion>
+          <svg viewBox="0 0 24 24" fill="currentColor"><path d="M12 2l3 6 6 1-4.5 4.5 1 6-5.5-3-5.5 3 1-6L3 9l6-1z"/></svg>
+          <span class="save-txt">Ahorras <b data-ahorro>$500 pesos</b></span><span class="save-off"><span data-descuento>48%</span> OFF</span>
         </div>
-        <p class="precio-consulta" data-precio-estado>Consulta el precio al inscribirte.</p>
       </div>
       <p class="cta-sub">Pago único · Acceso inmediato desde tu casa</p>
 
@@ -738,7 +727,7 @@
 <!-- ═══════ STICKY BAR (móvil) ═══════ -->
 <div class="sticky-bar">
   <div class="sticky-bar__price">
-    <b data-precio-actual-full data-precio-visible hidden></b>
+    <b data-precio-actual-full data-precio-visible>$550 MXN</b>
     <small>Acceso inmediato</small>
   </div>
   <button class="sticky-bar__cta" data-action="inscribir">
@@ -948,7 +937,7 @@ const showToast = (msg, type = '') => {
 </script>
 
 <script type="module">
-// ═══ Actualizar precio dinámicamente desde Firestore ═══
+// ═══ Cargar cupos y datos del instructor desde Firestore ═══
 import { initializeApp } from "https://www.gstatic.com/firebasejs/10.11.0/firebase-app.js";
 import { getFirestore, doc, getDoc } from "https://www.gstatic.com/firebasejs/10.11.0/firebase-firestore.js";
 
@@ -966,17 +955,11 @@ const db = getFirestore(app);
 
 const SLUG = document.body.dataset.slug || 'embutidos-artesanales';
 
-const fmtNum = centavos => (centavos / 100).toLocaleString('es-MX', {
-  minimumFractionDigits: centavos % 100 ? 2 : 0,
-  maximumFractionDigits: 2
-});
-
-async function actualizarPreciosDesdeFirestore() {
+async function cargarDatosCurso() {
   try {
     const snap = await getDoc(doc(db, 'cursosVenta', SLUG));
     if (!snap.exists()) return;
     const data = snap.data();
-    if (!snap.metadata?.fromCache && data.activo !== false) mostrarPrecios(data);
 
     // Cupos restantes
     if (typeof data.cupoLanzamientoMax === 'number') {
@@ -989,37 +972,8 @@ async function actualizarPreciosDesdeFirestore() {
     // Cargar datos del instructor (2 estrategias)
     await cargarInstructor(data);
   } catch (err) {
-    console.warn('[VP] Error leyendo precios de Firestore:', err);
+    console.warn('[VP] Error leyendo los datos del curso:', err);
   }
-}
-
-function mostrarPrecios(data) {
-  const precioNormal = Number(data.precioNormalCentavos) || Math.round(data.precioNormal * 100);
-  // Misma prioridad que el checkout, incluyendo los importes antiguos en pesos.
-  const precioActual = Number((data.precioLanzamientoCentavos ?? data.precioNormalCentavos)
-    || Math.round(data.precioLanzamiento * 100) || Math.round(data.precioNormal * 100));
-  if (!Number.isSafeInteger(precioActual) || precioActual <= 0) return;
-
-  const monto = fmtNum(precioActual);
-  const hayAhorro = Number.isSafeInteger(precioNormal) && precioNormal > precioActual;
-  const cifras = {
-    'precio-actual': monto,
-    'precio-actual-full': '$' + monto + ' MXN',
-    'precio-corto': '$' + monto,
-    'precio-btn': '$' + monto
-  };
-  if (hayAhorro) {
-    const ahorro = precioNormal - precioActual;
-    cifras['precio-antes'] = '$' + fmtNum(precioNormal) + ' MXN';
-    cifras.ahorro = '$' + fmtNum(ahorro) + ' pesos';
-    cifras.descuento = Math.round(ahorro / precioNormal * 100) + '%';
-  }
-  for (const [dato, texto] of Object.entries(cifras)) {
-    document.querySelectorAll('[data-' + dato + ']').forEach(el => { el.textContent = texto; });
-  }
-  document.querySelectorAll('[data-precio-comparacion]').forEach(el => { el.hidden = !hayAhorro; });
-  document.querySelectorAll('[data-precio-estado]').forEach(el => { el.hidden = true; });
-  document.querySelectorAll('[data-precio-visible]').forEach(el => { el.hidden = false; });
 }
 
 async function cargarInstructor(cursoData) {
@@ -1098,7 +1052,7 @@ function escapeHtml(str) {
   return div.innerHTML;
 }
 
-actualizarPreciosDesdeFirestore();
+cargarDatosCurso();
 </script>
 
 <!-- checkout-curso.js desconectado: el pago va inline, directo a Stripe -->
