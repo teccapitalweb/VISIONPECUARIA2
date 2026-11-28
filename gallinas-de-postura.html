@@ -188,12 +188,15 @@
     margin: 0 auto;
     display: grid;
     grid-template-columns: 1fr 1fr;
-    gap: 60px;
+    grid-template-areas: "titulo video" "detalles video";
+    column-gap: 60px;
     align-items: center;
     position: relative;
     z-index: 1;
   }
   .hero-titulo {
+    grid-area: titulo;
+    align-self: end;
     font-size: 48px;
     font-weight: 800;
     line-height: 1.1;
@@ -213,6 +216,11 @@
     line-height: 1.6;
     margin-bottom: 32px;
   }
+  .hero-detalles {
+    grid-area: detalles;
+    align-self: start;
+  }
+  .hero-right { grid-area: video; }
   .hero-precio {
     background: white;
     padding: 24px;
@@ -1365,8 +1373,79 @@
   .btn-whatsapp svg{width:20px;height:20px}
   .btn-numero{margin-left:0!important;font-size:clamp(.74rem,3.3vw,.85rem)!important;padding:4px 10px!important}
   h2{line-height:1.22!important}
-  .hero-titulo{font-size:26px!important;line-height:1.16!important;letter-spacing:-.4px;margin-bottom:12px!important}
+  .hero-container {
+    grid-template-areas: "titulo" "video" "detalles";
+    gap: 14px;
+  }
+  .hero-titulo {
+    font-size: clamp(1.375rem, 7.1vw, 2rem) !important;
+    line-height: 1.08 !important;
+    letter-spacing: -.4px;
+    margin-bottom: 0 !important;
+  }
+  .hero-titulo-linea { display: block; }
+  .hero-titulo .highlight { white-space: normal; }
   .hero-subtitulo{font-size:16px!important;line-height:1.55!important;margin-bottom:18px!important}
+
+  .stats-section .stats-grid {
+    grid-template-columns: repeat(4, minmax(0, 1fr));
+    gap: 6px;
+  }
+  .stats-section .stat-item { padding: 0; }
+  .stats-section .stat-number {
+    font-size: clamp(1.06rem, 5.8vw, 2rem);
+    margin-bottom: 6px;
+    white-space: nowrap;
+  }
+  .stats-section .stat-decimal { font-size: .6em; }
+  .stats-section .stat-label {
+    font-size: clamp(.72rem, 2.9vw, .84rem);
+    line-height: 1.3;
+    letter-spacing: 0;
+    text-transform: none;
+    text-wrap: balance;
+    overflow-wrap: anywhere;
+  }
+
+  .tabs-section-nueva .tabs-nav {
+    grid-template-columns: repeat(4, minmax(0, 1fr));
+    gap: 4px;
+  }
+  .tabs-section-nueva .tab-btn {
+    min-width: 0;
+    padding: 10px 2px;
+    line-height: 1.2;
+    letter-spacing: 0;
+  }
+  .tabs-section-nueva .tab-label {
+    font-size: clamp(.65rem, 2.8vw, .8rem);
+    text-wrap: balance;
+    overflow-wrap: anywhere;
+  }
+
+  .compra-final-wow .cierre--ultimas {
+    display: block;
+    padding: 12px max(8px, calc((100% - 230px) / 2));
+    font-size: clamp(.9rem, 4.4vw, 1.0625rem);
+    line-height: 1.22;
+  }
+  .compra-final-wow .cierre--ultimas .cierre__txt {
+    font-size: inherit;
+    line-height: inherit;
+  }
+  .compra-final-wow .cierre--ultimas .cierre__txt b { white-space: nowrap; }
+  .compra-final-wow .cierre--ultimas .cierre__dot {
+    display: inline-block;
+    margin-inline-end: 7px;
+    vertical-align: .12em;
+  }
+  .compra-final-wow .compra-cta-mega {
+    gap: 10px;
+    padding: clamp(18px, 5.9vw, 26px) clamp(10px, 3.2vw, 24px);
+    font-size: clamp(.9rem, 4.75vw, 1.12rem);
+    white-space: nowrap;
+  }
+  .compra-final-wow .compra-cta-mega span { flex: none; }
 }
 .badge-cupos{color:#5c4500!important;font-weight:800!important;text-shadow:none!important}
 </style>
@@ -1422,11 +1501,38 @@
   </div>
 
   <div class="hero-container">
-    <div class="hero-left">
-      <h1 class="hero-titulo">
-        Manejo profesional de <span class="highlight">gallinas de postura</span>
-        para <span class="highlight">huevo rentable</span>
-      </h1>
+    <h1 class="hero-titulo">
+      <span class="hero-titulo-linea">Manejo profesional de</span>
+      <span class="hero-titulo-linea"><span class="highlight">gallinas de postura</span></span>
+      <span class="hero-titulo-linea">para <span class="highlight">huevo rentable</span></span>
+    </h1>
+
+    <div class="hero-right">
+      <div class="hero-video-wrapper">
+        <video id="hero-video" muted autoplay loop playsinline poster="https://raw.githubusercontent.com/teccapitalweb/VISIONPECUARIA2/82cf6e620b53c6a3566961116bf68ca85634a9a3/assets/curso-gallinas-postura/preview-poster-20261125.jpg">
+          <source src="https://raw.githubusercontent.com/teccapitalweb/VISIONPECUARIA2/82cf6e620b53c6a3566961116bf68ca85634a9a3/assets/curso-gallinas-postura/preview-gallinas-20261125.mp4" type="video/mp4">
+        </video>
+        <button type="button" id="btn-activar-sonido" class="video-unmute" aria-label="Activar sonido del video">
+          <svg class="ico-muted" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round">
+            <polygon points="11 5 6 9 2 9 2 15 6 15 11 19 11 5"/>
+            <line x1="23" y1="9" x2="17" y2="15"/>
+            <line x1="17" y1="9" x2="23" y2="15"/>
+          </svg>
+          <svg class="ico-unmuted" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round">
+            <polygon points="11 5 6 9 2 9 2 15 6 15 11 19 11 5"/>
+            <path d="M15.54 8.46a5 5 0 010 7.07"/>
+            <path d="M19.07 4.93a10 10 0 010 14.14"/>
+          </svg>
+          <span class="lbl-activar">Activar sonido</span>
+          <span class="lbl-silenciar">Silenciar</span>
+        </button>
+      </div>
+      <div class="hero-video-etiqueta">
+        📹 Preview del curso
+      </div>
+    </div>
+
+    <div class="hero-detalles">
       <p class="hero-subtitulo">
         Aprende con el <b>M.V.Z. Diego Arturo Gómez</b> producción, sanidad,
         alimentación y comercialización de huevo.
@@ -1457,31 +1563,6 @@
         🛡️ Garantía de satisfacción 7 días · Pago seguro con Stripe
       </div>
       <div class="ya-compre-wrap"><a class="ya-compre" href="#mi-curso"><svg width="16" height="16" style="width:16px;height:16px;flex:none" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M15 3h4a2 2 0 0 1 2 2v14a2 2 0 0 1-2 2h-4M10 17l5-5-5-5M15 12H3"/></svg>Ya compré · Entrar a mi curso</a></div>
-    </div>
-
-    <div class="hero-right">
-      <div class="hero-video-wrapper">
-        <video id="hero-video" muted autoplay loop playsinline poster="https://raw.githubusercontent.com/teccapitalweb/VISIONPECUARIA2/82cf6e620b53c6a3566961116bf68ca85634a9a3/assets/curso-gallinas-postura/preview-poster-20261125.jpg">
-          <source src="https://raw.githubusercontent.com/teccapitalweb/VISIONPECUARIA2/82cf6e620b53c6a3566961116bf68ca85634a9a3/assets/curso-gallinas-postura/preview-gallinas-20261125.mp4" type="video/mp4">
-        </video>
-        <button type="button" id="btn-activar-sonido" class="video-unmute" aria-label="Activar sonido del video">
-          <svg class="ico-muted" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round">
-            <polygon points="11 5 6 9 2 9 2 15 6 15 11 19 11 5"/>
-            <line x1="23" y1="9" x2="17" y2="15"/>
-            <line x1="17" y1="9" x2="23" y2="15"/>
-          </svg>
-          <svg class="ico-unmuted" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round">
-            <polygon points="11 5 6 9 2 9 2 15 6 15 11 19 11 5"/>
-            <path d="M15.54 8.46a5 5 0 010 7.07"/>
-            <path d="M19.07 4.93a10 10 0 010 14.14"/>
-          </svg>
-          <span class="lbl-activar">Activar sonido</span>
-          <span class="lbl-silenciar">Silenciar</span>
-        </button>
-      </div>
-      <div class="hero-video-etiqueta">
-        📹 Preview del curso
-      </div>
     </div>
   </div>
 </section>

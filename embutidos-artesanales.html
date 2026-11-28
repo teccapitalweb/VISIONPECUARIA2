@@ -96,18 +96,20 @@
 
 .hero__grid {
   grid-template-columns: minmax(0, 1.1fr) minmax(0, 1fr);
-  grid-template-areas: "offer offer" "content video";
-  gap: 24px 72px;
+  grid-template-areas: "offer offer" "title video" "content video";
+  gap: 0 72px;
   align-items: start;
 }
 
 .hero__offer {
   grid-area: offer;
   width: min(100%, 540px);
+  margin-bottom: 24px;
 }
 
 .hero__offer .cierre { margin-block: 0; }
 .hero__badges { margin-bottom: 0; }
+.hero__grid > .hero__title { grid-area: title; }
 .hero__content { grid-area: content; }
 .hero__video { grid-area: video; }
 
@@ -116,9 +118,12 @@
 
   .hero__grid {
     grid-template-columns: minmax(0, 1fr);
-    grid-template-areas: "offer" "video" "content";
+    grid-template-areas: "offer" "title" "video" "content";
     gap: 18px;
   }
+
+  .hero__offer { margin-bottom: 0; }
+  .hero__grid > .hero__title { margin-bottom: 0 !important; }
 
   .hero__offer,
   .hero__video {
@@ -339,6 +344,10 @@
       </div>
     </div>
 
+    <h1 class="hero__title">
+      Domina los <span class="hero__title--accent">embutidos artesanales</span> que la industria pide.
+    </h1>
+
     <div class="hero__video">
       <div class="video-frame">
         <video id="preview-video" muted autoplay loop playsinline poster="https://vz-158cdd56-161.b-cdn.net/f841cf16-af3c-4803-9206-f50ec7fec389/thumbnail.jpg">
@@ -358,10 +367,6 @@
     </div>
 
     <div class="hero__content">
-      <h1 class="hero__title">
-        Domina los <span class="hero__title--accent">embutidos artesanales</span> que la industria pide.
-      </h1>
-
       <p class="hero__lead">
         Aprende con el <b>M.V.Z. José Antonio Castillo García</b> a elaborar chorizo rojo, chorizo verde estilo Toluca, longaniza y carne enchilada.
       </p>
