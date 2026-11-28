@@ -90,7 +90,7 @@
 </script>
 <!-- pixel-cursos:fin -->
 
-<link rel="stylesheet" href="/assets/css/embutidos-landing.css">
+<link rel="stylesheet" href="/assets/css/embutidos-landing.css?v=2">
 <style id="estilos-ya-compre-y-testimonios">
 /* Acceso discreto para alumnos que ya pagaron (landings de cursos) */
 .ya-compre-wrap { text-align: center; margin-top: 10px; }
@@ -235,9 +235,9 @@
 <section class="hero">
   <div class="grid-bg"></div>
   <div class="container hero__grid">
-    <div class="hero__content">
-            <div data-cierre></div>
-<div class="hero__badges">
+    <div class="hero__offer">
+      <div data-cierre></div>
+      <div class="hero__badges">
         <span class="badge badge--offer">
           <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"><path d="M12 2l3 6 6 1-4.5 4.5 1 6-5.5-3-5.5 3 1-6L3 9l6-1z"/></svg>
           OFERTA POR LANZAMIENTO
@@ -247,7 +247,27 @@
           Solo quedan <span data-cupo-restante>15</span> cupos
         </span>
       </div>
+    </div>
 
+    <div class="hero__video">
+      <div class="video-frame">
+        <video id="preview-video" muted autoplay loop playsinline poster="https://vz-158cdd56-161.b-cdn.net/f841cf16-af3c-4803-9206-f50ec7fec389/thumbnail.jpg">
+          <source src="https://vz-158cdd56-161.b-cdn.net/f841cf16-af3c-4803-9206-f50ec7fec389/play_720p.mp4" type="video/mp4">
+          <source src="/assets/curso-chorizo/promo-embutidos.mp4" type="video/mp4">
+        </video>
+        <button class="video-sound" id="btn-sound" aria-label="Activar sonido">
+          <svg class="ico-mute" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><polygon points="11 5 6 9 2 9 2 15 6 15 11 19 11 5"/><line x1="23" y1="9" x2="17" y2="15"/><line x1="17" y1="9" x2="23" y2="15"/></svg>
+          <svg class="ico-unmute" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><polygon points="11 5 6 9 2 9 2 15 6 15 11 19 11 5"/><path d="M15.54 8.46a5 5 0 010 7.07"/><path d="M19.07 4.93a10 10 0 010 14.14"/></svg>
+          <span>Activar sonido</span>
+        </button>
+      </div>
+      <p class="hero__video-label">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polygon points="23 7 16 12 23 17 23 7"/><rect x="1" y="5" width="15" height="14" rx="2" ry="2"/></svg>
+        Preview del curso
+      </p>
+    </div>
+
+    <div class="hero__content">
       <h1 class="hero__title">
         Domina los <span class="hero__title--accent">embutidos artesanales</span> que la industria pide.
       </h1>
@@ -304,24 +324,6 @@
         Garantía de satisfacción 7 días · Pago seguro con Stripe
       </p>
       <div class="ya-compre-wrap" style="text-align:left"><a class="ya-compre" href="#mi-curso"><svg width="16" height="16" style="width:16px;height:16px;flex:none" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M15 3h4a2 2 0 0 1 2 2v14a2 2 0 0 1-2 2h-4M10 17l5-5-5-5M15 12H3"/></svg>Ya compré · Entrar a mi curso</a></div>
-    </div>
-
-    <div class="hero__video">
-      <div class="video-frame">
-        <video id="preview-video" muted autoplay loop playsinline poster="https://vz-158cdd56-161.b-cdn.net/f841cf16-af3c-4803-9206-f50ec7fec389/thumbnail.jpg">
-          <source src="https://vz-158cdd56-161.b-cdn.net/f841cf16-af3c-4803-9206-f50ec7fec389/play_720p.mp4" type="video/mp4">
-          <source src="/assets/curso-chorizo/promo-embutidos.mp4" type="video/mp4">
-        </video>
-        <button class="video-sound" id="btn-sound" aria-label="Activar sonido">
-          <svg class="ico-mute" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><polygon points="11 5 6 9 2 9 2 15 6 15 11 19 11 5"/><line x1="23" y1="9" x2="17" y2="15"/><line x1="17" y1="9" x2="23" y2="15"/></svg>
-          <svg class="ico-unmute" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><polygon points="11 5 6 9 2 9 2 15 6 15 11 19 11 5"/><path d="M15.54 8.46a5 5 0 010 7.07"/><path d="M19.07 4.93a10 10 0 010 14.14"/></svg>
-          <span>Activar sonido</span>
-        </button>
-      </div>
-      <p class="hero__video-label">
-        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polygon points="23 7 16 12 23 17 23 7"/><rect x="1" y="5" width="15" height="14" rx="2" ry="2"/></svg>
-        Preview del curso
-      </p>
     </div>
   </div>
 </section>
