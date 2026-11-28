@@ -248,6 +248,32 @@
     text-wrap: balance;
     overflow-wrap: anywhere;
   }
+
+  .cta-final .cierre--ultimas {
+    display: block;
+    padding: 12px max(8px, calc((100% - 230px) / 2));
+    font-size: clamp(.9rem, 4.4vw, 1.0625rem);
+    line-height: 1.22;
+  }
+  .cta-final .cierre--ultimas .cierre__txt {
+    font-size: inherit;
+    line-height: inherit;
+  }
+  .cta-final .cierre--ultimas .cierre__txt b { white-space: nowrap; }
+  .cta-final .cierre--ultimas .cierre__dot {
+    display: inline-block;
+    margin-inline-end: 7px;
+    vertical-align: .12em;
+  }
+
+  .cta-final .btn-inscribirme--big {
+    gap: 10px;
+    padding: clamp(18px, 5.9vw, 26px) clamp(10px, 3.2vw, 24px);
+    font-size: clamp(.9rem, 4.75vw, 1.12rem);
+    font-weight: 800;
+    white-space: nowrap;
+  }
+  .cta-final .btn-inscribirme--big svg { flex: none; }
 }
 </style>
 <style id="pago-pantalla-completa">
