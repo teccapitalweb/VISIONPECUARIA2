@@ -223,6 +223,32 @@
   .hero__title{font-size:clamp(1.85rem,8.6vw,2.4rem)!important;line-height:1.08!important;letter-spacing:-.6px!important;margin-bottom:12px!important}
   .hero__lead{font-size:16px!important;line-height:1.55!important;margin-bottom:16px!important}
 }
+@media (max-width: 640px) {
+  .hero__title {
+    font-size: clamp(1.45rem, 7.1vw, 2.25rem) !important;
+    line-height: 1.03 !important;
+    text-wrap: balance;
+  }
+  .hero__title--accent { display: block; }
+
+  .stats__grid {
+    grid-template-columns: repeat(4, minmax(0, 1fr));
+    gap: 6px;
+    padding-inline: 0;
+  }
+  .stat__num {
+    font-size: clamp(1.06rem, 5.8vw, 2rem);
+    margin-bottom: 6px;
+    white-space: nowrap;
+  }
+  .stat__label {
+    font-size: clamp(.72rem, 2.9vw, .84rem);
+    line-height: 1.3;
+    letter-spacing: 0;
+    text-wrap: balance;
+    overflow-wrap: anywhere;
+  }
+}
 </style>
 <style id="pago-pantalla-completa">
 /* Formulario de pago a pantalla completa en teléfono (sin márgenes a los lados) */
