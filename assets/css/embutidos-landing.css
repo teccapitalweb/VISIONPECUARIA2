@@ -168,7 +168,7 @@ input, textarea { font-family: inherit; }
    HERO — Estilo IMDIIL: título BOLD sans + palabra clave en color
    ═══════════════════════════════════════════════════════════════════════════ */
 .hero {
-  padding: 64px 0 100px;
+  padding: 80px 0 100px;
   position: relative;
   background: var(--paper);
   overflow: hidden;
@@ -176,25 +176,18 @@ input, textarea { font-family: inherit; }
 .hero__grid {
   position: relative;
   display: grid;
-  grid-template-columns: minmax(0, 1.1fr) minmax(0, 1fr);
-  grid-template-areas: "offer offer" "content video";
-  gap: 24px 72px;
-  align-items: start;
+  grid-template-columns: 1.1fr 1fr;
+  gap: 72px;
+  align-items: center;
   z-index: 1;
 }
 
-.hero__offer {
-  grid-area: offer;
-  width: min(100%, 540px);
-}
-.hero__offer .cierre { margin-block: 0; }
-.hero__content { grid-area: content; }
-
-/* Badges debajo del contador */
+/* Badges arriba del título */
 .hero__badges {
   display: flex;
   gap: 10px;
   flex-wrap: wrap;
+  margin-bottom: 32px;
 }
 .badge {
   display: inline-flex;
@@ -413,7 +406,7 @@ input, textarea { font-family: inherit; }
 .hero__guarantee svg { width: 16px; height: 16px; color: var(--brand); }
 
 /* Video */
-.hero__video { position: relative; grid-area: video; }
+.hero__video { position: relative; }
 .video-frame {
   position: relative;
   border-radius: var(--r-xl);
@@ -465,14 +458,10 @@ input, textarea { font-family: inherit; }
 .hero__video-label svg { width: 15px; height: 15px; color: var(--brand); }
 
 @media (max-width: 900px) {
-  .hero { padding: 28px 0 64px; }
-  .hero__grid {
-    grid-template-columns: minmax(0, 1fr);
-    grid-template-areas: "offer" "video" "content";
-    gap: 18px;
-  }
-  .hero__offer, .hero__video { width: min(100%, 460px); margin-inline: auto; }
-  .hero__video-label { margin-top: 8px; }
+  .hero { padding: 48px 0 64px; }
+  .hero__grid { grid-template-columns: 1fr; gap: 40px; }
+  .hero__video { max-width: 460px; margin: 0 auto; }
+  .video-frame { aspect-ratio: 16 / 10; }
 }
 @media (max-width: 640px) {
   .pricing-block { padding: 22px 24px; }
